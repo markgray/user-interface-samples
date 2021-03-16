@@ -21,6 +21,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ViewAnimator
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.android.common.activities.SampleActivityBase
 import com.example.android.common.logger.Log
 import com.example.android.common.logger.LogFragment
@@ -35,13 +37,31 @@ import com.example.android.common.logger.MessageOnlyLogFilter
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 class MainActivity : SampleActivityBase() {
-    // Whether the Log Fragment is currently shown
+    /**
+     * Whether the Log [Fragment] is currently shown
+     */
     private var mLogShown = false
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * and then we set our content view to our layout file [R.layout.activity_main]. If our [Bundle]
+     * parameter [savedInstanceState] is `null` we are being started for the first time so we use
+     * the [FragmentManager] for interacting with fragments associated with this activity to begin
+     * a [FragmentTransaction] which we save in our variable `val transaction`, then we construct
+     * a new instance of [AdvancedImmersiveModeFragment] to initialize our variable `val fragment`,
+     * use `transaction` to `replace` the contents of the container with ID [R.id.sample_content_fragment]
+     * with fragment and commit the [FragmentTransaction] `transaction`.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this is not `null`, and any [Fragment] we added before being shut down will be
+     * restored by the system. If it *is* `null` we are starting for the first time and need to
+     * construct and add our [AdvancedImmersiveModeFragment] to our UI.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            val transaction = supportFragmentManager.beginTransaction()
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             val fragment = AdvancedImmersiveModeFragment()
             transaction.replace(R.id.sample_content_fragment, fragment)
             transaction.commit()
