@@ -18,9 +18,7 @@
 package com.example.android.advancedimmersivemode;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ViewAnimator;
@@ -33,7 +31,7 @@ import com.example.android.common.logger.MessageOnlyLogFilter;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
- * {@link Fragment} which can display a view.
+ * {@link android.support.v4.app.Fragment} which can display a view.
  * <p>
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.

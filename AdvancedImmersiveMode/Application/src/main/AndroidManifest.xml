@@ -20,7 +20,6 @@
      of "1.9" vs "1.10".  versionName, on the other hand, can be whatever you want, as the code
      that handles upgrading Android apps between versions on your device just ignores it.-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.advancedimmersivemode"
     android:versionCode="1"
     android:versionName="1.0">
@@ -33,10 +32,9 @@
     <!-- theme is a way of applying UI decisions across your entire application.  You can also
          define it on a per-application basis. -->
     <application
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher"
-        tools:ignore="AllowBackup">
+        android:icon="@drawable/ic_launcher">
 
         <!-- Every activity needs its own Manifest element.  The intent-filter contained in the
              element declares the intents that can be used to activate this Activity.  For instance,
