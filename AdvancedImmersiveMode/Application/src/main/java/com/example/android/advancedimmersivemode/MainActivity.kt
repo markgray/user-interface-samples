@@ -17,6 +17,7 @@ package com.example.android.advancedimmersivemode
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ViewAnimator
@@ -44,13 +45,22 @@ class MainActivity : SampleActivityBase() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * and then we set our content view to our layout file [R.layout.activity_main]. If our [Bundle]
-     * parameter [savedInstanceState] is `null` we are being started for the first time so we use
-     * the [FragmentManager] for interacting with fragments associated with this activity to begin
-     * a [FragmentTransaction] which we save in our variable `val transaction`, then we construct
-     * a new instance of [AdvancedImmersiveModeFragment] to initialize our variable `val fragment`,
-     * use `transaction` to `replace` the contents of the container with ID [R.id.sample_content_fragment]
-     * with fragment and commit the [FragmentTransaction] `transaction`.
+     * and then we set our content view to our layout file [R.layout.activity_main]. The default
+     * layout file layout/activity_main.xml outer most View is a vertical `LinearLayout` which holds
+     * a [ViewAnimator] which holds a `ScrollView` and a `fragment` (intended for our [LogFragment]),
+     * as well as a `FrameLayout` to hold our [AdvancedImmersiveModeFragment]. The layout file for
+     * displays with a width of 720dp or greater is layout-w720dp/activity_main.xml whose outer most
+     * View is a horizontal `LinearLayout` which holds a vertical `LinearLayout` on the left which
+     * holds a `TextView` displaying our intro message and a `fragment` for holding a [LogFragment],
+     * and on the right is a `FrameLayout` to hold our [AdvancedImmersiveModeFragment].
+     *
+     * If our [Bundle] parameter [savedInstanceState] is `null` we are being started for the first
+     * time so we use the [FragmentManager] for interacting with fragments associated with this
+     * activity to begin a [FragmentTransaction] which we save in our variable `val transaction`,
+     * then we construct a new instance of [AdvancedImmersiveModeFragment] to initialize our variable
+     * `val fragment`, use `transaction` to `replace` the contents of the container with ID
+     * [R.id.sample_content_fragment] with fragment and commit our [FragmentTransaction] variable
+     * `transaction`.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this is not `null`, and any [Fragment] we added before being shut down will be
@@ -68,18 +78,56 @@ class MainActivity : SampleActivityBase() {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in to [Menu] parameter [menu]. This is only called once, the first time the options
+     * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
+     * We use a [MenuInflater] for this context to inflate our menu layout file [R.menu.main] into
+     * our [Menu] parameter [menu]. This layout file holds a single menu item with resource ID
+     * [R.id.menu_toggle_log], whose title toggles between "Show Log" and "Hide Log" depending on
+     * the value of our [Boolean] field [mLogShown], and it is set to invisible when we are running
+     * on a display with a width of 720dp or greater (determined in our [onPrepareOptionsMenu]
+     * override by checking whether the View with ID [R.id.sample_output] is a [ViewAnimator]).
+     * Finally we return `true` so that the [Menu] will be displayed.
+     *
+     * @param menu The options [Menu] in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
+    /**
+     * Prepare the Screen's standard options menu to be displayed. This is called right before the
+     * menu is shown, every time it is shown. You can use this method to efficiently enable/disable
+     * items or otherwise dynamically modify the contents. We initialize our [MenuItem] variable
+     * `val logToggle` by finding the item with ID [R.id.menu_toggle_log] in our [Menu] parameter
+     * [menu]. We set `logToggle` to visible if the View with ID [R.id.sample_output] is an instance
+     * of [ViewAnimator] (which it is only when the display is narrower than 720dp). Then we set
+     * the title of `logToggle` to "Hide Log" if our [Boolean] field [mLogShown] is `true` or to
+     * "Show Log" if it is `false`. Finally we return the value returned by our super's implementation
+     * of `onPrepareOptionsMenu` to our caller.
+     *
+     * @param menu The options [Menu] as last shown or first initialized by [onCreateOptionsMenu].
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val logToggle = menu.findItem(R.id.menu_toggle_log)
+        val logToggle: MenuItem = menu.findItem(R.id.menu_toggle_log)
         logToggle.isVisible = findViewById<View>(R.id.sample_output) is ViewAnimator
         logToggle.setTitle(if (mLogShown) R.string.sample_hide_log else R.string.sample_show_log)
         return super.onPrepareOptionsMenu(menu)
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * @param item The [MenuItem] that was selected.
+     * @return boolean Return `false` to allow normal menu processing to proceed, `true` to consume
+     * it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_toggle_log -> {
