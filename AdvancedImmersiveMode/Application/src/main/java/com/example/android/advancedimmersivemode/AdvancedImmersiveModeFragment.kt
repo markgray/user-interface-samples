@@ -103,20 +103,25 @@ class AdvancedImmersiveModeFragment : Fragment() {
      *
      * We use our [LayoutInflater] parameter [inflater] to inflate our layout file [R.layout.fragment_flags],
      * using our [ViewGroup] parameter [container] for its `LayoutParams` without attaching to it and
-     * use the [View] that [inflater] returns to initialize our variable `val flagsView`. We find the
-     * [CheckBox] in `flagsView` with ID [R.id.flag_enable_lowprof] to initialize [mLowProfileCheckBox],
-     * find the [CheckBox] in `flagsView` with ID [R.id.flag_hide_navbar] to initialize [mHideNavCheckbox],
-     * find the [CheckBox] in `flagsView` with ID [R.id.flag_hide_statbar] to initialize [mHideStatusBarCheckBox],
-     * find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_immersive] to initialize
-     * [mImmersiveModeCheckBox], and find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_immersive_sticky]
-     * to initialize [mImmersiveModeStickyCheckBox].
+     * use the [View] that [inflater] returns to initialize our variable `val flagsView`.
+     *
+     * We find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_lowprof] (labeled "Enable Low
+     * Profile Mode") to initialize [mLowProfileCheckBox], find the [CheckBox] in `flagsView` with ID
+     * [R.id.flag_hide_navbar] (labeled "Hide Navigation bar") to initialize [mHideNavCheckbox], find
+     * the [CheckBox] in `flagsView` with ID [R.id.flag_hide_statbar] (labeled "Hide Status Bar") to
+     * initialize [mHideStatusBarCheckBox], find the [CheckBox] in `flagsView` with ID
+     * [R.id.flag_enable_immersive] (labeled "Enable Immersive Mode") to initialize [mImmersiveModeCheckBox],
+     * and find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_immersive_sticky] (labeled
+     * "Enable Immersive Mode (Sticky)") to initialize [mImmersiveModeStickyCheckBox].
      *
      * We initialize our [Button] variable `val toggleFlagsButton` to the [Button] in `flagsView` with
      * ID [R.id.btn_changeFlags] (labeled "Do things!") and set its `OnClickListener` to a lambda
-     * which calls our method [toggleUiFlags]. We initialize our [Button] variable
-     * `val presetsImmersiveModeButton` to the [Button] in `flagsView` with ID [R.id.btn_immersive]
-     * (labeled "Immersive Mode") and set its `OnClickListener` to a lambda which sets the flags
-     * [View.SYSTEM_UI_FLAG_FULLSCREEN], [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION], and
+     * which calls our method [toggleUiFlags] to have it apply the current [CheckBox] selections to
+     * our UI.
+     *
+     * We initialize our [Button] variable `val presetsImmersiveModeButton` to the [Button] in `flagsView`
+     * with ID [R.id.btn_immersive] (labeled "Immersive Mode") and set its `OnClickListener` to a lambda
+     * which sets the flags [View.SYSTEM_UI_FLAG_FULLSCREEN], [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION], and
      * [View.SYSTEM_UI_FLAG_IMMERSIVE] and clears the flags [View.SYSTEM_UI_FLAG_LOW_PROFILE], and
      * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] and does the same thing to the checked state of the
      * [CheckBox] which toggles each of these flags.
@@ -127,6 +132,28 @@ class AdvancedImmersiveModeFragment : Fragment() {
      * and clears the flags [View.SYSTEM_UI_FLAG_LOW_PROFILE], [View.SYSTEM_UI_FLAG_IMMERSIVE] and
      * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] and does the same thing to the checked state of the
      * [CheckBox] which toggles each of these flags.
+     *
+     * Next we set some flags which will make the content appear under the navigation bars, so that
+     * showing or hiding the nav bars doesn't resize the content window, which can be jarring. To
+     * do this we initialize our [Int] variable `var uiOptions` to the current `systemUiVisibility`
+     * property of `flagsView`, then we set these flags in `uiOptions`:
+     *  - [View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION] which requests that the [View] would like its
+     *  window to be laid out as if it has requested [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION], even if
+     *  it currently hasn't. This allows it to avoid artifacts when switching in and out of that mode,
+     *  at the expense that some of its user interface may be covered by screen decorations when they
+     *  are shown.
+     *  - [View.SYSTEM_UI_FLAG_LAYOUT_STABLE] which requests that when using other layout flags, we
+     *  would like a stable view of the content insets given to `fitSystemWindows`. This means that
+     *  the insets seen there will always represent the worst case that the application can expect
+     *  as a continuous state. In the stock Android UI this is the space for the system bar, nav bar,
+     *  and status bar, but not more transient elements such as an input method.
+     *  - [View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN] which requests that the [View] be laid out as if
+     *  it has requested [View.SYSTEM_UI_FLAG_FULLSCREEN], even if it currently hasn't. This allows
+     *  it to avoid artifacts when switching in and out of that mode, at the expense that some of
+     *  its user interface may be covered by screen decorations when they are shown.
+     *
+     * Having added these flags to `uiOptions` we set the `systemUiVisibility` property of `flagsView`
+     * to `uiOptions` and return 'flagsView` to the caller.
      *
      * @param inflater The [LayoutInflater] object that can be used to inflate
      * any views in the fragment.
@@ -201,7 +228,7 @@ class AdvancedImmersiveModeFragment : Fragment() {
         // Setting these flags makes the content appear under the navigation
         // bars, so that showing/hiding the nav bars doesn't resize the content
         // window, which can be jarring.
-        var uiOptions = flagsView.systemUiVisibility
+        var uiOptions: Int = flagsView.systemUiVisibility
         uiOptions = uiOptions or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         uiOptions = uiOptions or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         uiOptions = uiOptions or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -211,6 +238,7 @@ class AdvancedImmersiveModeFragment : Fragment() {
 
     /**
      * Helper method to dump flag state to the log.
+     *
      * @param uiFlags Set of UI flags to inspect
      */
     private fun dumpFlagStateToLog(uiFlags: Int) {
@@ -242,7 +270,10 @@ class AdvancedImmersiveModeFragment : Fragment() {
     }
 
     /**
-     * Detects and toggles immersive mode (also known as "hidey bar" mode).
+     * Applies the system UI visibility flags selected by the checked and unchecked state of the
+     * [CheckBox]'s of our UI to the `systemUiVisibility` property of the top-level window decor
+     * view (the `Window` which contains the standard window frame/decorations and our content
+     * inside of that).
      */
     private fun toggleUiFlags() {
 
