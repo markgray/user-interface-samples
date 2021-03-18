@@ -33,17 +33,115 @@ import com.example.android.common.logger.Log
  * TODO: Switch to android.view.WindowInsetsController for SDK 30+
  */
 class AdvancedImmersiveModeFragment : Fragment() {
+    /**
+     * The [CheckBox] labeled "Hide Navigation bar" resource ID [R.id.flag_hide_navbar], toggles the
+     * `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] which requests that the
+     * system navigation be temporarily hidden when set.
+     */
     private lateinit var mHideNavCheckbox: CheckBox
+
+    /**
+     * The [CheckBox] labeled "Hide Status Bar" resource ID [R.id.flag_hide_statbar], toggles the
+     * `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_FULLSCREEN] which requests that the [View]
+     * go into the normal fullscreen mode so that its content can take over the screen while still
+     * allowing the user to interact with the application.
+     */
     private lateinit var mHideStatusBarCheckBox: CheckBox
+
+    /**
+     * The [CheckBox] labeled "Enable Immersive Mode" resource ID [R.id.flag_enable_immersive],
+     * toggles the `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_IMMERSIVE] which requests that
+     * the [View] would like to remain interactive when hiding the navigation bar. If this flag is
+     * not set, [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] will be force cleared by the system on any
+     * user interaction.
+     */
     private lateinit var mImmersiveModeCheckBox: CheckBox
+
+    /**
+     * The [CheckBox] labeled "Enable Immersive Mode (Sticky)" resource ID [R.id.flag_enable_immersive_sticky],
+     * toggles the `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] which requests
+     * that the [View] would like to remain interactive when hiding the status bar and/or hiding the
+     * navigation bar. Use this flag to create an immersive experience while also hiding the system
+     * bars. If this flag is not set, [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] will be force cleared by
+     * the system on any user interaction, and [View.SYSTEM_UI_FLAG_FULLSCREEN] will be force-cleared
+     * by the system if the user swipes from the top of the screen.
+     */
     private lateinit var mImmersiveModeStickyCheckBox: CheckBox
+
+    /**
+     * The [CheckBox] labeled "Enable Low Profile Mode" resource ID [R.id.flag_enable_lowprof],
+     * toggles the `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_LOW_PROFILE] which requests
+     * that the [View] enter an unobtrusive "low profile" mode. This is for use in games, book
+     * readers, video players, or any other "immersive" application where the usual system chrome is
+     * deemed too distracting. In low profile mode, the status bar and/or navigation icons may dim.
+     */
     private lateinit var mLowProfileCheckBox: CheckBox
+
+    /**
+     * Called to do initial creation of a fragment. This is called after [onAttach] and before
+     * [onCreateView]. Note that this can be called while the fragment's activity is still in the
+     * process of being created. As such, you can not rely on things like the activity's content
+     * view hierarchy being initialized at this point. If you want to do work once the activity
+     * itself is created, see [onActivityCreated]. Any restored child fragments will be created
+     * before the base [Fragment.onCreate] method returns. First we call our super's implementation
+     * of `onCreate`, then we call the [setHasOptionsMenu] method with `true` to report that this
+     * fragment would like to participate in populating the options menu by receiving a call to
+     * [onCreateOptionsMenu] and related methods.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View? {
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and {[onActivityCreated]. It is recommended to __only__ inflate the layout in this
+     * method and move logic that operates on the returned [View] to [onViewCreated].
+     *
+     * We use our [LayoutInflater] parameter [inflater] to inflate our layout file [R.layout.fragment_flags],
+     * using our [ViewGroup] parameter [container] for its `LayoutParams` without attaching to it and
+     * use the [View] that [inflater] returns to initialize our variable `val flagsView`. We find the
+     * [CheckBox] in `flagsView` with ID [R.id.flag_enable_lowprof] to initialize [mLowProfileCheckBox],
+     * find the [CheckBox] in `flagsView` with ID [R.id.flag_hide_navbar] to initialize [mHideNavCheckbox],
+     * find the [CheckBox] in `flagsView` with ID [R.id.flag_hide_statbar] to initialize [mHideStatusBarCheckBox],
+     * find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_immersive] to initialize
+     * [mImmersiveModeCheckBox], and find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_immersive_sticky]
+     * to initialize [mImmersiveModeStickyCheckBox].
+     *
+     * We initialize our [Button] variable `val toggleFlagsButton` to the [Button] in `flagsView` with
+     * ID [R.id.btn_changeFlags] (labeled "Do things!") and set its `OnClickListener` to a lambda
+     * which calls our method [toggleUiFlags]. We initialize our [Button] variable
+     * `val presetsImmersiveModeButton` to the [Button] in `flagsView` with ID [R.id.btn_immersive]
+     * (labeled "Immersive Mode") and set its `OnClickListener` to a lambda which sets the flags
+     * [View.SYSTEM_UI_FLAG_FULLSCREEN], [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION], and
+     * [View.SYSTEM_UI_FLAG_IMMERSIVE] and clears the flags [View.SYSTEM_UI_FLAG_LOW_PROFILE], and
+     * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] and does the same thing to the checked state of the
+     * [CheckBox] which toggles each of these flags.
+     *
+     * We initialize our [Button] variable `val presetsLeanbackModeButton` to the [Button] in `flagsView`
+     * with ID [R.id.btn_leanback] (labeled "Leanback Mode") and set its `OnClickListener` to a lambda
+     * which sets the flags [View.SYSTEM_UI_FLAG_FULLSCREEN], [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION],
+     * and clears the flags [View.SYSTEM_UI_FLAG_LOW_PROFILE], [View.SYSTEM_UI_FLAG_IMMERSIVE] and
+     * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] and does the same thing to the checked state of the
+     * [CheckBox] which toggles each of these flags.
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the fragment.
+     * @param container If non-`null`, this is the parent [ViewGroup] that the fragment's UI will be
+     * attached to. The fragment should not add the view itself, but this can be used to generate
+     * the `LayoutParams` of the view.
+     * @param state If non-`null`, this fragment is being re-constructed from a previous saved
+     * state as given here.
+     * @return the [View] for the fragment's UI.
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        state: Bundle?
+    ): View? {
         val flagsView = inflater.inflate(R.layout.fragment_flags, container, false)
         mLowProfileCheckBox = flagsView.findViewById<View>(R.id.flag_enable_lowprof) as CheckBox
         mHideNavCheckbox = flagsView.findViewById<View>(R.id.flag_hide_navbar) as CheckBox
