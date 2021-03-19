@@ -273,7 +273,34 @@ class AdvancedImmersiveModeFragment : Fragment() {
      * Applies the system UI visibility flags selected by the checked and unchecked state of the
      * [CheckBox]'s of our UI to the `systemUiVisibility` property of the top-level window decor
      * view (the `Window` which contains the standard window frame/decorations and our content
-     * inside of that).
+     * inside of that). First we initialize our [View] variable `val decorView` to the top-level
+     * window decor view, initialize our [Int] variable `val uiOptions` to the `systemUiVisibility`
+     * property of `decorView` (its current SystemUiVisibility flags), and initialize our [Int]
+     * variable `var newUiOptions` to `uiOptions`. Then we proceed to check the checked state of
+     * each [CheckBox] in our UI and set or unset the SystemUiVisibility flag that they control:
+     *  - [mLowProfileCheckBox] sets the [View.SYSTEM_UI_FLAG_LOW_PROFILE] flag in `newUiOptions` if
+     *  checked (requests the system UI to enter an unobtrusive "low profile" mode where the status
+     *  bar and/or navigation icons may dim). Clears the flag if unchecked.
+     *  - [mHideStatusBarCheckBox] sets the [View.SYSTEM_UI_FLAG_FULLSCREEN] flag in `newUiOptions`
+     *  if checked (request non-critical UI be hidden, such as the status bar, the bar reappears
+     *  when the user swipes it down). Clears the flag if unchecked.
+     *  - [mHideNavCheckbox] sets the [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] flag in `newUiOptions`
+     *  if checked (requests that the system navigation be temporarily hidden, nav bar normally
+     *  instantly reappears when the user touches the screen but  when immersive mode is also enabled,
+     *  the nav bar stays hidden until the user swipes it back). Clears the flag if unchecked.
+     *  - [mImmersiveModeCheckBox] sets the [View.SYSTEM_UI_FLAG_IMMERSIVE] flag in `newUiOptions`
+     *  if checked (when enabled, it allows the user to swipe the status and/or nav bars off-screen.
+     *  When the user swipes the bars back onto the screen, the flags are cleared and immersive mode
+     *  is automatically disabled). Clears the flag if unchecked.
+     *  - [mImmersiveModeStickyCheckBox] sets the [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] flag in
+     *  `newUiOptions` if checked (similar to [View.SYSTEM_UI_FLAG_IMMERSIVE] but it uses semi
+     *  transparent bars for the nav and status bars, and this UI flag will *not* be cleared when
+     *  the user interacts with the UI. When the user swipes, the bars will temporarily appear for
+     *  a few seconds and then disappear again). Clears the flag if unchecked.
+     *
+     * After setting or clearing the new UI flags selected by the [CheckBox]'s in `newUiOptions` we
+     * set the `systemUiVisibility` to `newUiOptions`, then call our [dumpFlagStateToLog] method with
+     * `uiOptions` to have it log the old UI flags.
      */
     private fun toggleUiFlags() {
 
@@ -282,9 +309,9 @@ class AdvancedImmersiveModeFragment : Fragment() {
         // one to find from within a fragment, since there's a handy helper method to pull it, and
         // we don't have to bother with picking a view somewhere deeper in the hierarchy and calling
         // "findViewById" on it.
-        val decorView = activity!!.window.decorView
-        val uiOptions = decorView.systemUiVisibility
-        var newUiOptions = uiOptions
+        val decorView: View = activity!!.window.decorView
+        val uiOptions: Int = decorView.systemUiVisibility
+        var newUiOptions: Int = uiOptions
         // END_INCLUDE (get_current_ui_flags)
 
         // BEGIN_INCLUDE (toggle_lowprofile_mode)
@@ -360,6 +387,9 @@ class AdvancedImmersiveModeFragment : Fragment() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         const val TAG = "AdvancedImmersiveModeFragment"
     }
 }
