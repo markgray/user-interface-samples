@@ -23,11 +23,9 @@ import kotlin.jvm.JvmOverloads
 /**
  * Helper class for a list (or tree) of LoggerNodes.
  *
- *
- * When this is set as the head of the list,
- * an instance of it can function as a drop-in replacement for [android.util.Log].
- * Most of the methods in this class server only to map a method call in Log to its equivalent
- * in LogNode.
+ * When this is set as the head of the list, an instance of it can function as a drop-in replacement
+ * for [android.util.Log]. Most of the methods in this class server only to map a method call in Log
+ * to its equivalent in LogNode.
  */
 object Log {
     // Grabbing the native values from Android's native logging facilities,
