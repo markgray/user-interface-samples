@@ -45,12 +45,12 @@ import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 
 /**
- * Simple fraggment which contains a LogView and uses is to output log data it receives
- * through the LogNode interface.
+ * Simple fragment which contains a [LogView] and uses it to output log data it receives
+ * through the [LogNode] interface.
  */
 class LogFragment : Fragment() {
     /**
-     * Holds the beginning of the LogNode topology.
+     * The [LogView] we use to output the log data we receive through the [LogNode] interface.
      */
     var logView: LogView? = null
         private set
@@ -65,7 +65,21 @@ class LogFragment : Fragment() {
     /**
      * This method is called by our [onCreateView] override to construct, configure and return a
      * [ScrollView] (cached in [mScrollView]) which holds an instance of [LogView] (cached in
-     * [logView]).
+     * [logView]). First we initialize our [ScrollView] field [mScrollView] with a new instance,
+     * initialize our [ViewGroup.LayoutParams] variable `val scrollParams` whose width and height
+     * are both `MATCH_PARENT`, and then set the `layoutParams` property of [mScrollView] to
+     * `scrollParams`. Next we initialize our [LogView] field [logView] with a new instance,
+     * initialize our [ViewGroup.LayoutParams] variable `val logParams` to a clone of `scrollParams`,
+     * set the `height` of `logParams` to `WRAP_CONTENT`, and then set the `layoutParams` property
+     * of [logView] to `logParams`. We enable click events for `logView`, enable it to receive the
+     * focus, and set its typeface and style to [Typeface.MONOSPACE] (`NORMAL` style of the default
+     * monospace typeface). We want to set the padding to 16 dips so we calculate `val paddingPixels`
+     * to be 16dips times the logical density of the display rounded up to [Int], and use `paddingPixels`
+     * to set the padding on all sides of `logView`  as well as the size of the padding between the
+     * compound drawables and the text. We then set the `gravity` of `logView` to [Gravity.BOTTOM]
+     * and the text color, size, style, hint color, and highlight color to those of the system style
+     * [android.R.style.TextAppearance_Holo_Medium]. Finally we add [logView] to [mScrollView] and
+     * return [mScrollView] to the caller (always our [onCreateView] override in our case).
      *
      * @return the [View] which our [onCreateView] override will return for the fragment's UI.
      */
