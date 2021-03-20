@@ -50,6 +50,8 @@ object Log {
      * @param priority Log level of the data being logged. Verbose, Error, etc.
      * @param tag Tag for for the log data. Can be used to organize log statements.
      * @param msg The actual message to be logged. The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     * to extract and print useful information.
      */
     @JvmOverloads
     fun println(priority: Int, tag: String?, msg: String?, tr: Throwable? = null) {
@@ -63,22 +65,27 @@ object Log {
      *
      * @param tag Tag for for the log data. Can be used to organize log statements.
      * @param msg The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     * to extract and print useful information.
      */
     @JvmOverloads
     fun v(tag: String?, msg: String?, tr: Throwable? = null) {
         println(VERBOSE, tag, msg, tr)
     }
 
-   /**
+    /**
      * Prints a message at DEBUG priority.
      *
      * @param tag Tag for for the log data. Can be used to organize log statements.
      * @param msg The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     * to extract and print useful information.
      */
     @JvmOverloads
     fun d(tag: String?, msg: String?, tr: Throwable? = null) {
         println(DEBUG, tag, msg, tr)
     }
+
     /**
      * Prints a message at INFO priority.
      *
@@ -91,6 +98,7 @@ object Log {
     fun i(tag: String?, msg: String?, tr: Throwable? = null) {
         println(INFO, tag, msg, tr)
     }
+
     /**
      * Prints a message at WARN priority.
      *
@@ -114,6 +122,7 @@ object Log {
     fun w(tag: String?, tr: Throwable?) {
         w(tag, null, tr)
     }
+
     /**
      * Prints a message at ERROR priority.
      *
@@ -126,6 +135,7 @@ object Log {
     fun e(tag: String?, msg: String?, tr: Throwable? = null) {
         println(ERROR, tag, msg, tr)
     }
+
     /**
      * Prints a message at ASSERT priority.
      *
