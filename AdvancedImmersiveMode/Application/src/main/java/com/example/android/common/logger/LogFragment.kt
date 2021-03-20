@@ -49,15 +49,33 @@ import androidx.fragment.app.Fragment
  * through the LogNode interface.
  */
 class LogFragment : Fragment() {
+    /**
+     * Holds the beginning of the LogNode topology.
+     */
     var logView: LogView? = null
         private set
-    private var mScrollView: ScrollView? = null
+
+    /**
+     * The [ScrollView] which holds our [LogView] field [logView] and which is the [View] that is
+     * returned by our [onCreateView] override. Our [inflateViews] method constructs and configures
+     * [mScrollView] and adds a new instance of [LogView] to it (which is cached in [logView]).
+     */
+    private lateinit var mScrollView: ScrollView
+
+    /**
+     * This method is called by our [onCreateView] override to construct, configure and return a
+     * [ScrollView] (cached in [mScrollView]) which holds an instance of [LogView] (cached in
+     * [logView]).
+     *
+     * @return the [View] which our [onCreateView] override will return for the fragment's UI.
+     */
     fun inflateViews(): View {
         mScrollView = ScrollView(activity)
         val scrollParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT)
-        mScrollView!!.layoutParams = scrollParams
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        mScrollView.layoutParams = scrollParams
         logView = LogView(activity as Context)
         val logParams = ViewGroup.LayoutParams(scrollParams)
         logParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -75,19 +93,36 @@ class LogFragment : Fragment() {
         logView!!.gravity = Gravity.BOTTOM
         @Suppress("DEPRECATION")
         logView!!.setTextAppearance(activity, android.R.style.TextAppearance_Holo_Medium)
-        mScrollView!!.addView(logView)
-        return mScrollView!!
+        mScrollView.addView(logView)
+        return mScrollView
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and [onActivityCreated]. It is recommended to **only** inflate the layout in this
+     * method and move logic that operates on the returned View to [onViewCreated].
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the fragment.
+     * @param container If non-`null`, this is the parent view that the fragment's UI will be
+     * attached to.  The fragment should not add the view itself, but this can be used to generate
+     * the `LayoutParams` of the view.
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return Return the [View] for the fragment's UI.
+     */
     @Suppress("RedundantNullableReturnType")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val result = inflateViews()
         logView!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                mScrollView!!.fullScroll(ScrollView.FOCUS_DOWN)
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN)
             }
         })
         return result
