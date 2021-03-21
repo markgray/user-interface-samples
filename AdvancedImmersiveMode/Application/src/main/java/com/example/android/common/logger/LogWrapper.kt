@@ -18,24 +18,21 @@ package com.example.android.common.logger
 import android.util.Log
 
 /**
- * Helper class which wraps Android's native Log utility in the Logger interface.  This way
- * normal DDMS output can be one of the many targets receiving and outputting logs simultaneously.
+ * Helper class which wraps Android's native Log utility in the Logger interface. This way normal
+ * DDMS output can be one of the many targets receiving and outputting logs simultaneously.
  */
 class LogWrapper : LogNode {
     /**
-     * Returns the next LogNode in the linked list.
+     * For piping: The next node to receive Log data after this one has done its work.
      */
-    /**
-     * Sets the LogNode data will be sent to..
-     */
-    // For piping:  The next node to receive Log data after this one has done its work.
     var next: LogNode? = null
 
     /**
      * Prints data out to the console using Android's native log mechanism.
-     * @param priority Log level of the data being logged.  Verbose, Error, etc.
-     * @param tag Tag for for the log data.  Can be used to organize log statements.
-     * @param msg The actual message to be logged. The actual message to be logged.
+     *
+     * @param priority Log level of the data being logged. [Log.VERBOSE], [Log.ERROR], etc.
+     * @param tag Tag for for the log data. Can be used to organize log statements.
+     * @param msg The actual message to be logged.
      * @param tr If an exception was thrown, this can be sent along for the logging facilities
      * to extract and print useful information.
      */
@@ -51,10 +48,7 @@ class LogWrapper : LogNode {
         // If an exeption was provided, convert that exception to a usable string and attach
         // it to the end of the msg method.
         if (tr != null) {
-            msgVar += """
-                
-                ${Log.getStackTraceString(tr)}
-                """.trimIndent()
+            msgVar += "\n${Log.getStackTraceString(tr)}"
         }
 
         // This is functionally identical to Log.x(tag, useMsg);
