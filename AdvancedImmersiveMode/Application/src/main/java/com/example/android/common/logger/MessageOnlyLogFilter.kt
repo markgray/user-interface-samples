@@ -22,17 +22,14 @@ package com.example.android.common.logger
  */
 class MessageOnlyLogFilter : LogNode {
     /**
-     * Returns the next LogNode in the chain.
-     */
-    /**
-     * Sets the LogNode data will be sent to..
+     * The next [LogNode] that data will be sent to..
      */
     var next: LogNode? = null
 
     /**
-     * Takes the "next" LogNode as a parameter, to simplify chaining.
+     * Takes the "next" [LogNode] as a parameter, to simplify chaining.
      *
-     * @param next The next LogNode in the pipeline.
+     * @param next The next [LogNode] in the pipeline.
      */
     @Suppress("unused")
     constructor(next: LogNode?) {
@@ -41,6 +38,17 @@ class MessageOnlyLogFilter : LogNode {
 
     constructor()
 
+    /**
+     * If our [LogNode] field [next] is not `null` we call its [LogNode.println] method with its
+     * [priority] parameter set to [Log.NONE], its [tag] parameter set to `null`, and its [tr]
+     * parameter set to `null`. Only its [msg] parameter is set to our [String] parameter [msg].
+     *
+     * @param priority Log level of the data being logged.  Verbose, Error, etc.
+     * @param tag Tag for for the log data.  Can be used to organize log statements.
+     * @param msg The actual message to be logged. The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     * to extract and print useful information.
+     */
     override fun println(priority: Int, tag: String?, msg: String?, tr: Throwable?) {
         if (next != null) {
             next!!.println(Log.NONE, null, msg, null)
