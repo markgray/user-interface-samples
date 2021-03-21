@@ -116,6 +116,13 @@ class LogFragment : Fragment() {
      * [onCreate] and [onActivityCreated]. It is recommended to **only** inflate the layout in this
      * method and move logic that operates on the returned View to [onViewCreated].
      *
+     * We initialize our [View] variable `val result` to the [View] returned by our [inflateViews]
+     * method when it wraps a [ScrollView] around a [LogView]. [inflateViews] cached that [LogView]
+     * in our field [logView] so we can use the [logView] reference to it to add a [TextWatcher] to
+     * it whose [TextWatcher.afterTextChanged] override will scroll [mScrollView] down.
+     *
+     * Finally we return `result` to the caller.
+     *
      * @param inflater The [LayoutInflater] object that can be used to inflate
      * any views in the fragment.
      * @param container If non-`null`, this is the parent view that the fragment's UI will be
@@ -131,7 +138,7 @@ class LogFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val result = inflateViews()
+        val result: View = inflateViews()
         logView!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
