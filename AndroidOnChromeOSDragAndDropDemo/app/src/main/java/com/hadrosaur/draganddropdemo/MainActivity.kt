@@ -74,7 +74,45 @@ open class MainActivity : AppCompatActivity() {
         ) : OnDragListener {
         /**
          * Called when a drag event is dispatched to a [View]. This allows listeners to get a chance
-         * to override base [View] behavior.
+         * to override base [View] behavior. We branch on the action value of our [DragEvent] parameter
+         * [event]:
+         *  - [DragEvent.ACTION_DRAG_STARTED] Signals the start of a drag and drop operation. If the
+         *  [ClipDescription] of [event] has the MIME type [ClipDescription.MIMETYPE_TEXT_PLAIN] or
+         *  has the MIME type "application/x-arc-uri-list" we set the background color of our [View]
+         *  parameter [v] to a light green and return `true` to report the drag event was handled
+         *  successfully. For any other MIME type we return `false` to have [v] call its own `onDrag`
+         *  handler.
+         *  - [DragEvent.ACTION_DRAG_ENTERED] Signals to a [View] that the drag point has entered the
+         *  bounding box of the [View]. We increase the green background color and return `true` to
+         *  report that the drag event was handled successfully.
+         *  - [DragEvent.ACTION_DRAG_LOCATION] Sent to a [View] after ACTION_DRAG_ENTERED while the
+         *  drag shadow is still within the [View] object's bounding box, but not within a descendant
+         *  view that can accept the data. We just return `true` to report that the drag event was
+         *  handled successfully.
+         *  - [DragEvent.ACTION_DRAG_EXITED] Signals that the user has moved the drag shadow out of
+         *  the bounding box of the [View] or into a descendant [View] that can accept the data. We
+         *  set the background color to a less intense green when item is not over the target, and
+         *  return `true` to report that the drag event was handled successfully.
+         *  - [DragEvent.ACTION_DROP] Signals to a [View] that the user has released the drag shadow,
+         *  and the drag point is within the bounding box of the [View] and not within a descendant
+         *  [View] that can accept the data. We call the [requestDragAndDropPermissions] method with
+         *  [event] to create a `DragAndDropPermissions` object bound to this activity and controlling
+         *  the access permissions for content URIs associated with the [event]. Then we initialize
+         *  our [ClipData.Item] variable `val item` to the item at index 0 of the [ClipData] object
+         *  of [event]. Then we branch on the MIME type of the [ClipDescription] of [event]:
+         *      - [ClipDescription.MIMETYPE_TEXT_PLAIN] The item is a text item so we simply display
+         *      it in a new [TextView] which we add to our [FrameLayout] parameter [v].
+         *      - "application/x-arc-uri-list" if the item is a file we read the first 200 characters
+         *      and output them in a new [TextView] which we add to our [FrameLayout] parameter [v].
+         *      - For these two MIME types we return `true` to report that the drag event was handled
+         *      successfully, for all other MIME types we return `false` to have [v] call its own
+         *      `onDrag` handler.
+         *  - [DragEvent.ACTION_DRAG_ENDED] Signals to a View that the drag and drop operation has
+         *  concluded. We restore the background color of [v] to transparent and return `true` to
+         *  report that the drag event was handled successfully.
+         *  - For all other action values of our [DragEvent] parameter [event] we log the fact that
+         *  we received an unknown action type and return `false` to have [v] call its own `onDrag`
+         *  handler.
          *
          * @param v The [View] that received the drag event.
          * @param event The [DragEvent] object for the drag event.
@@ -110,14 +148,17 @@ open class MainActivity : AppCompatActivity() {
                 }
                 DragEvent.ACTION_DROP -> {
                     requestDragAndDropPermissions(event) //Allow items from other applications
-                    val item = event.clipData.getItemAt(0)
+                    val item: ClipData.Item = event.clipData.getItemAt(0)
                     when {
                         event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) -> {
                             //If this is a text item, simply display it in a new TextView.
                             val frameTarget = v as FrameLayout
                             frameTarget.removeAllViews()
                             val droppedText = TextView(mActivity)
-                            val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                            val params = FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                FrameLayout.LayoutParams.WRAP_CONTENT
+                            )
                             params.gravity = Gravity.CENTER
                             droppedText.layoutParams = params
                             droppedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f)
@@ -150,7 +191,10 @@ open class MainActivity : AppCompatActivity() {
                             val frameTarget = v as FrameLayout
                             frameTarget.removeAllViews()
                             val droppedText = TextView(mActivity)
-                            val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+                            val params = FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                FrameLayout.LayoutParams.WRAP_CONTENT
+                            )
                             params.gravity = Gravity.CENTER
                             droppedText.layoutParams = params
                             droppedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
@@ -169,13 +213,19 @@ open class MainActivity : AppCompatActivity() {
                     true
                 }
                 else -> {
-                    Log.e("DragDrop Example", "Unknown action type received by DropTargetListener.")
+                    Log.e(
+                        "DragDrop Example",
+                        "Unknown action type received by DropTargetListener."
+                    )
                     false
                 }
             }
         }
     }
 
+    /**
+     * Custom [OnLongClickListener] that we use for the [TextView] with ID [R.id.text_drag]
+     */
     protected inner class TextViewLongClickListener : OnLongClickListener {
         override fun onLongClick(v: View): Boolean {
             val thisTextView = v as TextView
