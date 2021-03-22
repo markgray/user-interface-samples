@@ -33,7 +33,22 @@ import androidx.appcompat.app.AppCompatActivity
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 
+/**
+ * A demo android application demonstrating basic Drag and Drop functionality with Chrome OS in mind.
+ * Allows for plain-text items and files from the Chrome OS file manager to be dragged into the app.
+ * Has a plain-text item that can be dragged out.
+ */
 open class MainActivity : AppCompatActivity() {
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main]. We initialize our
+     * [TextView] variable `val dragText` by finding the view with ID [R.id.text_drag] and our
+     * [FrameLayout] variable `val targetFrame` by finding the view with ID [R.id.frame_target]. We
+     * set the [OnDragListener] of `targetFrame` to an instance of our [DropTargetListener] class,
+     * and set the [OnLongClickListener] of `dragText` to an instance of [TextViewLongClickListener].
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,7 +62,26 @@ open class MainActivity : AppCompatActivity() {
         dragText.setOnLongClickListener(TextViewLongClickListener())
     }
 
-    protected inner class DropTargetListener(private val mActivity: AppCompatActivity) : OnDragListener {
+    /**
+     * This is the custom [OnDragListener] used for the [FrameLayout] with ID [R.id.frame_target]
+     * which is used as the drop target.
+     */
+    protected inner class DropTargetListener(
+        /**
+         * The [MainActivity] instance to use for context when constructing our [TextView].
+         */
+        private val mActivity: AppCompatActivity
+        ) : OnDragListener {
+        /**
+         * Called when a drag event is dispatched to a [View]. This allows listeners to get a chance
+         * to override base [View] behavior.
+         *
+         * @param v The [View] that received the drag event.
+         * @param event The [DragEvent] object for the drag event.
+         * @return `true` if the drag event was handled successfully, or `false` if the drag event
+         * was not handled. Note that `false` will trigger the [View] to call its own `onDrag`
+         * handler.
+         */
         override fun onDrag(v: View, event: DragEvent): Boolean {
             return when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
