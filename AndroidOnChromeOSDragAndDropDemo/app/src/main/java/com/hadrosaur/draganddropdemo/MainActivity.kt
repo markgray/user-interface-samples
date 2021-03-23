@@ -224,12 +224,33 @@ open class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Custom [OnLongClickListener] that we use for the [TextView] with ID [R.id.text_drag]
+     * Custom [OnLongClickListener] that we use for the [TextView] with ID [R.id.text_drag].
      */
     protected inner class TextViewLongClickListener : OnLongClickListener {
+        /**
+         * Called when a [View] has been clicked and held. First we initialize our [TextView] variable
+         * `val thisTextView` by casting our [View] parameter [v] to a [TextView]. Then we initialize
+         * our [String] variable `val dragContent` to the [String] formed by concatenating the text
+         * of `thisTextView` to the [String] "Dragged Text:". We initialize our [ClipData.Item]
+         * variable to a new instance holding `dragContent`, and initialize our [ClipData] variable
+         * `val dragData` to an instance that uses `dragContent` as the label to show to the user
+         * describing the clip, [ClipDescription.MIMETYPE_TEXT_PLAIN] as the MIME type (MIME type
+         * for a clip holding plain text) and `item` as the contents of the first item in the clip.
+         * We initialize our [DragShadowBuilder] variable `val dragShadow` to an instance based on [v]
+         * using the default: the resulting drag shadow will have the same appearance and dimensions
+         * as [v], with the touch point over the center of the [View]. Then we start the drag, with
+         * `dragData` as the [ClipData] object pointing to the data to be transferred by the drag
+         * and drop operation, `dragShadow` as the [DragShadowBuilder] object for building the drag
+         * shadow, with `null` for the `myLocalState` flags passed to the target, and the flag
+         * [View.DRAG_FLAG_GLOBAL] indicating that a drag can cross window boundaries. Finally we
+         * return `false` to report that we did not consume the long click.
+         *
+         * @param v The [View] that was clicked and held.
+         * @return `true` if the callback consumed the long click, `false` otherwise.
+         */
         override fun onLongClick(v: View): Boolean {
             val thisTextView = v as TextView
-            val dragContent = "Dragged Text: " + thisTextView.text
+            val dragContent: String = "Dragged Text: " + thisTextView.text
 
             //Set the drag content and type.
             val item = ClipData.Item(dragContent)
