@@ -15,12 +15,12 @@
  */
 package com.example.android.appshortcuts;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.pm.ShortcutInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
