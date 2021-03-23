@@ -173,8 +173,7 @@ class Main : ListActivity(), View.OnClickListener {
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view: View
-            view = convertView ?: mInflater.inflate(R.layout.list_item, null)
+            val view: View = convertView ?: mInflater.inflate(R.layout.list_item, null)
             bindView(view, position, mList[position])
             return view
         }
