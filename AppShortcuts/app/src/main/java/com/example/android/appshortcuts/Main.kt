@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.appshortcuts
 
+import android.annotation.SuppressLint
 import android.app.ListActivity
 import android.content.Context
 import android.content.DialogInterface
@@ -75,18 +78,19 @@ class Main : ListActivity(), View.OnClickListener {
             .setTitle("Add new website")
             .setMessage("Type URL of a website")
             .setView(editUri)
-            .setPositiveButton("Add") { dialog: DialogInterface?, whichButton: Int ->
+            .setPositiveButton("Add") { _: DialogInterface?, _: Int ->
                 val url = editUri.text.toString().trim { it <= ' ' }
-                if (url.length > 0) {
+                if (url.isNotEmpty()) {
                     addUriAsync(url)
                 }
             }
             .show()
     }
 
+    @SuppressLint("StaticFieldLeak")
     private fun addUriAsync(uri: String) {
         object : AsyncTask<Void?, Void?, Void?>() {
-            protected override fun doInBackground(vararg params: Void?): Void? {
+            override fun doInBackground(vararg params: Void?): Void? {
                 mHelper!!.addWebSiteShortcut(uri)
                 return null
             }
@@ -135,13 +139,15 @@ class Main : ListActivity(), View.OnClickListener {
         if (!shortcut.isEnabled) {
             sb.append(sep)
             sb.append("Disabled")
+            @Suppress("UNUSED_VALUE")
             sep = ", "
         }
         return sb.toString()
     }
 
+    @Suppress("CanBeParameter")
     private inner class MyAdapter(private val mContext: Context) : BaseAdapter() {
-        private val mInflater: LayoutInflater
+        private val mInflater: LayoutInflater = mContext.getSystemService(LayoutInflater::class.java)
         private var mList = EMPTY_LIST
         override fun getCount(): Int {
             return mList.size
@@ -173,11 +179,12 @@ class Main : ListActivity(), View.OnClickListener {
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view: View = convertView ?: mInflater.inflate(R.layout.list_item, null)
+            val view: View = convertView ?: mInflater.inflate(R.layout.list_item, parent, false)
             bindView(view, position, mList[position])
             return view
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun bindView(view: View, position: Int, shortcut: ShortcutInfo) {
             view.tag = shortcut
             val line1 = view.findViewById<View>(R.id.line1) as TextView
@@ -192,9 +199,6 @@ class Main : ListActivity(), View.OnClickListener {
             disable.setOnClickListener(this@Main)
         }
 
-        init {
-            mInflater = mContext.getSystemService(LayoutInflater::class.java)
-        }
     }
 
     companion object {
