@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.app.ListActivity
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.ShortcutManager
 import android.content.pm.ShortcutInfo
 import android.os.AsyncTask
 import android.os.Bundle
@@ -32,19 +33,39 @@ import android.view.inputmethod.EditorInfo
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListAdapter
+import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import java.util.ArrayList
 
+/**
+ * This sample demonstrates how to use the Launcher Shortcuts API introduced in Android 7.1 (API 25).
+ * This API allows an application to define a set of Intents which are displayed as when a user
+ * long-presses on the app's launcher icon. Examples are given for registering both links both
+ * statically in XML, as well as dynamically at runtime.
+ *
+ * Its UI consists of a [Button] labeled "Add New Website" which when clicked calls our [onAddPressed]
+ * method which pops up an [AlertDialog] to allow the user to add a new URL to the [List] of
+ * [ShortcutInfo] objects which are displayed in our [ListView] and which are accessed when a user
+ * long-presses on our app's launcher icon.
+ */
 class Main : ListActivity(), View.OnClickListener {
-    private var mAdapter: MyAdapter? = null
-    private var mHelper: ShortcutHelper? = null
+    /**
+     * The [MyAdapter] custom [ListAdapter] used to populate our [ListView].
+     */
+    private lateinit var mAdapter: MyAdapter
+
+    /**
+     * Our [ShortcutHelper] which we use to interact with the [ShortcutManager].
+     */
+    private lateinit var mHelper: ShortcutHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
         mHelper = ShortcutHelper(this)
-        mHelper!!.maybeRestoreAllDynamicShortcuts()
-        mHelper!!.refreshShortcuts( /*force=*/false)
+        mHelper.maybeRestoreAllDynamicShortcuts()
+        mHelper.refreshShortcuts( /*force=*/false)
         if (ACTION_ADD_WEBSITE == intent.action) {
             // Invoked via the manifest shortcut.
             addWebSite()
@@ -70,7 +91,7 @@ class Main : ListActivity(), View.OnClickListener {
         Log.i(TAG, "addWebSite")
 
         // This is important.  This allows the launcher to build a prediction model.
-        mHelper!!.reportShortcutUsed(ID_ADD_WEBSITE)
+        mHelper.reportShortcutUsed(ID_ADD_WEBSITE)
         val editUri = EditText(this)
         editUri.hint = "http://www.android.com/"
         editUri.inputType = EditorInfo.TYPE_TEXT_VARIATION_URI
@@ -91,7 +112,7 @@ class Main : ListActivity(), View.OnClickListener {
     private fun addUriAsync(uri: String) {
         object : AsyncTask<Void?, Void?, Void?>() {
             override fun doInBackground(vararg params: Void?): Void? {
-                mHelper!!.addWebSiteShortcut(uri)
+                mHelper.addWebSiteShortcut(uri)
                 return null
             }
 
@@ -102,7 +123,7 @@ class Main : ListActivity(), View.OnClickListener {
     }
 
     private fun refreshList() {
-        mAdapter!!.setShortcuts(mHelper!!.shortcuts)
+        mAdapter.setShortcuts(mHelper.shortcuts)
     }
 
     override fun onClick(v: View) {
@@ -110,14 +131,14 @@ class Main : ListActivity(), View.OnClickListener {
         when (v.id) {
             R.id.disable -> {
                 if (shortcut.isEnabled) {
-                    mHelper!!.disableShortcut(shortcut)
+                    mHelper.disableShortcut(shortcut)
                 } else {
-                    mHelper!!.enableShortcut(shortcut)
+                    mHelper.enableShortcut(shortcut)
                 }
                 refreshList()
             }
             R.id.remove -> {
-                mHelper!!.removeShortcut(shortcut)
+                mHelper.removeShortcut(shortcut)
                 refreshList()
             }
         }
