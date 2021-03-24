@@ -20,6 +20,7 @@ package com.example.android.appshortcuts
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.os.AsyncTask
@@ -63,7 +64,19 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.main]
+     * then we set our content view to our layout file [R.layout.main] which holds a [Button] which
+     * allows the user to add another shortcut (ID [R.id.add]) and a [ListView] which lists the URLs
+     * which we use for Launcher Shortcuts. We initialize our [ShortcutHelper] field [mHelper] with
+     * a new instance, call its [ShortcutHelper.maybeRestoreAllDynamicShortcuts] method to have it
+     * restore any dynamic shortcuts our app may have (a no-op since we do not have any ATM), and
+     * then call its [ShortcutHelper.refreshShortcuts] method to have it look for shortcuts that
+     * have been pushed and refresh them (the refresh part isn't implemented yet). If the `action`
+     * of the [Intent] that started this activity is [ACTION_ADD_WEBSITE] (declared in our Manifest)
+     * we call our [addWebSite] method to have it pop up an [AlertDialog] that will allow the user
+     * to add another URL to our list of shortcuts. We initialize our [ListView] variable `val listView`
+     * by finding the [View] with ID [R.id.list], initialize our [MyAdapter] field [mAdapter] to a
+     * new instance that uses our application [Context] to access the [LayoutInflater] system service,
+     * and set [mAdapter] to be the adapter for `listView`.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
