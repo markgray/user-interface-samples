@@ -18,11 +18,10 @@
 package com.example.android.appshortcuts
 
 import android.annotation.SuppressLint
-import android.app.ListActivity
 import android.content.Context
 import android.content.DialogInterface
-import android.content.pm.ShortcutManager
 import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -37,6 +36,7 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import java.util.ArrayList
 
 /**
@@ -50,7 +50,7 @@ import java.util.ArrayList
  * [ShortcutInfo] objects which are displayed in our [ListView] and which are accessed when a user
  * long-presses on our app's launcher icon.
  */
-class Main : ListActivity(), View.OnClickListener {
+class Main : AppCompatActivity(), View.OnClickListener {
     /**
      * The [MyAdapter] custom [ListAdapter] used to populate our [ListView].
      */
@@ -60,6 +60,13 @@ class Main : ListActivity(), View.OnClickListener {
      * Our [ShortcutHelper] which we use to interact with the [ShortcutManager].
      */
     private lateinit var mHelper: ShortcutHelper
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.main]
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
@@ -70,8 +77,9 @@ class Main : ListActivity(), View.OnClickListener {
             // Invoked via the manifest shortcut.
             addWebSite()
         }
+        val listView: ListView = findViewById(R.id.list)
         mAdapter = MyAdapter(this.applicationContext)
-        listAdapter = mAdapter
+        listView.adapter = mAdapter
     }
 
     override fun onResume() {
