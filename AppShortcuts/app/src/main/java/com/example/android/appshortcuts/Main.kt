@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("DEPRECATION")
 
 package com.example.android.appshortcuts
 
@@ -23,7 +22,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -168,13 +166,13 @@ class Main : AppCompatActivity(), View.OnClickListener {
      */
     @SuppressLint("StaticFieldLeak")
     private fun addUriAsync(uri: String) {
-        object : AsyncTask<Void?, Void?, Void?>() {
+        object : CoroutinesAsyncTask<Void?, Void?, Void?>() {
             override fun doInBackground(vararg params: Void?): Void? {
                 mHelper.addWebSiteShortcut(uri)
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void?) {
+            override fun onPostExecute(result: Void?) {
                 refreshList()
             }
         }.execute()
