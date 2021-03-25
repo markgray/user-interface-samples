@@ -95,13 +95,24 @@ class Main : AppCompatActivity(), View.OnClickListener {
         listView.adapter = mAdapter
     }
 
+    /**
+     * Called after [onRestoreInstanceState], [onRestart], or [onPause], for your activity to start
+     * interacting with the user. This is an indicator that the activity became active and ready to
+     * receive input. It is on top of an activity stack. First we call our super's implmentation of
+     * `onResume`, then we call our method [refreshList] to have it refresh the dataset held by our
+     * [MyAdapter] field [mAdapter] in order for them to be displayed in our [ListView] with all of
+     * the current mutable shortcuts of this app.
+     */
     override fun onResume() {
         super.onResume()
         refreshList()
     }
 
     /**
-     * Handle the add button.
+     * Handle the add button. We just call our [addWebSite] method to have it pop up an [AlertDialog]
+     * that will allow the user to add another URL to our list of shortcuts.
+     *
+     * @param v the [View] that was clicked.
      */
     @Suppress("UNUSED_PARAMETER")
     fun onAddPressed(v: View?) {
