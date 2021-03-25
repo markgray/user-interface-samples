@@ -119,6 +119,23 @@ class Main : AppCompatActivity(), View.OnClickListener {
         addWebSite()
     }
 
+    /**
+     * Pops up an [AlertDialog] that will allow the user to add another URL to our list of shortcuts.
+     * First we call the [ShortcutHelper.reportShortcutUsed] of our [ShortcutHelper] field [mHelper]
+     * to have it call the [ShortcutManager.reportShortcutUsed] method to report the user selected
+     * the shortcut containing ID [ID_ADD_WEBSITE] (or has completed an action in the app that is
+     * equivalent to selecting the shortcut). This allows the launcher to build a prediction model
+     * so that they can promote the shortcuts that are likely to be used at the moment. Next we
+     * initialize our [EditText] variable `val editUri` with a new instance, set its `hint` to the
+     * [String] "http://www.android.com/", and its `inputType` to [EditorInfo.TYPE_TEXT_VARIATION_URI]
+     * (a variation of `TYPE_CLASS_TEXT` for entering a URI). We construct an [AlertDialog.Builder],
+     * set its title to the [String] "Add new website", its message to the [String] "Type URL of a
+     * website", set its custom view to `editUri`, and the listener of the "Add" positive button to
+     * the a lambda which initializes its [String] variable `val url` to the `text` of `editUri` and
+     * then if `url` is not empty calls our [addUriAsync] method to have it add `url` as a web site
+     * shortcut using the [ShortcutHelper.addWebSiteShortcut] method of [ShortcutHelper] field
+     * [mHelper]. Finally we show the [AlertDialog.Builder] we constructed to the user.
+     */
     private fun addWebSite() {
         Log.i(TAG, "addWebSite")
 
