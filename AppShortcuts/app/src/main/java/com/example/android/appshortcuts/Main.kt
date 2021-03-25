@@ -42,9 +42,9 @@ import java.util.ArrayList
 
 /**
  * This sample demonstrates how to use the Launcher Shortcuts API introduced in Android 7.1 (API 25).
- * This API allows an application to define a set of Intents which are displayed as when a user
- * long-presses on the app's launcher icon. Examples are given for registering both links both
- * statically in XML, as well as dynamically at runtime.
+ * This API allows an application to define a set of Intents which are displayed when a user long
+ * presses on the app's launcher icon. Examples are given for registering links both statically in
+ * XML, as well as dynamically at runtime.
  *
  * Its UI consists of a [Button] labeled "Add New Website" which when clicked calls our [onAddPressed]
  * method which pops up an [AlertDialog] to allow the user to add a new URL to the [List] of
@@ -100,8 +100,8 @@ class Main : AppCompatActivity(), View.OnClickListener {
      * interacting with the user. This is an indicator that the activity became active and ready to
      * receive input. It is on top of an activity stack. First we call our super's implmentation of
      * `onResume`, then we call our method [refreshList] to have it refresh the dataset held by our
-     * [MyAdapter] field [mAdapter] in order for them to be displayed in our [ListView] with all of
-     * the current mutable shortcuts of this app.
+     * [MyAdapter] field [mAdapter] with all mutable shortcuts for this app in order for them to be
+     * displayed in our [ListView].
      */
     override fun onResume() {
         super.onResume()
@@ -121,17 +121,17 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     /**
      * Pops up an [AlertDialog] that will allow the user to add another URL to our list of shortcuts.
-     * First we call the [ShortcutHelper.reportShortcutUsed] of our [ShortcutHelper] field [mHelper]
-     * to have it call the [ShortcutManager.reportShortcutUsed] method to report the user selected
-     * the shortcut containing ID [ID_ADD_WEBSITE] (or has completed an action in the app that is
-     * equivalent to selecting the shortcut). This allows the launcher to build a prediction model
-     * so that they can promote the shortcuts that are likely to be used at the moment. Next we
+     * First we call the [ShortcutHelper.reportShortcutUsed] method of our [ShortcutHelper] field
+     * [mHelper] to have it call the [ShortcutManager.reportShortcutUsed] method to report the user
+     * selected the shortcut containing ID [ID_ADD_WEBSITE] (or has completed an action in the app
+     * that is equivalent to selecting the shortcut). This allows the launcher to build a prediction
+     * model so that it can promote the shortcuts that are likely to be used at the moment. Next we
      * initialize our [EditText] variable `val editUri` with a new instance, set its `hint` to the
      * [String] "http://www.android.com/", and its `inputType` to [EditorInfo.TYPE_TEXT_VARIATION_URI]
      * (a variation of `TYPE_CLASS_TEXT` for entering a URI). We construct an [AlertDialog.Builder],
      * set its title to the [String] "Add new website", its message to the [String] "Type URL of a
      * website", set its custom view to `editUri`, and the listener of the "Add" positive button to
-     * the a lambda which initializes its [String] variable `val url` to the `text` of `editUri` and
+     * a lambda which initializes its [String] variable `val url` to the `text` of `editUri` and
      * then if `url` is not empty calls our [addUriAsync] method to have it add `url` as a web site
      * shortcut using the [ShortcutHelper.addWebSiteShortcut] method of [ShortcutHelper] field
      * [mHelper]. Finally we show the [AlertDialog.Builder] we constructed to the user.
@@ -157,6 +157,15 @@ class Main : AppCompatActivity(), View.OnClickListener {
             .show()
     }
 
+    /**
+     * Starts a background task which calls the [ShortcutHelper.addWebSiteShortcut] method of our
+     * [ShortcutHelper] field [mHelper] to have it add our [String] parameter [uri] as a new website
+     * shortcut. And when that is done it calls our [refreshList] method to have it refresh the
+     * dataset held by our [MyAdapter] field [mAdapter] with all mutable shortcuts for this app in
+     * order for them to be displayed in our [ListView].
+     *
+     * @param uri a web site URL which the user wants to add to our short cut list.
+     */
     @SuppressLint("StaticFieldLeak")
     private fun addUriAsync(uri: String) {
         object : AsyncTask<Void?, Void?, Void?>() {
