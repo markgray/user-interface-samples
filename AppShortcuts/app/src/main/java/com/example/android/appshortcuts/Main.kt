@@ -178,10 +178,37 @@ class Main : AppCompatActivity(), View.OnClickListener {
         }.execute()
     }
 
+    /**
+     * Refreshes the dataset held by our [MyAdapter] field [mAdapter] with all mutable shortcuts for
+     * this app in order for them to be displayed in our [ListView]. It does this by calling the
+     * [MyAdapter.setShortcuts] method of our [MyAdapter] field [mAdapter] with the [List] of
+     * [ShortcutInfo] that the [ShortcutHelper.getShortcuts] method of our [ShortcutHelper] field
+     * [mHelper] returns when it queries the [ShortcutManager] for all mutable shortcuts for this
+     * app.
+     */
     private fun refreshList() {
         mAdapter.setShortcuts(mHelper.shortcuts)
     }
 
+    /**
+     * [Main] is set as the [View.OnClickListener] for both the "Remove" (ID [R.id.remove]) and the
+     * "Disable" (ID [R.id.disable]) buttons in the layout file layout/list_item.xml which is used
+     * to display items in our [ListView] of existing shortcuts so this method is called whenever
+     * either of these buttons are clicked. We initialize our [ShortcutInfo] variable `val shortcut`
+     * by retrieving the `tag` of the parent [View] of [v]. Then we branch on the `id` of [v]:
+     *  - [R.id.disable]: if `shortcut` is enabled we call the [ShortcutHelper.disableShortcut] method
+     *  of our [ShortcutHelper] field [mHelper] to disable `shortcut`, otherwise we call the
+     *  [ShortcutHelper.enableShortcut] method of [mHelper] to enable `shortcut`. In either case we
+     *  then call our [refreshList] method to have it refresh the dataset held by our [MyAdapter]
+     *  field [mAdapter] with all mutable shortcuts for this app in order for them to be displayed
+     *  in our [ListView].
+     *  - [R.id.remove]: we call the [ShortcutHelper.removeShortcut] method of [mHelper] to remove
+     *  `shortcut`, then call our [refreshList] method to have it refresh the dataset held by our
+     *  [MyAdapter] field [mAdapter] with all mutable shortcuts for this app in order for them to
+     *  be displayed in our [ListView].
+     *
+     * @param v the [View] that was clicked.
+     */
     override fun onClick(v: View) {
         val shortcut = (v.parent as View).tag as ShortcutInfo
         when (v.id) {
@@ -200,6 +227,16 @@ class Main : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * Constructs and returns a [String] describing what type of shortcut our [ShortcutInfo] parameter
+     * [shortcut] is.
+     *
+     * @param shortcut the [ShortcutInfo] object for the shortcut we are to describe.
+     * @return a [String] formed by concatenating "Dynamic" if the [ShortcutInfo.isDynamic] property
+     * of [shortcut] is `true`, followed by "Pinned" if the [ShortcutInfo.isPinned] property of
+     * [shortcut] is `true`, followed by "Disabled" if the [ShortcutInfo.isEnabled] property of
+     * [shortcut] is `false`.
+     */
     private fun getType(shortcut: ShortcutInfo): String {
         val sb = StringBuilder()
         var sep = ""
@@ -271,7 +308,8 @@ class Main : AppCompatActivity(), View.OnClickListener {
             val remove = view.findViewById<View>(R.id.remove) as Button
             val disable = view.findViewById<View>(R.id.disable) as Button
             disable.setText(
-                if (shortcut.isEnabled) R.string.disable_shortcut else R.string.enable_shortcut)
+                if (shortcut.isEnabled) R.string.disable_shortcut else R.string.enable_shortcut
+            )
             remove.setOnClickListener(this@Main)
             disable.setOnClickListener(this@Main)
         }
