@@ -229,7 +229,15 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     /**
      * Constructs and returns a [String] describing what type of shortcut our [ShortcutInfo] parameter
-     * [shortcut] is.
+     * [shortcut] is. First we initialize our [StringBuilder] variable `val sb`, then initialize our
+     * [String] variable `var sep` to the emptry [String]. If the [ShortcutInfo.isDynamic] property
+     * of our [ShortcutInfo] parameter [shortcut] is `true` we append `sep` to `sb` followed by the
+     * [String] "Dynamic" and set `sep` to ", ". If the [ShortcutInfo.isPinned] property of our
+     * [ShortcutInfo] parameter [shortcut] is `true` we append `sep` to `sb` followed by the
+     * [String] "Pinned" and set `sep` to ", ". If the [ShortcutInfo.isEnabled] property of our
+     * [ShortcutInfo] parameter [shortcut] is `false` we append `sep` to `sb` followed by the
+     * [String] "Disabled" and set `sep` to ", ". Finally we return the [String] value of `sb` to the
+     * caller.
      *
      * @param shortcut the [ShortcutInfo] object for the shortcut we are to describe.
      * @return a [String] formed by concatenating "Dynamic" if the [ShortcutInfo.isDynamic] property
@@ -259,22 +267,65 @@ class Main : AppCompatActivity(), View.OnClickListener {
         return sb.toString()
     }
 
+    /**
+     * The custom [BaseAdapter] that we use to display [ShortcutInfo] objects in our [ListView].
+     *
+     * @param mContext the application [Context] of [Main] which we use to get a [LayoutInflater]
+     * that we can use to inflate item views.
+     */
     @Suppress("CanBeParameter")
     private inner class MyAdapter(private val mContext: Context) : BaseAdapter() {
+        /**
+         * The system level [LayoutInflater] we use to inflate item views.
+         */
         private val mInflater: LayoutInflater = mContext.getSystemService(LayoutInflater::class.java)
+
+        /**
+         * The dataset of [ShortcutInfo] objects we hold for display in our [ListView].
+         */
         private var mList = EMPTY_LIST
+
+        /**
+         * How many items are in the data set represented by this Adapter. We just return the `size`
+         * of our [List] of [ShortcutInfo] field [mList].
+         *
+         * @return Count of items.
+         */
         override fun getCount(): Int {
             return mList.size
         }
 
+        /**
+         * Get the data item associated with the specified position in the data set. We return the
+         * [ShortcutInfo] at position [position] in our [List] of [ShortcutInfo] field [mList].
+         *
+         * @param position Position of the item whose data we want within the adapter's
+         * data set.
+         * @return The data at the specified position.
+         */
         override fun getItem(position: Int): Any {
             return mList[position]
         }
 
+        /**
+         * Get the row id associated with the specified position in the list. We use the position of
+         * the item in our dataset as the row id so we just return our [position] parameter converted
+         * to a [Long].
+         *
+         * @param position The position of the item within the adapter's data set whose row id we want.
+         * @return The id of the item at the specified position.
+         */
         override fun getItemId(position: Int): Long {
             return position.toLong()
         }
 
+        /**
+         * Indicates whether the item ids are stable across changes to the underlying data. Since our
+         * item id is the position of the item in our dataset, and that position can change when items
+         * are delete we have to return `false`.
+         *
+         * @return `true` if the same id always refers to the same object. We return `false`.
+         */
         override fun hasStableIds(): Boolean {
             return false
         }

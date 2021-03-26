@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * A coroutine version of `AsyncTask`
+ * A coroutine version of `AsyncTask` written by Rahul Lad
  * TODO: make methods and comments more closely resemble AsyncTask
  */
 abstract class CoroutinesAsyncTask<Params, Progress, Result> {
