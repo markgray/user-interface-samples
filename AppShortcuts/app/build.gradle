@@ -5,7 +5,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.example.android.shortcutsample"
+        applicationId "com.example.android.appshortcuts"
         minSdkVersion 25
         targetSdkVersion 30
     }

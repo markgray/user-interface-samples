@@ -42,7 +42,7 @@ public class ShortcutHelper {
     private static final String TAG = Main.TAG;
 
     private static final String EXTRA_LAST_REFRESH =
-            "com.example.android.shortcutsample.EXTRA_LAST_REFRESH";
+            "com.example.android.appshortcuts.EXTRA_LAST_REFRESH";
 
     private static final long REFRESH_INTERVAL_MS = 60 * 60 * 1000;
 

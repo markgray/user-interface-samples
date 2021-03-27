@@ -322,7 +322,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
         /**
          * Indicates whether the item ids are stable across changes to the underlying data. Since our
          * item id is the position of the item in our dataset, and that position can change when items
-         * are delete we have to return `false`.
+         * are deleted we have to return `false`.
          *
          * @return `true` if the same id always refers to the same object. We return `false`.
          */
@@ -330,14 +330,38 @@ class Main : AppCompatActivity(), View.OnClickListener {
             return false
         }
 
+        /**
+         * Indicates whether all the items in this adapter are enabled. If the value returned by
+         * this method changes over time, there is no guarantee it will take effect. If `true`, it
+         * means all items are selectable and clickable (there is no separator.) We always return
+         * `true`.
+         *
+         * @return `true` if all items are enabled, `false` otherwise.
+         */
         override fun areAllItemsEnabled(): Boolean {
             return true
         }
 
+        /**
+         * Returns `true` if the item at the specified [position] is not a separator. (A separator is
+         * a non-selectable, non-clickable item). The result is unspecified if [position] is invalid.
+         * We ignore [position] and always return `true`.
+         *
+         * @param position Index of the item
+         * @return `true` if the item is not a separator
+         */
         override fun isEnabled(position: Int): Boolean {
             return true
         }
 
+        /**
+         * Called to update the dataset we hold in our [List] of [ShortcutInfo] field [mList]. We
+         * set [mList] to our parameter [list], then call the [notifyDataSetChanged] method to notify
+         * all of our observers that the underlying data has been changed and any [View] reflecting
+         * the data set should refresh itself.
+         *
+         * @param list the new [List] of [ShortcutInfo] we should use as our dataset [mList].
+         */
         fun setShortcuts(list: List<ShortcutInfo>) {
             mList = list
             notifyDataSetChanged()
@@ -368,9 +392,9 @@ class Main : AppCompatActivity(), View.OnClickListener {
     }
 
     companion object {
-        const val TAG = "ShortcutSample"
+        const val TAG = "appshortcuts"
         private const val ID_ADD_WEBSITE = "add_website"
-        private const val ACTION_ADD_WEBSITE = "com.example.android.shortcutsample.ADD_WEBSITE"
+        private const val ACTION_ADD_WEBSITE = "com.example.android.appshortcuts.ADD_WEBSITE"
         private val EMPTY_LIST: List<ShortcutInfo> = ArrayList()
     }
 }
