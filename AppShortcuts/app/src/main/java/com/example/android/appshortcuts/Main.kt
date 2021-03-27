@@ -367,12 +367,57 @@ class Main : AppCompatActivity(), View.OnClickListener {
             notifyDataSetChanged()
         }
 
+        /**
+         * Get a [View] that displays the data at the specified [position] in the data set. You can
+         * either create a [View] manually or inflate it from an XML layout file. When the [View] is
+         * inflated, the parent [View] (`GridView`, [ListView]...) will apply default layout
+         * parameters unless you use specify a root view and prevent attachment to that root. If our
+         * [View] parameter [convertView] is not `null` we initialize our variable `val view` to it,
+         * if it is `null` we initialize `view` to the [View] that our [LayoutInflater] field
+         * [mInflater] returns when it inflates our item view layout file [R.layout.list_item] using
+         * our [ViewGroup] parameter [parent] for its layout params without attaching to it. Then we
+         * call our method [bindView] to have it configure `view` to hold and display the [ShortcutInfo]
+         * object in position [position] of our dataset [List] of [ShortcutInfo] field [mList]. Finally
+         * we return `view` to the caller.
+         *
+         * @param position The position of the item within the adapter's data set of the item whose
+         * view we want.
+         * @param convertView The old [View] to reuse, if possible. Note: You should check that this
+         * view is non-`null` and of an appropriate type before using. If it is not possible to
+         * convert this [View] to display the correct data, this method can create a new [View].
+         * Heterogeneous lists can specify their number of view types, so that this [View] is always
+         * of the right type (see [getViewTypeCount] and [getItemViewType]).
+         * @param parent The parent that this view will eventually be attached to
+         * @return A [View] corresponding to the data at the specified position.
+         */
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view: View = convertView ?: mInflater.inflate(R.layout.list_item, parent, false)
             bindView(view, position, mList[position])
             return view
         }
 
+        /**
+         * Called to configure our [View] parameter [view] to hold and display the [ShortcutInfo]
+         * object at position [position] of our dataset [List] of [ShortcutInfo] field [mList].
+         * First we set the `tag` property of our [View] parameter [view] to our [ShortcutInfo]
+         * parameter [shortcut]. We initialize our [TextView] variable `val line1` by finding the
+         * [View] in [view] with ID [R.id.line1] and our [TextView] variable `val line2` by finding
+         * the [View] in [view] with ID [R.id.line2]. We set the text of `line1` to the `longLabel`
+         * property of [shortcut], and the text of `line2` to the [String] that our [getType] method
+         * returns describing the "type" of shortcut that [shortcut] is. We initialize our [Button]
+         * variable `val remove` by finding the [View] in [view] with ID [R.id.remove] and our
+         * [Button] variable `val disable` by finding the [View] in [view] with ID [R.id.disable].
+         * If the `isEnabled` property of [shortcut] is `true` we set the text of `disable` to the
+         * [String] with resource ID [R.string.disable_shortcut] ("Disable"), otherwise we set the
+         * text of `disable` to the [String] with resource ID [R.string.enable_shortcut] ("Enable").
+         * Finally we set the `OnClickListener` of both `remove` and `disable` to [Main].
+         *
+         * @param view the [View] we are to configure to hold and display our [ShortcutInfo]
+         * parameter [shortcut].
+         * @param position the position of the [ShortcutInfo] object in our dataset's [List].
+         * @param shortcut the [ShortcutInfo] object that our [View] parameter [view] is to hold and
+         * to display.
+         */
         @Suppress("UNUSED_PARAMETER")
         fun bindView(view: View, position: Int, shortcut: ShortcutInfo) {
             view.tag = shortcut
@@ -392,9 +437,28 @@ class Main : AppCompatActivity(), View.OnClickListener {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         const val TAG = "appshortcuts"
+
+        /**
+         * The short cut ID that is reported to the [ShortcutManager] when the user selects the
+         * "Add Website" shortcut or completes an action in the app that is equivalent to having
+         * selected the shortcut.
+         */
         private const val ID_ADD_WEBSITE = "add_website"
+
+        /**
+         * The action of the [Intent] that is launched when the user selects the "Add Website"
+         * shortcut.
+         */
         private const val ACTION_ADD_WEBSITE = "com.example.android.appshortcuts.ADD_WEBSITE"
+
+        /**
+         * The empty [List] of [ShortcutInfo] objects used to initialize the [MyAdapter.mList]
+         * dataset before the user adds some shortcuts to it.
+         */
         private val EMPTY_LIST: List<ShortcutInfo> = ArrayList()
     }
 }
