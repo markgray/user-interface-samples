@@ -13,20 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.appshortcuts;
+package com.example.android.appshortcuts
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.Toast;
+import android.content.Context
+import android.content.pm.ShortcutManager
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 
-public class Utils {
-    private Utils() {
-    }
-
-    public static void showToast(Context context, String message) {
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-        });
+/**
+ * Just exists to allow any thread to use [Toast] to notify the user on the UI thread.
+ */
+object Utils {
+    /**
+     * Adds a [Runnable] displaying a [Toast] to the message queue of the UI thread.
+     *
+     * @param context the context to use for the [Toast], the [Context] used to construct the
+     * [ShortcutHelper] that calls us in our case.
+     * @param message the mesage to toast, errors that occur when [ShortcutHelper] uses the
+     * [ShortcutManager] in its `callShortcutManager` method in our case.
+     */
+    @JvmStatic
+    fun showToast(context: Context?, message: String?) {
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 }
