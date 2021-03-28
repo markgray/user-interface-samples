@@ -13,23 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.appshortcuts;
+package com.example.android.appshortcuts
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 
-public class MyReceiver extends BroadcastReceiver {
-    private static final String TAG = Main.TAG;
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive: " + intent);
-        if (Intent.ACTION_LOCALE_CHANGED.equals(intent.getAction())) {
+class MyReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        Log.i(TAG, "onReceive: $intent")
+        if (Intent.ACTION_LOCALE_CHANGED == intent.action) {
             // Refresh all shortcut to update the labels.
             // (Right now shortcut labels don't contain localized strings though.)
-            new ShortcutHelper(context).refreshShortcuts(/*force=*/ true);
+            ShortcutHelper(context).refreshShortcuts( /*force=*/true)
         }
+    }
+
+    companion object {
+        private const val TAG = Main.TAG
     }
 }
