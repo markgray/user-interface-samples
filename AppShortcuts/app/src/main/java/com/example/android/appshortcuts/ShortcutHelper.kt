@@ -35,8 +35,19 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.function.BooleanSupplier
 
+/**
+ * This class exists to make it easier to interact with the [ShortcutManager] system level service.
+ */
 class ShortcutHelper(private val mContext: Context) {
+    /**
+     * Our handle to the [ShortcutManager] system level service.
+     */
     private val mShortcutManager: ShortcutManager = mContext.getSystemService(ShortcutManager::class.java)
+
+    /**
+     * If this application is always supposed to have dynamic shortcuts, then we should publish them
+     * here. We have none. Called from the `onCreate` override of [Main].
+     */
     fun maybeRestoreAllDynamicShortcuts() {
         @Suppress("ControlFlowWithEmptyBody")
         if (mShortcutManager.dynamicShortcuts.size == 0) {
