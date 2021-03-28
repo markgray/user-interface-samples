@@ -33,7 +33,6 @@ object Utils {
      * @param message the mesage to toast, errors that occur when [ShortcutHelper] uses the
      * [ShortcutManager] in its `callShortcutManager` method in our case.
      */
-    @JvmStatic
     fun showToast(context: Context?, message: String?) {
         Handler(Looper.getMainLooper()).post {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
