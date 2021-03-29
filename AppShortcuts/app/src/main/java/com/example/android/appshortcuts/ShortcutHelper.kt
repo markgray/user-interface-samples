@@ -46,7 +46,9 @@ class ShortcutHelper(private val mContext: Context) {
 
     /**
      * If this application is always supposed to have dynamic shortcuts, then we should publish them
-     * here. We have none. Called from the `onCreate` override of [Main].
+     * here. We have none. Called from the `onCreate` override of [Main]. If the size of the [List]
+     * of [ShortcutInfo] objects returned by the `dynamicShortcuts` property of our [ShortcutManager]
+     * field [mShortcutManager] is 0 we restore dynamic shortcuts our app is always supposed to have.
      */
     fun maybeRestoreAllDynamicShortcuts() {
         @Suppress("ControlFlowWithEmptyBody")
@@ -58,12 +60,32 @@ class ShortcutHelper(private val mContext: Context) {
         }
     }
 
+    /**
+     * Called to report the user selected the shortcut containing ID [id] (or has completed an action
+     * in the app that is equivalent to selecting the shortcut). It is called from the `addWebSite`
+     * method of [Main] to report that the user has expressed a desire to add another website to our
+     * shortcuts. We just call the [ShortcutManager.reportShortcutUsed] method of our [ShortcutManager]
+     * field [mShortcutManager] with our [id] parameter.
+     *
+     * @param id the ID of the shortcut, in our case only the ID `ID_ADD_WEBSITE` is used.
+     */
     fun reportShortcutUsed(id: String?) {
         mShortcutManager.reportShortcutUsed(id)
     }
 
     /**
-     * Use this when interacting with ShortcutManager to show consistent error messages.
+     * Use this when interacting with [ShortcutManager] to show consistent error messages. This is
+     * called with a lambda whose last statement is a call to a [ShortcutManager] method which
+     * returns `true` for success and `false` for failure and is used by our [addWebSiteShortcut]
+     * method when it calls the [ShortcutManager.addDynamicShortcuts] method of [mShortcutManager]
+     * and by our [refreshShortcuts] method when it calls the [ShortcutManager.updateShortcuts]
+     * method of [mShortcutManager]. If the result of our [BooleanSupplier] parameter [r] is `false`
+     * we toast the message "Call to ShortcutManager is rate-limited", and if the lambda we are
+     * called with throws an exception we toast the message "Error while calling ShortcutManager:"
+     * along with the [String] vaule or the [Exception] caught.
+     *
+     * @param r If `true` no error has occurred in the call to the [ShortcutManager], and if `false`
+     * the call is rate-limited (ie. an error).
      */
     private fun callShortcutManager(r: BooleanSupplier) {
         try {
@@ -74,12 +96,13 @@ class ShortcutHelper(private val mContext: Context) {
             Log.e(TAG, "Caught Exception", e)
             showToast(mContext, "Error while calling ShortcutManager: $e")
         }
-    }// Load mutable dynamic shortcuts and pinned shortcuts and put them into a single list
-    // removing duplicates.
+    }
 
-    // Check existing shortcuts shortcuts
     /**
-     * Return all mutable shortcuts from this app self.
+     * Returns all mutable dynamic shortcuts and pinned shortcuts in a single [List] of [ShortcutInfo]
+     * objects without any duplicates. To do this its `get` getter initializes its [MutableList] of
+     * [ShortcutInfo] variable `val ret` to an [ArrayList], and its [HashSet] of [String] variable
+     * `val seenKeys` to a new instance.
      */
     val shortcuts: List<ShortcutInfo>
         get() {
