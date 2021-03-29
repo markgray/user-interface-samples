@@ -15,7 +15,6 @@
  */
 package com.example.android.appshortcuts
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
@@ -102,7 +101,16 @@ class ShortcutHelper(private val mContext: Context) {
      * Returns all mutable dynamic shortcuts and pinned shortcuts in a single [List] of [ShortcutInfo]
      * objects without any duplicates. To do this its `get` getter initializes its [MutableList] of
      * [ShortcutInfo] variable `val ret` to an [ArrayList], and its [HashSet] of [String] variable
-     * `val seenKeys` to a new instance.
+     * `val seenKeys` to a new instance. We loop over the [ShortcutInfo] variable `shortcut` for each
+     * object in the [List] of [ShortcutInfo] objects returned by the `dynamicShortcuts` property of
+     * our [ShortcutManager] field [mShortcutManager] (all our dynamic shortcuts), and if the
+     * `isImmutable` property of `shortcut` is `false` we add `shortcut` to `ret` and add the `id`
+     * property of `shortcut` to `seenKeys`. Then we loop over the [ShortcutInfo] variable `shortcut`
+     * for each object in the [List] of [ShortcutInfo] objects returned by the `pinnedShortcuts`
+     * property of our [ShortcutManager] field [mShortcutManager] (all our pinned shortcuts), and if
+     * the `isImmutable` property of `shortcut` is `false` and it is not already in the set `seenKeys`
+     * we add `shortcut` to `ret` and add the `id` property of `shortcut` to `seenKeys`. Finally we
+     * return `ret` to the caller (in kotlin it is the value of our [shortcuts] property).
      */
     val shortcuts: List<ShortcutInfo>
         get() {
@@ -128,10 +136,41 @@ class ShortcutHelper(private val mContext: Context) {
         }
 
     /**
-     * Called when the activity starts.  Looks for shortcuts that have been pushed and refreshes
-     * them (but the refresh part isn't implemented yet...).
+     * Called when the activity starts from the `onCreate` override of [Main] and from the `onReceive`
+     * override of [MyReceiver] when it receives an ACTION_LOCALE_CHANGED broadcast `Intent`. Looks
+     * for shortcuts that have been pushed and refreshes them (but the refresh part isn't implemented
+     * yet...). We use an anonymous [CoroutinesAsyncTask] to do the following in a background thread:
+     *  - We log the fact that we are "refreshingShortcuts...".
+     *  - We initialize our [Long] variable `val now` to the current time in milliseconds.
+     *  - We initialize our [Long] variable `val staleThreshold` to `now` if [force] is `true` or to
+     *  `now` minus [REFRESH_INTERVAL_MS] if it is `false`.
+     *  - We initialize our [MutableList] of [ShortcutInfo] variable `val updateList` to an [ArrayList].
+     *  - We loop over the [ShortcutInfo] variable `shortcut` for each object in the [List] of
+     *  [ShortcutInfo] objects in our field [shortcuts].
+     *      - If the `isImmutable` property of `shortcut` is `true` we skip that [ShortcutInfo].
+     *      - We initialize our [PersistableBundle] variable `val extras` to the `extras` of `shortcut`
+     *      - If `extras` is not `null` and the [Long] stored under the key `EXTRA_LAST_REFRESH` is
+     *      greater than or equal to `staleThreshold` we skip that [ShortcutInfo].
+     *      - We log the fact that we are "Refreshing" the shortcut with the `id` property of `shortcut`.
+     *      - We initialize our [ShortcutInfo.Builder] variable `val b` to a new instance with the
+     *      ID of the shortcut it is to build being the `id` property of `shortcut`.
+     *      - We call our [setSiteInformation] method to have it configure `b` with the site info of
+     *      `shortcut` using the `data` property of the `intent` property of `shortcut`
+     *      - We call our [setExtras] method to have it add the current time in milliseconds to a
+     *      [PersistableBundle] under the key [EXTRA_LAST_REFRESH] and add that [PersistableBundle]
+     *      as an extra to `b`.
+     *      - We then build `b` into a [ShortcutInfo] and add it to `updateList`.
+     *  - Having finished creating `updateList`, if its `size` is greater than 0 we call our method
+     *  [callShortcutManager] with a lambda that calls the [ShortcutManager.updateShortcuts] method
+     *  of our  [ShortcutManager] field [mShortcutManager] with `updateList` to update all existing
+     *  shortcuts with the same IDs as those in `updateList`.
+     *  - Finally we return `null`.
+     *
+     * @param force if `true` force an immediate refresh of all shortcuts, if `false` a refresh of a
+     * shortcut is performed only if the shortcut is older than [REFRESH_INTERVAL_MS] milliseconds
+     * (60 minutes). We are called with `false` from the `onCreate` override of [Main] and with `true`
+     * from the `onReceive` override of [MyReceiver]
      */
-    @SuppressLint("StaticFieldLeak")
     fun refreshShortcuts(force: Boolean) {
         object : CoroutinesAsyncTask<Void?, Void?, Void?>() {
             override fun doInBackground(vararg params: Void?): Void? {
@@ -146,14 +185,13 @@ class ShortcutHelper(private val mContext: Context) {
                     if (shortcut.isImmutable) {
                         continue
                     }
-                    val extras = shortcut.extras
+                    val extras: PersistableBundle? = shortcut.extras
                     if (extras != null && extras.getLong(EXTRA_LAST_REFRESH) >= staleThreshold) {
                         // Shortcut still fresh.
                         continue
                     }
                     Log.i(TAG, "Refreshing shortcut: " + shortcut.id)
-                    val b = ShortcutInfo.Builder(
-                        mContext, shortcut.id)
+                    val b = ShortcutInfo.Builder(mContext, shortcut.id)
                     setSiteInformation(b, shortcut.intent!!.data)
                     setExtras(b)
                     updateList.add(b.build())
