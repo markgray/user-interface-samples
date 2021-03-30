@@ -243,6 +243,7 @@ class ShortcutHelper(private val mContext: Context) {
      * [Uri] parameter [uri].
      * @param uri the [Uri] whose [ShortcutInfo] object is being built in our [ShortcutInfo.Builder]
      * parameter [b].
+     * @return the modified [ShortcutInfo.Builder] parameter passed us in [b] to allow chaining.
      */
     private fun setSiteInformation(b: ShortcutInfo.Builder, uri: Uri?): ShortcutInfo.Builder {
         // TODO Get the actual site <title> and use it.
@@ -258,6 +259,16 @@ class ShortcutHelper(private val mContext: Context) {
         return b
     }
 
+    /**
+     * Constructs a [PersistableBundle] holding the current time in milliseconds stored under the key
+     * [EXTRA_LAST_REFRESH] and adds it as the extras of its [ShortcutInfo.Builder] parameter [b].
+     * First we initialize our [PersistableBundle] variable `val extras` with a new instance, then we
+     * store the current time in milliseconds under the key [EXTRA_LAST_REFRESH] in `extras`, and set
+     * the extras of [b] to `extras`. Finally we return [b] to the caller to allow chaining.
+     *
+     * @param b the [ShortcutInfo.Builder] we are to add a [PersistableBundle] to as its extras.
+     * @return the modified [ShortcutInfo.Builder] parameter passed us in [b] to allow chaining.
+     */
     private fun setExtras(b: ShortcutInfo.Builder): ShortcutInfo.Builder {
         val extras = PersistableBundle()
         extras.putLong(EXTRA_LAST_REFRESH, System.currentTimeMillis())
@@ -265,6 +276,16 @@ class ShortcutHelper(private val mContext: Context) {
         return b
     }
 
+    /**
+     * If its [String] parameter [urlAsString] starts with the substrings "http://" or "https://"
+     * this method just returns [urlAsString] as is, otherwise it will prepend the substring "http://"
+     * to [urlAsString] and return that.
+     *
+     * @param urlAsString a [String] which may or may not be usable as is for a website URL (ie. it
+     * starts with the substrings "http://" or "https://").
+     * @return a [String] which *can* be used as a website URL (ie. it definitely starts with either
+     * the substring "http://" or "https://").
+     */
     private fun normalizeUrl(urlAsString: String): String {
         return if (urlAsString.startsWith("http://") || urlAsString.startsWith("https://")) {
             urlAsString
@@ -273,9 +294,22 @@ class ShortcutHelper(private val mContext: Context) {
         }
     }
 
+    /**
+     * Creates a [ShortcutInfo] from the website URL contained in its [String] parameter [urlAsString]
+     * and publishes this dynamic shortcut to the [ShortcutManager]. We call our [callShortcutManager]
+     * method with a lambda which first uses our [createShortcutForUrl] method to create a [ShortcutInfo]
+     * from the normalized URL [String] returned by our [normalizeUrl] method and uses that [ShortcutInfo]
+     * to initialize its variable `val shortcut`. It then calls the [ShortcutManager.addDynamicShortcuts]
+     * method of our [ShortcutManager] field [mShortcutManager] to publish shortcut `shortcut`. The
+     * method [callShortcutManager] is called this way so that it can toast an error message if the
+     * [ShortcutManager.addDynamicShortcuts] method returns `false` or throws an [Exception].
+     *
+     * @param urlAsString a [String] which may be used to connect to a website (once [normalizeUrl]
+     * makes sure it starts with the substrings "http://" or "https://")
+     */
     fun addWebSiteShortcut(urlAsString: String) {
         callShortcutManager {
-            val shortcut = createShortcutForUrl(normalizeUrl(urlAsString))
+            val shortcut: ShortcutInfo = createShortcutForUrl(normalizeUrl(urlAsString))
             mShortcutManager.addDynamicShortcuts(listOf(shortcut))
         }
     }
