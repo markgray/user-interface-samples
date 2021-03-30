@@ -205,22 +205,51 @@ class ShortcutHelper(private val mContext: Context) {
         }.execute()
     }
 
+    /**
+     * Creates a [ShortcutInfo] object from its URL [String] parameter [urlAsString]. First we log
+     * the fact that we were called with [urlAsString]. We initialize our [ShortcutInfo.Builder]
+     * variable `val b` with a new instance whose ID is [urlAsString], and our [Uri] variable
+     * `val uri` to the [Uri] that the [Uri.parse] method creates from [urlAsString]. We set the
+     * [Intent] of `b` to an [Intent] whose action is [Intent.ACTION_VIEW] (display the data to the
+     * user) and whose [Intent] data URI is `uri`. We call our [setSiteInformation] method to have
+     * it set the site information of `b` to those of `uri` (the short title, the text, and the icon),
+     * and call our [setExtras] method to have it set the extras of `b` to a [PersistableBundle] which
+     * has the current time in milliseconds stored under the key [EXTRA_LAST_REFRESH] in it. Finally
+     * we build and return the [ShortcutInfo] built from `b` to the caller.
+     *
+     * @param urlAsString a [String] holding a URL for a website beginning with "http://" or "https://"
+     */
     private fun createShortcutForUrl(urlAsString: String): ShortcutInfo {
         Log.i(TAG, "createShortcutForUrl: $urlAsString")
         val b = ShortcutInfo.Builder(mContext, urlAsString)
-        val uri = Uri.parse(urlAsString)
+        val uri: Uri = Uri.parse(urlAsString)
         b.setIntent(Intent(Intent.ACTION_VIEW, uri))
         setSiteInformation(b, uri)
         setExtras(b)
         return b.build()
     }
 
+    /**
+     * Sets the site information of its [ShortcutInfo.Builder] parameter [b] to those pertaining to
+     * its [Uri] parameter [uri] (the short title, the text, and the icon). First we set the short
+     * label of [b] to the `host` property of [uri] (the encoded host from the authority for this
+     * URI). Next we set the text of [b] to the encoded string representation of [uri]. We set our
+     * [Bitmap] variable `val bmp` to the "favicon.ico" icon that is associtated with [uri] which
+     * our [fetchFavicon] method fetches from the internet. If `bmp` is not `null` we set the icon
+     * of [b] to it, otherwise we set it to the [Icon] created from the drawable with resource ID
+     * [R.drawable.link]. Finally we return [b] to the caller to allow chaining.
+     *
+     * @param b the [ShortcutInfo.Builder] to which we add the site information pertaining to our
+     * [Uri] parameter [uri].
+     * @param uri the [Uri] whose [ShortcutInfo] object is being built in our [ShortcutInfo.Builder]
+     * parameter [b].
+     */
     private fun setSiteInformation(b: ShortcutInfo.Builder, uri: Uri?): ShortcutInfo.Builder {
         // TODO Get the actual site <title> and use it.
         // TODO Set the current locale to accept-language to get localized title.
         b.setShortLabel(uri!!.host!!)
         b.setLongLabel(uri.toString())
-        val bmp = fetchFavicon(uri)
+        val bmp: Bitmap? = fetchFavicon(uri)
         if (bmp != null) {
             b.setIcon(Icon.createWithBitmap(bmp))
         } else {
