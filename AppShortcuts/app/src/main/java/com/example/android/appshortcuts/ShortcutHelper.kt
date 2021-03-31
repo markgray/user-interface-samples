@@ -314,18 +314,57 @@ class ShortcutHelper(private val mContext: Context) {
         }
     }
 
+    /**
+     * Removes the dynamic shortcut of [ShortcutInfo] parameter [shortcut] by its ID. It does this
+     * by calling the [ShortcutManager.removeDynamicShortcuts] method of [ShortcutManager] field
+     * [mShortcutManager] with the `id` property of [shortcut]. Called from the `onClick` override
+     * of [Main] when the ID of the `View` clicked is [R.id.remove] (the "Remove" `Button` in the
+     * layout file layout/list_item.xml which is used for each of the items in the `ListView` of
+     * the UI of [Main]).
+     *
+     * @param shortcut the [ShortcutInfo] object of the shortcut the user wants to remove.
+     */
     fun removeShortcut(shortcut: ShortcutInfo) {
         mShortcutManager.removeDynamicShortcuts(listOf(shortcut.id))
     }
 
+    /**
+     * Disables the dynamic shortcut of [ShortcutInfo] parameter [shortcut] by its ID. It does this
+     * by calling the [ShortcutManager.disableShortcuts] method of [ShortcutManager] field
+     * [mShortcutManager] with the `id` property of [shortcut]. Called from the `onClick` override
+     * of [Main] when the ID of the `View` clicked is [R.id.disable] and the shortcut is presently
+     * enabled (the `Button` is in the layout file layout/list_item.xml which is used for each of
+     * the items in the `ListView` of the UI of [Main]  -- its label is set to "Disable" when the
+     * shortcut is currently enabled).
+     *
+     * @param shortcut the [ShortcutInfo] object of the shortcut the user wants to disable.
+     */
     fun disableShortcut(shortcut: ShortcutInfo) {
         mShortcutManager.disableShortcuts(listOf(shortcut.id))
     }
 
+    /**
+     * Enables the dynamic shortcut of [ShortcutInfo] parameter [shortcut] by its ID. It does this
+     * by calling the [ShortcutManager.enableShortcuts] method of [ShortcutManager] field
+     * [mShortcutManager] with the `id` property of [shortcut]. Called from the `onClick` override
+     * of [Main] when the ID of the `View` clicked is [R.id.disable] and the shortcut is presently
+     * disabled (the `Button` is in the layout file layout/list_item.xml which is used for each of
+     * the items in the `ListView` of the UI of [Main] -- its label is set to "Enable" when the
+     * shortcut is currently disabled).
+     *
+     * @param shortcut the [ShortcutInfo] object of the shortcut the user wants to enable.
+     */
     fun enableShortcut(shortcut: ShortcutInfo) {
         mShortcutManager.enableShortcuts(listOf(shortcut.id))
     }
 
+    /**
+     * Fetches the "favicon" associated with the website whose URL is our [Uri] parameter [uri] and
+     * if it succeeds returns it as a [Bitmap], and if it fails it returns `null`.
+     *
+     * @param uri the [Uri] of the website whose "favicon" we are to fetch, decode and return.
+     * @return a [Bitmap] version of the "favicon" if found, otherwise `null`.
+     */
     private fun fetchFavicon(uri: Uri?): Bitmap? {
         val iconUri = uri!!.buildUpon().path("favicon.ico").build()
         Log.i(TAG, "Fetching favicon from: $iconUri")
