@@ -30,6 +30,7 @@ import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
+import java.net.URLConnection
 import java.util.ArrayList
 import java.util.HashSet
 import java.util.function.BooleanSupplier
@@ -360,16 +361,33 @@ class ShortcutHelper(private val mContext: Context) {
 
     /**
      * Fetches the "favicon" associated with the website whose URL is our [Uri] parameter [uri] and
-     * if it succeeds returns it as a [Bitmap], and if it fails it returns `null`.
+     * if it succeeds returns it as a [Bitmap], and if it fails it returns `null`. First we initialize
+     * our [Uri] variable `val iconUri` by constructing a new [Uri.Builder] by copying the attributes
+     * from [Uri] parameter [uri], appending the path "favicon.ico" to it, and then building the
+     * [Uri.Builder] into a [Uri]. We log the fact that we are fetching the favicon from `iconUri`,
+     * then wrapped in a `try` block intended to catch [IOException] we:
+     *  - initialize our [URLConnection] variable `val conn` by converting `iconUri` to a [String]
+     *  and constructing a [URL] from that [String] whose [URL.openConnection] method we use to
+     *  open a [URLConnection] to the [URL].
+     *  - we call the [URLConnection.connect] method of `conn` to open a communications link to the
+     *  resource referenced by `conn`.
+     *  - we initialize our [InputStream] variable `val inputStream` to an input stream that reads
+     *  from the `conn` open connection.
+     *  - we initialize our [BufferedInputStream] variable `val bis` to use `inputStream` as its
+     *  underlying input stream with a buffer size of 8192.
+     *  - the last line of the `try` block calls the [BitmapFactory.decodeStream] method with `bis`
+     *  to have it decode it into a [Bitmap] which we return to our caller.
+     *  - If the `try` block catches an [IOException] we log the fact that we failed and return `null`
+     *  to the caller.
      *
      * @param uri the [Uri] of the website whose "favicon" we are to fetch, decode and return.
      * @return a [Bitmap] version of the "favicon" if found, otherwise `null`.
      */
     private fun fetchFavicon(uri: Uri?): Bitmap? {
-        val iconUri = uri!!.buildUpon().path("favicon.ico").build()
+        val iconUri: Uri = uri!!.buildUpon().path("favicon.ico").build()
         Log.i(TAG, "Fetching favicon from: $iconUri")
         return try {
-            val conn = URL(iconUri.toString()).openConnection()
+            val conn: URLConnection = URL(iconUri.toString()).openConnection()
             conn.connect()
             val inputStream: InputStream = conn.getInputStream()
             val bis = BufferedInputStream(inputStream, 8192)
@@ -381,8 +399,21 @@ class ShortcutHelper(private val mContext: Context) {
     }
 
     companion object {
+        /**
+         * TAG to use for logging
+         */
         private const val TAG = Main.TAG
+
+        /**
+         * The key under which we store the current time in milliseconds when the [ShortcutInfo] was
+         * last refreshed in the [PersistableBundle] extra to that [ShortcutInfo].
+         *
+         */
         private const val EXTRA_LAST_REFRESH = "com.example.android.appshortcuts.EXTRA_LAST_REFRESH"
+
+        /**
+         * The length of time to wait between refreshing a [ShortcutInfo] (60 minutes)
+         */
         private const val REFRESH_INTERVAL_MS = (60 * 60 * 1000).toLong()
     }
 
