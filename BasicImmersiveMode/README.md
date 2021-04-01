@@ -14,12 +14,14 @@ modes, by letting users swipe the bars in and out.
 This sample demonstrates how to enable and disable immersive mode programmatically.
 
 Immersive mode was introduced in Android 4.4 (Api Level 19). It is toggled using the 
-SYSTEM_UI_FLAG_IMMERSIVE system ui flag. When combined with the SYSTEM_UI_FLAG_HIDE_NAVIGATION and SYSTEM_UI_FLAG_FULLSCREEN  flags, hides the navigation and status bars and lets your app capture all touch events on the screen.
+SYSTEM_UI_FLAG_IMMERSIVE system ui flag. When combined with the SYSTEM_UI_FLAG_HIDE_NAVIGATION and
+SYSTEM_UI_FLAG_FULLSCREEN  flags, hides the navigation and status bars and lets your app capture
+all touch events on the screen.
 
 Pre-requisites
 --------------
 
-- Android SDK 28
+- Android SDK 30
 - Android Build Tools v28.0.3
 - Android Support Repository
 
