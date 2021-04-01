@@ -18,6 +18,7 @@ package com.example.android.basicimmersivemode
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -46,17 +47,15 @@ class MainActivity : SampleActivityBase() {
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
      * and then we set our content view to our layout file [R.layout.activity_main].
      *
-     * If our [Bundle] parameter [savedInstanceState] is `null` we are being started for the first
+     * If the [FragmentManager] for interacting with fragments associated with this activity is not
+     * able to find a [Fragment] whose tag name is [FRAGTAG] we are being started for the first
      * time so we use the [FragmentManager] for interacting with fragments associated with this
      * activity to begin a [FragmentTransaction] which we save in our variable `val transaction`,
      * then we construct a new instance of [BasicImmersiveModeFragment] to initialize our variable
-     * `val fragment`, use `transaction` to `replace` the contents of the container with ID
-     * [FRAGTAG] with fragment and commit our [FragmentTransaction] variable `transaction`.
+     * `val fragment`, use `transaction` to `add` `fragment` to the activity state using the tag
+     * name [FRAGTAG] and then commit `transaction`.
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut
-     * down then this is not `null`, and any [Fragment] we added before being shut down will be
-     * restored by the system. If it *is* `null` we are starting for the first time and need to
-     * construct and add our [BasicImmersiveModeFragment] to our UI.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,12 +68,27 @@ class MainActivity : SampleActivityBase() {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in to [Menu] parameter [menu]. This is only called once, the first time the options
+     * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
+     * We use a [MenuInflater] for this context to inflate our menu layout file [R.menu.main] into
+     * our [Menu] parameter [menu]. This layout file holds a single menu item with resource ID
+     * [R.id.sample_action], whose title is "Toggle Immersive Mode!" Finally we return `true` so
+     * that the [Menu] will be displayed.
+     *
+     * @param menu The options [Menu] in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
-    /** Create a chain of targets that will receive log data  */
+    /**
+     * Create a chain of targets that will receive log data
+     */
     override fun initializeLogging() {
         // Wraps Android's native log framework.
         val logWrapper = LogWrapper()
@@ -95,7 +109,15 @@ class MainActivity : SampleActivityBase() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         const val TAG = "MainActivity"
+
+        /**
+         * [Fragment] tag name we use when we add our [BasicImmersiveModeFragment] fragment to the
+         * activity state.
+         */
         const val FRAGTAG = "BasicImmersiveModeFragment"
     }
 }
