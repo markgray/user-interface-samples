@@ -13,64 +13,55 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.example.android.basicimmersivemode;
+package com.example.android.basicimmersivemode
 
-import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.view.MenuItem;
-import android.view.View;
+import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import androidx.fragment.app.Fragment
+import com.example.android.common.logger.Log
 
-import com.example.android.common.logger.Log;
-
-public class BasicImmersiveModeFragment extends Fragment {
-
-    public static final String TAG = "BasicImmersiveModeFragment";
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+class BasicImmersiveModeFragment : Fragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        final View decorView = getActivity().getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(
-                new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int i) {
-                        int height = decorView.getHeight();
-                        Log.i(TAG, "Current height: " + height);
-                    }
-                });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.sample_action) {
-            toggleHideyBar();
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val decorView = activity!!.window.decorView
+        @Suppress("DEPRECATION")
+        decorView.setOnSystemUiVisibilityChangeListener {
+            val height = decorView.height
+            Log.i(TAG, "Current height: $height")
         }
-        return true;
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.sample_action) {
+            toggleHideyBar()
+        }
+        return true
     }
 
     /**
      * Detects and toggles immersive mode.
      */
-    public void toggleHideyBar() {
+    fun toggleHideyBar() {
         // BEGIN_INCLUDE (get_current_ui_flags)
         // The UI options currently enabled are represented by a bitfield.
         // getSystemUiVisibility() gives us that bitfield.
-        int uiOptions = getActivity().getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
+        @Suppress("DEPRECATION")
+        val uiOptions = activity!!.window.decorView.systemUiVisibility
+        var newUiOptions = uiOptions
         // END_INCLUDE (get_current_ui_flags)
         // BEGIN_INCLUDE (toggle_ui_flags)
-        boolean isImmersiveModeEnabled =
-                ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        @Suppress("DEPRECATION")
+        val isImmersiveModeEnabled = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY == uiOptions
         if (isImmersiveModeEnabled) {
-            Log.i(TAG, "Turning immersive mode mode off. ");
+            Log.i(TAG, "Turning immersive mode mode off. ")
         } else {
-            Log.i(TAG, "Turning immersive mode mode on.");
+            Log.i(TAG, "Turning immersive mode mode on.")
         }
 
         // Immersive mode: Backward compatible to KitKat (API 19).
@@ -79,10 +70,18 @@ public class BasicImmersiveModeFragment extends Fragment {
         // all three flags are being toggled together.
         // This sample uses the "sticky" form of immersive mode, which will let the user swipe
         // the bars back in again, but will automatically make them disappear a few seconds later.
-        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getActivity().getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+        @Suppress("DEPRECATION")
+        newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        @Suppress("DEPRECATION")
+        newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_FULLSCREEN
+        @Suppress("DEPRECATION")
+        newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        @Suppress("DEPRECATION")
+        activity!!.window.decorView.systemUiVisibility = newUiOptions
         //END_INCLUDE (set_ui_flags)
+    }
+
+    companion object {
+        const val TAG = "BasicImmersiveModeFragment"
     }
 }
