@@ -18,18 +18,53 @@ package com.example.android.basicimmersivemode
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
 import androidx.fragment.app.Fragment
 import com.example.android.common.logger.Log
 
+/**
+ * The [Fragment] which toggles the visibility of the status bar and system navigation for the app
+ * when the "Toggle Immersive Mode!" [MenuItem] in the options menu is clicked. It has no [View]
+ * itself, but controls the top-level window decor view (containing the standard window frame
+ * decorations and the client's content inside of that) of the current [Window] of the activity.
+ */
 class BasicImmersiveModeFragment : Fragment() {
+    /**
+     * Called to do initial creation of a fragment. This is called after [onAttach] and before
+     * [onCreateView]. Note that this can be called while the fragment's activity is still in
+     * the process of being created. As such, you can not rely on things like the activity's
+     * content view hierarchy being initialized at this point. If you want to do work once the
+     * activity itself is created, see [onActivityCreated].
+     *
+     * First we call our super's implementation of `onCreate`, then we call the [setHasOptionsMenu]
+     * method with `true` to report that this fragment would like to participate in populating the
+     * options menu by receiving a call to [onCreateOptionsMenu] and related methods.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state. We do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
+    /**
+     * Called when the fragment's activity has been created and this fragment's view hierarchy
+     * instantiated. This is called after [onCreateView] and before [onViewStateRestored].
+     *
+     * First we call our super's implementation of `onActivityCreated`. Then we initialize our
+     * [View] variable `val decorView` to the top-level window decor view (containing the standard
+     * window frame decorations and the client's content inside of that) of the current [Window] of
+     * the activity. Finally we set the [View.OnSystemUiVisibilityChangeListener] of `decorView` to
+     * a lambda which retrieves the height of `decorView` to initialize its variable `val height`
+     * and then log that height.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state. We do not override [onSaveInstanceState] so do not use.
+     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val decorView = activity!!.window.decorView
+        val decorView: View = activity!!.window.decorView
         @Suppress("DEPRECATION")
         decorView.setOnSystemUiVisibilityChangeListener {
             val height = decorView.height
@@ -37,6 +72,16 @@ class BasicImmersiveModeFragment : Fragment() {
         }
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. If the `itemId` of our
+     * [MenuItem] parameter [item] is [R.id.sample_action] ("Toggle Immersive Mode!") we call our
+     * method [toggleHideyBar] to have it detect and toggle immersive mode. In any case we return
+     * `true` to consume the event here.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return `false` to allow normal menu processing to proceed, `true` to consume
+     * it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.sample_action) {
             toggleHideyBar()
@@ -82,6 +127,9 @@ class BasicImmersiveModeFragment : Fragment() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         const val TAG = "BasicImmersiveModeFragment"
     }
 }
