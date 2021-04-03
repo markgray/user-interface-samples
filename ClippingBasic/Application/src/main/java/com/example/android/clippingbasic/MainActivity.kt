@@ -29,15 +29,30 @@ import com.example.android.common.logger.MessageOnlyLogFilter
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
- * [Fragment] which can display a view.
+ * [Fragment] which can display a view. For devices with displays with a width of 720dp or greater,
+ * the sample log is always visible, on other devices it's visibility is controlled by an item on
+ * the Action Bar.
  *
+ * This is a basic app showing how to clip on a [View] using the `ViewOutlineProvider` interface,
+ * by which a View builds the outline to be used for its shadowing and clipping.
  *
- * For devices with displays with a width of 720dp or greater, the sample log is always visible,
- * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 class MainActivity : SampleActivityBase() {
-    // Whether the Log Fragment is currently shown
+    /**
+     * Whether the Log Fragment is currently shown
+     */
     private var mLogShown = false
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main].
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
+     * ***Note: Otherwise it is null.*** We just use the fact that it `null` only when we are being
+     * started for the first time to determine whether we need to add our [ClippingBasicFragment] to
+     * our UI -- if it is non-`null` the system framework will restore the old fragment.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
