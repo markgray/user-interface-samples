@@ -90,7 +90,22 @@ class BasicImmersiveModeFragment : Fragment() {
     }
 
     /**
-     * Detects and toggles immersive mode.
+     * Detects and toggles immersive mode. First we initialize our [Int] variable `val uiOptions` to
+     * the currently enabled UI options of the top-level window decor view of the current [Window]
+     * of the activity, and initialize our variable `var newUiOptions` to `uiOptions`. We set our
+     * [Boolean] variable `val isImmersiveModeEnabled` to `true` if the bit flag
+     * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY]  in `uiOptions` is set, and then if
+     * `isImmersiveModeEnabled` is `true` we log "Turning immersive mode mode off.", and if it is
+     * `false` we log "Turning immersive mode mode on." Then we proceed to toggle the value of the
+     * following UI options in `newUiOptions`:
+     *  - [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] requests that the system navigation be hidden.
+     *  - [View.SYSTEM_UI_FLAG_FULLSCREEN] requests that the [View] go into normal fullscreen mode
+     *  so that its content can take over the screen while still allowing the user to interact with
+     *  the application.
+     *  - [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] the [View] would like to remain interactive when
+     *  hiding the status bar and hiding the navigation bar. The "sticky" form of immersive mode
+     *  will let the user swipe the bars back in again, but will automatically make them disappear
+     *  a few seconds later.
      */
     fun toggleHideyBar() {
         // BEGIN_INCLUDE (get_current_ui_flags)
