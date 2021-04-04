@@ -21,6 +21,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ViewAnimator
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.android.common.activities.SampleActivityBase
 import com.example.android.common.logger.Log
 import com.example.android.common.logger.LogFragment
@@ -45,7 +47,28 @@ class MainActivity : SampleActivityBase() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main].
+     * then we set our content view to our layout file [R.layout.activity_main]. The layout file used
+     * for displays narrower then 720dp - layout/activity_main.xml consists of a root `LinearLayout`
+     * holding a `ViewAnimator` with two child views: a `ScrollView` holding a `TextView` displaying
+     * the sample description, and a `fragment` for our [LogFragment] (these are toggled between using
+     * our options menu). Below the `ViewAnimator` in the `LinearLayout` is a 1dp "darker_gray" spacer
+     * `View` and a `FrameLayout` with the ID [R.id.sample_content_fragment] which is used to hold
+     * our sample fragment [ClippingBasicFragment]. The layout file used for displays 720dp and wider
+     * is the file layout-w720dp/activity_main.xml which consists of a root horizontal `LinearLayout`
+     * holding a vertical `LinearLayout` which holds a `FrameLayout` holding a `TextView` displaying
+     * the sample description, followed by a 1dp "darker_gray" spacer `View`, followed by a `fragment`
+     * for our [LogFragment]. To the right in the root `LinearLayout` is a 1dp "darker_gray" spacer
+     * `View` and a `FrameLayout` with the ID [R.id.sample_content_fragment] which is used to hold
+     * our sample fragment [ClippingBasicFragment].
+     *
+     * If our [Bundle] parameter [savedInstanceState] is non-`null` we are being restarted so our
+     * [ClippingBasicFragment] will be restored by the system so we just return. If it is `null` we
+     * are starting for the first time so we use the [FragmentManager] for interacting with fragments
+     * associated with this activity to begin a [FragmentTransaction] with which we initialize our
+     * variable `val transaction`, and initialize our [ClippingBasicFragment] variable `val fragment`
+     * to a new instance. We then use `transaction` to replace any existing fragment that is in the
+     * container with resource ID [R.id.sample_content_fragment] with `fragment`. Finally we "commit"
+     * `transaction`.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
@@ -57,7 +80,7 @@ class MainActivity : SampleActivityBase() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            val transaction = supportFragmentManager.beginTransaction()
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             val fragment = ClippingBasicFragment()
             transaction.replace(R.id.sample_content_fragment, fragment)
             transaction.commit()
