@@ -15,8 +15,10 @@
 */
 package com.example.android.clippingbasic
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ViewAnimator
@@ -72,7 +74,7 @@ class MainActivity : SampleActivityBase() {
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
-     * ***Note: Otherwise it is null.*** We just use the fact that it `null` only when we are being
+     * ***Note: Otherwise it is null.*** We just use the fact that it is `null` only when we are being
      * started for the first time to determine whether we need to add our [ClippingBasicFragment] to
      * our UI -- if it is non-`null` the system framework will restore the old fragment.
      */
@@ -87,23 +89,67 @@ class MainActivity : SampleActivityBase() {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in the [Menu] parameter [menu]. This is only called once, the first time the options
+     * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
+     * We use a [MenuInflater] for our [Context] to inflate our menu layout file [R.menu.main] into
+     * our [Menu] parameter [menu] (it consists of a single [MenuItem] with ID [R.id.menu_toggle_log]
+     * whose title toggles between "Show Log" and "Hide Log" depending on whether the [LogFragment]
+     * is invisible or visible at the moment). Finally we return `true` so that the menu will be
+     * displayed.
+     *
+     * @param menu The options [Menu] in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
+    /**
+     * Prepare the Screen's standard options menu to be displayed. This is called right before the
+     * menu is shown, every time it is shown. You can use this method to efficiently enable/disable
+     * items or otherwise dynamically modify the contents. We initialize our [MenuItem] variable
+     * `val logToggle` by finding the item in our [Menu] parameter [menu] with ID [R.id.menu_toggle_log]
+     * and set its visibility to visible iff the view with ID [R.id.sample_output] is a [ViewAnimator]
+     * (this is true only for displays narrower than 720dp, for wider displays the view is a
+     * `LinearLayout` holding both the sample description and our [LogFragment] which is always
+     * visible). The we set the title of `logToggle` to "Hide Log" is our [Boolean] field [mLogShown]
+     * is `true` or to "Show Log" if it is `false`. Finally we return the value returned by our super's
+     * implementation of `onPrepareOptionsMenu` to the caller.
+     *
+     * @param menu The options menu as last shown or first initialized by [onCreateOptionsMenu].
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val logToggle = menu.findItem(R.id.menu_toggle_log)
+        val logToggle: MenuItem = menu.findItem(R.id.menu_toggle_log)
         logToggle.isVisible = findViewById<View>(R.id.sample_output) is ViewAnimator
         logToggle.setTitle(if (mLogShown) R.string.sample_hide_log else R.string.sample_show_log)
         return super.onPrepareOptionsMenu(menu)
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. When the item ID of our
+     * [MenuItem] parameter [item] is [R.id.menu_toggle_log] we toggle the value of our [Boolean]
+     * field [mLogShown] then initialize our [ViewAnimator] variable `val output` to the view with
+     * ID [R.id.sample_output]. If [mLogShown] is now `true` we set the displayed child of `output`
+     * to 1 (the `fragment` holding our [LogFragment]) and if it is now `false` we set its displayed
+     * child to 0 (the `ScrollView` wrapped `TextView` displaying the sample description). We then
+     * call the [invalidateOptionsMenu] method to report that the options menu has changed, so should
+     * be recreated, and return `true` to consume the event here. If the item ID is not our [MenuItem]
+     * we return the value returned by our super's implementation of `onOptionsItemSelected`.
+     *
+     * @param item The menu item that was selected.
+     * @return Return `false` to allow normal menu processing to proceed, `true` to consume it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_toggle_log -> {
                 mLogShown = !mLogShown
-                val output = findViewById<View>(R.id.sample_output) as ViewAnimator
+                val output: ViewAnimator = findViewById<View>(R.id.sample_output) as ViewAnimator
                 if (mLogShown) {
                     output.displayedChild = 1
                 } else {
@@ -116,7 +162,9 @@ class MainActivity : SampleActivityBase() {
         return super.onOptionsItemSelected(item)
     }
 
-    /** Create a chain of targets that will receive log data  */
+    /**
+     * Create a chain of targets that will receive log data
+     */
     override fun initializeLogging() {
         // Wraps Android's native log framework.
         val logWrapper = LogWrapper()
