@@ -15,6 +15,7 @@
  */
 package com.example.android.clippingbasic
 
+import android.content.res.Resources
 import android.graphics.Outline
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.android.common.logger.Log
@@ -31,17 +33,20 @@ import com.example.android.common.logger.Log
  */
 class ClippingBasicFragment : Fragment() {
     /**
-     * Store the click count so that we can show a different text on every click.
+     * Store the click count so that we can show a different text on every click of our [TextView]
+     * field [mTextView].
      */
     private var mClickCount = 0
 
     /**
-     * The [Outline] used to clip the image with.
+     * The [Outline] used to clip the [FrameLayout] with ID [R.id.frame] which holds our [TextView]
+     * field [mTextView].
      */
     private lateinit var mOutlineProvider: ViewOutlineProvider
 
     /**
-     * An array of texts.
+     * An array of texts to display in our [TextView] field [mTextView]. They are cycled through
+     * round robin when the [TextView] is clicked.
      */
     private lateinit var mSampleTexts: Array<String>
 
@@ -49,6 +54,21 @@ class ClippingBasicFragment : Fragment() {
      * A reference to a [TextView] that shows different text strings when clicked.
      */
     private lateinit var mTextView: TextView
+
+    /**
+     * Called to do initial creation of a fragment. This is called after [onAttach] and before
+     * [onCreateView]. Note that this can be called while the fragment's activity is still in the
+     * process of being created. As such, you can not rely on things like the activity's content
+     * view hierarchy being initialized at this point. If you want to do work once the activity
+     * itself is created, see [onActivityCreated].
+     *
+     * First we call our super's implementation of `onCreate`, and call the [setHasOptionsMenu] with
+     * `true` to report that this fragment would like to participate in populating the options menu
+     * by receiving a call to [onCreateOptionsMenu] and related methods. We initialize our
+     * [ViewOutlineProvider] field [mOutlineProvider] with a new instance of [ClipOutlineProvider],
+     * and initialize our [Array] of [String] field [mSampleTexts] with the strings stored under the
+     * resource ID [R.array.sample_texts] in our activity's [Resources].
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -56,8 +76,30 @@ class ClippingBasicFragment : Fragment() {
         mSampleTexts = resources.getStringArray(R.array.sample_texts)
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and {@link [onActivityCreated]. It is recommended to *only* inflate the layout in
+     * this method and move logic that operates on the returned View to [onViewCreated].
+     *
+     * We use our [LayoutInflater] parameter [inflater] to inflate the layout file whose resource ID
+     * is [R.layout.clipping_basic_fragment] using our [ViewGroup] parameter [container] for its
+     * `LayoutParams` without attaching to it and return the [View] that [inflater] returns to our
+     * caller.
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-`null`, this is the parent view that the fragment's UI will be
+     * attached to. The fragment should not add the view itself, but this can be used to generate
+     * the `LayoutParams` of the view.
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed from a
+     * previous saved state as given here.
+     * @return Return the [View] for the fragment's UI, or `null`.
+     */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.clipping_basic_fragment, container, false)
     }
 
@@ -69,7 +111,8 @@ class ClippingBasicFragment : Fragment() {
         changeText()
         val clippedView = view.findViewById<View>(R.id.frame)
 
-        /* Sets the OutlineProvider for the View. */clippedView.outlineProvider = mOutlineProvider
+        /* Sets the OutlineProvider for the View. */
+        clippedView.outlineProvider = mOutlineProvider
 
         /* When the button is clicked, the text is clipped or un-clipped. */
         view.findViewById<View>(R.id.button).setOnClickListener { bt ->
@@ -120,6 +163,9 @@ class ClippingBasicFragment : Fragment() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         private const val TAG = "ClippingBasicFragment"
     }
 }
