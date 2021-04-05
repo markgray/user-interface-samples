@@ -103,14 +103,44 @@ class ClippingBasicFragment : Fragment() {
         return inflater.inflate(R.layout.clipping_basic_fragment, container, false)
     }
 
+    /**
+     * Called immediately after [onCreateView] has returned, but before any saved state has been
+     * restored in to the view. This gives subclasses a chance to initialize themselves once they
+     * know their view hierarchy has been completely created. The fragment's view hierarchy is not
+     * however attached to its parent at this point.
+     *
+     * First we call our super's implementation of `onViewCreated`. We initialize our [TextView]
+     * field [mTextView] by finding the view with ID [R.id.text_view] then call our [changeText]
+     * method to have it set the initial text for the [TextView]. We initialize our [View] variable
+     * `val clippedView` by finding the view with ID [R.id.frame] (the [FrameLayout] holding our
+     * [TextView] field [mTextView]) and then set the [ViewOutlineProvider] of `clippedView` to our
+     * field [mOutlineProvider]. We set the [View.OnClickListener] of the [Button] with ID [R.id.button]
+     * to a lambda which branches on the value of the `clipToOutline` property of `clippedView`:
+     *  - `true` - currently the Outline should be used to clip the contents of the [View]:
+     *  Sets the `clipToOutline` property to `false`, logs the fact that "Clipping to outline is
+     *  disabled", then sets the text of the [Button] clicked to "Enable outline clipping".
+     *  - `false` - currently the Outline should *not* be used to clip the contents of the [View]:
+     *  Sets the `clipToOutline` property to `true`, logs the fact that "Clipping to outline is
+     *  enabled", then sets the text of the [Button] clicked to "Disable outline clipping".
+     *
+     * Finally we set the [View.OnClickListener] of the [View] with ID [R.id.text_view] (our [TextView]
+     * displaying one of the strings in our [Array] of strings field [mSampleTexts]) to a lambda which
+     * increments our field [mClickCount], calls our [changeText] method to update the text in the
+     * [TextView], and then calls the [View.invalidateOutline] method of `clippedView` to invalidate
+     * the outline just in case the [TextView] changed size.
+     *
+     * @param view The [View] returned by [onCreateView].
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         /* Set the initial text for the TextView. */
         mTextView = view.findViewById<View>(R.id.text_view) as TextView
         changeText()
-        val clippedView = view.findViewById<View>(R.id.frame)
 
+        val clippedView = view.findViewById<View>(R.id.frame)
         /* Sets the OutlineProvider for the View. */
         clippedView.outlineProvider = mOutlineProvider
 
@@ -140,10 +170,17 @@ class ClippingBasicFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets the text of the [TextView] field [mTextView] to one of the strings in our [Array] of
+     * [String] field [mSampleTexts] based on the current value of our field [mClickCount]
+     * the size of [mSampleTexts]. We initialize our [String] variable `val newText` to the [String]
+     * at index [mClickCount] modulo the size of [mSampleTexts] in our [mSampleTexts] field, set the
+     * text of [TextView] field [mTextView] to `newText`, and log the fact that "Text was changed."
+     */
     private fun changeText() {
         // Compute the position of the string in the array using the number of strings
         //  and the number of clicks.
-        val newText = mSampleTexts[mClickCount % mSampleTexts.size]
+        val newText: String = mSampleTexts[mClickCount % mSampleTexts.size]
 
         /* Once the text is selected, change the TextView */
         mTextView.text = newText
