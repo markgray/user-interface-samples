@@ -24,6 +24,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+/**
+ * Sample demonstrating the different ways to support Dark Mode on Android. Uses the Material Design
+ * Components Library. Light mode uses the colors from the file values/colors.xml and night mode uses
+ * the colors from the file values-night/colors.xml -- see README.md for a very detailed explanation.
+ */
 class MainActivity : AppCompatActivity() {
     private val mOnNavigationListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
