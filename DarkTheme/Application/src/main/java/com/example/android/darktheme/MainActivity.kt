@@ -13,109 +13,87 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.darktheme
 
-package com.example.android.darktheme;
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.DrawableCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.fragment.app.Fragment;
-
-public class MainActivity extends AppCompatActivity {
-
-    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    showFragment(WelcomeFragment.TAG);
-                    return true;
-                case R.id.navigation_preferences:
-                    showFragment(PreferencesFragment.TAG);
-                    return true;
-                case R.id.navigation_settings:
-                    showFragment(SettingsFragment.TAG);
-                    return true;
+class MainActivity : AppCompatActivity() {
+    private val mOnNavigationListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.navigation_home -> {
+                showFragment(WelcomeFragment.TAG)
+                return@OnNavigationItemSelectedListener true
             }
-            return false;
+            R.id.navigation_preferences -> {
+                showFragment(PreferencesFragment.TAG)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_settings -> {
+                showFragment(SettingsFragment.TAG)
+                return@OnNavigationItemSelectedListener true
+            }
         }
-    };
+        false
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationListener);
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById<View>(R.id.toolbar) as Toolbar)
+        val navigation = findViewById<BottomNavigationView>(R.id.navigation)
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationListener)
         if (savedInstanceState == null) {
-            showFragment(WelcomeFragment.TAG);
+            showFragment(WelcomeFragment.TAG)
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
 
         // This demonstrates how to programmatically tint a drawable
-        MenuItem item = menu.findItem(R.id.action_more);
-        Drawable drawableWrap = DrawableCompat.wrap(item.getIcon()).mutate();
-        DrawableCompat.setTint(drawableWrap, ColorUtils.getThemeColor(this, R.attr.colorOnPrimary));
-        item.setIcon(drawableWrap);
-
-        return true;
+        val item = menu.findItem(R.id.action_more)
+        val drawableWrap = DrawableCompat.wrap(item.icon).mutate()
+        DrawableCompat.setTint(drawableWrap, ColorUtils.getThemeColor(this, R.attr.colorOnPrimary))
+        item.icon = drawableWrap
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_more) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        return if (id == R.id.action_more) {
             // TODO
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
-    private void showFragment(@NonNull String tag) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+    private fun showFragment(tag: String) {
+        var fragment = supportFragmentManager.findFragmentByTag(tag)
         if (fragment == null) {
-            switch (tag) {
-                case WelcomeFragment.TAG: {
-                    fragment = new WelcomeFragment();
-                    break;
+            fragment = when (tag) {
+                WelcomeFragment.TAG -> {
+                    WelcomeFragment()
                 }
-                case PreferencesFragment.TAG: {
-                    fragment = new PreferencesFragment();
-                    break;
+                PreferencesFragment.TAG -> {
+                    PreferencesFragment()
                 }
-                case SettingsFragment.TAG: {
-                    fragment = new SettingsFragment();
-                    break;
+                SettingsFragment.TAG -> {
+                    SettingsFragment()
                 }
-                default: {
-                    fragment = new WelcomeFragment();
-                    break;
+                else -> {
+                    WelcomeFragment()
                 }
             }
         }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_layout, fragment, tag)
-                .commit();
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_layout, fragment, tag)
+            .commit()
     }
 }
