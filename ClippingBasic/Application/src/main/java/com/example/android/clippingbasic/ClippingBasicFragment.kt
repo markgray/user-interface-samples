@@ -188,12 +188,29 @@ class ClippingBasicFragment : Fragment() {
     }
 
     /**
-     * A [ViewOutlineProvider] which clips the view with a rounded rectangle which is inset
-     * by 10%
+     * A [ViewOutlineProvider] which clips the view with a rounded rectangle which is inset by 10%.
+     * [ViewOutlineProvider] is an interface by which a [View] builds its [Outline], which is used
+     * for shadow casting and clipping.
      */
     private inner class ClipOutlineProvider : ViewOutlineProvider() {
+        /**
+         * Called to get the provider to populate the [Outline] parameter [outline]. This method
+         * will be called by a [View] when its owned Drawables are invalidated, when the [View]'s
+         * size changes, or if [View.invalidateOutline] is called explicitly. The input [Outline]
+         * is empty and has an alpha of 1.0f.
+         *
+         * We initialize our [Int] variable `val margin` to the minimum of the width and height of
+         * our [View] parameter [view] divided by 10. Then we call the [Outline.setRoundRect] method
+         * of our [Outline] parameter [outline] to have it set the [Outline] to the rounded rect
+         * whose left top is at the point (`margin`,`margin`), whose right is at the width of [view]
+         * minus `margin`, whose bottom is at the height of [view] minus `margin` and whose ratius
+         * is `margin` divided by 2.
+         *
+         * @param view The [View] building the outline.
+         * @param outline The empty [Outline] to be populated.
+         */
         override fun getOutline(view: View, outline: Outline) {
-            val margin = view.width.coerceAtMost(view.height) / 10
+            val margin: Int = view.width.coerceAtMost(view.height) / 10
             outline.setRoundRect(margin, margin, view.width - margin,
                 view.height - margin, (margin / 2).toFloat())
         }
