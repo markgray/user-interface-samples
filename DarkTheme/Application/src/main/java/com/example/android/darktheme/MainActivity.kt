@@ -15,8 +15,11 @@
  */
 package com.example.android.darktheme
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -76,6 +79,25 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main]. The root view of
+     * this layout is a `ConstraintLayout` with ID [R.id.container] which holds a [Toolbar] with ID
+     * [R.id.toolbar], a `FrameLayout` with ID [R.id.fragment_layout], and a [BottomNavigationView]
+     * with ID [R.id.navigation] at the bottom of the `ConstraintLayout`. We set the [Toolbar] with
+     * ID [R.id.toolbar] in our UI to act as the `ActionBar` for this Activity window by calling the
+     * [setSupportActionBar] method. Next we initialize our [BottomNavigationView] variable
+     * `val navigation` by finding the view with ID [R.id.navigation] and set its
+     * [BottomNavigationView.OnNavigationItemSelectedListener] to our field [mOnNavigationListener].
+     * Finally if our [Bundle] parameter [savedInstanceState] is `null` we are being started for the
+     * first time so we call our [showFragment] method to have it load our [WelcomeFragment] into
+     * the `FrameLayout` with ID [R.id.fragment_layout]. If it is non-`null` we are being restarted
+     * and the system will care of restoring whichever fragment was running when we were shut down.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
+     * ***Note: Otherwise it is null.***
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -87,12 +109,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in the [Menu] parameter [menu]. This is only called once, the first time the options
+     * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
+     * We use a [MenuInflater] for this context to inflate our menu layout file [R.menu.main_menu]
+     * into our [Menu] parameter [menu]. If holds a single [MenuItem] with ID [R.id.action_more] and
+     * the title "More". We initialize our [MenuItem] variable `val item` by finding that [MenuItem]
+     * then initialize our [Drawable] variable `val drawableWrap` by using the [DrawableCompat.wrap]
+     * method to wrap the [MenuItem.getIcon] (aka kotlin `icon` property) of `item` and making that
+     * [Drawable] mutable. We then use the [DrawableCompat.setTint] method to set the tint of
+     * `drawableWrap` to the current theme color which our [ColorUtils.getThemeColor] method returns
+     * for the [R.attr.colorOnPrimary] color (which resolves to the color named "primary" which is
+     * "Blue 300" in the resource file values-night/colors.xml, and "Blue 700" in the resource file
+     * values/colors.xml). We then set the `icon` of `item` to `drawableWrap` and return `true` so
+     * that the menu will be displayed. ***Note: the tinting of the icon is useless on newer devices
+     * because menu icons are not displayed***
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
 
         // This demonstrates how to programmatically tint a drawable
         val item = menu.findItem(R.id.action_more)
-        val drawableWrap = DrawableCompat.wrap(item.icon).mutate()
+        val drawableWrap: Drawable = DrawableCompat.wrap(item.icon).mutate()
         DrawableCompat.setTint(drawableWrap, ColorUtils.getThemeColor(this, R.attr.colorOnPrimary))
         item.icon = drawableWrap
         return true
