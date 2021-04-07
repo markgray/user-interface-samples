@@ -28,8 +28,36 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  * Sample demonstrating the different ways to support Dark Mode on Android. Uses the Material Design
  * Components Library. Light mode uses the colors from the file values/colors.xml and night mode uses
  * the colors from the file values-night/colors.xml -- see README.md for a very detailed explanation.
+ *
+ * The UI consists of three framents which are switched between using a [BottomNavigationView]:
+ *  - [WelcomeFragment] just consists of a `TextView` with a welcome message and two `ImageView` in
+ *  a vertical `LinearLayout` (does nothing)
+ *  - [PreferencesFragment] just consists of two `TextView`, an `EditText`, a `RadioGroup` with two
+ *  `RadioButton`, a `SwitchMaterial` switch, and a `Button` in a vertical `LinearLayout` (does
+ *  nothing)
+ *  - [SettingsFragment] extends `PreferenceFragmentCompat` and its xml/preferences.xml file consists
+ *  of a `androidx.preference.PreferenceScreen` whose "Theme" `PreferenceCategory` contains a single
+ *  `ListPreference` with the key "themePref" which allows the user to select between the themes for
+ *  "Light", "Dark" or "System Default" (this does what it says it does)
  */
 class MainActivity : AppCompatActivity() {
+    /**
+     * Listener for handling selection events on bottom navigation items. Its lambda override of the
+     * `onNavigationItemSelected` method of this interface is called when an item in the bottom
+     * navigation menu is selected with the [MenuItem] which was selected and the lambda branches on
+     * the [MenuItem.getItemId] of the item (aka kotlin `itemId` property):
+     *  - [R.id.navigation_home] calls our [showFragment] method to replace the fragment with tag
+     *  [WelcomeFragment.TAG] with a new instance of [WelcomeFragment].
+     *  - [R.id.navigation_preferences] calls our [showFragment] method to replace the fragment with
+     *  tag [PreferencesFragment.TAG] with a new instance of [PreferencesFragment].
+     *  - [R.id.navigation_settings] calls our [showFragment] method to replace the fragment with
+     *  tag [SettingsFragment.TAG] with a new instance of [SettingsFragment].
+     *
+     * After calling [showFragment] each branch returns `true` to display the item as the selected
+     * item. The `FrameLayout` with ID [R.id.fragment_layout] in our layout file is used to hold
+     * the latest fragment. If the `itemID` is not one of ours we return `false` so the item will
+     * not be selected.
+     */
     private val mOnNavigationListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {

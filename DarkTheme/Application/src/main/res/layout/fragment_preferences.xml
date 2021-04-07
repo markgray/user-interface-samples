@@ -23,6 +23,7 @@
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:padding="@dimen/margin_medium"
@@ -49,7 +50,8 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:layout_margin="@dimen/margin_small"
-        android:hint="@string/your_name" />
+        android:hint="@string/your_name"
+        tools:ignore="Autofill" />
 
     <RadioGroup
         android:layout_width="match_parent"
@@ -71,7 +73,7 @@
             android:text="@string/designer" />
     </RadioGroup>
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

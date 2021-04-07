@@ -17,6 +17,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -35,12 +36,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
         app:srcCompat="@drawable/ic_brightness"
-        android:tint="?attr/colorSecondary"/>
+        app:tint="?attr/colorSecondary"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
-        app:srcCompat="@drawable/ic_brightness_2" />
+        app:srcCompat="@drawable/ic_brightness_2"
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>
