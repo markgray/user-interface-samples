@@ -21,7 +21,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
+/**
+ * Just consists of a `TextView` with a welcome message and two `ImageView` in a vertical
+ * `LinearLayout` (does nothing). It is used as the starting contents of the `FrameLayout`
+ * with ID [R.id.fragment_layout] in our UI.
+ */
 class WelcomeFragment : Fragment() {
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and [onActivityCreated]. It is recommended to __only__ inflate the layout in this
+     * method and move logic that operates on the returned View to [onViewCreated]. We return the
+     * [View] that our [LayoutInflater] parameter [inflater] inflates from our layout file
+     * [R.layout.fragment_welcome] using our [ViewGroup] parameter [container] for its `LayoutParams`
+     * without attaching to it.
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the [Fragment],
+     * @param container If non-`null`, this is the parent [View] that the fragment's
+     * UI will be attached to. The fragment should not add the view itself, but this
+     * can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return Return the [View] for the fragment's UI, or `null`.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +53,10 @@ class WelcomeFragment : Fragment() {
     }
 
     companion object {
+        /**
+         * TAG used by [MainActivity.showFragment] when adding an instance of [WelcomeFragment] to
+         * the activity state.
+         */
         const val TAG = "VectorDrawableFragmentTag"
     }
 }
