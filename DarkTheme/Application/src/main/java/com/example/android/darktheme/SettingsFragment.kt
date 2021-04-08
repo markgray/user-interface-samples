@@ -20,6 +20,12 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 
+/**
+ * Extends [PreferenceFragmentCompat] and its xml/preferences.xml file consists of a
+ * `androidx.preference.PreferenceScreen` whose "Theme" `PreferenceCategory` contains a single
+ * `ListPreference` with the key "themePref" which allows the user to select between the themes
+ * for "Light", "Dark" or "System Default" (this does what it says it does)
+ */
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -34,6 +40,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
+        /**
+         * TAG used by [MainActivity.showFragment] when adding an instance of [SettingsFragment]
+         * to the activity state.
+         */
         const val TAG = "SettingsFragmentTag"
     }
 }
