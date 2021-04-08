@@ -28,7 +28,8 @@
     android:layout_width="match_parent"
     android:padding="@dimen/margin_medium"
     android:forceDarkAllowed="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="UnusedAttribute">
 
     <TextView
         android:layout_width="match_parent"
