@@ -13,35 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.darktheme
 
-package com.example.android.darktheme;
+import android.os.Bundle
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-
-public class SettingsFragment extends PreferenceFragmentCompat {
-
-    static final String TAG = "SettingsFragmentTag";
-
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
-
-        ListPreference themePreference = findPreference("themePref");
+class SettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.preferences, rootKey)
+        val themePreference = findPreference<ListPreference>("themePref")
         if (themePreference != null) {
-            themePreference.setOnPreferenceChangeListener(
-                    new Preference.OnPreferenceChangeListener() {
-                        @Override
-                        public boolean onPreferenceChange(Preference preference, Object newValue) {
-                            String themeOption = (String) newValue;
-                            ThemeHelper.applyTheme(themeOption);
-                            return true;
-                        }
-                    });
+            themePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                val themeOption = newValue as String
+                ThemeHelper.applyTheme(themeOption)
+                true
+            }
         }
+    }
+
+    companion object {
+        const val TAG = "SettingsFragmentTag"
     }
 }
