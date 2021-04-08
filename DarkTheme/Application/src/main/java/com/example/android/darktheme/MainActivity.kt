@@ -15,7 +15,6 @@
  */
 package com.example.android.darktheme
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
@@ -25,6 +24,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
@@ -130,7 +132,6 @@ class MainActivity : AppCompatActivity() {
      * @return You must return `true` for the menu to be displayed, if you return `false` it will
      * not be shown.
      */
-    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
 
@@ -142,16 +143,42 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. We initialize our [Int]
+     * variable `val id` to the `itemId` of our [MenuItem] parameter [item]. If `id` is equal to the
+     * resource ID [R.id.action_more] (our [MenuItem]) we return `true` to the caller to consume the
+     * event here, otherwise we return the value returned by our super's implementation of
+     * `onOptionsItemSelected`.
+     *
+     * @param item The menu item that was selected.
+     * @return Return `false` to allow normal menu processing to proceed, `true` to consume it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
+        val id: Int = item.itemId
         return if (id == R.id.action_more) {
             // TODO
             true
         } else super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Called to replace the [Fragment] occupying the [R.id.fragment_layout] container in our UI with
+     * the [Fragment] whose tag is the same as our [String] parameter [tag]. We use the [FragmentManager]
+     * for interacting with fragments associated with this activity to search for a [Fragment] whose
+     * tag is [tag] and initialize our variable `var fragment` to what it returns. If `fragment` is
+     * `null` (an instance of a [Fragment] with tag [tag] is not currently a part of the activity
+     * state) we set `fragment` to a new instance of one of our fragments based on the value of [tag]:
+     *  - [WelcomeFragment.TAG] we set it to a new instance of [WelcomeFragment]
+     *  - [PreferencesFragment.TAG] we set it to a new instance of [PreferencesFragment]
+     *  - [SettingsFragment.TAG] we set it to a new instance of [SettingsFragment]
+     *
+     * We then use the [FragmentManager] for interacting with fragments associated with this activity
+     * to begin a new [FragmentTransaction] which we use to replace the contents of the container with
+     * resource ID [R.id.fragment_layout] with `fragment` using [tag] as its tag and commit that
+     * [FragmentTransaction].
+     */
     private fun showFragment(tag: String) {
-        var fragment = supportFragmentManager.findFragmentByTag(tag)
+        var fragment: Fragment? = supportFragmentManager.findFragmentByTag(tag)
         if (fragment == null) {
             fragment = when (tag) {
                 WelcomeFragment.TAG -> {
