@@ -16,13 +16,23 @@
 package com.example.android.darktheme
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Color
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 
 object ColorUtils {
     /**
-     * Queries the theme of the given `context` for a theme color.
+     * Queries the theme of the given [Context] for a theme color. Called from the `onCreateOptionsMenu`
+     * override of [MainActivity] to retrieve the color [R.attr.colorOnPrimary] that is used for the
+     * current theme. **Note: this is used to tint the icon used for a `MenuItem`, but icons are not
+     * shown on newer devices.**
+     *
+     * First we initialize our [TypedArray] variable `val a` to the value that the method
+     * [Context.obtainStyledAttributes] of our parameter [context] returns for the theme color
+     * attribute that our [Int] parameter [attrResId] resolves to. Then wrapped in a `try` block
+     * whose `finally` block recycles `a` we retrieve and return the color value for the attribute
+     * at index 0 in `a`, defaulting to [Color.MAGENTA].
      *
      * @param context   the context holding the current theme.
      * @param attrResId the theme color attribute to resolve.
@@ -30,7 +40,7 @@ object ColorUtils {
      */
     @ColorInt
     fun getThemeColor(context: Context, @AttrRes attrResId: Int): Int {
-        val a = context.obtainStyledAttributes(null, intArrayOf(attrResId))
+        val a: TypedArray = context.obtainStyledAttributes(null, intArrayOf(attrResId))
         return try {
             a.getColor(0, Color.MAGENTA)
         } finally {
