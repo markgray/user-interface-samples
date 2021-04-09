@@ -19,6 +19,7 @@ import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceScreen
 
 /**
  * Extends [PreferenceFragmentCompat] and its xml/preferences.xml file consists of a
@@ -27,11 +28,32 @@ import androidx.preference.PreferenceFragmentCompat
  * for "Light", "Dark" or "System Default" (this does what it says it does)
  */
 class SettingsFragment : PreferenceFragmentCompat() {
+    /**
+     * Called during [onCreate] to supply the preferences for this fragment. Subclasses are expected
+     * to call [setPreferenceScreen] either directly or via helper methods such as
+     * [addPreferencesFromResource].
+     *
+     * First we call the [setPreferencesFromResource] method to have it inflate the XML resource with
+     * ID [R.xml.preferences] and replace the current preference hierarchy with the preference
+     * hierarchy rooted at the key [rootKey]. Next we initialize our [ListPreference] variable
+     * `val themePref` by using the [findPreference] method to find the [Preference] with the key
+     * "themePref", and if this is not `null` we set the [Preference.OnPreferenceChangeListener] of
+     * `themePref` to a lambda whose `onPreferenceChange` override initializes its [String] variable
+     * `val themeOption` to the new value of the preference, calls our [ThemeHelper.applyTheme]
+     * method with `themeOption` to have it set the default night mode to the value selected (one
+     * of "light", "dark" or "default"), and finally we return `true` to the caller to update the
+     * state of the preference with the new value.
+     *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state.
+     * @param rootKey If non-`null`, this preference fragment should be rooted at the
+     * [PreferenceScreen] with this key.
+     */
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
-        val themePreference = findPreference<ListPreference>("themePref")
-        if (themePreference != null) {
-            themePreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+        val themePref = findPreference<ListPreference>("themePref")
+        if (themePref != null) {
+            themePref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 val themeOption = newValue as String
                 ThemeHelper.applyTheme(themeOption)
                 true
