@@ -16,13 +16,14 @@
 
 package com.example.android.documentcentricapps;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * DocumentCentricActivity shows the basic usage of the new Document-Centric Apps API. The new
@@ -38,7 +39,7 @@ import android.widget.CheckBox;
  * NEW_DOCUMENT, “always” equivalent to NEW_DOCUMENT | MULTIPLE_TASK, “none” the default, and
  * “never” which will negate the effect of any attempt to launch the activity with NEW_DOCUMENT.
  */
-public class DocumentCentricActivity extends Activity {
+public class DocumentCentricActivity extends AppCompatActivity {
 
     private final static String TAG = "DocumentCentricActivity";
 
@@ -52,7 +53,7 @@ public class DocumentCentricActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document_centric_main);
-        mCheckbox = (CheckBox) findViewById(R.id.multiple_task_checkbox);
+        mCheckbox = findViewById(R.id.multiple_task_checkbox);
     }
 
     @Override

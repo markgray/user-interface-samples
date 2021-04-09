@@ -16,11 +16,12 @@
 
 package com.example.android.documentcentricapps;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Represents a "document" in the new overview notion. This is just a placeholder.
@@ -34,7 +35,7 @@ import android.widget.TextView;
  *     <li>Shopping item details</li>
  * </ul>
  */
-public class NewDocumentActivity extends Activity {
+public class NewDocumentActivity extends AppCompatActivity {
 
     private TextView mDocumentCounterTextView;
     private int mDocumentCount;
@@ -45,7 +46,7 @@ public class NewDocumentActivity extends Activity {
         setContentView(R.layout.activity_new_document);
         mDocumentCount = getIntent()
                 .getIntExtra(DocumentCentricActivity.KEY_EXTRA_NEW_DOCUMENT_COUNTER, 0);
-        mDocumentCounterTextView = (TextView) findViewById(
+        mDocumentCounterTextView = findViewById(
                 R.id.hello_new_document_text_view);
         setDocumentCounterText(R.string.hello_new_document_counter);
     }
@@ -66,7 +67,7 @@ public class NewDocumentActivity extends Activity {
 
     public void setDocumentCounterText(int resId) {
         mDocumentCounterTextView
-                .setText(String.format(getString(resId), String.valueOf(mDocumentCount)));
+                .setText(String.format(getString(resId), mDocumentCount));
     }
 
 }
