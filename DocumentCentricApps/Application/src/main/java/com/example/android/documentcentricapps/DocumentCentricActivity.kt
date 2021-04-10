@@ -38,7 +38,13 @@ import androidx.appcompat.app.AppCompatActivity
  * “never” which will negate the effect of any attempt to launch the activity with NEW_DOCUMENT.
  */
 class DocumentCentricActivity : AppCompatActivity() {
-    private var mCheckbox: CheckBox? = null
+    /**
+     * The [CheckBox] in our UI labeled "Task per document" with ID [R.id.multiple_task_checkbox].
+     * When it is checked the flag [Intent.FLAG_ACTIVITY_MULTIPLE_TASK] is added to the [Intent]
+     * used to launch [NewDocumentActivity]. This causes the system to create a new task and launch
+     * [NewDocumentActivity] into it.
+     */
+    private lateinit var mCheckbox: CheckBox
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document_centric_main)
@@ -68,7 +74,7 @@ class DocumentCentricActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun createNewDocument(view: View?) {
-        val useMultipleTasks = mCheckbox!!.isChecked
+        val useMultipleTasks = mCheckbox.isChecked
         val newDocumentIntent = newDocumentIntent()
         if (useMultipleTasks) {
             /*
@@ -100,9 +106,28 @@ class DocumentCentricActivity : AppCompatActivity() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         private const val TAG = "DocumentCentricActivity"
+
+        /**
+         * The [Intent] extra key which is used to pass the value of our static [Int] field
+         * [mDocumentCounter] to [NewDocumentActivity] when it is launched.
+         */
         const val KEY_EXTRA_NEW_DOCUMENT_COUNTER = "KEY_EXTRA_NEW_DOCUMENT_COUNTER"
+
+        /**
+         * The number of the next [NewDocumentActivity] to be launched, it is passed under the key
+         * [KEY_EXTRA_NEW_DOCUMENT_COUNTER] in the [Intent] used to launch a [NewDocumentActivity]
+         */
         private var mDocumentCounter = 0
+
+        /**
+         * Post increments and returns our static [Int] field [mDocumentCounter], logging it as well.
+         *
+         * @return the current value of our our static [Int] field [mDocumentCounter]
+         */
         private fun incrementAndGet(): Int {
             Log.d(TAG, "incrementAndGet(): $mDocumentCounter")
             return mDocumentCounter++
