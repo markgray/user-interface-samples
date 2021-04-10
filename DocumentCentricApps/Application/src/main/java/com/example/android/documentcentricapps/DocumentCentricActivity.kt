@@ -45,12 +45,41 @@ class DocumentCentricActivity : AppCompatActivity() {
      * [NewDocumentActivity] into it.
      */
     private lateinit var mCheckbox: CheckBox
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_document_centric_main],
+     * and initialize our [CheckBox] field [mCheckbox] by finding the view in our UI with the ID
+     * [R.id.multiple_task_checkbox]. Our UI consists of a root vertical `LinearLayout` holding two
+     * vertical `LinearLayout`, the top one just holding a `TextView` displaying text describing the
+     * demo, and the bottom one holding a `Button` labeled "Create new document" which launches a
+     * new instance of [NewDocumentActivity], and a [CheckBox] labeled "Task per document" which the
+     * user can use to add the flag [Intent.FLAG_ACTIVITY_MULTIPLE_TASK] the [Intent] used to launch
+     * [NewDocumentActivity].
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document_centric_main)
         mCheckbox = findViewById(R.id.multiple_task_checkbox)
     }
 
+    /**
+     * This is the same as `onPostCreate(Bundle)` but is called for activities created with the
+     * activity attribute android:persistableMode set to "persistAcrossReboots". It is called when
+     * activity start-up is complete (ie. after [onStart] and [onRestoreInstanceState] have been
+     * called).
+     *
+     * First we call our super's implementation of `onPostCreate`, then if our [PersistableBundle]
+     * parameter [persistentState] is not `null` we set our static [Int] field [mDocumentCounter] to
+     * the [Int] stored under the key [KEY_EXTRA_NEW_DOCUMENT_COUNTER] in [persistentState].
+     *
+     * @param savedInstanceState The data most recently supplied in [onSaveInstanceState]
+     * @param persistentState The data coming from the [PersistableBundle] first saved in
+     * [onSaveInstanceState]`(Bundle, PersistableBundle)`.
+     */
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onPostCreate(savedInstanceState, persistentState)
         // Restore state from PersistableBundle
@@ -59,6 +88,19 @@ class DocumentCentricActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This is the same as [onSaveInstanceState]`(Bundle)` but is called for activities created with
+     * the activity attribute android:persistableMode set to "persistAcrossReboots". The
+     * [PersistableBundle] passed in will be saved and passed to the method
+     * [onCreate]`(Bundle, PersistableBundle)` the first time that this activity is restarted
+     * following the next device reboot. First we store our [Int] field [mDocumentCounter] in
+     * our [PersistableBundle] parameter [outPersistentState] under the key
+     * [KEY_EXTRA_NEW_DOCUMENT_COUNTER], then we call our super's implementation of
+     * `onSaveInstanceState`
+     *
+     * @param outState [Bundle] in which to place your saved state.
+     * @param outPersistentState State which will be saved across reboots.
+     */
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         /*
         To maintain activity state across reboots the system saves and restore critical information for
@@ -72,15 +114,21 @@ class DocumentCentricActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState, outPersistentState)
     }
 
+    /**
+     * This is used as the value of the android:onClick attribute of the `Button` in our UI labeled
+     * "Create new document" and will launch a new instance of [NewDocumentActivity].
+     *
+     * @param view the [View] that was clicked, we ignore.
+     */
     @Suppress("UNUSED_PARAMETER")
     fun createNewDocument(view: View?) {
         val useMultipleTasks = mCheckbox.isChecked
         val newDocumentIntent = newDocumentIntent()
         if (useMultipleTasks) {
             /*
-            When {@linkIntent#FLAG_ACTIVITY_NEW_DOCUMENT} is used with {@link Intent#FLAG_ACTIVITY_MULTIPLE_TASK}
-            the system will always create a new task with the target activity as the root. This allows the same
-            document to be opened in more than one task.
+            When Intent.FLAG_ACTIVITY_NEW_DOCUMENT is used with Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+            the system will always create a new task with the target activity as the root. This
+             allows the same document to be opened in more than one task.
              */
             newDocumentIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
         }
@@ -113,7 +161,9 @@ class DocumentCentricActivity : AppCompatActivity() {
 
         /**
          * The [Intent] extra key which is used to pass the value of our static [Int] field
-         * [mDocumentCounter] to [NewDocumentActivity] when it is launched.
+         * [mDocumentCounter] to [NewDocumentActivity] when it is launched, and also used as
+         * the key which is used to store [mDocumentCounter] in the [PersistableBundle] in our
+         * [onSaveInstanceState] method and to retrieve it in our [onPostCreate] method.
          */
         const val KEY_EXTRA_NEW_DOCUMENT_COUNTER = "KEY_EXTRA_NEW_DOCUMENT_COUNTER"
 
