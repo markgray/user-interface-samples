@@ -116,14 +116,23 @@ class DocumentCentricActivity : AppCompatActivity() {
 
     /**
      * This is used as the value of the android:onClick attribute of the `Button` in our UI labeled
-     * "Create new document" and will launch a new instance of [NewDocumentActivity].
+     * "Create new document" and will launch a new instance of [NewDocumentActivity]. First we
+     * initialize our [Boolean] variable `val useMultipleTasks` to the `isChecked` property of our
+     * [CheckBox] field [mCheckbox], and initialize our [Intent] variable `val newDocumentIntent` to
+     * an [Intent] that will start [NewDocumentActivity] as a new document in the overview menu
+     * that is returned by our [newDocumentIntent] method. If `useMultipleTasks` is `true` we add
+     * the flag [Intent.FLAG_ACTIVITY_MULTIPLE_TASK] to `newDocumentIntent` (causes the system to
+     * always create a new task with the target activity as the root).
+     *
+     * Finally we call the [startActivity] method to Launch the new [NewDocumentActivity] activity
+     * as specified by our [Intent] variable `newDocumentIntent`.
      *
      * @param view the [View] that was clicked, we ignore.
      */
     @Suppress("UNUSED_PARAMETER")
     fun createNewDocument(view: View?) {
-        val useMultipleTasks = mCheckbox.isChecked
-        val newDocumentIntent = newDocumentIntent()
+        val useMultipleTasks: Boolean = mCheckbox.isChecked
+        val newDocumentIntent: Intent = newDocumentIntent()
         if (useMultipleTasks) {
             /*
             When Intent.FLAG_ACTIVITY_NEW_DOCUMENT is used with Intent.FLAG_ACTIVITY_MULTIPLE_TASK
@@ -136,15 +145,24 @@ class DocumentCentricActivity : AppCompatActivity() {
     }
 
     /**
-     * Returns an new [Intent] to start [NewDocumentActivity] as a new document in
-     * overview menu.
+     * Returns a new [Intent] to start [NewDocumentActivity] as a new document in the overview menu.
+     * To start a new document task [Intent.FLAG_ACTIVITY_NEW_DOCUMENT] must be used. The system will
+     * search through existing tasks for one whose [Intent] matches the [Intent] component name and
+     * the [Intent] data. If it finds one then that task will be brought to the front and the new
+     * [Intent] will be passed to `onNewIntent()`.
      *
-     * To start a new document task [Intent.FLAG_ACTIVITY_NEW_DOCUMENT] must be used. The
-     * system will search through existing tasks for one whose Intent matches the Intent component
-     * name and the Intent data. If it finds one then that task will be brought to the front and the
-     * new Intent will be passed to onNewIntent().
+     * Activities launched with the [Intent.FLAG_ACTIVITY_NEW_DOCUMENT] flag must be created with
+     * launchMode="standard" (this is the default, so it is not specified in AndroidManifest.xml).
      *
-     * Activities launched with the NEW_DOCUMENT flag must be created with launchMode="standard".
+     * First we initialize our [Intent] variable `val newDocumentIntent` to a new instance for the
+     * specific component [NewDocumentActivity]. We then add to `newDocumentIntent` the flag
+     * [Intent.FLAG_ACTIVITY_NEW_DOCUMENT] (opens a document into a new task rooted at the activity
+     * launched by this [Intent]), and add as an extra the current value of [mDocumentCounter] that
+     * is returned by our [incrementAndGet] method under the key [KEY_EXTRA_NEW_DOCUMENT_COUNTER]
+     * ([incrementAndGet] post increments [mDocumentCounter]). Finally we return `newDocumentIntent`
+     * to the caller.
+     *
+     * @return a new [Intent] to start [NewDocumentActivity] as a new document in the overview menu.
      */
     private fun newDocumentIntent(): Intent {
         val newDocumentIntent = Intent(this, NewDocumentActivity::class.java)
@@ -161,9 +179,9 @@ class DocumentCentricActivity : AppCompatActivity() {
 
         /**
          * The [Intent] extra key which is used to pass the value of our static [Int] field
-         * [mDocumentCounter] to [NewDocumentActivity] when it is launched, and also used as
-         * the key which is used to store [mDocumentCounter] in the [PersistableBundle] in our
-         * [onSaveInstanceState] method and to retrieve it in our [onPostCreate] method.
+         * [mDocumentCounter] to [NewDocumentActivity] when it is launched, and which is also
+         * used as the key which is used to store [mDocumentCounter] in the [PersistableBundle]
+         * in our [onSaveInstanceState] method and to retrieve it in our [onPostCreate] method.
          */
         const val KEY_EXTRA_NEW_DOCUMENT_COUNTER = "KEY_EXTRA_NEW_DOCUMENT_COUNTER"
 
