@@ -20,14 +20,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.android.basicdocumentcentric.DocumentActivity">
+    tools:context="com.example.android.documentcentricapps.NewDocumentActivity">
 
     <TextView
         android:id="@+id/hello_new_document_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginLeft="@dimen/margin_small" />
+        android:layout_marginLeft="@dimen/margin_small"
+        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/remove_task_button"
@@ -36,6 +37,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:layout_marginLeft="@dimen/margin_small"
         android:text="@string/remove_task_button_text"
-        android:onClick="onRemoveFromOverview" />
+        android:onClick="onRemoveFromOverview"
+        tools:ignore="RtlHardcoded" />
 
 </LinearLayout>
