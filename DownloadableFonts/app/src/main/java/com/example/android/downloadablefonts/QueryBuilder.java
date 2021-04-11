@@ -16,8 +16,8 @@
 
 package com.example.android.downloadablefonts;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Builder class for constructing a query for downloading a font.

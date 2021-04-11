@@ -20,11 +20,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.provider.FontRequest;
-import android.support.v4.provider.FontsContractCompat;
-import android.support.v4.util.ArraySet;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.core.provider.FontRequest;
+import androidx.core.provider.FontsContractCompat;
+import androidx.collection.ArraySet;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
      * @return the converted width
      */
     private float progressToWidth(int progress) {
-        return progress == 0 ? 1 : progress * WIDTH_MAX / 100;
+        return progress == 0 ? 1f : (float) (progress * WIDTH_MAX / 100);
     }
 
     /**
