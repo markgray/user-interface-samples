@@ -13,61 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.documentcentricapps
 
-package com.example.android.documentcentricapps;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Represents a "document" in the new overview notion. This is just a placeholder.
  * Real world examples of this could be:
  *
- * <ul>
- *     <li>Document Editing</li>
- *     <li>Browser tabs</li>
- *     <li>Message composition</li>
- *     <li>Sharing</li>
- *     <li>Shopping item details</li>
- * </ul>
+ *
+ *  * Document Editing
+ *  * Browser tabs
+ *  * Message composition
+ *  * Sharing
+ *  * Shopping item details
+ *
  */
-public class NewDocumentActivity extends AppCompatActivity {
-
-    private TextView mDocumentCounterTextView;
-    private int mDocumentCount;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_document);
-        mDocumentCount = getIntent()
-                .getIntExtra(DocumentCentricActivity.KEY_EXTRA_NEW_DOCUMENT_COUNTER, 0);
+class NewDocumentActivity : AppCompatActivity() {
+    private lateinit var mDocumentCounterTextView: TextView
+    private var mDocumentCount = 0
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_new_document)
+        mDocumentCount = intent
+            .getIntExtra(DocumentCentricActivity.KEY_EXTRA_NEW_DOCUMENT_COUNTER, 0)
         mDocumentCounterTextView = findViewById(
-                R.id.hello_new_document_text_view);
-        setDocumentCounterText(R.string.hello_new_document_counter);
+            R.id.hello_new_document_text_view)
+        setDocumentCounterText(R.string.hello_new_document_counter)
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         /* If {@link Intent#FLAG_ACTIVITY_MULTIPLE_TASK} has not been used this Activity
         will be reused.
-         */
-        setDocumentCounterText(R.string.reusing_document_counter);
+         */setDocumentCounterText(R.string.reusing_document_counter)
     }
 
-    public void onRemoveFromOverview(View view) {
+    @Suppress("UNUSED_PARAMETER")
+    fun onRemoveFromOverview(view: View?) {
         // It is good pratice to remove a document from the overview stack if not needed anymore.
-        finishAndRemoveTask();
+        finishAndRemoveTask()
     }
 
-    public void setDocumentCounterText(int resId) {
-        mDocumentCounterTextView
-                .setText(String.format(getString(resId), mDocumentCount));
+    private fun setDocumentCounterText(resId: Int) {
+        mDocumentCounterTextView.text = String.format(getString(resId), mDocumentCount)
     }
-
 }
