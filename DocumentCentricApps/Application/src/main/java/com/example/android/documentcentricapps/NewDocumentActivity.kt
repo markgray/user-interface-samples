@@ -56,9 +56,9 @@ class NewDocumentActivity : AppCompatActivity() {
      * that started this activity under the key [DocumentCentricActivity.KEY_EXTRA_NEW_DOCUMENT_COUNTER],
      * and initialize our [TextView] field [mDocumentCounterTextView] by finding the [View] in our
      * UI with the ID [R.id.hello_new_document_text_view]. Finally we call our [setDocumentCounterText]
-     * with the resource ID [R.string.hello_new_document_counter] (points to the [String] "Hello
-     * Document %s!") to have it use that [String] to format [mDocumentCount] and display the result
-     * as the text of [mDocumentCounterTextView].
+     * method with the resource ID [R.string.hello_new_document_counter] (points to the [String]
+     * "Hello Document %s!") to have it use that [String] to format [mDocumentCount] and display the
+     * result as the text of [mDocumentCounterTextView].
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
@@ -72,6 +72,30 @@ class NewDocumentActivity : AppCompatActivity() {
         setDocumentCounterText(R.string.hello_new_document_counter)
     }
 
+    /**
+     * This is called for activities that set launchMode to "singleTop" in their package, or if a
+     * client used the [Intent.FLAG_ACTIVITY_SINGLE_TOP] flag when calling [startActivity]. In
+     * either case, when the activity is re-launched while at the top of the activity stack instead
+     * of a new instance of the activity being started, [onNewIntent] will be called on the existing
+     * instance with the [Intent] that was used to re-launch it.
+     *
+     * An activity can never receive a new intent in the resumed state. You can count on [onResume]
+     * being called after this method, though not necessarily immediately after the completion of
+     * this callback. If the activity was resumed, it will be paused and new intent will be
+     * delivered, followed by [onResume]. If the activity wasn't in the resumed state, then new
+     * intent can be delivered immediately, with [onResume] called sometime later when activity
+     * becomes active again.
+     *
+     * Note that [getIntent] still returns the original [Intent]. You can use [setIntent] to update
+     * it to this new [Intent].
+     *
+     * First we call our super's implementation of `onNewIntent`, then we call our [setDocumentCounterText]
+     * method with the resource ID [R.string.reusing_document_counter] (points to the [String]
+     * "Reusing Document %s!) to have it use that [String] to format [mDocumentCount] and display the
+     * result as the text of [mDocumentCounterTextView].
+     *
+     * @param intent The new [Intent] that was started for the activity.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         /**
@@ -80,12 +104,28 @@ class NewDocumentActivity : AppCompatActivity() {
         setDocumentCounterText(R.string.reusing_document_counter)
     }
 
+    /**
+     * This is called by the android:onClick attribute of the `Button` in our UI labeled "Remove
+     * from Overview", resource ID [R.id.remove_task_button] when the user clicks that `Button`.
+     * We just call the [finishAndRemoveTask] method to have the system close our task and
+     * completely remove it as a part of finishing the root activity of our task.
+     *
+     * @param view the [View] that was clicked.
+     */
     @Suppress("UNUSED_PARAMETER")
     fun onRemoveFromOverview(view: View?) {
         // It is good pratice to remove a document from the overview stack if not needed anymore.
         finishAndRemoveTask()
     }
 
+    /**
+     * Uses the [String] whose resource ID is our [Int] parameter [resId] as the format string to
+     * format our [Int] field [mDocumentCount] and display the result as the text of our [TextView]
+     * field [mDocumentCounterTextView].
+     *
+     * @param resId the resource ID of the format [String] we should use to format our [Int] field
+     * [mDocumentCount] with.
+     */
     private fun setDocumentCounterText(resId: Int) {
         mDocumentCounterTextView.text = String.format(getString(resId), mDocumentCount)
     }
