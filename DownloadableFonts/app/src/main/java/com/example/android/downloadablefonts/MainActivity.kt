@@ -38,8 +38,27 @@ import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import com.google.android.material.textfield.TextInputLayout
 
+/**
+ * This sample demonstrates how to use the Downloadable Fonts feature introduced in Android O.
+ * Downloadable Fonts is a feature that allows apps to request a certain font from a provider
+ * instead of bundling it or downloading it themselves. This means, there is no need to bundle the
+ * font as an asset.
+ */
 class MainActivity : AppCompatActivity() {
+    /**
+     * The [Handler] we use to download a font. It is lazily initialized by our [handlerThreadHandler]
+     * property to use the `looper` of a [HandlerThread] named "fonts" and then used in a call to
+     * [FontsContractCompat.requestFont] by its [handlerThreadHandler] "alias" in our [requestDownload]
+     * method so it is essentially the backing field for [handlerThreadHandler].
+     */
     private var mHandler: Handler? = null
+
+    /**
+     * The [TextView] in our UI with resource ID [R.id.textview]. It contains text whose typeface is
+     * changed to the one the user asks to be downloaded in the `onTypefaceRetrieved` override of the
+     * [FontsContractCompat.FontRequestCallback] passed to [FontsContractCompat.requestFont] in our
+     * [requestDownload] method.
+     */
     private lateinit var mDownloadableFontTextView: TextView
     private lateinit var mWidthSeekBar: SeekBar
     private lateinit var mWeightSeekBar: SeekBar
@@ -130,8 +149,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         FontsContractCompat
-            .requestFont(this@MainActivity, request, callback,
-                handlerThreadHandler)
+            .requestFont(this@MainActivity, request, callback, handlerThreadHandler)
     }
 
     private fun initializeSeekBars() {
