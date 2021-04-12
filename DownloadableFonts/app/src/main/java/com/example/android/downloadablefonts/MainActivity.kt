@@ -42,7 +42,8 @@ import com.google.android.material.textfield.TextInputLayout
  * This sample demonstrates how to use the Downloadable Fonts feature introduced in Android O.
  * Downloadable Fonts is a feature that allows apps to request a certain font from a provider
  * instead of bundling it or downloading it themselves. This means, there is no need to bundle the
- * font as an asset.
+ * font as an asset. See https://fonts.google.com/?sort=alpha for the fonts available, our choices
+ * are in the [String] array with resource ID [R.array.family_names].
  */
 class MainActivity : AppCompatActivity() {
     /**
@@ -60,8 +61,32 @@ class MainActivity : AppCompatActivity() {
      * [requestDownload] method.
      */
     private lateinit var mDownloadableFontTextView: TextView
+
+    /**
+     * The [SeekBar] in our UI with the ID [R.id.seek_bar_width] which is used to select the width
+     * of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
+     * which is included by our content view layout file layout/activity_main.xml Note: Persistent
+     * bottom sheets are views that come up from the bottom of the screen, elevated over the main
+     * content. They can be dragged vertically to expose more or less of their content.
+     */
     private lateinit var mWidthSeekBar: SeekBar
+
+    /**
+     * The [SeekBar] in our UI with the ID [R.id.seek_bar_weight] which is used to select the weight
+     * of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
+     * which is included by our content view layout file layout/activity_main.xml Note: Persistent
+     * bottom sheets are views that come up from the bottom of the screen, elevated over the main
+     * content. They can be dragged vertically to expose more or less of their content.
+     */
     private lateinit var mWeightSeekBar: SeekBar
+
+    /**
+     * The [SeekBar] in our UI with the ID [R.id.seek_bar_italic] which is used to select the italic
+     * value (0f to 1f) of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
+     * which is included by our content view layout file layout/activity_main.xml Note: Persistent
+     * bottom sheets are views that come up from the bottom of the screen, elevated over the main
+     * content. They can be dragged vertically to expose more or less of their content.
+     */
     private lateinit var mItalicSeekBar: SeekBar
     private lateinit var mBestEffort: CheckBox
     private lateinit var mRequestDownloadButton: Button
