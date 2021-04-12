@@ -48,6 +48,9 @@ import static com.example.android.downloadablefonts.Constants.WIDTH_MAX;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * TAG used for logging.
+     */
     private static final String TAG = "MainActivity";
 
     private Handler mHandler = null;
