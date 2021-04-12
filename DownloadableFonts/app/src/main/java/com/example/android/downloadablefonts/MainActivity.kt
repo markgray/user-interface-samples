@@ -13,244 +13,189 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.downloadablefonts
 
-package com.example.android.downloadablefonts;
+import android.graphics.Typeface
+import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ProgressBar
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.ArraySet
+import androidx.core.provider.FontRequest
+import androidx.core.provider.FontsContractCompat
+import com.google.android.material.textfield.TextInputLayout
 
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.core.provider.FontRequest;
-import androidx.core.provider.FontsContractCompat;
-import androidx.collection.ArraySet;
-import androidx.appcompat.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.Arrays;
-
-import static com.example.android.downloadablefonts.Constants.ITALIC_DEFAULT;
-import static com.example.android.downloadablefonts.Constants.WEIGHT_DEFAULT;
-import static com.example.android.downloadablefonts.Constants.WEIGHT_MAX;
-import static com.example.android.downloadablefonts.Constants.WIDTH_DEFAULT;
-import static com.example.android.downloadablefonts.Constants.WIDTH_MAX;
-
-public class MainActivity extends AppCompatActivity {
-
-    /**
-     * TAG used for logging.
-     */
-    private static final String TAG = "MainActivity";
-
-    private Handler mHandler = null;
-
-    private TextView mDownloadableFontTextView;
-    private SeekBar mWidthSeekBar;
-    private SeekBar mWeightSeekBar;
-    private SeekBar mItalicSeekBar;
-    private CheckBox mBestEffort;
-    private Button mRequestDownloadButton;
-
-    private ArraySet<String> mFamilyNameSet;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        initializeSeekBars();
-        mFamilyNameSet = new ArraySet<>();
-        mFamilyNameSet.addAll(Arrays.asList(getResources().getStringArray(R.array.family_names)));
-
-        mDownloadableFontTextView = findViewById(R.id.textview);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line,
-                getResources().getStringArray(R.array.family_names));
-        final TextInputLayout familyNameInput = findViewById(R.id.auto_complete_family_name_input);
-        final AutoCompleteTextView autoCompleteFamilyName = findViewById(
-                R.id.auto_complete_family_name);
-        autoCompleteFamilyName.setAdapter(adapter);
-        autoCompleteFamilyName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count,
-                    int after) {
+class MainActivity : AppCompatActivity() {
+    private var mHandler: Handler? = null
+    private lateinit var mDownloadableFontTextView: TextView
+    private lateinit var mWidthSeekBar: SeekBar
+    private lateinit var mWeightSeekBar: SeekBar
+    private lateinit var mItalicSeekBar: SeekBar
+    private lateinit var mBestEffort: CheckBox
+    private lateinit var mRequestDownloadButton: Button
+    private lateinit var mFamilyNameSet: ArraySet<String>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        initializeSeekBars()
+        mFamilyNameSet = ArraySet()
+        mFamilyNameSet.addAll(listOf(*resources.getStringArray(R.array.family_names)))
+        mDownloadableFontTextView = findViewById(R.id.textview)
+        val adapter = ArrayAdapter(this,
+            android.R.layout.simple_dropdown_item_1line,
+            resources.getStringArray(R.array.family_names))
+        val familyNameInput = findViewById<TextInputLayout>(R.id.auto_complete_family_name_input)
+        val autoCompleteFamilyName = findViewById<AutoCompleteTextView>(
+            R.id.auto_complete_family_name)
+        autoCompleteFamilyName.setAdapter(adapter)
+        autoCompleteFamilyName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, start: Int, count: Int,
+                                           after: Int) {
                 // No op
             }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+            override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
                 if (isValidFamilyName(charSequence.toString())) {
-                    familyNameInput.setErrorEnabled(false);
-                    familyNameInput.setError("");
+                    familyNameInput.isErrorEnabled = false
+                    familyNameInput.error = ""
                 } else {
-                    familyNameInput.setErrorEnabled(true);
-                    familyNameInput.setError(getString(R.string.invalid_family_name));
+                    familyNameInput.isErrorEnabled = true
+                    familyNameInput.error = getString(R.string.invalid_family_name)
                 }
             }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            override fun afterTextChanged(editable: Editable) {
                 // No op
             }
-        });
-
-        mRequestDownloadButton = findViewById(R.id.button_request);
-        mRequestDownloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String familyName = autoCompleteFamilyName.getText().toString();
-                if (!isValidFamilyName(familyName)) {
-                    familyNameInput.setErrorEnabled(true);
-                    familyNameInput.setError(getString(R.string.invalid_family_name));
-                    Toast.makeText(
-                            MainActivity.this,
-                            R.string.invalid_input,
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                requestDownload(familyName);
-                mRequestDownloadButton.setEnabled(false);
+        })
+        mRequestDownloadButton = findViewById(R.id.button_request)
+        mRequestDownloadButton.setOnClickListener(View.OnClickListener {
+            val familyName = autoCompleteFamilyName.text.toString()
+            if (!isValidFamilyName(familyName)) {
+                familyNameInput.isErrorEnabled = true
+                familyNameInput.error = getString(R.string.invalid_family_name)
+                Toast.makeText(
+                    this@MainActivity,
+                    R.string.invalid_input,
+                    Toast.LENGTH_SHORT).show()
+                return@OnClickListener
             }
-        });
-        mBestEffort = findViewById(R.id.checkbox_best_effort);
+            requestDownload(familyName)
+            mRequestDownloadButton.isEnabled = false
+        })
+        mBestEffort = findViewById(R.id.checkbox_best_effort)
     }
 
-    private void requestDownload(String familyName) {
-        QueryBuilder queryBuilder = new QueryBuilder(familyName)
-                .withWidth(progressToWidth(mWidthSeekBar.getProgress()))
-                .withWeight(progressToWeight(mWeightSeekBar.getProgress()))
-                .withItalic(progressToItalic(mItalicSeekBar.getProgress()))
-                .withBestEffort(mBestEffort.isChecked());
-        String query = queryBuilder.build();
-
-        Log.d(TAG, "Requesting a font. Query: " + query);
-        FontRequest request = new FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                query,
-                R.array.com_google_android_gms_fonts_certs);
-
-        final ProgressBar progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-
-        FontsContractCompat.FontRequestCallback callback = new FontsContractCompat
-                .FontRequestCallback() {
-            @Override
-            public void onTypefaceRetrieved(Typeface typeface) {
-                mDownloadableFontTextView.setTypeface(typeface);
-                progressBar.setVisibility(View.GONE);
-                mRequestDownloadButton.setEnabled(true);
+    private fun requestDownload(familyName: String) {
+        val queryBuilder = QueryBuilder(familyName)
+            .withWidth(progressToWidth(mWidthSeekBar.progress))
+            .withWeight(progressToWeight(mWeightSeekBar.progress))
+            .withItalic(progressToItalic(mItalicSeekBar.progress))
+            .withBestEffort(mBestEffort.isChecked)
+        val query = queryBuilder.build()
+        Log.d(TAG, "Requesting a font. Query: $query")
+        val request = FontRequest(
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            query,
+            R.array.com_google_android_gms_fonts_certs)
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
+        val callback: FontsContractCompat.FontRequestCallback = object : FontsContractCompat.FontRequestCallback() {
+            override fun onTypefaceRetrieved(typeface: Typeface) {
+                mDownloadableFontTextView.typeface = typeface
+                progressBar.visibility = View.GONE
+                mRequestDownloadButton.isEnabled = true
             }
 
-            @Override
-            public void onTypefaceRequestFailed(int reason) {
-                Toast.makeText(MainActivity.this,
-                        getString(R.string.request_failed, reason), Toast.LENGTH_LONG)
-                        .show();
-                progressBar.setVisibility(View.GONE);
-                mRequestDownloadButton.setEnabled(true);
+            override fun onTypefaceRequestFailed(reason: Int) {
+                Toast.makeText(this@MainActivity,
+                    getString(R.string.request_failed, reason), Toast.LENGTH_LONG)
+                    .show()
+                progressBar.visibility = View.GONE
+                mRequestDownloadButton.isEnabled = true
             }
-        };
-        FontsContractCompat
-                .requestFont(MainActivity.this, request, callback,
-                        getHandlerThreadHandler());
-    }
-
-    private void initializeSeekBars() {
-        mWidthSeekBar = findViewById(R.id.seek_bar_width);
-        int widthValue = (int) (100 * (float) WIDTH_DEFAULT / (float) WIDTH_MAX);
-        mWidthSeekBar.setProgress(widthValue);
-        final TextView widthTextView = findViewById(R.id.textview_width);
-        widthTextView.setText(String.valueOf(widthValue));
-        mWidthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                widthTextView
-                        .setText(String.valueOf(progressToWidth(progress)));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        mWeightSeekBar = findViewById(R.id.seek_bar_weight);
-        float weightValue = (float) WEIGHT_DEFAULT / (float) WEIGHT_MAX * 100;
-        mWeightSeekBar.setProgress((int) weightValue);
-        final TextView weightTextView = findViewById(R.id.textview_weight);
-        weightTextView.setText(String.valueOf(WEIGHT_DEFAULT));
-        mWeightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                weightTextView
-                        .setText(String.valueOf(progressToWeight(progress)));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        mItalicSeekBar = findViewById(R.id.seek_bar_italic);
-        mItalicSeekBar.setProgress((int) ITALIC_DEFAULT);
-        final TextView italicTextView = findViewById(R.id.textview_italic);
-        italicTextView.setText(String.valueOf(ITALIC_DEFAULT));
-        mItalicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromuser) {
-                italicTextView
-                        .setText(String.valueOf(progressToItalic(progress)));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-    }
-
-    private boolean isValidFamilyName(String familyName) {
-        return familyName != null && mFamilyNameSet.contains(familyName);
-    }
-
-    private Handler getHandlerThreadHandler() {
-        if (mHandler == null) {
-            HandlerThread handlerThread = new HandlerThread("fonts");
-            handlerThread.start();
-            mHandler = new Handler(handlerThread.getLooper());
         }
-        return mHandler;
+        FontsContractCompat
+            .requestFont(this@MainActivity, request, callback,
+                handlerThreadHandler)
     }
+
+    private fun initializeSeekBars() {
+        mWidthSeekBar = findViewById(R.id.seek_bar_width)
+        val widthValue = (100 * Constants.WIDTH_DEFAULT.toFloat() / Constants.WIDTH_MAX.toFloat()).toInt()
+        mWidthSeekBar.progress = widthValue
+        val widthTextView = findViewById<TextView>(R.id.textview_width)
+        widthTextView.text = widthValue.toString()
+        mWidthSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                widthTextView.text = progressToWidth(progress).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+        mWeightSeekBar = findViewById(R.id.seek_bar_weight)
+        val weightValue = Constants.WEIGHT_DEFAULT.toFloat() / Constants.WEIGHT_MAX.toFloat() * 100
+        mWeightSeekBar.progress = weightValue.toInt()
+        val weightTextView = findViewById<TextView>(R.id.textview_weight)
+        weightTextView.text = Constants.WEIGHT_DEFAULT.toString()
+        mWeightSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                weightTextView.text = progressToWeight(progress).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+        mItalicSeekBar = findViewById(R.id.seek_bar_italic)
+        mItalicSeekBar.progress = Constants.ITALIC_DEFAULT.toInt()
+        val italicTextView = findViewById<TextView>(R.id.textview_italic)
+        italicTextView.text = Constants.ITALIC_DEFAULT.toString()
+        mItalicSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromuser: Boolean) {
+                italicTextView.text = progressToItalic(progress).toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+    }
+
+    private fun isValidFamilyName(familyName: String?): Boolean {
+        return familyName != null && mFamilyNameSet.contains(familyName)
+    }
+
+    private val handlerThreadHandler: Handler
+        get() {
+            if (mHandler == null) {
+                val handlerThread = HandlerThread("fonts")
+                handlerThread.start()
+                mHandler = Handler(handlerThread.looper)
+            }
+            return mHandler!!
+        }
 
     /**
      * Converts progress from a SeekBar to the value of width.
      * @param progress is passed from 0 to 100 inclusive
      * @return the converted width
      */
-    private float progressToWidth(int progress) {
-        return progress == 0 ? 1f : (float) (progress * WIDTH_MAX / 100);
+    private fun progressToWidth(progress: Int): Float {
+        return if (progress == 0) 1f else (progress * Constants.WIDTH_MAX / 100).toFloat()
     }
 
     /**
@@ -258,13 +203,17 @@ public class MainActivity extends AppCompatActivity {
      * @param progress is passed from 0 to 100 inclusive
      * @return the converted weight
      */
-    private int progressToWeight(int progress) {
-        if (progress == 0) {
-            return 1; // The range of the weight is between (0, 1000) (exclusive)
-        } else if (progress == 100) {
-            return WEIGHT_MAX - 1; // The range of the weight is between (0, 1000) (exclusive)
-        } else {
-            return WEIGHT_MAX * progress / 100;
+    private fun progressToWeight(progress: Int): Int {
+        return when (progress) {
+            0 -> {
+                1 // The range of the weight is between (0, 1000) (exclusive)
+            }
+            100 -> {
+                Constants.WEIGHT_MAX - 1 // The range of the weight is between (0, 1000) (exclusive)
+            }
+            else -> {
+                Constants.WEIGHT_MAX * progress / 100
+            }
         }
     }
 
@@ -273,7 +222,14 @@ public class MainActivity extends AppCompatActivity {
      * @param progress is passed from 0 to 100 inclusive.
      * @return the converted italic
      */
-    private float progressToItalic(int progress) {
-        return (float) progress / 100f;
+    private fun progressToItalic(progress: Int): Float {
+        return progress.toFloat() / 100f
+    }
+
+    companion object {
+        /**
+         * TAG used for logging.
+         */
+        private const val TAG = "MainActivity"
     }
 }
