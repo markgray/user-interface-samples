@@ -137,6 +137,44 @@ class MainActivity : AppCompatActivity() {
      * and configure all of the [SeekBar] controls used to change the characteristics of the font
      * we want to download.
      *
+     * We initialize our [ArraySet] field [mFamilyNameSet] with a new instance then add all of the
+     * strings in the [R.array.family_names] string array resource to it (our method [isValidFamilyName]
+     * uses this [ArraySet] to verify that the font name the user chooses is a valid font name).
+     *
+     * Next we initialize our [TextView] field [mDownloadableFontTextView] by finding the view with
+     * ID [R.id.textview] (contains the sample text whose typeface will be changed to use the font
+     * that is downloaded). We initialize our [ArrayAdapter] variable `val adapter` to an instance
+     * which uses the layout file with ID [android.R.layout.simple_dropdown_item_1line] when
+     * instantiating views, and the string array whose resource ID is [R.array.family_names] as the
+     * objects to represent in the ListView. We initialize our [TextInputLayout] variable
+     * `val familyNameInput` by finding the view with ID [R.id.auto_complete_family_name_input]
+     * (it is a Layout which wraps a [AutoCompleteTextView] to show a floating label when the hint
+     * is hidden while the user inputs text, and is used to display an error message if the user
+     * tries to choose an invalid font). We initialize our [AutoCompleteTextView] variable
+     * `val autoCompleteFamilyName` by finding the view with ID [R.id.auto_complete_family_name]
+     * (it is the [AutoCompleteTextView] wrapped by `familyNameInput` which the user uses to choose
+     * a font name). We then set hte adapter of `autoCompleteFamilyName` to `adapter` and add an
+     * anonymous [TextWatcher] to it whose `onTextChanged` override uses our [isValidFamilyName]
+     * method to determine if the text that the user typed in is valid and if it is valid disables
+     * the error functionality of `familyNameInput` and clears the error message that will be displayed
+     * below its [AutoCompleteTextView] `autoCompleteFamilyName`. If it is invalid the override will
+     * enable the error functionality of `familyNameInput` and set the error message that will be
+     * displayed below its [AutoCompleteTextView] `autoCompleteFamilyName` to "Not a valid Family
+     * Name".
+     *
+     * Next we initialize our [Button] field [mRequestDownloadButton] by finding the view in our UI
+     * with the ID [R.id.button_request] and set its [View.OnClickListener] to a lambda which
+     * initializes its [String] variable `val familyName` to the `text` in `autoCompleteFamilyName`.
+     * If our [isValidFamilyName] determines that it is not a valid family it enables the error
+     * functionality of `familyNameInput` and sets the error message that will be displayed below its
+     * [AutoCompleteTextView] `autoCompleteFamilyName` to "Not a valid Family Name" then toasts the
+     * message "Invalid inputs exist". If [isValidFamilyName] determines that it is a valid family
+     * name the lambda call our method [requestDownload] with `familyName` and disables the
+     * [Button] field [mRequestDownloadButton].
+     *
+     * Finally our [onCreate] override initializes our [CheckBox] field [mBestEffort] by finding the
+     * view with ID [R.id.checkbox_best_effort].
+     *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
      */
@@ -204,6 +242,14 @@ class MainActivity : AppCompatActivity() {
         mBestEffort = findViewById(R.id.checkbox_best_effort)
     }
 
+    /**
+     * Constructs a URL for the font whose family name is our [String] parameter [familyName], with
+     * query strings added to it for all of the options that the user has requested, then uses the
+     * [FontsContractCompat.requestFont] method to dowload and then apply the new font using a
+     * [FontsContractCompat.FontRequestCallback] passed to the method.
+     *
+     * @param familyName the font family name that the user has requested.
+     */
     private fun requestDownload(familyName: String) {
         val queryBuilder = QueryBuilder(familyName)
             .withWidth(progressToWidth(mWidthSeekBar.progress))
