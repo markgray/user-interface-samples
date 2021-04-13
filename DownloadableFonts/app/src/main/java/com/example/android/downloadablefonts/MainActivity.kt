@@ -243,10 +243,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Constructs a URL for the font whose family name is our [String] parameter [familyName], with
+     * Constructs an URL for the font whose family name is our [String] parameter [familyName], with
      * query strings added to it for all of the options that the user has requested, then uses the
-     * [FontsContractCompat.requestFont] method to dowload and then apply the new font using a
-     * [FontsContractCompat.FontRequestCallback] passed to the method.
+     * [FontsContractCompat.requestFont] method to download and then apply the new font using the
+     * [FontsContractCompat.FontRequestCallback] passed to that method.
      *
      * @param familyName the font family name that the user has requested.
      */
