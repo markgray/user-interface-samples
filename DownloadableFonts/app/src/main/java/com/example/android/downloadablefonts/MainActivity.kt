@@ -82,15 +82,64 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * The [SeekBar] in our UI with the ID [R.id.seek_bar_italic] which is used to select the italic
-     * value (0f to 1f) of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
-     * which is included by our content view layout file layout/activity_main.xml Note: Persistent
-     * bottom sheets are views that come up from the bottom of the screen, elevated over the main
-     * content. They can be dragged vertically to expose more or less of their content.
+     * value (0f to 1f) of the requested font. It is in the bottomsheet layout file
+     * layout/bottom_sheet_font_query.xml which is included by our content view layout file
+     * layout/activity_main.xml Note: Persistent bottom sheets are views that come up from the
+     * bottom of the screen, elevated over the main content. They can be dragged vertically to
+     * expose more or less of their content.
      */
     private lateinit var mItalicSeekBar: SeekBar
+
+    /**
+     * The [CheckBox] in our UI with the ID [R.id.checkbox_best_effort] which is used to select the
+     * value to use for the "&besteffort=" query parameter (`true` or `false`) of the requested font
+     * URL. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml which is included
+     * by our content view layout file layout/activity_main.xml Note: Persistent bottom sheets are
+     * views that come up from the bottom of the screen, elevated over the main content. They can be
+     * dragged vertically to expose more or less of their content.
+     */
     private lateinit var mBestEffort: CheckBox
+
+    /**
+     * The [Button] in our UI with the ID [R.id.button_request] which when clicked will call our
+     * [requestDownload] method to build a font request URL from the user's current choices and
+     * call the [FontsContractCompat.requestFont] method to download that font. It is in the bottom
+     * sheet layout file layout/bottom_sheet_font_query.xml which is included by our content view
+     * layout file layout/activity_main.xml Note: Persistent bottom sheets are views that come up
+     * from the bottom of the screen, elevated over the main content. They can be dragged vertically
+     * to expose more or less of their content.
+     */
     private lateinit var mRequestDownloadButton: Button
+
+    /**
+     * The [ArraySet] holding the names of the fonts we can download. It is read from the string
+     * array resource with ID [R.array.family_names] in our [onCreate] override. It is used only to
+     * verify that the font name chosen in the [AutoCompleteTextView] used to select a font is a
+     * valid font name by our [isValidFamilyName] method.
+     */
     private lateinit var mFamilyNameSet: ArraySet<String>
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main]. It consists of a
+     * [androidx.coordinatorlayout.widget.CoordinatorLayout] root view (a super-powered `FrameLayout`)
+     * which includes the layout file [R.layout.bottom_sheet_font_query] (which is a A `FrameLayout`
+     * with a rounded corner background and shadow) whose app:layout_behavior attribute is
+     * [com.google.android.material.bottomsheet.BottomSheetBehavior] (ie. a bottom sheet with a peek
+     * height of 120dp which can come up from the bottom of the screen, elevated over the main content.
+     * It can be dragged vertically to expose more or less of its content) which holds a
+     * [androidx.core.widget.NestedScrollView] holding all of the controls used to select and
+     * configure the font to be requested. [R.layout.activity_main] also contains a `LinearLayout`
+     * holding a [TextView] which displays sample text whose typeface is changed when a new font is
+     * downloaded, and a [ProgressBar] used to display the progress of the font download.
+     *
+     * Having set our content view we next call our [initializeSeekBars] method to have it locate
+     * and configure all of the [SeekBar] controls used to change the characteristics of the font
+     * we want to download.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -98,20 +147,32 @@ class MainActivity : AppCompatActivity() {
         mFamilyNameSet = ArraySet()
         mFamilyNameSet.addAll(listOf(*resources.getStringArray(R.array.family_names)))
         mDownloadableFontTextView = findViewById(R.id.textview)
-        val adapter = ArrayAdapter(this,
+        val adapter = ArrayAdapter(
+            this,
             android.R.layout.simple_dropdown_item_1line,
-            resources.getStringArray(R.array.family_names))
+            resources.getStringArray(R.array.family_names)
+        )
         val familyNameInput = findViewById<TextInputLayout>(R.id.auto_complete_family_name_input)
         val autoCompleteFamilyName = findViewById<AutoCompleteTextView>(
-            R.id.auto_complete_family_name)
+            R.id.auto_complete_family_name
+        )
         autoCompleteFamilyName.setAdapter(adapter)
         autoCompleteFamilyName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, start: Int, count: Int,
-                                           after: Int) {
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 // No op
             }
 
-            override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 if (isValidFamilyName(charSequence.toString())) {
                     familyNameInput.isErrorEnabled = false
                     familyNameInput.error = ""
