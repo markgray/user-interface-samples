@@ -284,7 +284,43 @@ class MainActivity : AppCompatActivity() {
      * Constructs an URL for the font whose family name is our [String] parameter [familyName], with
      * query strings added to it for all of the options that the user has requested, then uses the
      * [FontsContractCompat.requestFont] method to download and then apply the new font using the
-     * [FontsContractCompat.FontRequestCallback] passed to that method.
+     * [FontsContractCompat.FontRequestCallback] passed to that method. We initialize our [QueryBuilder]
+     * variable `val queryBuilder` to a new instance which is configured to use:
+     *  - for its "&width=" query string the value that our [progressToWidth] calculates from the
+     *  `progress` of our [SeekBar] field [mWidthSeekBar]
+     *  - for its "&weight=" query string the value that our [progressToWeight] calculates from the
+     *  `progress` of our [SeekBar] field [mWeightSeekBar]
+     *  - for its "&italic=" query string the value that our [progressToItalic] calculates from the
+     *  `progress` of our [SeekBar] field [mItalicSeekBar]
+     *  - and for its "&besteffort=" query string the `true` or `false` value of the `isChecked`
+     *  property of our [CheckBox] field [mBestEffort]
+     *
+     * We then initialize our [String] variable `val query` to the value returned by the
+     * [QueryBuilder.build] method of `queryBuilder` and log the fact that we are about to
+     * request that font. Next we initialize our [FontRequest] variable `val request` to a new
+     * instance which uses the [String] "com.google.android.gms.fonts" as the authority of the Font
+     * Provider to be used for the request, uses the [String] "com.google.android.gms" as the package
+     * for the Font Provider to be used for the request (this is used to verify the identity of the
+     * provider), uses `query` as the query to be sent over to the provider, and uses our resource
+     * array with ID [R.array.com_google_android_gms_fonts_certs] as the resource array with the
+     * list of sets of hashes for the certificates the provider should be signed with (this is used
+     * to verify the identity of the provider). That last array is in our file values/font_certs.xml
+     * and is an array of the string arrays [R.array.com_google_android_gms_fonts_certs_dev] and
+     * [R.array.com_google_android_gms_fonts_certs_prod] which are defined in the same file.
+     *
+     * Next we intitialize our [ProgressBar] variable `val progressBar` by finding the view in our UI
+     * with ID [R.id.progressBar] and set it to be visible. We initialize our variable `val callback`
+     * to an anonymous [FontsContractCompat.FontRequestCallback] whose `onTypefaceRetrieved` override
+     * sets the `typeface` property of our [TextView] field [mDownloadableFontTextView] to its [Typeface]
+     * parameter `typeface`, sets the visibility of `progressBar` to [View.GONE] and enables our [Button]
+     * field [mRequestDownloadButton], and whose `onTypefaceRequestFailed` override toasts the reason
+     * number given for the font request failure, sets the visibility of `progressBar` to [View.GONE]
+     * and enables our [Button] field [mRequestDownloadButton].
+     *
+     * Finally we call the [FontsContractCompat.requestFont] method with the [FontRequest] `request`
+     * as the font to download, `callback` as the callback that will be triggered when results are
+     * obtained, and our [Handler] field [handlerThreadHandler] as the handler to use to perform the
+     * font fetching.
      *
      * @param familyName the font family name that the user has requested.
      */
@@ -294,13 +330,14 @@ class MainActivity : AppCompatActivity() {
             .withWeight(progressToWeight(mWeightSeekBar.progress))
             .withItalic(progressToItalic(mItalicSeekBar.progress))
             .withBestEffort(mBestEffort.isChecked)
-        val query = queryBuilder.build()
+        val query: String = queryBuilder.build()
         Log.d(TAG, "Requesting a font. Query: $query")
         val request = FontRequest(
             "com.google.android.gms.fonts",
             "com.google.android.gms",
             query,
-            R.array.com_google_android_gms_fonts_certs)
+            R.array.com_google_android_gms_fonts_certs
+        )
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
         val callback: FontsContractCompat.FontRequestCallback = object : FontsContractCompat.FontRequestCallback() {
@@ -322,6 +359,10 @@ class MainActivity : AppCompatActivity() {
             .requestFont(this@MainActivity, request, callback, handlerThreadHandler)
     }
 
+    /**
+     * Locates and configures all of the [SeekBar] widgets in our UI that are to be used to vary the
+     * characteristics of the font that is requested.
+     */
     private fun initializeSeekBars() {
         mWidthSeekBar = findViewById(R.id.seek_bar_width)
         val widthValue = (100 * Constants.WIDTH_DEFAULT.toFloat() / Constants.WIDTH_MAX.toFloat()).toInt()
