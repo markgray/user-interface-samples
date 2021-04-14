@@ -196,6 +196,17 @@ class MainActivity : AppCompatActivity() {
         )
         autoCompleteFamilyName.setAdapter(adapter)
         autoCompleteFamilyName.addTextChangedListener(object : TextWatcher {
+            /**
+             * This method is called to notify you that, within our [CharSequence] parameter
+             * [charSequence] the [count] characters beginning at [start] are about to be replaced
+             * by new text with length [after]. It is an error to attempt to make changes to
+             * [charSequence] from this callback. We ignore.
+             *
+             * @param charSequence the [CharSequence] which is about to be modified.
+             * @param start the starting index of the substring that will be replaced.
+             * @param count the number of characters that will be replaced
+             * @param after the length of the new text that is being added.
+             */
             override fun beforeTextChanged(
                 charSequence: CharSequence,
                 start: Int,
@@ -205,11 +216,29 @@ class MainActivity : AppCompatActivity() {
                 // No op
             }
 
+            /**
+             * This method is called to notify you that, within [charSequence], the [before]
+             * characters beginning at [start] have just replaced old text that had length
+             * [count]. It is an error to attempt to make changes to [[charSequence]] from
+             * this callback. If our [isValidFamilyName] determines that our [CharSequence]
+             * parameter [charSequence] is a valid font family name we disable the error
+             * functionality of our [TextInputLayout] variable `familyNameInput` and set the
+             * error message that will be displayed below its [AutoCompleteTextView] to an
+             * empty [String], and if [isValidFamilyName] determines that [charSequence] is not
+             * a valid font family name enable the error functionality of our [TextInputLayout]
+             * variable `familyNameInput` and set the error message that will be displayed below
+             * its [AutoCompleteTextView] to the [String] "Not a valid Family Name".
+             *
+             * @param charSequence the [CharSequence] which has had a substring replaced.
+             * @param start the starting index of the substring that was replaced.
+             * @param before the number of characters that are new in [charSequence].
+             * @param count the number of characters that got replaced.
+             */
             override fun onTextChanged(
                 charSequence: CharSequence,
                 start: Int,
-                count: Int,
-                after: Int
+                before: Int,
+                count: Int
             ) {
                 if (isValidFamilyName(charSequence.toString())) {
                     familyNameInput.isErrorEnabled = false
@@ -220,6 +249,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            /**
+             * This method is called to notify you that, somewhere within our [Editable] parameter
+             * [editable], the text has been changed. It is legitimate to make further changes to
+             * [editable] from this callback, but be careful not to get yourself into an infinite
+             * loop, because any changes you make will cause this method to be called again
+             * recursively. We ignore.
+             *
+             * @param editable the [Editable] which has had text changed inside it.
+             */
             override fun afterTextChanged(editable: Editable) {
                 // No op
             }
