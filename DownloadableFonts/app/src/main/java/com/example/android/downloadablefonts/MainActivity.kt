@@ -19,6 +19,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -462,10 +463,27 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Convenience function to check whether our [String] parameter [familyName] is among the font
+     * family names in our [ArraySet] field [mFamilyNameSet] which is read from the string array
+     * resource with ID [R.array.family_names] in our [onCreate] override. It is a subset of the
+     * font family names actually avaiable from the provider but the only ones this demo allows the
+     * user to chose from. We return `true` if [familyName] is not `null` and it exists in the set
+     * [mFamilyNameSet], otherwise we return `false`.
+     */
     private fun isValidFamilyName(familyName: String?): Boolean {
         return familyName != null && mFamilyNameSet.contains(familyName)
     }
 
+    /**
+     * Lazily initialized [Handler] that we pass in our call to [FontsContractCompat.requestFont]
+     * that it uses to download our font from our provider in our [requestDownload] method. If our
+     * [Handler] backing field [mHandler] is `null` we initialize our [HandlerThread] variable
+     * `val handlerThread` to a new instance whose [Thread] name is "fonts", start `handlerThread`,
+     * and then initialize [mHandler] to a new instance of [Handler] which will use the [Looper] of
+     * `handlerThread` as its [Looper] instead of the default. Having made sure it is initialized
+     * we return [mHandler] to the caller.
+     */
     private val handlerThreadHandler: Handler
         get() {
             if (mHandler == null) {
@@ -477,7 +495,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     /**
-     * Converts progress from a SeekBar to the value of width.
+     * Converts [progress] from a [SeekBar] to the value of width. If our parameter [progress] is 0 we
+     * return 1f, otherwise we return [progress] times [Constants.WIDTH_MAX] divided by 100.
+     *
      * @param progress is passed from 0 to 100 inclusive
      * @return the converted width
      */
@@ -486,7 +506,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Converts progress from a SeekBar to the value of weight.
+     * Converts [progress] from a [SeekBar] to the value of weight.
+     *
      * @param progress is passed from 0 to 100 inclusive
      * @return the converted weight
      */
