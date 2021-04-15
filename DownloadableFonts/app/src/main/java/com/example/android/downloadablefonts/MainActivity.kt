@@ -340,13 +340,44 @@ class MainActivity : AppCompatActivity() {
         )
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
-        val callback: FontsContractCompat.FontRequestCallback = object : FontsContractCompat.FontRequestCallback() {
+        val callback = object : FontsContractCompat.FontRequestCallback() {
+            /**
+             * Called then a [Typeface] request done via [FontsContractCompat.requestFont] is
+             * complete. Note that this method will not be called if [onTypefaceRequestFailed]
+             * is called instead. We set the `typeface` property of our [TextView] field
+             * [mDownloadableFontTextView] to our [Typeface] parameter [typeface], set the
+             * visibility of `progressBar` to [View.GONE] and enable our [Button] field
+             * [mRequestDownloadButton],
+             *
+             * @param typeface  The [Typeface] object retrieved.
+             */
             override fun onTypefaceRetrieved(typeface: Typeface) {
                 mDownloadableFontTextView.typeface = typeface
                 progressBar.visibility = View.GONE
                 mRequestDownloadButton.isEnabled = true
             }
 
+            /**
+             * Called when a [Typeface] request done via [FontsContractCompat.requestFont] fails.
+             * We toast the value of our [Int] parameter [reason], set the visibility of `progressBar`
+             * to [View.GONE] and enable our [Button] field [mRequestDownloadButton].
+             *
+             * @param reason May be one of:
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_PROVIDER_NOT_FOUND] signals
+             *  that given provider was not found on the device.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_FONT_NOT_FOUND] signals that
+             *  the font provider did not return any results for the given query.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_FONT_LOAD_ERROR] signals that
+             *  the font returned by the provider was not loaded properly.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_FONT_UNAVAILABLE] signals that
+             *  the font provider found the queried font, but it is currently unavailable.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_MALFORMED_QUERY] signals that
+             *  the given query was not supported by the provider.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_WRONG_CERTIFICATES] signals
+             *  that the given provider must be authenticated and the given certificates do not
+             *  match its signature.
+             *  - or a provider defined positive code number.
+             */
             override fun onTypefaceRequestFailed(reason: Int) {
                 Toast.makeText(this@MainActivity,
                     getString(R.string.request_failed, reason), Toast.LENGTH_LONG)
@@ -361,7 +392,34 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Locates and configures all of the [SeekBar] widgets in our UI that are to be used to vary the
-     * characteristics of the font that is requested.
+     * characteristics of the font that is requested. The [SeekBar] widgets are all in our bottom
+     * sheet layout file layout/bottom_sheet_font_query.xml and are configured as follows:
+     *  - "Width" is found at resource ID [R.id.seek_bar_width] to initialize our [SeekBar] field
+     *  [mWidthSeekBar], its default `progress` property is calculated to initialize our variable
+     *  `val widthValue` to be 100 times [Constants.WIDTH_DEFAULT] divided by [Constants.WIDTH_MAX],
+     *  the [TextView] that displays its current value is found at resource ID [R.id.textview_width]
+     *  to initialize our variable `val widthTextView` and the text of `widthTextView` is set to the
+     *  [String] value of `widthValue`, and finally its [OnSeekBarChangeListener] is set to an anonymous
+     *  instance whose `onProgressChanged` override sets the text of `widthTextView` to the width
+     *  returned by our [progressToWidth] method for the current `progress` value passed the override,
+     *  and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
+     *  - "Weight" is found at resource ID [R.id.seek_bar_weight] to initialize our [SeekBar] field
+     *  [mWeightSeekBar], its default `progress` property is calculated to initialize our variable
+     *  `val weightValue` to be 100 times [Constants.WEIGHT_DEFAULT] divided by [Constants.WEIGHT_MAX],
+     *  the [TextView] that displays its current value is found at resource ID [R.id.textview_weight]
+     *  to initialize our variable `val weightTextView` and the text of `weightTextView` is set to the
+     *  [String] value of `weightValue`, and finally its [OnSeekBarChangeListener] is set to an
+     *  anonymous instance whose `onProgressChanged` override sets the text of `weightTextView` to
+     *  the value returned by our [progressToWeight] method for the current `progress` value passed
+     *  the override, and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
+     *  - "Italic" is found at resource ID [R.id.seek_bar_italic] to initialize our [SeekBar] field
+     *  [mItalicSeekBar], its default `progress` property is set to [Constants.ITALIC_DEFAULT], the
+     *  [TextView] that displays its current value is found at resource ID [R.id.textview_italic]
+     *  to initialize our variable `val italicTextView` and the text of `italicTextView` is set to
+     *  [Constants.ITALIC_DEFAULT], and finally its [OnSeekBarChangeListener] is set to an anonymous
+     *  instance whose `onProgressChanged` override sets the text of `progressToItalic` to the
+     *  value returned by our [progressToItalic] method for the current `progress` value passed the
+     *  override, and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
      */
     private fun initializeSeekBars() {
         mWidthSeekBar = findViewById(R.id.seek_bar_width)
