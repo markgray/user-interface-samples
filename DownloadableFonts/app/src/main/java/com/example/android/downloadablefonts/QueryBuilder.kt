@@ -13,89 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.example.android.downloadablefonts;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+package com.example.android.downloadablefonts
 
 /**
  * Builder class for constructing a query for downloading a font.
  */
-class QueryBuilder {
-
-    @NonNull
-    private String mFamilyName;
-
-    @Nullable
-    private Float mWidth = null;
-
-    @Nullable
-    private Integer mWeight = null;
-
-    @Nullable
-    private Float mItalic = null;
-
-    @Nullable
-    private Boolean mBesteffort = null;
-
-    QueryBuilder(@NonNull String familyName) {
-        mFamilyName = familyName;
+internal class QueryBuilder(private var mFamilyName: String) {
+    private var mWidth: Float? = null
+    private var mWeight: Int? = null
+    private var mItalic: Float? = null
+    private var mBesteffort: Boolean? = null
+    @Suppress("unused")
+    fun withFamilyName(familyName: String): QueryBuilder {
+        mFamilyName = familyName
+        return this
     }
 
-    QueryBuilder withFamilyName(@NonNull String familyName) {
-        mFamilyName = familyName;
-        return this;
+    fun withWidth(width: Float): QueryBuilder {
+        require(width > Constants.WIDTH_MIN) { "Width must be more than 0" }
+        mWidth = width
+        return this
     }
 
-    QueryBuilder withWidth(float width) {
-        if (width <= Constants.WIDTH_MIN) {
-            throw new IllegalArgumentException("Width must be more than 0");
-        }
-        mWidth = width;
-        return this;
+    fun withWeight(weight: Int): QueryBuilder {
+        require(!(weight <= Constants.WEIGHT_MIN || weight >= Constants.WEIGHT_MAX)) { "Weight must be between 0 and 1000 (exclusive)" }
+        mWeight = weight
+        return this
     }
 
-    QueryBuilder withWeight(int weight) {
-        if (weight <= Constants.WEIGHT_MIN || weight >= Constants.WEIGHT_MAX) {
-            throw new IllegalArgumentException(
-                    "Weight must be between 0 and 1000 (exclusive)");
-        }
-        mWeight = weight;
-        return this;
+    fun withItalic(italic: Float): QueryBuilder {
+        require(!(italic < Constants.ITALIC_MIN || italic > Constants.ITALIC_MAX)) { "Italic must be between 0 and 1 (inclusive)" }
+        mItalic = italic
+        return this
     }
 
-    QueryBuilder withItalic(float italic) {
-        if (italic < Constants.ITALIC_MIN || italic > Constants.ITALIC_MAX) {
-            throw new IllegalArgumentException("Italic must be between 0 and 1 (inclusive)");
-        }
-        mItalic = italic;
-        return this;
+    fun withBestEffort(bestEffort: Boolean): QueryBuilder {
+        mBesteffort = bestEffort
+        return this
     }
 
-    QueryBuilder withBestEffort(boolean bestEffort) {
-        mBesteffort = bestEffort;
-        return this;
-    }
-
-    String build() {
+    fun build(): String {
         if (mWeight == null && mWidth == null && mItalic == null && mBesteffort == null) {
-            return mFamilyName;
+            return mFamilyName
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append("name=").append(mFamilyName);
+        val builder = StringBuilder()
+        builder.append("name=").append(mFamilyName)
         if (mWeight != null) {
-           builder.append("&weight=").append(mWeight);
+            builder.append("&weight=").append(mWeight)
         }
         if (mWidth != null) {
-            builder.append("&width=").append(mWidth);
+            builder.append("&width=").append(mWidth)
         }
         if (mItalic != null) {
-            builder.append("&italic=").append(mItalic);
+            builder.append("&italic=").append(mItalic)
         }
         if (mBesteffort != null) {
-            builder.append("&besteffort=").append(mBesteffort);
+            builder.append("&besteffort=").append(mBesteffort)
         }
-        return builder.toString();
+        return builder.toString()
     }
 }
