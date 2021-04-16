@@ -15,6 +15,8 @@
  */
 package com.example.android.downloadablefonts
 
+import androidx.core.provider.FontRequest
+
 /**
  * Builder class for constructing a query for downloading a font.
  *
@@ -53,7 +55,7 @@ internal class QueryBuilder(private var mFamilyName: String) {
 
     /**
      * Unused setter for our [String] field [mFamilyName] which is used as the font family name in
-     * the request we are building. (our constructor sets the field to its parameter). We just set
+     * the query we are building (our constructor sets the field to its parameter). We just set
      * [mFamilyName] to our [String] parameter [familyName] and return `this` [QueryBuilder] to
      * allow chaining.
      *
@@ -68,7 +70,7 @@ internal class QueryBuilder(private var mFamilyName: String) {
 
     /**
      * Setter for our [Float] field [mWidth] which is used to select the width of the font in the
-     * request we are building. We [require] that our [Float] parameter [width] be greater than
+     * query we are building. We [require] that our [Float] parameter [width] be greater than
      * [Constants.WIDTH_MIN] (0f) throwing an [IllegalArgumentException] with the message "Width
      * must be more than 0" if it is not, then set our field [mWidth] to [width] and return `this`
      * [QueryBuilder] to allow chaining.
@@ -84,7 +86,7 @@ internal class QueryBuilder(private var mFamilyName: String) {
 
     /**
      * Setter for our [Int] field [mWeight] which is used to select the weight of the font in the
-     * request we are building. We [require] that our [Int] parameter [weight] be between
+     * query we are building. We [require] that our [Int] parameter [weight] be between
      * [Constants.WEIGHT_MIN] (0) and [Constants.WEIGHT_MAX] (1000) exclusive throwing an
      * [IllegalArgumentException] with the message "Weight must be between 0 and 1000 (exclusive)"
      * if it is not, then set our field [mWidth] to [weight] and return `this` [QueryBuilder] to
@@ -103,7 +105,7 @@ internal class QueryBuilder(private var mFamilyName: String) {
 
     /**
      * Setter for our [Float] field [mItalic] which is used to select the italic value of the font
-     * in the request we are building. We [require] that our [Float] parameter [italic] be between
+     * in the query we are building. We [require] that our [Float] parameter [italic] be between
      * [Constants.ITALIC_MIN] (0) and [Constants.ITALIC_MAX] (1000) inclusive throwing an
      * [IllegalArgumentException] with the message "Italic must be between 0 and 1 (inclusive)"
      * if it is not, then set our field [mItalic] to [italic] and return `this` [QueryBuilder] to
@@ -122,10 +124,10 @@ internal class QueryBuilder(private var mFamilyName: String) {
 
     /**
      * Setter for our [Boolean] field [mBesteffort] which is used to supply the value of the
-     * "&besteffort=" query string of the request we are building. We just our field [mBesteffort]
+     * "&besteffort=" query string of the query we are building. We just set our field [mBesteffort]
      * to [bestEffort] and return `this` [QueryBuilder] to allow chaining.
      *
-     * @param bestEffort the `true` of `false` value to use for the "&besteffort=" query string.
+     * @param bestEffort the `true` or `false` value to use for the "&besteffort=" query string.
      * @return `this` [QueryBuilder] to allow chaining.
      */
     fun withBestEffort(bestEffort: Boolean): QueryBuilder {
@@ -133,6 +135,12 @@ internal class QueryBuilder(private var mFamilyName: String) {
         return this
     }
 
+    /**
+     * Builds `this` [QueryBuilder] into a query that can be used in a [FontRequest] for a font from
+     * a font provider.
+     *
+     * @return the query [String] to be used when constructing a [FontRequest]
+     */
     fun build(): String {
         if (mWeight == null && mWidth == null && mItalic == null && mBesteffort == null) {
             return mFamilyName
