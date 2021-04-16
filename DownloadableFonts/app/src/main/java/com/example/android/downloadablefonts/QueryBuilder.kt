@@ -67,7 +67,14 @@ internal class QueryBuilder(private var mFamilyName: String) {
     }
 
     /**
-     * Setter for our [Float] field [mWidth]
+     * Setter for our [Float] field [mWidth] which is used to select the width of the font in the
+     * request we are building. We [require] that our [Float] parameter [width] be greater than
+     * [Constants.WIDTH_MIN] (0f) throwing an [IllegalArgumentException] with the message "Width
+     * must be more than 0" if it is not, then set our field [mWidth] to [width] and return `this`
+     * [QueryBuilder] to allow chaining.
+     *
+     * @param width the width of the font to request in the request we are building.
+     * @return `this` [QueryBuilder] to allow chaining.
      */
     fun withWidth(width: Float): QueryBuilder {
         require(width > Constants.WIDTH_MIN) { "Width must be more than 0" }
@@ -75,6 +82,17 @@ internal class QueryBuilder(private var mFamilyName: String) {
         return this
     }
 
+    /**
+     * Setter for our [Int] field [mWeight] which is used to select the weight of the font in the
+     * request we are building. We [require] that our [Int] parameter [weight] be between
+     * [Constants.WEIGHT_MIN] (0) and [Constants.WEIGHT_MAX] (1000) exclusive throwing an
+     * [IllegalArgumentException] with the message "Weight must be between 0 and 1000 (exclusive)"
+     * if it is not, then set our field [mWidth] to [weight] and return `this` [QueryBuilder] to
+     * allow chaining.
+     *
+     * @param weight the weight of the font to request in the request we are building.
+     * @return `this` [QueryBuilder] to allow chaining.
+     */
     fun withWeight(weight: Int): QueryBuilder {
         require(!(weight <= Constants.WEIGHT_MIN || weight >= Constants.WEIGHT_MAX)) {
             "Weight must be between 0 and 1000 (exclusive)"
@@ -83,6 +101,17 @@ internal class QueryBuilder(private var mFamilyName: String) {
         return this
     }
 
+    /**
+     * Setter for our [Float] field [mItalic] which is used to select the italic value of the font
+     * in the request we are building. We [require] that our [Float] parameter [italic] be between
+     * [Constants.ITALIC_MIN] (0) and [Constants.ITALIC_MAX] (1000) inclusive throwing an
+     * [IllegalArgumentException] with the message "Italic must be between 0 and 1 (inclusive)"
+     * if it is not, then set our field [mItalic] to [italic] and return `this` [QueryBuilder] to
+     * allow chaining.
+     *
+     * @param italic the value of italic of the font to request in the request we are building.
+     * @return `this` [QueryBuilder] to allow chaining.
+     */
     fun withItalic(italic: Float): QueryBuilder {
         require(!(italic < Constants.ITALIC_MIN || italic > Constants.ITALIC_MAX)) {
             "Italic must be between 0 and 1 (inclusive)"
@@ -91,6 +120,14 @@ internal class QueryBuilder(private var mFamilyName: String) {
         return this
     }
 
+    /**
+     * Setter for our [Boolean] field [mBesteffort] which is used to supply the value of the
+     * "&besteffort=" query string of the request we are building. We just our field [mBesteffort]
+     * to [bestEffort] and return `this` [QueryBuilder] to allow chaining.
+     *
+     * @param bestEffort the `true` of `false` value to use for the "&besteffort=" query string.
+     * @return `this` [QueryBuilder] to allow chaining.
+     */
     fun withBestEffort(bestEffort: Boolean): QueryBuilder {
         mBesteffort = bestEffort
         return this
