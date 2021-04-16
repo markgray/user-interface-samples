@@ -17,18 +17,58 @@ package com.example.android.downloadablefonts
 
 /**
  * Builder class for constructing a query for downloading a font.
+ *
+ * @param mFamilyName the family name of the font that is to be requested.
  */
 internal class QueryBuilder(private var mFamilyName: String) {
+    /**
+     * The width of the font, more than [Constants.WIDTH_MIN] (0) and less than [Constants.WIDTH_MAX]
+     * (1000), with the default [Constants.WIDTH_DEFAULT] (100). Set by our [withWidth] method, its
+     * value is appended to the "&width=" query string of the query that is built.
+     */
     private var mWidth: Float? = null
+
+    /**
+     * The weight of the font, greater than [Constants.WEIGHT_MIN] (0) and less than [Constants.WEIGHT_MAX]
+     * (1000) with the default [Constants.WEIGHT_DEFAULT] (400). Set by our [withWeight] method, its
+     * value is appended to the "&weight=" query string of the query that is built.
+     */
     private var mWeight: Int? = null
+
+    /**
+     * The italic value of the font, greater than or equal to [Constants.ITALIC_MIN] (0f) and less
+     * than or equal to [Constants.ITALIC_MAX] (1.0f) with the default [Constants.ITALIC_DEFAULT]
+     * (0f). Set by our [withItalic] method, its value is appended to the "&italic=" query string
+     * of the query that is built.
+     */
     private var mItalic: Float? = null
+
+    /**
+     * `true` or `false` value of the "&besteffort=" query string added to our query. Set by our
+     * [withBestEffort] method it defaults to `true` and if `true` and your query specifies a valid
+     * family name but the requested width/weight/italic value is not supported the font provider
+     * will return the best match it can find within the family.
+     */
     private var mBesteffort: Boolean? = null
+
+    /**
+     * Unused setter for our [String] field [mFamilyName] which is used as the font family name in
+     * the request we are building. (our constructor sets the field to its parameter). We just set
+     * [mFamilyName] to our [String] parameter [familyName] and return `this` [QueryBuilder] to
+     * allow chaining.
+     *
+     * @param familyName the font family name to use in the request being built.
+     * @return `this` [QueryBuilder] to allow chaining.
+     */
     @Suppress("unused")
     fun withFamilyName(familyName: String): QueryBuilder {
         mFamilyName = familyName
         return this
     }
 
+    /**
+     * Setter for our [Float] field [mWidth]
+     */
     fun withWidth(width: Float): QueryBuilder {
         require(width > Constants.WIDTH_MIN) { "Width must be more than 0" }
         mWidth = width
@@ -36,13 +76,17 @@ internal class QueryBuilder(private var mFamilyName: String) {
     }
 
     fun withWeight(weight: Int): QueryBuilder {
-        require(!(weight <= Constants.WEIGHT_MIN || weight >= Constants.WEIGHT_MAX)) { "Weight must be between 0 and 1000 (exclusive)" }
+        require(!(weight <= Constants.WEIGHT_MIN || weight >= Constants.WEIGHT_MAX)) {
+            "Weight must be between 0 and 1000 (exclusive)"
+        }
         mWeight = weight
         return this
     }
 
     fun withItalic(italic: Float): QueryBuilder {
-        require(!(italic < Constants.ITALIC_MIN || italic > Constants.ITALIC_MAX)) { "Italic must be between 0 and 1 (inclusive)" }
+        require(!(italic < Constants.ITALIC_MIN || italic > Constants.ITALIC_MAX)) {
+            "Italic must be between 0 and 1 (inclusive)"
+        }
         mItalic = italic
         return this
     }
