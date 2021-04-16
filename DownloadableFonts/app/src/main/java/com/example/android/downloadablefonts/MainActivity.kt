@@ -506,7 +506,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Converts [progress] from a [SeekBar] to the value of weight.
+     * Converts [progress] from a [SeekBar] to the value of weight. For a [progress] of 0 we return
+     * 1, and for a [progress] of 100 we return 1 less than [Constants.WEIGHT_MAX] (the range of the
+     * weight is between (0, 1000) excluding the end points). For all other values we return
+     * [Constants.WEIGHT_MAX] times [progress] divided by 100.
      *
      * @param progress is passed from 0 to 100 inclusive
      * @return the converted weight
@@ -526,7 +529,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Converts progress from a SeekBar to the value of italic.
+     * Converts progress from a [SeekBar] to the value of italic. We return [progress] divided by
+     * 100f.
+     *
      * @param progress is passed from 0 to 100 inclusive.
      * @return the converted italic
      */
