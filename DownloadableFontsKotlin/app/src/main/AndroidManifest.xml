@@ -15,6 +15,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.downloadablefonts">
 
     <application
@@ -22,7 +23,8 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
-        android:allowBackup="true">
+        android:allowBackup="false"
+        tools:ignore="AllowBackup">
 
         <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts" />
 

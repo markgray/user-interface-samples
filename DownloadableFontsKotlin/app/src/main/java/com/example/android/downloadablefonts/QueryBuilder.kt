@@ -19,7 +19,7 @@ package com.example.android.downloadablefonts
 /**
  * Builder class for constructing a query for downloading a font.
  */
-internal class QueryBuilder(val familyName: String,
+internal class QueryBuilder(private val familyName: String,
                             val width: Float? = null,
                             val weight: Int? = null,
                             val italic: Float? = null,
