@@ -20,6 +20,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -43,19 +44,148 @@ import com.example.android.downloadablefonts.Constants.WIDTH_DEFAULT
 import com.example.android.downloadablefonts.Constants.WIDTH_MAX
 import com.google.android.material.textfield.TextInputLayout
 
+/**
+ * This sample demonstrates how to use the Downloadable Fonts feature introduced in Android O.
+ * Downloadable Fonts is a feature that allows apps to request a certain font from a provider
+ * instead of bundling it or downloading it themselves. This means, there is no need to bundle the
+ * font as an asset. See https://fonts.google.com/?sort=alpha for the fonts available, our choices
+ * are in the [String] array with resource ID [R.array.family_names].
+ */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     * The [Handler] we use to download a font. It uses the [Looper] of a [HandlerThread] whose name
+     * is "fonts" that is constructed and started in our [onCreate] override.
+     */
     private lateinit var mHandler: Handler
 
+    /**
+     * The [TextView] in our UI with resource ID [R.id.textview]. It contains text whose typeface is
+     * changed to the one the user asks to be downloaded in the `onTypefaceRetrieved` override of the
+     * [FontsContractCompat.FontRequestCallback] passed to [FontsContractCompat.requestFont] in our
+     * [requestDownload] method.
+     */
     private lateinit var mDownloadableFontTextView: TextView
+
+    /**
+     * The [SeekBar] in our UI with the ID [R.id.seek_bar_width] which is used to select the width
+     * of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
+     * which is included by our content view layout file layout/activity_main.xml Note: Persistent
+     * bottom sheets are views that come up from the bottom of the screen, elevated over the main
+     * content. They can be dragged vertically to expose more or less of their content.
+     */
     private lateinit var mWidthSeekBar: SeekBar
+
+    /**
+     * The [SeekBar] in our UI with the ID [R.id.seek_bar_weight] which is used to select the weight
+     * of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
+     * which is included by our content view layout file layout/activity_main.xml Note: Persistent
+     * bottom sheets are views that come up from the bottom of the screen, elevated over the main
+     * content. They can be dragged vertically to expose more or less of their content.
+     */
     private lateinit var mWeightSeekBar: SeekBar
+
+    /**
+     * The [SeekBar] in our UI with the ID [R.id.seek_bar_italic] which is used to select the italic
+     * value (0f to 1f) of the requested font. It is in the bottomsheet layout file
+     * layout/bottom_sheet_font_query.xml which is included by our content view layout file
+     * layout/activity_main.xml Note: Persistent bottom sheets are views that come up from the
+     * bottom of the screen, elevated over the main content. They can be dragged vertically to
+     * expose more or less of their content.
+     */
     private lateinit var mItalicSeekBar: SeekBar
+
+    /**
+     * The [CheckBox] in our UI with the ID [R.id.checkbox_best_effort] which is used to select the
+     * value to use for the "&besteffort=" query parameter (`true` or `false`) of the requested font
+     * URL. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml which is included
+     * by our content view layout file layout/activity_main.xml Note: Persistent bottom sheets are
+     * views that come up from the bottom of the screen, elevated over the main content. They can be
+     * dragged vertically to expose more or less of their content.
+     */
     private lateinit var mBestEffort: CheckBox
+
+    /**
+     * The [Button] in our UI with the ID [R.id.button_request] which when clicked will call our
+     * [requestDownload] method to build a font request URL from the user's current choices and
+     * call the [FontsContractCompat.requestFont] method to download that font. It is in the bottom
+     * sheet layout file layout/bottom_sheet_font_query.xml which is included by our content view
+     * layout file layout/activity_main.xml Note: Persistent bottom sheets are views that come up
+     * from the bottom of the screen, elevated over the main content. They can be dragged vertically
+     * to expose more or less of their content.
+     */
     private lateinit var mRequestDownloadButton: Button
 
+    /**
+     * The [ArraySet] holding the names of the fonts we can download. It is read from the string
+     * array resource with ID [R.array.family_names] in our [onCreate] override. It is used only to
+     * verify that the font name chosen in the [AutoCompleteTextView] used to select a font is a
+     * valid font name by our [isValidFamilyName] method.
+     */
     private lateinit var mFamilyNameSet: ArraySet<String>
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main]. It consists of a
+     * [androidx.coordinatorlayout.widget.CoordinatorLayout] root view (a super-powered `FrameLayout`)
+     * which includes the layout file [R.layout.bottom_sheet_font_query] (which is a A `FrameLayout`
+     * with a rounded corner background and shadow) whose app:layout_behavior attribute is
+     * [com.google.android.material.bottomsheet.BottomSheetBehavior] (ie. a bottom sheet with a peek
+     * height of 120dp which can come up from the bottom of the screen, elevated over the main content.
+     * It can be dragged vertically to expose more or less of its content) which holds a
+     * [androidx.core.widget.NestedScrollView] holding all of the controls used to select and
+     * configure the font to be requested. [R.layout.activity_main] also contains a `LinearLayout`
+     * holding a [TextView] which displays sample text whose typeface is changed when a new font is
+     * downloaded, and a [ProgressBar] used to display the progress of the font download.
+     *
+     * Next we initialize our [HandlerThread] variable `val handlerThread` with a new instance whose
+     * [Thread] name is "fonts", start it executing, and use its [Looper] to construct a new instance
+     * of [Handler] to initialize our field [mHandler].
+     *
+     * We then call our  [initializeSeekBars] method to have it locate and configure all of the
+     * [SeekBar] controls used to change the characteristics of the font we want to download,
+     * initialize our [ArraySet] field [mFamilyNameSet] with a new instance and then add all of the
+     * strings in the string array resource whose ID is [R.array.family_names] (our method
+     * [isValidFamilyName] uses this [ArraySet] to verify that the font name the user chooses
+     * is a valid font name).
+     *
+     * Next we initialize our [TextView] field [mDownloadableFontTextView] by finding the view with
+     * ID [R.id.textview] (contains the sample text whose typeface will be changed to use the font
+     * that is downloaded). We initialize our [ArrayAdapter] variable `val adapter` to an instance
+     * which uses the layout file with ID [android.R.layout.simple_dropdown_item_1line] when
+     * instantiating views, and the string array whose resource ID is [R.array.family_names] as the
+     * objects to represent in the ListView. We initialize our [TextInputLayout] variable
+     * `val familyNameInput` by finding the view with ID [R.id.auto_complete_family_name_input]
+     * (it is a Layout which wraps a [AutoCompleteTextView] to show a floating label when the hint
+     * is hidden while the user inputs text, and is used to display an error message if the user
+     * tries to choose an invalid font). We initialize our [AutoCompleteTextView] variable
+     * `val autoCompleteFamilyName` by finding the view with ID [R.id.auto_complete_family_name]
+     * (it is the [AutoCompleteTextView] wrapped by `familyNameInput` which the user uses to choose
+     * a font name). We then set the adapter of `autoCompleteFamilyName` to `adapter` and add an
+     * anonymous [TextWatcher] to it whose `onTextChanged` override uses our [isValidFamilyName]
+     * method to determine if the text that the user typed in is valid and if it is valid disables
+     * the error functionality of `familyNameInput` and clears the error message that will be displayed
+     * below its [AutoCompleteTextView] `autoCompleteFamilyName`. If it is invalid the override will
+     * enable the error functionality of `familyNameInput` and set the error message that will be
+     * displayed below its [AutoCompleteTextView] `autoCompleteFamilyName` to "Not a valid Family
+     * Name".
+     *
+     * Next we initialize our [Button] field [mRequestDownloadButton] by finding the view in our UI
+     * with the ID [R.id.button_request] and set its [View.OnClickListener] to a lambda which
+     * initializes its [String] variable `val familyName` to the `text` in `autoCompleteFamilyName`.
+     * If our [isValidFamilyName] determines that it is not a valid family it enables the error
+     * functionality of `familyNameInput` and sets the error message that will be displayed below its
+     * [AutoCompleteTextView] `autoCompleteFamilyName` to "Not a valid Family Name" then toasts the
+     * message "Invalid inputs exist". If [isValidFamilyName] determines that it is a valid family
+     * name the lambda call our method [requestDownload] with `familyName` and disables the
+     * [Button] field [mRequestDownloadButton].
+     *
+     * Finally our [onCreate] override initializes our [CheckBox] field [mBestEffort] by finding the
+     * view with ID [R.id.checkbox_best_effort].
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -75,12 +205,50 @@ class MainActivity : AppCompatActivity() {
         val autoCompleteFamilyName = findViewById<AutoCompleteTextView>(R.id.auto_complete_family_name)
         autoCompleteFamilyName.setAdapter<ArrayAdapter<String>>(adapter)
         autoCompleteFamilyName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, start: Int, count: Int,
-                                           after: Int) {
+            /**
+             * This method is called to notify you that, within our [CharSequence] parameter
+             * [charSequence] the [count] characters beginning at [start] are about to be replaced
+             * by new text with length [after]. It is an error to attempt to make changes to
+             * [charSequence] from this callback. We ignore.
+             *
+             * @param charSequence the [CharSequence] which is about to be modified.
+             * @param start the starting index of the substring that will be replaced.
+             * @param count the number of characters that will be replaced
+             * @param after the length of the new text that is being added.
+             */
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
                 // No op
             }
 
-            override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
+            /**
+             * This method is called to notify you that, within [charSequence], the [before]
+             * characters beginning at [start] have just replaced old text that had length
+             * [count]. It is an error to attempt to make changes to [[charSequence]] from
+             * this callback. If our [isValidFamilyName] determines that our [CharSequence]
+             * parameter [charSequence] is a valid font family name we disable the error
+             * functionality of our [TextInputLayout] variable `familyNameInput` and set the
+             * error message that will be displayed below its [AutoCompleteTextView] to an
+             * empty [String], and if [isValidFamilyName] determines that [charSequence] is not
+             * a valid font family name enable the error functionality of our [TextInputLayout]
+             * variable `familyNameInput` and set the error message that will be displayed below
+             * its [AutoCompleteTextView] to the [String] "Not a valid Family Name".
+             *
+             * @param charSequence the [CharSequence] which has had a substring replaced.
+             * @param start the starting index of the substring that was replaced.
+             * @param before the number of characters that are new in [charSequence].
+             * @param count the number of characters that got replaced.
+             */
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 if (isValidFamilyName(charSequence.toString())) {
                     familyNameInput.isErrorEnabled = false
                     familyNameInput.error = ""
@@ -90,6 +258,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            /**
+             * This method is called to notify you that, somewhere within our [Editable] parameter
+             * [editable], the text has been changed. It is legitimate to make further changes to
+             * [editable] from this callback, but be careful not to get yourself into an infinite
+             * loop, because any changes you make will cause this method to be called again
+             * recursively. We ignore.
+             *
+             * @param editable the [Editable] which has had text changed inside it.
+             */
             override fun afterTextChanged(editable: Editable) {
                 // No op
             }
@@ -113,6 +290,27 @@ class MainActivity : AppCompatActivity() {
         mBestEffort = findViewById(R.id.checkbox_best_effort)
     }
 
+    /**
+     * Constructs an URL for the font whose family name is our [String] parameter [familyName], with
+     * query strings added to it for all of the options that the user has requested, then uses the
+     * [FontsContractCompat.requestFont] method to download and then apply the new font using the
+     * [FontsContractCompat.FontRequestCallback] passed to that method. We initialize our [QueryBuilder]
+     * variable `val queryBuilder` to a new instance constructed to use:
+     *  - Our [String] parameter [familyName] for its "name=" font family name.
+     *  - for its "&width=" query string the value that our [progressToWidth] calculates from the
+     *  `progress` of our [SeekBar] field [mWidthSeekBar]
+     *  - for its "&weight=" query string the value that our [progressToWeight] calculates from the
+     *  `progress` of our [SeekBar] field [mWeightSeekBar]
+     *  - for its "&italic=" query string the value that our [progressToItalic] calculates from the
+     *  `progress` of our [SeekBar] field [mItalicSeekBar]
+     *  - and for its "&besteffort=" query string the `true` or `false` value of the `isChecked`
+     *  property of our [CheckBox] field [mBestEffort].
+     *
+     * We then initialize our [String] variable `val query` to the value that the [QueryBuilder.build]
+     * method of `queryBuilder` builds from itself.
+     *
+     * @param familyName the font family name that the user has requested.
+     */
     private fun requestDownload(familyName: String) {
         val queryBuilder = QueryBuilder(familyName,
                 width = progressToWidth(mWidthSeekBar.progress),
@@ -126,7 +324,8 @@ class MainActivity : AppCompatActivity() {
                 "com.google.android.gms.fonts",
                 "com.google.android.gms",
                 query,
-                R.array.com_google_android_gms_fonts_certs)
+                R.array.com_google_android_gms_fonts_certs
+        )
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.VISIBLE
@@ -139,9 +338,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onTypefaceRequestFailed(reason: Int) {
-                Toast.makeText(this@MainActivity,
-                        getString(R.string.request_failed, reason), Toast.LENGTH_LONG)
-                        .show()
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.request_failed, reason),
+                    Toast.LENGTH_LONG
+                ).show()
                 progressBar.visibility = View.GONE
                 mRequestDownloadButton.isEnabled = true
             }
