@@ -137,7 +137,21 @@ internal class QueryBuilder(private var mFamilyName: String) {
 
     /**
      * Builds `this` [QueryBuilder] into a query that can be used in a [FontRequest] for a font from
-     * a font provider.
+     * a font provider. If our fields [mWeight], [mWidth], [mItalic], and [mBesteffort] are all `null`
+     * we return our font family name field [mFamilyName] to the caller. Otherwise we initialize our
+     * [StringBuilder] variable `val builder` to a new instance and add the [String] "name=" followed
+     * by [mFamilyName] and proceed to check each of our fields for a non-`null` value and add query
+     * strings for the non-`null` fields to `builder` as follows:
+     *  - [mWeight] non-`null` adds the query string "&weight=" followed by the string value of the
+     *  [Int] field [mWeight] to `builder`
+     *  - [mWidth] non-`null` adds the query string "&width=" followed by the string value of the
+     *  [Float] field [mWidth] to `builder`
+     *  - [mItalic] non-`null` adds the query string "&italic=" followed by the string value of the
+     *  [Float] field [mItalic] to `builder`
+     *  - [mBesteffort] non-`null` adds the query string "&besteffort=" followed by the string value
+     *  of the [Boolean] field [mBesteffort] ("true" or "false") to `builder`
+     *
+     * Finally we return the [String] value of `builder` to the caller.
      *
      * @return the query [String] to be used when constructing a [FontRequest]
      */
