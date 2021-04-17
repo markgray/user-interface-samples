@@ -19,13 +19,42 @@ package com.example.android.downloadablefonts
  * Constants class
  */
 internal object Constants {
+    /**
+     * The default value to use for the "&width=" query string.
+     */
     const val WIDTH_DEFAULT = 100
+    /**
+     * The maximum value to use for the "&width=" query string.
+     */
     const val WIDTH_MAX = 1000
+    /**
+     * The minimum value to use for the "&width=" query string.
+     */
     const val WIDTH_MIN = 0
+
+    /**
+     * The default value to use for the "&weight=" query string.
+     */
     const val WEIGHT_DEFAULT = 400
+    /**
+     * The maximum value to use for the "&weight=" query string.
+     */
     const val WEIGHT_MAX = 1000
+    /**
+     * The minimum value to use for the "&weight=" query string.
+     */
     const val WEIGHT_MIN = 0
+
+    /**
+     * The default value to use for the "&italic=" query string.
+     */
     const val ITALIC_DEFAULT = 0f
+    /**
+     * The maximum value to use for the "&italic=" query string.
+     */
     const val ITALIC_MAX = 1f
+    /**
+     * The minimum value to use for the "&italic=" query string.
+     */
     const val ITALIC_MIN = 0f
 }
