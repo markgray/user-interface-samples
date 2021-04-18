@@ -28,15 +28,22 @@ import com.example.android.common.logger.LogWrapper
 import com.example.android.common.logger.MessageOnlyLogFilter
 
 /**
- * A simple launcher activity containing a summary sample description, sample log and a custom
- * [Fragment] which can display a view.
+ * This sample contains two separate Android applications: DragSource and DropTarget.
+ * DragSource contains images and text that can be dropped into the DropTarget app.
+ * Images are shared between the two apps through a URI for which the receiving app
+ * must request permission first, before it can be used.
  *
- *
+ * This is DragSource which consists of a simple launcher activity containing a summary
+ * sample description, sample log and a custom [DragSourceFragment] `Fragment` which demonstrates
+ * drag and drop functionality and is the source app for this sample. It shows how data can be moved
+ * between views within an app or between different apps (ie. to the DropTarget app).
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 class MainActivity : SampleActivityBase() {
-    // Whether the Log Fragment is currently shown
+    /**
+     * Whether the Log [Fragment] is currently shown
+     */
     private var mLogShown = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
