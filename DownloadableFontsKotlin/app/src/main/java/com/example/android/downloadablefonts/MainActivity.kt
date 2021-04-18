@@ -31,6 +31,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ProgressBar
 import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -198,9 +199,11 @@ class MainActivity : AppCompatActivity() {
         mFamilyNameSet.addAll(listOf(*resources.getStringArray(R.array.family_names)))
 
         mDownloadableFontTextView = findViewById(R.id.textview)
-        val adapter = ArrayAdapter(this,
-                android.R.layout.simple_dropdown_item_1line,
-                resources.getStringArray(R.array.family_names))
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            resources.getStringArray(R.array.family_names)
+        )
         val familyNameInput = findViewById<TextInputLayout>(R.id.auto_complete_family_name_input)
         val autoCompleteFamilyName = findViewById<AutoCompleteTextView>(R.id.auto_complete_family_name)
         autoCompleteFamilyName.setAdapter<ArrayAdapter<String>>(adapter)
@@ -307,7 +310,31 @@ class MainActivity : AppCompatActivity() {
      *  property of our [CheckBox] field [mBestEffort].
      *
      * We then initialize our [String] variable `val query` to the value that the [QueryBuilder.build]
-     * method of `queryBuilder` builds from itself.
+     * method of `queryBuilder` builds from itself. We then log that were are "Requesting a font" with
+     * `query`. We initialize our [FontRequest] variable `val request` with a new instance constructed
+     * to use the [String] "com.google.android.gms.fonts" as the authority of the Font Provider to be
+     * used for the request, uses the [String] "com.google.android.gms" as the package for the Font
+     * Provider to be used for the request (this is used to verify the identity of the provider), uses
+     * `query` as the query to be sent over to the provider, and uses our resource array with ID
+     * [R.array.com_google_android_gms_fonts_certs] as the resource array with the list of sets of
+     * hashes for the certificates the provider should be signed with (this is used to verify the
+     * identity of the provider). That last array is in our file values/font_certs.xml and is an array
+     * of the string arrays [R.array.com_google_android_gms_fonts_certs_dev] and
+     * [R.array.com_google_android_gms_fonts_certs_prod] which are defined in the same file.
+     *
+     * We locate the [ProgressBar] in our UI with [R.id.progressBar] and set its visibility to
+     * [View.VISIBLE], and initialize our variable `val callback` to an anonymous instance of
+     * [FontsContractCompat.FontRequestCallback] whose `onTypefaceRetrieved` override sets the
+     * `typeface` property of our [TextView] field [mDownloadableFontTextView] to its [Typeface]
+     * parameter `typeface`, sets the visibility of `progressBar` to [View.GONE] and enables our
+     * [Button] field [mRequestDownloadButton], and whose `onTypefaceRequestFailed` override toasts
+     * the reason number given for the font request failure, sets the visibility of `progressBar`
+     * to [View.GONE] and enables our [Button] field [mRequestDownloadButton].
+     *
+     * Finally we call the [FontsContractCompat.requestFont] method with the [FontRequest] `request`
+     * as the font to download, `callback` as the callback that will be triggered when results are
+     * obtained, and our [Handler] field [mHandler] as the handler to use to perform the font
+     * fetching.
      *
      * @param familyName the font family name that the user has requested.
      */
@@ -331,12 +358,43 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
 
         val callback = object : FontsContractCompat.FontRequestCallback() {
+            /**
+             * Called then a [Typeface] request done via [FontsContractCompat.requestFont] is
+             * complete. Note that this method will not be called if [onTypefaceRequestFailed]
+             * is called instead. We set the `typeface` property of our [TextView] field
+             * [mDownloadableFontTextView] to our [Typeface] parameter [typeface], set the
+             * visibility of `progressBar` to [View.GONE] and enable our [Button] field
+             * [mRequestDownloadButton],
+             *
+             * @param typeface  The [Typeface] object retrieved.
+             */
             override fun onTypefaceRetrieved(typeface: Typeface) {
                 mDownloadableFontTextView.typeface = typeface
                 progressBar.visibility = View.GONE
                 mRequestDownloadButton.isEnabled = true
             }
 
+            /**
+             * Called when a [Typeface] request done via [FontsContractCompat.requestFont] fails.
+             * We toast the value of our [Int] parameter [reason], set the visibility of `progressBar`
+             * to [View.GONE] and enable our [Button] field [mRequestDownloadButton].
+             *
+             * @param reason May be one of:
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_PROVIDER_NOT_FOUND] signals
+             *  that given provider was not found on the device.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_FONT_NOT_FOUND] signals that
+             *  the font provider did not return any results for the given query.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_FONT_LOAD_ERROR] signals that
+             *  the font returned by the provider was not loaded properly.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_FONT_UNAVAILABLE] signals that
+             *  the font provider found the queried font, but it is currently unavailable.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_MALFORMED_QUERY] signals that
+             *  the given query was not supported by the provider.
+             *  - [FontsContractCompat.FontRequestCallback.FAIL_REASON_WRONG_CERTIFICATES] signals
+             *  that the given provider must be authenticated and the given certificates do not
+             *  match its signature.
+             *  - or a provider defined positive code number.
+             */
             override fun onTypefaceRequestFailed(reason: Int) {
                 Toast.makeText(
                     this@MainActivity,
@@ -351,13 +409,44 @@ class MainActivity : AppCompatActivity() {
                 .requestFont(this@MainActivity, request, callback, mHandler)
     }
 
+    /**
+     * Locates and configures all of the [SeekBar] widgets in our UI that are to be used to vary the
+     * characteristics of the font that is requested. The [SeekBar] widgets are all in our bottom
+     * sheet layout file layout/bottom_sheet_font_query.xml and are configured as follows:
+     *  - "Width" is found at resource ID [R.id.seek_bar_width] to initialize our [SeekBar] field
+     *  [mWidthSeekBar], its default `progress` property is calculated to initialize our variable
+     *  `val widthValue` to be 100 times [Constants.WIDTH_DEFAULT] divided by [Constants.WIDTH_MAX],
+     *  the [TextView] that displays its current value is found at resource ID [R.id.textview_width]
+     *  to initialize our variable `val widthTextView` and the text of `widthTextView` is set to the
+     *  [String] value of `widthValue`, and finally its [OnSeekBarChangeListener] is set to an anonymous
+     *  instance whose `onProgressChanged` override sets the text of `widthTextView` to the width
+     *  returned by our [progressToWidth] method for the current `progress` value passed the override,
+     *  and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
+     *  - "Weight" is found at resource ID [R.id.seek_bar_weight] to initialize our [SeekBar] field
+     *  [mWeightSeekBar], its default `progress` property is calculated to initialize our variable
+     *  `val weightValue` to be 100 times [Constants.WEIGHT_DEFAULT] divided by [Constants.WEIGHT_MAX],
+     *  the [TextView] that displays its current value is found at resource ID [R.id.textview_weight]
+     *  to initialize our variable `val weightTextView` and the text of `weightTextView` is set to the
+     *  [String] value of `weightValue`, and finally its [OnSeekBarChangeListener] is set to an
+     *  anonymous instance whose `onProgressChanged` override sets the text of `weightTextView` to
+     *  the value returned by our [progressToWeight] method for the current `progress` value passed
+     *  the override, and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
+     *  - "Italic" is found at resource ID [R.id.seek_bar_italic] to initialize our [SeekBar] field
+     *  [mItalicSeekBar], its default `progress` property is set to [Constants.ITALIC_DEFAULT], the
+     *  [TextView] that displays its current value is found at resource ID [R.id.textview_italic]
+     *  to initialize our variable `val italicTextView` and the text of `italicTextView` is set to
+     *  [Constants.ITALIC_DEFAULT], and finally its [OnSeekBarChangeListener] is set to an anonymous
+     *  instance whose `onProgressChanged` override sets the text of `progressToItalic` to the
+     *  value returned by our [progressToItalic] method for the current `progress` value passed the
+     *  override, and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
+     */
     private fun initializeSeekBars() {
         mWidthSeekBar = findViewById(R.id.seek_bar_width)
         val widthValue = (100 * WIDTH_DEFAULT.toFloat() / WIDTH_MAX.toFloat()).toInt()
         mWidthSeekBar.progress = widthValue
         val widthTextView = findViewById<TextView>(R.id.textview_width)
         widthTextView.text = widthValue.toString()
-        mWidthSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        mWidthSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 widthTextView.text = progressToWidth(progress).toString()
             }
@@ -372,7 +461,7 @@ class MainActivity : AppCompatActivity() {
         mWeightSeekBar.progress = weightValue.toInt()
         val weightTextView = findViewById<TextView>(R.id.textview_weight)
         weightTextView.text = WEIGHT_DEFAULT.toString()
-        mWeightSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        mWeightSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 weightTextView.text = progressToWeight(progress).toString()
             }
@@ -386,7 +475,7 @@ class MainActivity : AppCompatActivity() {
         mItalicSeekBar.progress = ITALIC_DEFAULT.toInt()
         val italicTextView = findViewById<TextView>(R.id.textview_italic)
         italicTextView.text = ITALIC_DEFAULT.toString()
-        mItalicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        mItalicSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 italicTextView.text = progressToItalic(progress).toString()
             }
@@ -397,14 +486,23 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Convenience function to check whether our [String] parameter [familyName] is among the font
+     * family names in our [ArraySet] field [mFamilyNameSet] which is read from the string array
+     * resource with ID [R.array.family_names] in our [onCreate] override. It is a subset of the
+     * font family names actually avaiable from the provider but the only ones this demo allows the
+     * user to chose from. We return `true` if [familyName] is not `null` and it exists in the set
+     * [mFamilyNameSet], otherwise we return `false`.
+     */
     private fun isValidFamilyName(familyName: String?): Boolean {
         return familyName != null && mFamilyNameSet.contains(familyName)
     }
 
     /**
-     * Converts progress from a SeekBar to the value of width.
+     * Converts [progress] from a [SeekBar] to the value of width. If our parameter [progress] is 0
+     * we return 1f, otherwise we return [progress] times [Constants.WIDTH_MAX] divided by 100.
+     *
      * @param progress is passed from 0 to 100 inclusive
-     * *
      * @return the converted width
      */
     private fun progressToWidth(progress: Int): Float {
@@ -412,9 +510,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Converts progress from a SeekBar to the value of weight.
+     * Converts [progress] from a [SeekBar] to the value of weight. For a [progress] of 0 we return
+     * 1, and for a [progress] of 100 we return 1 less than [Constants.WEIGHT_MAX] (the range of the
+     * weight is between (0, 1000) excluding the end points). For all other values we return
+     * [Constants.WEIGHT_MAX] times [progress] divided by 100.
+     *
      * @param progress is passed from 0 to 100 inclusive
-     * *
      * @return the converted weight
      */
     private fun progressToWeight(progress: Int): Int {
@@ -432,9 +533,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Converts progress from a SeekBar to the value of italic.
+     * Converts progress from a [SeekBar] to the value of italic. We return [progress] divided by
+     * 100f.
+     *
      * @param progress is passed from 0 to 100 inclusive.
-     * *
      * @return the converted italic
      */
     private fun progressToItalic(progress: Int): Float {
@@ -442,7 +544,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-
+        /**
+         * TAG used for logging.
+         */
         private const val TAG = "MainActivity"
     }
 }
