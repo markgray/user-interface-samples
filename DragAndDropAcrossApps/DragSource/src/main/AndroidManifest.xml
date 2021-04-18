@@ -16,7 +16,8 @@
      limitations under the License.
 -->
 
-<manifest package="com.example.android.dragsource"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.android.dragsource"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -24,7 +25,8 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="DragSource Sample">
+        android:label="DragSource Sample"
+        tools:ignore="AllowBackup">
         <activity android:name="com.example.android.dragsource.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +38,7 @@
         A content provider that serves selected files. Images are copied and added to this provider
         in DragSourceFragment where they are displayed and made available for drag and drop. -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.dragsource.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
