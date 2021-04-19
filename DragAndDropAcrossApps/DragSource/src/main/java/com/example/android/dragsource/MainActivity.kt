@@ -126,6 +126,23 @@ class MainActivity : SampleActivityBase() {
         return super.onPrepareOptionsMenu(menu)
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     *
+     * When the `itemId` property of our [MenuItem] parameter [item] is [R.id.menu_toggle_log] we
+     * toggle the value of our [Boolean] field [mLogShown], initialize our [ViewAnimator] variable
+     * `val output` by finding the [View] in our UI with ID [R.id.sample_output] and if [mLogShown]
+     * is now `true` set the child view of `output` that will be displayed to 1 (our [LogFragment])
+     * if it is now `false` we set the child view of `output` that will be displayed to 0 (the
+     * text describing the sample). We then call [invalidateOptionsMenu] to report that the options
+     * menu has changed, and should be recreated by a call to [onCreateOptionsMenu], and return
+     * `true` to consume the event here. If the `itemID` is not [R.id.menu_toggle_log] we return the
+     * value returned by our super's implementation of `onOptionsItemSelected`.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return `false` to allow normal menu processing to proceed, `true` to
+     * consume it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_toggle_log -> {
@@ -143,7 +160,9 @@ class MainActivity : SampleActivityBase() {
         return super.onOptionsItemSelected(item)
     }
 
-    /** Create a chain of targets that will receive log data  */
+    /**
+     * Create a chain of targets that will receive log data
+     */
     override fun initializeLogging() {
         // Wraps Android's native log framework.
         val logWrapper = LogWrapper()
@@ -162,6 +181,9 @@ class MainActivity : SampleActivityBase() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         const val TAG = "MainActivity"
     }
 }
