@@ -17,10 +17,13 @@ package com.example.android.dragsource
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ViewAnimator
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.android.common.activities.SampleActivityBase
 import com.example.android.common.logger.Log
 import com.example.android.common.logger.LogFragment
@@ -45,24 +48,79 @@ class MainActivity : SampleActivityBase() {
      * Whether the Log [Fragment] is currently shown
      */
     private var mLogShown = false
+
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main]. There are two of
+     * these: layout/activity_main.xml used by displays narrower than 720dp, and displays 720dp or
+     * greater will use layout-w720dp/activity_main.xml with the only difference being that the
+     * layout/activity_main.xml file contains a [ViewAnimator] that holds the sample description
+     * and a `fragment` used for [LogFragment] with which child is displayed being toggled by our
+     * option menu, and layout-w720dp/activity_main.xml displays both the sample description and a
+     * `fragment` used for [LogFragment] at the same time.
+     *
+     * If our [Bundle] parameter [savedInstanceState] is `null` it means we are being started for
+     * the first time so we use the [FragmentManager] for interacting with fragments associated with
+     * this activity to start a new [FragmentTransaction] which we use to initialize our variable
+     * `val transaction`, initialize our [DragSourceFragment] variable `val fragment` with a new
+     * instance, use `transaction` to replace any content in the container in our UI whose ID is
+     * [R.id.sample_content_fragment] with `fragment` and then commit `transaction`. If it is
+     * non-`null` we are being re-initialized after previously being shut and the system will take
+     * care of restoring our fragments.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            val transaction = supportFragmentManager.beginTransaction()
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             val fragment = DragSourceFragment()
             transaction.replace(R.id.sample_content_fragment, fragment)
             transaction.commit()
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in [Menu] parameter [menu]. This is only called once, the first time the options menu
+     * is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu]. When
+     * you add items to the menu, you can implement the Activity's [onOptionsItemSelected] method to
+     * handle them there.
+     *
+     * We use a [MenuInflater] for this context to our inflate our menu layout file [R.menu.main]
+     * into our [Menu] parameter [menu] and return `true` so that the menu will be displayed.
+     *
+     * @param menu The options [Menu] in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
+    /**
+     * Prepare the Screen's standard options menu to be displayed. This is called right before the
+     * menu is shown, every time it is shown. You can use this method to efficiently enable/disable
+     * items or otherwise dynamically modify the contents.
+     *
+     * We initialize our [MenuItem] variable `val logToggle` by finding the item in our [Menu]
+     * parameter [menu] with ID [R.id.menu_toggle_log], and set it to visible if the [View] in our
+     * UI with ID [R.id.sample_output] is a [ViewAnimator] (layout file layout/activity_main.xml
+     * for displays narrower than 720dp only, it is a `LinearLayout` in the layout file used for
+     * 720dp or wider displays layout-w720dp/activity_main.xml). If our [Boolean] field [mLogShown]
+     * is `true` we set the title of `logToggle` to "Hide Log" or to "Show Log" if it is `false`.
+     * Finally we return the value returned by our super's implementation of `onPrepareOptionsMenu`
+     * to the caller.
+     *
+     * @param menu The options menu as last shown or first initialized by [onCreateOptionsMenu].
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        val logToggle = menu.findItem(R.id.menu_toggle_log)
+        val logToggle: MenuItem = menu.findItem(R.id.menu_toggle_log)
         logToggle.isVisible = findViewById<View>(R.id.sample_output) is ViewAnimator
         logToggle.setTitle(if (mLogShown) R.string.sample_hide_log else R.string.sample_show_log)
         return super.onPrepareOptionsMenu(menu)
