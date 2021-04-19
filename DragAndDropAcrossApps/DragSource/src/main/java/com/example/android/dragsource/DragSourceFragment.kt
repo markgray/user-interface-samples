@@ -48,10 +48,8 @@ import java.util.Date
  * to a drop target area within the same app or in the DropTarget app (a separate app in this
  * sample).
  *
- *
  * There is also one [android.widget.EditText] widget that can be a drag source (no extra
  * setup is necessary).
- *
  *
  * To enable cross application drag and drop, the [android.view.View.DRAG_FLAG_GLOBAL]
  * permission needs to be passed to the [android.view.View.startDragAndDrop] method. If a Uri
@@ -64,8 +62,31 @@ class DragSourceFragment : Fragment() {
      * Uri of the ImageView source when set.
      */
     private var mLocalImageUri: Uri? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and [onActivityCreated]. It is recommended to **only** inflate the layout in this
+     * method and move logic that operates on the returned View to [onViewCreated].
+     *
+     * We use our [LayoutInflater] parameter [inflater] to inflate the layout file with resource ID
+     * [R.layout.fragment_dragsource], using our [ViewGroup] parameter [container] to generate its
+     * `LayoutParams` without attaching to it and use the [View] returned to initialize our variable
+     * `val view`.
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate any views
+     * in the fragment,
+     * @param container If non-`null`, this is the parent view that the fragment's UI will
+     * be attached to. The fragment should not add the view itself, but this can be used to
+     * generate the `LayoutParams` of the view.
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return Return the [View] for the fragment's UI, or `null`.
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_dragsource, container, false)
 
         // Set up two image views for global drag and drop with a permission grant.
@@ -206,6 +227,10 @@ class DragSourceFragment : Fragment() {
          * image.
          */
         const val EXTRA_IMAGE_INFO = "IMAGE_INFO"
+
+        /**
+         * TAG used for logging
+         */
         private const val TAG = "DragSourceFragment"
         private const val CONTENT_AUTHORITY = "com.example.android.dragsource.fileprovider"
     }
