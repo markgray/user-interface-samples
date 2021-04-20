@@ -150,6 +150,19 @@ class DragSourceFragment : Fragment() {
         return view
     }
 
+    /**
+     * Called to ask the fragment to save its current dynamic state, so it can later be
+     * reconstructed in a new instance of its process is restarted. If a new instance of
+     * the fragment later needs to be created, the data you place in the [Bundle] here
+     * will be available in the [Bundle] given to [onCreate], [onCreateView], and
+     * [onActivityCreated].
+     *
+     * If our [Uri] field [mLocalImageUri] is not `null` we store a string representation of it in
+     * [savedInstanceState] under the key [IMAGE_URI]. Finally we call our super's implementation of
+     * `onSaveInstanceState`.
+     *
+     * @param savedInstanceState [Bundle] in which to place your saved state.
+     */
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         if (mLocalImageUri != null) {
             savedInstanceState.putString(IMAGE_URI, mLocalImageUri.toString())
@@ -157,6 +170,27 @@ class DragSourceFragment : Fragment() {
         super.onSaveInstanceState(savedInstanceState)
     }
 
+    /**
+     * Called to configure the [ImageView] parameter [imageView] to be dragged and dropped with the
+     * [Uri] parameter [imageUri] used as the [Uri] of the [ClipData] that is dropped.
+     *
+     * First we initialize our [OnDragStartListener] variable `val listener` to an instance whose
+     * lambda override of the [OnDragStartListener.onDragStart] method:
+     *  - Initializes its [DragShadowBuilder] variable `val shadowBuilder` to an anonymous instance
+     *  whose `onProvideShadowMetrics` override calls its super's implementation of `onProvideShadowMetrics`
+     *  alls the `getTouchPosition` of the [DragStartHelper] passed to the [OnDragStartListener] have
+     *  it compute the position of the touch event that started the drag operation based on its
+     *  [Point] parameter `shadowTouchPoint` (this will notify the [DragStartHelper] where the view
+     *  was touched) and then log where it was touched.
+     *  - We set up the `val flags` for the drag event by or'ing the flag [View.DRAG_FLAG_GLOBAL]
+     *  (enables drag and drop across apps ie. global) and [View.DRAG_FLAG_GLOBAL_URI_READ] (require
+     *  read permissions for the URI).
+     *
+     * @param imageView the [ImageView] we are to create and configure a [DragStartHelper] for.
+     * @param imageUri the [Uri] which will be used as the [ClipData.Item] of the [ClipData] which
+     * will be passed to the [View.startDragAndDrop] method of the view over which a drag start
+     * gesture has been detected by our [OnDragStartListener].
+     */
     private fun setUpDraggableImage(imageView: ImageView, imageUri: Uri?) {
 
         // Set up a listener that starts the drag and drop event with flags and extra data.
