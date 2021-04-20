@@ -27,6 +27,7 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.DragShadowBuilder
+import android.view.View.OnDragListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.FileProvider
@@ -73,6 +74,36 @@ class DragSourceFragment : Fragment() {
      * `LayoutParams` without attaching to it and use the [View] returned to initialize our variable
      * `val view`.
      *
+     * Next we set up the two image views in our UI for global drag and drop with a permission grant
+     * by:
+     *  - Initializing our [Uri] variable `var imageUri` to the [Uri] returned by our [getFileUri]
+     *  for the drawable with ID [R.drawable.image1] and the target name "image1.png"
+     *  - Initializing our [ImageView] variable `var imageView` by finding the [View] in our UI with
+     *  ID [R.id.image_one].
+     *  - Calling our method [setUpDraggableImage] with `imageView` and `imageUri` to configure them
+     *  for drag and drop use.
+     *  - Setting our [Uri] variable `imageUri` to the [Uri] returned by our [getFileUri] for the
+     *  drawable with ID [R.drawable.image2] and the target name "image2.png"
+     *  - Setting our [ImageView] variable `imageView` by finding the [View] in our UI with ID
+     *  [R.id.image_two].
+     *  - Calling our method [setUpDraggableImage] with `imageView` and `imageUri` to configure them
+     *  for drag and drop use.
+     *
+     * Next we set up the local drop target area by:
+     *  - Initializing our [ImageView] variable `val localImageTarget` by finding the [View] in our
+     *  UI with ID [R.id.local_target]
+     *  - Setting its [OnDragListener] to an anonymous [ImageDragListener] whose `setImageUri`
+     *  override will set our [Uri] field [mLocalImageUri] to the [Uri] passed it then if the [View]
+     *  passed it is an [ImageView], set the content of the [View] to the [Uri] passed it.
+     *
+     * If our [Bundle] parameter [savedInstanceState] is not `null`, we set our [String] variable
+     * `val uriString` to the [String] stored in [savedInstanceState] under the key [IMAGE_URI],
+     * and if `uriString` is not `null` we restore our [Uri] field [mLocalImageUri] to the [Uri]
+     * that the [Uri.parse] method parses from `uriString` and set the content of the [ImageView]
+     * `localImageTarget` to the [Uri] field [mLocalImageUri].
+     *
+     * Finally whether or not [savedInstanceState] is `null` we return `view` to the caller.
+     *
      * @param inflater The [LayoutInflater] object that can be used to inflate any views
      * in the fragment,
      * @param container If non-`null`, this is the parent view that the fragment's UI will
@@ -90,7 +121,7 @@ class DragSourceFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_dragsource, container, false)
 
         // Set up two image views for global drag and drop with a permission grant.
-        var imageUri = getFileUri(R.drawable.image1, "image1.png")
+        var imageUri: Uri? = getFileUri(R.drawable.image1, "image1.png")
         var imageView = view.findViewById<View>(R.id.image_one) as ImageView
         setUpDraggableImage(imageView, imageUri)
         imageView.setImageURI(imageUri)
