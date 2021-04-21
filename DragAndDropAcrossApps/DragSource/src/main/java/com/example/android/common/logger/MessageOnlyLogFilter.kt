@@ -13,49 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.common.logger;
+package com.example.android.common.logger
 
 /**
- * Simple {@link LogNode} filter, removes everything except the message.
- * Useful for situations like on-screen log output where you don't want a lot of metadata
- * displayed,
+ * Simple [LogNode] filter, removes everything except the message.
+ * Useful for situations like on-screen log output where you don't want a lot of metadata displayed,
  * just easy-to-read message updates as they're happening.
  */
-public class MessageOnlyLogFilter implements LogNode {
-
-    LogNode mNext;
+class MessageOnlyLogFilter : LogNode {
+    /**
+     * The next [LogNode] that data will be sent to..
+     */
+    var next: LogNode? = null
 
     /**
-     * Takes the "next" LogNode as a parameter, to simplify chaining.
+     * Takes the "next" [LogNode] as a parameter, to simplify chaining.
      *
-     * @param next The next LogNode in the pipeline.
+     * @param next The next [LogNode] in the pipeline.
      */
-    public MessageOnlyLogFilter(LogNode next) {
-        mNext = next;
+    @Suppress("unused")
+    constructor(next: LogNode?) {
+        this.next = next
     }
 
-    public MessageOnlyLogFilter() {
-    }
+    constructor()
 
-    @Override
-    public void println(int priority, String tag, String msg, Throwable tr) {
-        if (mNext != null) {
-            getNext().println(Log.NONE, null, msg, null);
+    /**
+     * If our [LogNode] field [next] is not `null` we call its [LogNode.println] method with its
+     * [priority] parameter set to [Log.NONE], its [tag] parameter set to `null`, and its [tr]
+     * parameter set to `null`. Only its [msg] parameter is set to our [String] parameter [msg].
+     *
+     * @param priority Log level of the data being logged.  Verbose, Error, etc.
+     * @param tag Tag for for the log data.  Can be used to organize log statements.
+     * @param msg The actual message to be logged. The actual message to be logged.
+     * @param tr If an exception was thrown, this can be sent along for the logging facilities
+     * to extract and print useful information.
+     */
+    override fun println(priority: Int, tag: String?, msg: String?, tr: Throwable?) {
+        if (next != null) {
+            next!!.println(Log.NONE, null, msg, null)
         }
     }
-
-    /**
-     * Returns the next LogNode in the chain.
-     */
-    public LogNode getNext() {
-        return mNext;
-    }
-
-    /**
-     * Sets the LogNode data will be sent to..
-     */
-    public void setNext(LogNode node) {
-        mNext = node;
-    }
-
 }
