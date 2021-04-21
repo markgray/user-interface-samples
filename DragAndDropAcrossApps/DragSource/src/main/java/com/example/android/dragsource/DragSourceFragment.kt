@@ -17,6 +17,8 @@ package com.example.android.dragsource
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
@@ -264,11 +266,28 @@ class DragSourceFragment : Fragment() {
     }
 
     /**
-     * Copy a drawable resource into local storage and makes it available via the
-     * [FileProvider].
+     * Copies a drawable resource into local storage and makes it available via the [FileProvider].
+     * First we initialize our [File] variable `val filePath` from the parent abstract pathname of
+     * the absolute path to the directory on the filesystem where files created with openFileOutput
+     * are stored, with the child name "images" (creates a path to a directory or file in the
+     * directory holding our application files with the name "images"). If `filePath` does not yet
+     * exist, we "short circuit" try to create a directory with the name `filePath` and if the
+     * directory does not already exist and the attempt to create one fails we return `null` to the
+     * caller.
      *
-     * @see FileProvider
-     * @see FileProvider.getUriForFile
+     * Next we initialize our [File] variable `val newFile` with a new instance whose parent directory
+     * is `filePath` and whose filename is our [String] parameter [targetName]. If `newFile` does not
+     * exist we call our [copyImageResourceToFile] to have it copy the PNG whose resource ID is our
+     * [Int] parameter [sourceResourceId] into `newFile`.
+     *
+     * Finally we return the [Uri] that the [FileProvider.getUriForFile] method creates for the
+     * [Context] this fragment is currently associated, using [CONTENT_AUTHORITY] as the authority
+     * of the [FileProvider] defined in a `<provider> `element in our app's manifest, and `newFile`
+     * as the [File] pointing to the filename for which we want a content Uri.
+     *
+     * @param sourceResourceId the resource ID of the drawable resource.
+     * @param targetName the file name to copy the drawable to.
+     * @return a content [Uri] for the file we copied to the internal directory.
      */
     private fun getFileUri(sourceResourceId: Int, targetName: String): Uri? {
         // Create the images/ sub directory if it does not exist yet.
@@ -288,10 +307,24 @@ class DragSourceFragment : Fragment() {
     }
 
     /**
-     * Copy a PNG resource drawable to a {@File}.
+     * Copy the PNG resource drawable whose ID is [resourceId] to the [File] parameter [filePath].
+     * We initialize our [Bitmap] variable `val image` to the [Bitmap] that the method
+     * [BitmapFactory.decodeResource] decodes from the PNG with ID [resourceId] in our activities
+     * [Resources] and we initialize our [FileOutputStream] variable `var out` to `null`.
+     *
+     * Then wrapped in a `try` block whose `catch` prints the stack trace of any [Exception] and
+     * whose `finally` block closes `out` if it is not `null` we:
+     *  - Set `out` to a new instance of [FileOutputStream] with [filePath] the file to be opened
+     *  for writing.
+     *  - Call the [Bitmap.compress] method of `image` to have it write a compressed version of the
+     *  bitmap to the outputstream `out`, using [Bitmap.CompressFormat.PNG] as the format of the
+     *  compressed image, and 100 as the quality.
+     *
+     * @param resourceId the resource ID of the PNG resource.
+     * @param filePath the [File] in our internal directory we are to copy to.
      */
     private fun copyImageResourceToFile(resourceId: Int, filePath: File) {
-        val image = BitmapFactory.decodeResource(resources, resourceId)
+        val image: Bitmap = BitmapFactory.decodeResource(resources, resourceId)
         var out: FileOutputStream? = null
         try {
             out = FileOutputStream(filePath)
@@ -309,12 +342,14 @@ class DragSourceFragment : Fragment() {
 
     companion object {
         /**
-         * Name of saved data that stores the dropped image URI on the local ImageView when set.
+         * Key used to store the [String] version of [Uri] field [mLocalImageUri] in the [Bundle]
+         * passed to our [onSaveInstanceState] overrride, which is then restored in our [onCreateView]
+         * override if we are restarted.
          */
         private const val IMAGE_URI = "IMAGE_URI"
 
         /**
-         * Name of the parameter for a [ClipData] extra that stores a text describing the dragged
+         * Name of the parameter for the [ClipData] extra that stores a text describing the dragged
          * image.
          */
         const val EXTRA_IMAGE_INFO = "IMAGE_INFO"
@@ -323,6 +358,10 @@ class DragSourceFragment : Fragment() {
          * TAG used for logging
          */
         private const val TAG = "DragSourceFragment"
+
+        /**
+         * The authority of a [FileProvider] defined in a `<provider>` element in our app's manifest.
+         */
         private const val CONTENT_AUTHORITY = "com.example.android.dragsource.fileprovider"
     }
 }
