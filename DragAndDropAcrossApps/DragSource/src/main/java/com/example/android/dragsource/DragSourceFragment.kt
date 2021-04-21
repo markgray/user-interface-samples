@@ -182,9 +182,34 @@ class DragSourceFragment : Fragment() {
      *  it compute the position of the touch event that started the drag operation based on its
      *  [Point] parameter `shadowTouchPoint` (this will notify the [DragStartHelper] where the view
      *  was touched) and then log where it was touched.
-     *  - We set up the `val flags` for the drag event by or'ing the flag [View.DRAG_FLAG_GLOBAL]
+     *  - Sets up the `val flags` for the drag event by or'ing the flag [View.DRAG_FLAG_GLOBAL]
      *  (enables drag and drop across apps ie. global) and [View.DRAG_FLAG_GLOBAL_URI_READ] (require
      *  read permissions for the URI).
+     *  - Initializes its [ClipDescription] variable `val clipDescription` with an instance whose
+     *  Label to show to the user describing this clip is the empty [String], and whose array of
+     *  MIME types this data is available as consisting of the MIME type of [Uri] parameter [imageUri]
+     *  as determined by the `getType` method of a ContentResolver instance for our application's
+     *  package (this will be read out by the target app and logged).
+     *  - Initializes its [PersistableBundle] variable `val extras` to a new instance with an
+     *  initial capacity of 1, then stores a string in `extras` under the key [EXTRA_IMAGE_INFO]
+     *  consisting of the [String] created by the string template "Drag Started at ${Date()}", and
+     *  then sets the `extras` property of `clipDescription` to `extras`.
+     *  - Initializes its [ClipData] variable `val clipData` to a new instance whose ClipDescription
+     *  describing the clip contents is `clipDescription` and whose contents of the first item in
+     *  the clip is the [ClipData.Item] constructed for the [Uri] parameter [imageUri].
+     *  - After logging the message "Created ClipDescription. Starting drag and drop." the lambda
+     *  then calls the [View.startDragAndDrop] method of `view` (the [View] being dragged) with
+     *  `clipData` as the [ClipData] object pointing to the data to be transferred by the drag and
+     *  drop operation, `shadowBuilder` as the [View.DragShadowBuilder] object for building the drag
+     *  shadow, `null` as the "myLocalState", and `flags` as the Flags that control the drag and
+     *  drop operation.
+     *
+     * Having constructed and configured our [OnDragStartListener] variable `listener` we next
+     * initialize our [DragStartHelper] variable `val helper` to a new instance which uses our
+     * [ImageView] parameter [imageView] as the [View] the helper is associated with, and our
+     * variable `listener` as the [OnDragStartListener] to be invoked when a drag start gesture
+     * is detected. We call the [DragStartHelper.attach] method of `helper` to attach the helper
+     * to its view and then log the message "DragStartHelper attached to view."
      *
      * @param imageView the [ImageView] we are to create and configure a [DragStartHelper] for.
      * @param imageUri the [Uri] which will be used as the [ClipData.Item] of the [ClipData] which
@@ -214,13 +239,14 @@ class DragSourceFragment : Fragment() {
 
             // Add an optional clip description that that contains an extra String that is
             // read out by the target app.
-            val clipDescription = ClipDescription("", arrayOf(
-                context!!.contentResolver.getType(imageUri!!)))
+            val clipDescription = ClipDescription(
+                "",
+                arrayOf(context!!.contentResolver.getType(imageUri!!))
+            )
             // Extras are stored within a PersistableBundle.
             val extras = PersistableBundle(1)
             // Add a String that the target app will display.
-            extras.putString(EXTRA_IMAGE_INFO,
-                "Drag Started at " + Date())
+            extras.putString(EXTRA_IMAGE_INFO, "Drag Started at ${Date()}")
             clipDescription.extras = extras
 
             // The ClipData object describes the object that is being dragged and dropped.
