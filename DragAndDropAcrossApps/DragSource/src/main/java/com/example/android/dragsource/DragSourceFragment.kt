@@ -135,7 +135,7 @@ class DragSourceFragment : Fragment() {
         // Set up the local drop target area.
         val localImageTarget = view.findViewById<View>(R.id.local_target) as ImageView
         localImageTarget.setOnDragListener(object : ImageDragListener() {
-            override fun setImageUri(view: View, event: DragEvent, uri: Uri): Boolean {
+            override fun setImageUri(view: View?, event: DragEvent?, uri: Uri?): Boolean {
                 mLocalImageUri = uri
                 Log.d(TAG, "Setting local image to: $uri")
                 return super.setImageUri(view, event, uri)
