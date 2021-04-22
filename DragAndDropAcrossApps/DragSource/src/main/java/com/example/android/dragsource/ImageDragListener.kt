@@ -99,23 +99,72 @@ open class ImageDragListener : OnDragListener {
         return false
     }
 
+    /**
+     * Convenience function to set the background color of [View] parameter [view] to the [Int] color
+     * parameter [color].
+     *
+     * @param view the [View] whose background color we are to set to the color [color].
+     * @param color the color we are to use as the background color for [View] parameter [view]
+     */
     private fun setTargetColor(view: View, color: Int) {
         view.setBackgroundColor(color)
     }
 
+    /**
+     * Retrieves the [ClipData] object sent to the system as part of the call to `startDragAndDrop`
+     * from the [DragEvent] and if the [ClipData.Item] at index 0 contains a [Uri] calls our method
+     * [setImageUri] to have it set the content of the [View] parameter [view] to the that [Uri].
+     * Called only when the `action` property of the [DragEvent] parameter [event] is a
+     * [DragEvent.ACTION_DROP].
+     *
+     * We initialize our [ClipData] variable `val clipData` to the `clipData` property of [DragEvent]
+     * parameter [event], and if `clipData` is `null` or the item count of `clipData` is 0 we return
+     * `false` to report that we did not handle the event. Otherwise we:
+     *  - initialize our [ClipData.Item] variable `val item` to the item at index 0 in `clipData`
+     *  and if that is `null` return `false` to report that we did not handle the event.
+     *  - initialize our [Uri] variable `val uri` to the raw [Uri] contained in `item` and if that
+     *  is `null` return `false` to report that we did not handle the event.
+     *
+     * If we have gotten this far without failing to handle the event we return the value returned
+     * by our [setImageUri] method when it tries to set the content of [View] parameter [view] to
+     * the [Uri] variable `uri` ([view] must be an [ImageView] for this to succeed of course).
+     *
+     * @param view The [View] that received the [DragEvent.ACTION_DROP] drag event.
+     * @param event The [DragEvent] object for the [DragEvent.ACTION_DROP] drag event
+     * @return `true` if the drag event was handled successfully, or `false` if the drag event was
+     * not handled.
+     */
     private fun processDrop(view: View, event: DragEvent): Boolean {
         val clipData = event.clipData
         if (clipData == null || clipData.itemCount == 0) {
             return false
         }
-        val item = clipData.getItemAt(0) ?: return false
+        val item: ClipData.Item = clipData.getItemAt(0) ?: return false
         val uri = item.uri ?: return false
         return setImageUri(view, event, uri)
     }
 
+    /**
+     * Called when our [onDrag] override receives a [DragEvent] whose `action` property is
+     * [DragEvent.ACTION_DRAG_LOCATION]. We ignore.
+     *
+     * @param x the `x` coordinate of the [DragEvent]
+     * @param y the `y` coordinate of the [DragEvent]
+     */
     @Suppress("UNUSED_PARAMETER")
     protected fun processLocation(x: Float, y: Float) {}
 
+    /**
+     * If its [View] parameter [view] is not an [ImageView] we return `false` to report that we did
+     * not handle the event. Otherwise we call the [ImageView.setImageURI] method of [view] to have
+     * it set its content to the [Uri] parameter [uri] and return `true` to report that the drag
+     * event was handled successfully,
+     *
+     * @param view The [View] that received the [DragEvent.ACTION_DROP] drag event.
+     * @param event The [DragEvent] object for the [DragEvent.ACTION_DROP] drag event
+     * @param uri the raw [Uri] contained in [ClipData.Item] at index 0 of the [ClipData] property
+     * of the [DragEvent]
+     */
     protected open fun setImageUri(view: View?, event: DragEvent?, uri: Uri?): Boolean {
         if (view !is ImageView) {
             return false
@@ -125,8 +174,23 @@ open class ImageDragListener : OnDragListener {
     }
 
     companion object {
+        /**
+         * Color used for the background color of the [View] when our [onDrag] override receives a
+         * [DragEvent.ACTION_DRAG_ENDED] action [DragEvent] (a very light gray)
+         */
         private const val COLOR_INACTIVE = -0x777778
+
+        /**
+         * Color used for the background color of the [View] when our [onDrag] override receives a
+         * [DragEvent.ACTION_DRAG_STARTED] or a [DragEvent.ACTION_DRAG_EXITED] action [DragEvent]
+         * (a dark gray)
+         */
         private const val COLOR_ACTIVE = -0x333334
+
+        /**
+         * Color used for the background color of the [View] when our [onDrag] override receives a
+         * [DragEvent.ACTION_DRAG_ENTERED] action [DragEvent] (a very dark gray)
+         */
         private const val COLOR_HOVER = -0x111112
     }
 }
