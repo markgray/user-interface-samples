@@ -25,8 +25,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
-import androidx.fragment.app.Fragment
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.example.android.common.logger.Log.d
 
 /**
@@ -34,9 +34,8 @@ import com.example.android.common.logger.Log.d
  * drag and drop.
  *
  * This is the Target app for the drag and drop process. This app uses a
- * [android.widget.ImageView] as the drop target. Images onto this
- * view from the DragSource app that is also part of this sample.
- *
+ * [android.widget.ImageView] as the drop target. Images are dragged onto
+ * this view from the DragSource app that is also part of this sample.
  *
  * There is also a [android.widget.EditText] widget that can accept dropped text (no
  * extra setup is necessary).
@@ -47,10 +46,38 @@ import com.example.android.common.logger.Log.d
  * [android.view.DragAndDropPermissions] object.
  */
 class DropTargetFragment : Fragment() {
+    /**
+     * The [Uri] of the image that the user has dragged from the `DragSource` app and dropped on us.
+     */
     private var mImageUri: Uri? = null
+
+    /**
+     * The [CheckBox] in our UI with ID [R.id.release_checkbox] labeled "Release permissions
+     * immediately after a drop" which when checked causes us to release the permissions on the
+     * [Uri] dropped on us immediately upon drop, otherwise we hold on to them so we can restore
+     * the image after the activity has been resized.
+     */
     private var mReleasePermissionCheckBox: CheckBox? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and [onActivityCreated]. It is recommended to **only** inflate the layout in this
+     * method and move logic that operates on the returned View to [onViewCreated].
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the fragment.
+     * @param container If non-`null`, this is the parent view that the fragment's UI will be
+     * attached to. The fragment should not add the view itself, but this can be used to generate
+     * the `LayoutParams` of the view.
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed from a
+     * previous saved state as given here.
+     * @return Return the [View] for the fragment's UI, or null.
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val rootView = inflater.inflate(R.layout.fragment_droptarget, container, false)
         val imageView = rootView.findViewById<View>(R.id.image_target) as ImageView
         val imageDragListener: ImageDragListener = PermissionAwareImageDragListener()
