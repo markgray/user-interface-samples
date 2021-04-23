@@ -13,119 +13,90 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.droptarget
 
-package com.example.android.droptarget;
-
-import com.example.android.common.logger.Log;
-
-import android.app.Activity;
-import android.content.ClipDescription;
-import android.content.ContentResolver;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import androidx.annotation.Nullable;
-import androidx.legacy.app.ActivityCompat;
-import androidx.core.view.DragAndDropPermissionsCompat;
-import androidx.fragment.app.Fragment;
-import android.view.DragEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.content.ContentResolver
+import android.net.Uri
+import android.os.Bundle
+import android.os.PersistableBundle
+import android.view.DragEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.core.app.ActivityCompat
+import com.example.android.common.logger.Log.d
 
 /**
  * This sample demonstrates data can be moved between views in different applications via
  * drag and drop.
- * <p>This is the Target app for the drag and drop process. This app uses a
- * {@link android.widget.ImageView} as the drop target. Images onto this
+ *
+ * This is the Target app for the drag and drop process. This app uses a
+ * [android.widget.ImageView] as the drop target. Images onto this
  * view from the DragSource app that is also part of this sample.
- * <p>
- * There is also a {@link android.widget.EditText} widget that can accept dropped text (no
+ *
+ *
+ * There is also a [android.widget.EditText] widget that can accept dropped text (no
  * extra setup is necessary).
  * To access content URIs requiring permissions, the target app needs to request the
- * {@link android.view.DragAndDropPermissions} from the Activity via
- * {@link ActivityCompat#requestDragAndDropPermissions(Activity, DragEvent)}. This permission will
+ * [android.view.DragAndDropPermissions] from the Activity via
+ * [ActivityCompat.requestDragAndDropPermissions]. This permission will
  * stay either as long as the activity is alive, or until the release() method is called on the
- * {@link android.view.DragAndDropPermissions} object.
+ * [android.view.DragAndDropPermissions] object.
  */
-public class DropTargetFragment extends Fragment {
-
-    private static final String IMAGE_URI = "IMAGE_URI";
-
-    public static final String EXTRA_IMAGE_INFO = "IMAGE_INFO";
-
-    private static final String TAG = "DropTargetFragment";
-
-    private Uri mImageUri;
-
-    private CheckBox mReleasePermissionCheckBox;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_droptarget, container, false);
-        final ImageView imageView = (ImageView) rootView.findViewById(R.id.image_target);
-
-        ImageDragListener imageDragListener = new PermissionAwareImageDragListener();
-
-        imageView.setOnDragListener(imageDragListener);
+class DropTargetFragment : Fragment() {
+    private var mImageUri: Uri? = null
+    private var mReleasePermissionCheckBox: CheckBox? = null
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val rootView = inflater.inflate(R.layout.fragment_droptarget, container, false)
+        val imageView = rootView.findViewById<View>(R.id.image_target) as ImageView
+        val imageDragListener: ImageDragListener = PermissionAwareImageDragListener()
+        imageView.setOnDragListener(imageDragListener)
 
         // Restore the application state if an image was being displayed.
         if (savedInstanceState != null) {
-            final String uriString = savedInstanceState.getString(IMAGE_URI);
+            val uriString = savedInstanceState.getString(IMAGE_URI)
             if (uriString != null) {
-                mImageUri = Uri.parse(uriString);
-                imageView.setImageURI(mImageUri);
+                mImageUri = Uri.parse(uriString)
+                imageView.setImageURI(mImageUri)
             }
         }
-
-        mReleasePermissionCheckBox = (CheckBox) rootView.findViewById(R.id.release_checkbox);
-
-        return rootView;
+        mReleasePermissionCheckBox = rootView.findViewById<View>(R.id.release_checkbox) as CheckBox
+        return rootView
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
         if (mImageUri != null) {
-            savedInstanceState.putString(IMAGE_URI, mImageUri.toString());
+            savedInstanceState.putString(IMAGE_URI, mImageUri.toString())
         }
-        super.onSaveInstanceState(savedInstanceState);
+        super.onSaveInstanceState(savedInstanceState)
     }
 
-    private class PermissionAwareImageDragListener extends ImageDragListener {
-
-        @Override
-        protected void processLocation(float x, float y) {
+    private inner class PermissionAwareImageDragListener : ImageDragListener() {
+        override fun processLocation(x: Float, y: Float) {
             // Callback is received when the dragged image enters the drop area.
         }
 
-        @Override
-        protected boolean setImageUri(View view, DragEvent event, Uri uri) {
+        override fun setImageUri(view: View, event: DragEvent, uri: Uri): Boolean {
             // Read the string from the clip description extras.
-            Log.d(TAG, "ClipDescription extra: " + getExtra(event));
-
-            Log.d(TAG, "Setting image source to: " + uri.toString());
-            mImageUri = uri;
-
-            if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            d(TAG, "ClipDescription extra: " + getExtra(event))
+            d(TAG, "Setting image source to: $uri")
+            mImageUri = uri
+            return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
                 // Accessing a "content" scheme Uri requires a permission grant.
-                DragAndDropPermissionsCompat dropPermissions = ActivityCompat
-                        .requestDragAndDropPermissions(getActivity(), event);
-                Log.d(TAG, "Requesting permissions.");
-
+                val dropPermissions = ActivityCompat
+                    .requestDragAndDropPermissions(activity, event)
+                d(TAG, "Requesting permissions.")
                 if (dropPermissions == null) {
                     // Permission could not be obtained.
-                    Log.d(TAG, "Drop permission request failed.");
-                    return false;
+                    d(TAG, "Drop permission request failed.")
+                    return false
                 }
-
-                final boolean result = super.setImageUri(view, event, uri);
-
-                if (mReleasePermissionCheckBox.isChecked()) {
+                val result = super.setImageUri(view, event, uri)
+                if (mReleasePermissionCheckBox!!.isChecked) {
                     /* Release the permissions if you are done with the URI.
                      Note that you may need to hold onto the permission until later if other
                      operations are performed on the content. For instance, releasing the
@@ -134,45 +105,48 @@ public class DropTargetFragment extends Fragment {
                      If permissions are not explicitly released, the permission grant will be
                      revoked when the activity is destroyed.
                      */
-                    dropPermissions.release();
-                    Log.d(TAG, "Permissions released.");
+                    dropPermissions.release()
+                    d(TAG, "Permissions released.")
                 }
-
-                return result;
+                result
             } else {
                 // Other schemes (such as "android.resource") do not require a permission grant.
-                return super.setImageUri(view, event, uri);
+                super.setImageUri(view, event, uri)
             }
         }
 
-        @Override
-        public boolean onDrag(View view, DragEvent event) {
+        override fun onDrag(view: View, event: DragEvent): Boolean {
             // DragTarget is peeking into the MIME types of the dragged event in order to ignore
             // non-image drags completely.
             // DragSource does not do that but rejects non-image content once a drop has happened.
-            ClipDescription clipDescription = event.getClipDescription();
-            if (clipDescription != null && !clipDescription.hasMimeType("image/*")) {
-                return false;
-            }
+            val clipDescription = event.clipDescription
+            return if (clipDescription != null && !clipDescription.hasMimeType("image/*")) {
+                false
+            } else super.onDrag(view, event)
             // Callback received when image is being dragged.
-            return super.onDrag(view, event);
         }
     }
 
     /**
-     * DragEvents can contain additional data packaged in a {@link PersistableBundle}.
+     * DragEvents can contain additional data packaged in a [PersistableBundle].
      * Extract the extras from the event and return the String stored for the
-     * {@link #EXTRA_IMAGE_INFO} entry.
+     * [.EXTRA_IMAGE_INFO] entry.
      */
-    private String getExtra(DragEvent event) {
+    private fun getExtra(event: DragEvent): String? {
         // The extras are contained in the ClipDescription in the DragEvent.
-        ClipDescription clipDescription = event.getClipDescription();
+        val clipDescription = event.clipDescription
         if (clipDescription != null) {
-            PersistableBundle extras = clipDescription.getExtras();
+            val extras = clipDescription.extras
             if (extras != null) {
-                return extras.getString(EXTRA_IMAGE_INFO);
+                return extras.getString(EXTRA_IMAGE_INFO)
             }
         }
-        return null;
+        return null
+    }
+
+    companion object {
+        private const val IMAGE_URI = "IMAGE_URI"
+        const val EXTRA_IMAGE_INFO = "IMAGE_INFO"
+        private const val TAG = "DropTargetFragment"
     }
 }
