@@ -15,6 +15,7 @@
  */
 package com.example.android.droptarget
 
+import android.content.ClipData
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.Bundle
@@ -22,6 +23,7 @@ import android.os.PersistableBundle
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnDragListener
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -64,6 +66,25 @@ class DropTargetFragment : Fragment() {
      * [onCreate] and [onActivityCreated]. It is recommended to **only** inflate the layout in this
      * method and move logic that operates on the returned View to [onViewCreated].
      *
+     * We initialize our [View] variable `val rootView` to the [View] returned by our [LayoutInflater]
+     * parameter [inflater] when its [LayoutInflater.inflate] method inflates our layout file whose
+     * resource ID is [R.layout.fragment_droptarget] using our [ViewGroup] parameter [container] for
+     * its `LayoutParams` without attaching to it, initialize our [ImageView] variable `val imageView`
+     * by finding the [View] in `rootView` with ID [R.id.image_target], and initialize our
+     * [ImageDragListener] variable `val imageDragListener` to a new instance then set the
+     * [OnDragListener] of `imageView` to `imageDragListener`.
+     *
+     * If our [Bundle] parameter [savedInstanceState] is not `null` we are being re-constructed after
+     * having been stopped so we want to restore the application state if an image was being displayed.
+     * To do this we initialize our [String] variable `val uriString` by retrieving the [String] that
+     * was stored in [savedInstanceState] under the key [IMAGE_URI], and if `uriString` is not `null`
+     * we initialize our [Uri] field [mImageUri] by using the [Uri.parse] method to parse `uriString`
+     * into a [Uri] then we call the `setImageURI` method of `imageView` to have the contents of
+     * `imageView` to [mImageUri].
+     *
+     * Finally we initialize our [CheckBox] field [mReleasePermissionCheckBox] by finding the [View]
+     * in `rootView` with ID [R.id.release_checkbox] and return `rootView` to the caller.
+     *
      * @param inflater The [LayoutInflater] object that can be used to inflate
      * any views in the fragment.
      * @param container If non-`null`, this is the parent view that the fragment's UI will be
@@ -95,6 +116,18 @@ class DropTargetFragment : Fragment() {
         return rootView
     }
 
+    /**
+     * Called to ask the fragment to save its current dynamic state, so it can later be reconstructed
+     * in a new instance of its process is restarted. If a new instance of the fragment later needs
+     * to be created, the data you place in the [Bundle] here will be available in the [Bundle] given
+     * to [onCreate], [onCreateView], and [onActivityCreated].
+     *
+     * If our [Uri] field [mImageUri] is not `null` we store the [String] version of [mImageUri] under
+     * the key [IMAGE_URI] in our [Bundle] parameter [savedInstanceState]. In any case we then call
+     * our super's implementation of `onSaveInstanceState`.
+     *
+     * @param savedInstanceState [Bundle] in which to place your saved state.
+     */
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         if (mImageUri != null) {
             savedInstanceState.putString(IMAGE_URI, mImageUri.toString())
@@ -102,7 +135,22 @@ class DropTargetFragment : Fragment() {
         super.onSaveInstanceState(savedInstanceState)
     }
 
+    /**
+     * Custom implementation of our [ImageDragListener] class (which is a custom [OnDragListener])
+     * which is aware that we need to request `DragAndDropPermissions` to read the image contained
+     * in the [ClipData] of the [DragEvent] dropped on us. It overrides the [processLocation],
+     * [setImageUri], and [onDrag] methods of [ImageDragListener].
+     */
     private inner class PermissionAwareImageDragListener : ImageDragListener() {
+        /**
+         * Called when our super's [onDrag] override receives a [DragEvent] whose `action` property
+         * is [DragEvent.ACTION_DRAG_LOCATION] which is sent to a [View] after `ACTION_DRAG_ENTERED`
+         * while the drag shadow is still within the [View] object's bounding box, but not within
+         * a descendant view that can accept the data.  We ignore.
+         *
+         * @param x the `x` coordinate of the [DragEvent]
+         * @param y the `y` coordinate of the [DragEvent]
+         */
         override fun processLocation(x: Float, y: Float) {
             // Callback is received when the dragged image enters the drop area.
         }
@@ -157,7 +205,7 @@ class DropTargetFragment : Fragment() {
     /**
      * DragEvents can contain additional data packaged in a [PersistableBundle].
      * Extract the extras from the event and return the String stored for the
-     * [.EXTRA_IMAGE_INFO] entry.
+     * [EXTRA_IMAGE_INFO] entry.
      */
     private fun getExtra(event: DragEvent): String? {
         // The extras are contained in the ClipDescription in the DragEvent.
@@ -172,8 +220,24 @@ class DropTargetFragment : Fragment() {
     }
 
     companion object {
+        /**
+         * Key that our [onSaveInstanceState] override uses to store the [String] version of the [Uri]
+         * field [mImageUri] under in its [Bundle] parameter `savedInstanceState`, and which our
+         * [onCreateView] override uses to fetch it from its [Bundle] parameter when our fragment is
+         * restarted.
+         */
         private const val IMAGE_URI = "IMAGE_URI"
+
+        /**
+         * The key under which the `DragSource` app stores a [String] in the [PersistableBundle]
+         * extras of the `ClipDescription` of the [DragEvent] which has been dropped on us and which
+         * our [getExtra] method retrieves in order for our `setImageUri` method to log it.
+         */
         const val EXTRA_IMAGE_INFO = "IMAGE_INFO"
+
+        /**
+         * TAG used for logging.
+         */
         private const val TAG = "DropTargetFragment"
     }
 }
