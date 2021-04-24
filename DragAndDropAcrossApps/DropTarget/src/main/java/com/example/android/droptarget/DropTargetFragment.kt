@@ -155,6 +155,25 @@ class DropTargetFragment : Fragment() {
             // Callback is received when the dragged image enters the drop area.
         }
 
+        /**
+         * This override of our super's implementation of `setImageUri` asks for read permissions
+         * for its [Uri] parameter [uri] if the `scheme` of [uri] is [ContentResolver.SCHEME_CONTENT]
+         * then calls our super's `setImageUri` method to do the rest of the work, and if no permissions
+         * are required (all other schemes) just calls our super's `setImageUri` method.
+         *
+         * First we use our [getExtra] method to read the string from the clip description extras of
+         * our [DragEvent] parameter [event] and log them, then we log the message: "Setting image
+         * source to:" concatenated to the [String] value of [uri]. We set our [Uri] field [mImageUri]
+         * to [uri] and branch on whether the `scheme` property of [uri] is [ContentResolver.SCHEME_CONTENT]
+         * or not:
+         *  - Scheme is [ContentResolver.SCHEME_CONTENT]
+         *  - Scheme is **not** [ContentResolver.SCHEME_CONTENT]
+         *
+         * @param view The [View] that received the [DragEvent.ACTION_DROP] drag event.
+         * @param event The [DragEvent] object for the [DragEvent.ACTION_DROP] drag event
+         * @param uri the raw [Uri] contained in [ClipData.Item] at index 0 of the [ClipData] property
+         * of the [DragEvent]
+         */
         override fun setImageUri(view: View, event: DragEvent, uri: Uri): Boolean {
             // Read the string from the clip description extras.
             d(TAG, "ClipDescription extra: " + getExtra(event))
@@ -162,8 +181,7 @@ class DropTargetFragment : Fragment() {
             mImageUri = uri
             return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
                 // Accessing a "content" scheme Uri requires a permission grant.
-                val dropPermissions = ActivityCompat
-                    .requestDragAndDropPermissions(activity, event)
+                val dropPermissions = ActivityCompat.requestDragAndDropPermissions(activity, event)
                 d(TAG, "Requesting permissions.")
                 if (dropPermissions == null) {
                     // Permission could not be obtained.
