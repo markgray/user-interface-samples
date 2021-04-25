@@ -16,6 +16,7 @@
 package com.example.android.droptarget
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ContentResolver
 import android.net.Uri
 import android.os.Bundle
@@ -28,7 +29,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestDragAndDropPermissions
+import androidx.core.view.DragAndDropPermissionsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.example.android.common.logger.Log.d
 
 /**
@@ -166,8 +170,19 @@ class DropTargetFragment : Fragment() {
          * source to:" concatenated to the [String] value of [uri]. We set our [Uri] field [mImageUri]
          * to [uri] and branch on whether the `scheme` property of [uri] is [ContentResolver.SCHEME_CONTENT]
          * or not:
-         *  - Scheme is [ContentResolver.SCHEME_CONTENT]
-         *  - Scheme is **not** [ContentResolver.SCHEME_CONTENT]
+         *  - Scheme is [ContentResolver.SCHEME_CONTENT] - we initialize our [DragAndDropPermissionsCompat]
+         *  variable `val dropPermissions` to the value returned by the [requestDragAndDropPermissions]
+         *  method that is bound to our [FragmentActivity] and controlling the access permissions for
+         *  content URIs associated with our [DragEvent] parameter [event] and if that is `null` we
+         *  log the fact that "Drop permission request failed" and return `false`. Otherwise we set
+         *  our [Boolean] variable `val result` to the value returned by our super's implementation
+         *  of `setImageUri`. If our [CheckBox] field [mReleasePermissionCheckBox] (labeled "Release
+         *  permissions immediately after a drop") is checked we call the `release` method of
+         *  `dropPermissions` to revoke the permission grant explicitly and log that we did so. In
+         *  either case we return `result` to the caller.
+         *  - Scheme is **not** [ContentResolver.SCHEME_CONTENT] All other schemes (such as
+         *  "android.resource") do not require a permission grant so we just return the value
+         *  that our super's implementation of `setImageUri` returns to the caller.
          *
          * @param view The [View] that received the [DragEvent.ACTION_DROP] drag event.
          * @param event The [DragEvent] object for the [DragEvent.ACTION_DROP] drag event
@@ -181,14 +196,14 @@ class DropTargetFragment : Fragment() {
             mImageUri = uri
             return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
                 // Accessing a "content" scheme Uri requires a permission grant.
-                val dropPermissions = ActivityCompat.requestDragAndDropPermissions(activity, event)
+                val dropPermissions = requestDragAndDropPermissions(activity, event)
                 d(TAG, "Requesting permissions.")
                 if (dropPermissions == null) {
                     // Permission could not be obtained.
                     d(TAG, "Drop permission request failed.")
                     return false
                 }
-                val result = super.setImageUri(view, event, uri)
+                val result: Boolean = super.setImageUri(view, event, uri)
                 if (mReleasePermissionCheckBox!!.isChecked) {
                     /* Release the permissions if you are done with the URI.
                      Note that you may need to hold onto the permission until later if other
@@ -208,11 +223,28 @@ class DropTargetFragment : Fragment() {
             }
         }
 
+        /**
+         * Called when a drag event is dispatched to a view. This allows listeners to get a chance
+         * to override base [View] behavior.
+         *
+         * We initialize our [ClipDescription] variable `val clipDescription` to the [ClipDescription]
+         * object contained in the [ClipData] object sent to the system as part of the call to
+         * `startDragAndDrop`. If `clipDescription` is `null` its mime type is not for an "image"
+         * we return `false` to the caller so that the [View] parameter [view] will call its own
+         * `onDragEvent` handler. Otherwise we return the value returned by our super's implementation
+         * of `onDrag`.
+         *
+         * @param view The [View] that received the drag event.
+         * @param event The [DragEvent] object for the drag event.
+         * @return `true` if the drag event was handled successfully, or `false` if the drag event
+         * was not handled. Note that `false` will trigger the [View] to call its `onDragEvent`
+         * handler.
+         */
         override fun onDrag(view: View, event: DragEvent): Boolean {
             // DragTarget is peeking into the MIME types of the dragged event in order to ignore
             // non-image drags completely.
             // DragSource does not do that but rejects non-image content once a drop has happened.
-            val clipDescription = event.clipDescription
+            val clipDescription: ClipDescription? = event.clipDescription
             return if (clipDescription != null && !clipDescription.hasMimeType("image/*")) {
                 false
             } else super.onDrag(view, event)
@@ -221,15 +253,24 @@ class DropTargetFragment : Fragment() {
     }
 
     /**
-     * DragEvents can contain additional data packaged in a [PersistableBundle].
-     * Extract the extras from the event and return the String stored for the
-     * [EXTRA_IMAGE_INFO] entry.
+     * DragEvents can contain additional data packaged in a [PersistableBundle]. Extract the extras
+     * from the event and return the [String] stored for the [EXTRA_IMAGE_INFO] entry. We initialize
+     * our [ClipDescription] variable `val clipDescription` to the [ClipDescription] of our [DragEvent]
+     * parameter [event] and if that is not `null` we initialize our [PersistableBundle] variable
+     * `val extras` to the extended data stored in `clipDescription`, and if that is not `null` we
+     * return the [String] stored under the key [EXTRA_IMAGE_INFO] in `extras` to the caller. If
+     * either of these were `null` we return `null` to the caller.
+     *
+     * @param event the [DragEvent] that our [PermissionAwareImageDragListener.setImageUri] method
+     * received.
+     * @return the [String] stored in the [PersistableBundle] extra of the [ClipDescription] of the
+     * [DragEvent] parameter [event] under the key [EXTRA_IMAGE_INFO].
      */
     private fun getExtra(event: DragEvent): String? {
         // The extras are contained in the ClipDescription in the DragEvent.
-        val clipDescription = event.clipDescription
+        val clipDescription: ClipDescription? = event.clipDescription
         if (clipDescription != null) {
-            val extras = clipDescription.extras
+            val extras: PersistableBundle? = clipDescription.extras
             if (extras != null) {
                 return extras.getString(EXTRA_IMAGE_INFO)
             }
