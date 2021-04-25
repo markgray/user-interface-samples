@@ -189,12 +189,12 @@ class DropTargetFragment : Fragment() {
          * @param uri the raw [Uri] contained in [ClipData.Item] at index 0 of the [ClipData] property
          * of the [DragEvent]
          */
-        override fun setImageUri(view: View, event: DragEvent, uri: Uri): Boolean {
+        override fun setImageUri(view: View?, event: DragEvent?, uri: Uri?): Boolean {
             // Read the string from the clip description extras.
-            d(TAG, "ClipDescription extra: " + getExtra(event))
+            d(TAG, "ClipDescription extra: " + getExtra(event!!))
             d(TAG, "Setting image source to: $uri")
             mImageUri = uri
-            return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
+            return if (ContentResolver.SCHEME_CONTENT == uri!!.scheme) {
                 // Accessing a "content" scheme Uri requires a permission grant.
                 val dropPermissions = requestDragAndDropPermissions(activity, event)
                 d(TAG, "Requesting permissions.")

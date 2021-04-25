@@ -13,84 +13,70 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+package com.example.android.droptarget
 
-package com.example.android.droptarget;
+import android.net.Uri
+import android.view.DragEvent
+import android.view.View
+import android.view.View.OnDragListener
+import android.widget.ImageView
 
-import android.content.ClipData;
-import android.net.Uri;
-import android.view.DragEvent;
-import android.view.View;
-import android.widget.ImageView;
-
-public class ImageDragListener implements View.OnDragListener {
-
-    private static final int COLOR_INACTIVE = 0xFF888888;
-
-    private static final int COLOR_ACTIVE = 0xFFCCCCCC;
-
-    private static final int COLOR_HOVER = 0xFFEEEEEE;
-
-    @Override
-    public boolean onDrag(View view, DragEvent event) {
-        switch (event.getAction()) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                setTargetColor(view, COLOR_ACTIVE);
-                return true;
-
-            case DragEvent.ACTION_DRAG_ENTERED:
-                setTargetColor(view, COLOR_HOVER);
-                return true;
-
-            case DragEvent.ACTION_DRAG_LOCATION:
-                processLocation(event.getX(), event.getY());
-                return true;
-
-            case DragEvent.ACTION_DRAG_EXITED:
-                setTargetColor(view, COLOR_ACTIVE);
-                return true;
-
-            case DragEvent.ACTION_DROP:
-                return processDrop(view, event);
-
-            case DragEvent.ACTION_DRAG_ENDED:
-                setTargetColor(view, COLOR_INACTIVE);
-                return true;
-
-            default:
-                break;
+open class ImageDragListener : OnDragListener {
+    override fun onDrag(view: View, event: DragEvent): Boolean {
+        when (event.action) {
+            DragEvent.ACTION_DRAG_STARTED -> {
+                setTargetColor(view, COLOR_ACTIVE)
+                return true
+            }
+            DragEvent.ACTION_DRAG_ENTERED -> {
+                setTargetColor(view, COLOR_HOVER)
+                return true
+            }
+            DragEvent.ACTION_DRAG_LOCATION -> {
+                processLocation(event.x, event.y)
+                return true
+            }
+            DragEvent.ACTION_DRAG_EXITED -> {
+                setTargetColor(view, COLOR_ACTIVE)
+                return true
+            }
+            DragEvent.ACTION_DROP -> return processDrop(view, event)
+            DragEvent.ACTION_DRAG_ENDED -> {
+                setTargetColor(view, COLOR_INACTIVE)
+                return true
+            }
+            else -> {
+            }
         }
-
-        return false;
+        return false
     }
 
-    private void setTargetColor(View view, int color) {
-        view.setBackgroundColor(color);
+    private fun setTargetColor(view: View, color: Int) {
+        view.setBackgroundColor(color)
     }
 
-    private boolean processDrop(View view, DragEvent event) {
-        ClipData clipData = event.getClipData();
-        if (clipData == null || clipData.getItemCount() == 0) {
-            return false;
+    private fun processDrop(view: View, event: DragEvent): Boolean {
+        val clipData = event.clipData
+        if (clipData == null || clipData.itemCount == 0) {
+            return false
         }
-        ClipData.Item item = clipData.getItemAt(0);
-        if (item == null) {
-            return false;
-        }
-        Uri uri = item.getUri();
-        if (uri == null) {
-            return false;
-        }
-        return setImageUri(view, event, uri);
+        val item = clipData.getItemAt(0) ?: return false
+        val uri = item.uri ?: return false
+        return setImageUri(view, event, uri)
     }
 
-    protected void processLocation(float x, float y) {
+    protected open fun processLocation(x: Float, y: Float) {}
+    protected open fun setImageUri(view: View?, event: DragEvent?, uri: Uri?): Boolean {
+        if (view !is ImageView) {
+            return false
+        }
+        view.setImageURI(uri)
+        return true
     }
 
-    protected boolean setImageUri(View view, DragEvent event, Uri uri) {
-        if (!(view instanceof ImageView)) {
-            return false;
-        }
-        ((ImageView) view).setImageURI(uri);
-        return true;
+    companion object {
+        private const val COLOR_INACTIVE = -0x777778
+        private const val COLOR_ACTIVE = -0x333334
+        private const val COLOR_HOVER = -0x111112
     }
 }
