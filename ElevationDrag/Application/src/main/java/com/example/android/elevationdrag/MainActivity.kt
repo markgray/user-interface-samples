@@ -13,100 +13,96 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+package com.example.android.elevationdrag
 
-
-package com.example.android.elevationdrag;
-
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ViewAnimator;
-
-import com.example.android.common.activities.SampleActivityBase;
-import com.example.android.common.logger.Log;
-import com.example.android.common.logger.LogFragment;
-import com.example.android.common.logger.LogWrapper;
-import com.example.android.common.logger.MessageOnlyLogFilter;
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.ViewAnimator
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.example.android.common.activities.SampleActivityBase
+import com.example.android.common.logger.Log
+import com.example.android.common.logger.LogFragment
+import com.example.android.common.logger.LogWrapper
+import com.example.android.common.logger.MessageOnlyLogFilter
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
- * {@link Fragment} which can display a view.
- * <p>
+ * [Fragment] which can display a view.
+ *
+ *
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
-public class MainActivity extends SampleActivityBase {
-
-    public static final String TAG = "MainActivity";
-
-    // Whether the Log Fragment is currently shown
-    private boolean mLogShown;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+class MainActivity : SampleActivityBase() {
+    /**
+     * Whether the Log Fragment is currently shown
+     */
+    private var mLogShown = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            ElevationDragFragment fragment = new ElevationDragFragment();
-            transaction.replace(R.id.sample_content_fragment, fragment);
-            transaction.commit();
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+            val fragment = ElevationDragFragment()
+            transaction.replace(R.id.sample_content_fragment, fragment)
+            transaction.commit()
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem logToggle = menu.findItem(R.id.menu_toggle_log);
-        logToggle.setVisible(findViewById(R.id.sample_output) instanceof ViewAnimator);
-        logToggle.setTitle(mLogShown ? R.string.sample_hide_log : R.string.sample_show_log);
-
-        return super.onPrepareOptionsMenu(menu);
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val logToggle = menu.findItem(R.id.menu_toggle_log)
+        logToggle.isVisible = findViewById<View>(R.id.sample_output) is ViewAnimator
+        logToggle.setTitle(if (mLogShown) R.string.sample_hide_log else R.string.sample_show_log)
+        return super.onPrepareOptionsMenu(menu)
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_toggle_log:
-                mLogShown = !mLogShown;
-                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_toggle_log -> {
+                mLogShown = !mLogShown
+                val output = findViewById<View>(R.id.sample_output) as ViewAnimator
                 if (mLogShown) {
-                    output.setDisplayedChild(1);
+                    output.displayedChild = 1
                 } else {
-                    output.setDisplayedChild(0);
+                    output.displayedChild = 0
                 }
-                supportInvalidateOptionsMenu();
-                return true;
+                invalidateOptionsMenu()
+                return true
+            }
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item)
     }
 
-    /** Create a chain of targets that will receive log data */
-    @Override
-    public void initializeLogging() {
+    /** Create a chain of targets that will receive log data  */
+    override fun initializeLogging() {
         // Wraps Android's native log framework.
-        LogWrapper logWrapper = new LogWrapper();
+        val logWrapper = LogWrapper()
         // Using Log, front-end to the logging chain, emulates android.util.log method signatures.
-        Log.setLogNode(logWrapper);
+        Log.setLogNode(logWrapper)
 
         // Filter strips out everything except the message text.
-        MessageOnlyLogFilter msgFilter = new MessageOnlyLogFilter();
-        logWrapper.setNext(msgFilter);
+        val msgFilter = MessageOnlyLogFilter()
+        logWrapper.next = msgFilter
 
         // On screen logging via a fragment with a TextView.
-        LogFragment logFragment = (LogFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.log_fragment);
-        msgFilter.setNext(logFragment.getLogView());
+        val logFragment = supportFragmentManager
+            .findFragmentById(R.id.log_fragment) as LogFragment?
+        msgFilter.next = logFragment!!.logView
+        Log.i(TAG, "Ready")
+    }
 
-        Log.i(TAG, "Ready");
+    companion object {
+        /**
+         * TAG used for logging.
+         */
+        const val TAG = "MainActivity"
     }
 }
