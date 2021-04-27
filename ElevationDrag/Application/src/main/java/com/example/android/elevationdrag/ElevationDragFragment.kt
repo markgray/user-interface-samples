@@ -138,14 +138,16 @@ class ElevationDragFragment : Fragment() {
         floatingShape.clipToOutline = true
 
         val dragLayout = rootView.findViewById<View>(R.id.main_layout) as DragFrameLayout
-        dragLayout.setDragFrameController { captured ->
-            /**
-             * Animate the translation of the [View]. Note that the translation
-             * is being modified, not the elevation.
-             */
-            floatingShape.animate().translationZ(if (captured) 50f else 0f).duration = 100
-            Log.d(TAG, if (captured) "Drag" else "Drop")
-        }
+        dragLayout.setDragFrameController(object : DragFrameLayout.DragFrameLayoutController {
+            override fun onDragDrop(captured: Boolean) {
+                /**
+                 * Animate the translation of the [View]. Note that the translation
+                 * is being modified, not the elevation.
+                 */
+                floatingShape.animate().translationZ(if (captured) 50f else 0f).duration = 100
+                Log.d(TAG, if (captured) "Drag" else "Drop")
+            }
+        })
         dragLayout.addDragView(floatingShape)
 
         /**
