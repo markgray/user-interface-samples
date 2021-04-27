@@ -26,6 +26,11 @@ import androidx.fragment.app.Fragment
 import com.example.android.common.logger.Log
 import java.util.Locale
 
+/**
+ * This demo consists of a circle which the user can drag around the screen which casts a shadow when
+ * dragged, and two [Button]s which allow the user to increase or decrease the resting `elevation` of
+ * the circle.
+ */
 class ElevationDragFragment : Fragment() {
     /**
      * The circular outline provider
@@ -89,6 +94,15 @@ class ElevationDragFragment : Fragment() {
      * for drag, and by 0f otherwise (if the lambda's argument `captured` is `true` it logs "Drag"
      * and if `false` it logs "Drop"). Then we add `floatingShape` to the list of [View]s that are
      * draggable within the container `dragLayout`.
+     *
+     * Next we locate the "Z+" [Button] in `rootView` by finding the [View] with ID [R.id.raise_bt]
+     * and set its [View.OnClickListener] to a lambda which increments our [mElevation] field by
+     * our [mElevationStep] field, logs the new value of [mElevation], and sets the `elevation`
+     * property of `floatingShape` to the new [mElevation]. Then we locate the "Z-" [Button] in
+     * `rootView` by finding the [View] with ID [R.id.lower_bt] and set its [View.OnClickListener]
+     * to a lambda which decrements our [mElevation] field by our [mElevationStep] field (down to
+     * a minimum of 0f only), logs the new value of [mElevation], and sets the `elevation` property
+     * of `floatingShape` to the new [mElevation].
      *
      * Having set up our UI we return `rootView` to the caller.
      *
@@ -162,6 +176,19 @@ class ElevationDragFragment : Fragment() {
      * [ViewOutlineProvider] which sets the outline to be an oval which fits the view bounds.
      */
     private inner class CircleOutlineProvider : ViewOutlineProvider() {
+        /**
+         * Called to get the provider to populate the Outline. This method will be called by a [View]
+         * when its owned Drawables are invalidated, when the [View]'s size changes, or if
+         * [View.invalidateOutline] is called explicitly. The input [Outline] paramer [outline] is
+         * empty and has an alpha of 1.0f.
+         *
+         * We just call the [Outline.setOval] method of [outline] to have it set itself to an oval
+         * whose left side is at 0, top is at 0, right is at the `width` of [View] parameter [view],
+         * and whose bottom is at the height of [view].
+         *
+         * @param view The view building the outline.
+         * @param outline The empty outline to be populated.
+         */
         override fun getOutline(view: View, outline: Outline) {
             outline.setOval(0, 0, view.width, view.height)
         }
