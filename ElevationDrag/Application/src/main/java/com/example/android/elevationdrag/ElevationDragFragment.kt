@@ -13,109 +13,109 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.elevationdrag
 
-package com.example.android.elevationdrag;
+import android.graphics.Outline
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewOutlineProvider
+import androidx.fragment.app.Fragment
+import com.example.android.common.logger.Log
+import java.util.Locale
 
-import com.example.android.common.logger.Log;
+class ElevationDragFragment : Fragment() {
+    /**
+     * The circular outline provider
+     */
+    private var mOutlineProviderCircle: ViewOutlineProvider? = null
 
-import android.graphics.Outline;
-import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
+    /**
+     * The current elevation of the floating view.
+     */
+    private var mElevation = 0f
 
-import java.util.Locale;
-
-public class ElevationDragFragment extends Fragment {
-
-    public static final String TAG = "ElevationDragFragment";
-
-    /* The circular outline provider */
-    private ViewOutlineProvider mOutlineProviderCircle;
-
-    /* The current elevation of the floating view. */
-    private float mElevation = 0;
-
-    /* The step in elevation when changing the Z value */
-    private int mElevationStep;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mOutlineProviderCircle = new CircleOutlineProvider();
-
-        mElevationStep = getResources().getDimensionPixelSize(R.dimen.elevation_step);
+    /**
+     * The step in elevation when changing the Z value
+     */
+    private var mElevationStep = 0
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mOutlineProviderCircle = CircleOutlineProvider()
+        mElevationStep = resources.getDimensionPixelSize(R.dimen.elevation_step)
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.ztranslation, container, false);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val rootView = inflater.inflate(R.layout.ztranslation, container, false)
 
-        /* Find the {@link View} to apply z-translation to. */
-        final View floatingShape = rootView.findViewById(R.id.circle);
+        /**
+         * Find the [View] to apply z-translation to.
+         */
+        val floatingShape = rootView.findViewById<View>(R.id.circle)
 
-        /* Define the shape of the {@link View}'s shadow by setting one of the {@link Outline}s. */
-        floatingShape.setOutlineProvider(mOutlineProviderCircle);
+        /**
+         * Define the shape of the [View]'s shadow by setting one of the [Outline]s.
+         */
+        floatingShape.outlineProvider = mOutlineProviderCircle
 
-        /* Clip the {@link View} with its outline. */
-        floatingShape.setClipToOutline(true);
+        /**
+         * Clip the [View] with its outline.
+         */
+        floatingShape.clipToOutline = true
+        val dragLayout = rootView.findViewById<View>(R.id.main_layout) as DragFrameLayout
+        dragLayout.setDragFrameController { captured ->
+            /**
+             * Animate the translation of the [View]. Note that the translation
+             * is being modified, not the elevation.
+             */
+            floatingShape.animate()
+                .translationZ(if (captured) 50f else 0f).duration = 100
+            Log.d(TAG, if (captured) "Drag" else "Drop")
+        }
+        dragLayout.addDragView(floatingShape)
 
-        DragFrameLayout dragLayout = ((DragFrameLayout) rootView.findViewById(R.id.main_layout));
+        /**
+         * Raise the circle in z when the "z+" button is clicked.
+         */
+        rootView.findViewById<View>(R.id.raise_bt).setOnClickListener {
+            mElevation += mElevationStep.toFloat()
+            Log.d(TAG, String.format(Locale.US, "Elevation: %.1f", mElevation))
+            floatingShape.elevation = mElevation
+        }
 
-        dragLayout.setDragFrameController(new DragFrameLayout.DragFrameLayoutController() {
-
-            @Override
-            public void onDragDrop(boolean captured) {
-                /* Animate the translation of the {@link View}. Note that the translation
-                 is being modified, not the elevation. */
-                floatingShape.animate()
-                        .translationZ(captured ? 50 : 0)
-                        .setDuration(100);
-                Log.d(TAG, captured ? "Drag" : "Drop");
+        /**
+         * Lower the circle in z when the "z-" button is clicked.
+         */
+        rootView.findViewById<View>(R.id.lower_bt).setOnClickListener {
+            mElevation -= mElevationStep.toFloat()
+            // Don't allow for negative values of Z.
+            if (mElevation < 0) {
+                mElevation = 0f
             }
-        });
-
-        dragLayout.addDragView(floatingShape);
-
-        /* Raise the circle in z when the "z+" button is clicked. */
-        rootView.findViewById(R.id.raise_bt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mElevation += mElevationStep;
-                Log.d(TAG, String.format(Locale.US, "Elevation: %.1f", mElevation));
-                floatingShape.setElevation(mElevation);
-            }
-        });
-
-        /* Lower the circle in z when the "z-" button is clicked. */
-        rootView.findViewById(R.id.lower_bt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mElevation -= mElevationStep;
-                // Don't allow for negative values of Z.
-                if (mElevation < 0) {
-                    mElevation = 0;
-                }
-                Log.d(TAG, String.format(Locale.US, "Elevation: %.1f", mElevation));
-                floatingShape.setElevation(mElevation);
-            }
-        });
-
-        return rootView;
+            Log.d(TAG, String.format(Locale.US, "Elevation: %.1f", mElevation))
+            floatingShape.elevation = mElevation
+        }
+        return rootView
     }
 
     /**
-     * ViewOutlineProvider which sets the outline to be an oval which fits the view bounds.
+     * [ViewOutlineProvider] which sets the outline to be an oval which fits the view bounds.
      */
-    private class CircleOutlineProvider extends ViewOutlineProvider {
-        @Override
-        public void getOutline(View view, Outline outline) {
-            outline.setOval(0, 0, view.getWidth(), view.getHeight());
+    private inner class CircleOutlineProvider : ViewOutlineProvider() {
+        override fun getOutline(view: View, outline: Outline) {
+            outline.setOval(0, 0, view.width, view.height)
         }
     }
 
+    companion object {
+        /**
+         * TAG used for logging
+         */
+        const val TAG = "ElevationDragFragment"
+    }
 }
