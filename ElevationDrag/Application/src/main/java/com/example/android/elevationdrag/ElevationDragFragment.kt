@@ -89,11 +89,11 @@ class ElevationDragFragment : Fragment() {
      * have the [View] use its [Outline] to clip the contents of the [View].
      *
      * Next we initialize our [DragFrameLayout] variable `val dragLayout` by finding the [View] in
-     * `rootView` with ID [R.id.main_layout] then set its `DragFrameController` to a lambda which
-     * animates the `translationZ` property of `floatingShape` by 50f if it is currently `captured`
-     * for drag, and by 0f otherwise (if the lambda's argument `captured` is `true` it logs "Drag"
-     * and if `false` it logs "Drop"). Then we add `floatingShape` to the list of [View]s that are
-     * draggable within the container `dragLayout`.
+     * `rootView` with ID [R.id.main_layout] then set its [DragFrameLayout.DragFrameLayoutController]
+     * to a lambda which animates the `translationZ` property of `floatingShape` by 50f if it is
+     * currently `captured` for drag, and by 0f otherwise (if the lambda's argument `captured` is
+     * `true` it logs "Drag" and if `false` it logs "Drop"). Then we add `floatingShape` to the list
+     * of [View]s that are draggable within the container `dragLayout`.
      *
      * Next we locate the "Z+" [Button] in `rootView` by finding the [View] with ID [R.id.raise_bt]
      * and set its [View.OnClickListener] to a lambda which increments our [mElevation] field by
@@ -138,16 +138,14 @@ class ElevationDragFragment : Fragment() {
         floatingShape.clipToOutline = true
 
         val dragLayout = rootView.findViewById<View>(R.id.main_layout) as DragFrameLayout
-        dragLayout.setDragFrameController(object : DragFrameLayout.DragFrameLayoutController {
-            override fun onDragDrop(captured: Boolean) {
-                /**
-                 * Animate the translation of the [View]. Note that the translation
-                 * is being modified, not the elevation.
-                 */
-                floatingShape.animate().translationZ(if (captured) 50f else 0f).duration = 100
-                Log.d(TAG, if (captured) "Drag" else "Drop")
-            }
-        })
+        dragLayout.setDragFrameController { captured ->
+            /**
+             * Animate the translation of the [View]. Note that the translation
+             * is being modified, not the elevation.
+             */
+            floatingShape.animate().translationZ(if (captured) 50f else 0f).duration = 100
+            Log.d(TAG, if (captured) "Drag" else "Drop")
+        }
         dragLayout.addDragView(floatingShape)
 
         /**
