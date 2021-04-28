@@ -140,25 +140,58 @@ class DragFrameLayout @JvmOverloads constructor(
     }
 
     /**
-     * A controller that will receive the drag events.
+     * A controller that will receive the drag events. Its [onDragDrop] method will be called by the
+     * `onViewCaptured` method of the [ViewDragHelper.Callback] of our [mDragHelper] field with `true`
+     * and with `false` from its `onViewReleased` method.
      */
     fun interface DragFrameLayoutController {
+        /**
+         * Called by the `onViewCaptured` method of the [ViewDragHelper.Callback] of our [mDragHelper]
+         * field with `true` and with `false` from its `onViewReleased` method.
+         *
+         * @param captured `true` if the child view has been captured by a [MotionEvent.ACTION_DOWN],
+         * and `false` when it is released by a [MotionEvent.ACTION_POINTER_UP] or a
+         * [MotionEvent.ACTION_CANCEL].
+         */
         fun onDragDrop(captured: Boolean)
     }
 
     init {
+        /**
+         * Our list of draggable child views.
+         */
         mDragViews = ArrayList()
         /**
          * Create the `ViewDragHelper` and set its callback.
          */
         mDragHelper = ViewDragHelper.create(
-            this,
-            1.0f,
+            this,  // Parent view to monitor
+            1.0f, // Multiplier for how sensitive the helper should be
             object : ViewDragHelper.Callback() {
+                /**
+                 * Called when the user's input indicates that they want to capture the given child
+                 * view with the pointer indicated by [pointerId]. The callback should return `true`
+                 * if the user is permitted to drag the given view with the indicated pointer. We
+                 * return `true` if [child] is in our list of draggable child views [mDragViews].
+                 *
+                 * @param child Child the user is attempting to capture
+                 * @param pointerId ID of the pointer attempting the capture
+                 * @return true if capture should be allowed, false otherwise
+                 */
             override fun tryCaptureView(child: View, pointerId: Int): Boolean {
                 return mDragViews.contains(child)
             }
 
+                /**
+                 * Called when the captured view's position changes as the result of a drag or settle.
+                 * We just call our super's implementation of `onViewPositionChanged`.
+                 *
+                 * @param changedView View whose position changed
+                 * @param left New X coordinate of the left edge of the view
+                 * @param top New Y coordinate of the top edge of the view
+                 * @param dx Change in X position from the last call
+                 * @param dy Change in Y position from the last call
+                 */
             @Suppress("RedundantOverride")
             override fun onViewPositionChanged(
                 changedView: View,
@@ -170,19 +203,64 @@ class DragFrameLayout @JvmOverloads constructor(
                 super.onViewPositionChanged(changedView, left, top, dx, dy)
             }
 
+                /**
+                 * Restrict the motion of the dragged child view along the horizontal axis. The
+                 * default implementation does not allow horizontal motion; the extending class
+                 * must override this method and provide the desired clamping. We just return our
+                 * parameter [left] to the caller.
+                 *
+                 * @param child Child view being dragged
+                 * @param left Attempted motion along the X axis
+                 * @param dx Proposed change in position for left
+                 * @return The new clamped position for left
+                 */
             override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int {
                 return left
             }
 
+                /**
+                 * Restrict the motion of the dragged child view along the vertical axis. The
+                 * default implementation does not allow vertical motion; the extending class
+                 * must override this method and provide the desired clamping. We just return our
+                 * parameter [top] to the caller.
+                 *
+                 * @param child Child view being dragged
+                 * @param top Attempted motion along the Y axis
+                 * @param dy Proposed change in position for top
+                 * @return The new clamped position for top
+                 */
             override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
                 return top
             }
 
+                /**
+                 * Called when a child view is captured for dragging or settling. First we call our
+                 * super's implementation of `onViewCaptured` then we call the
+                 * [DragFrameLayoutController.onDragDrop] method of our field [mDragFrameLayoutController]
+                 * with `true` and the [DragFrameLayoutController] that is constructed in the
+                 * `onCreateView` override of [ElevationDragFragment] will elevate the floating view
+                 * by 50f pixels and log the message "Drag".
+                 *
+                 * @param capturedChild Child view that was captured
+                 * @param activePointerId Pointer id tracking the child capture
+                 */
             override fun onViewCaptured(capturedChild: View, activePointerId: Int) {
                 super.onViewCaptured(capturedChild, activePointerId)
                 mDragFrameLayoutController.onDragDrop(true)
             }
 
+                /**
+                 * Called when the child view is no longer being actively dragged. First we call our
+                 * super's implementation of `onViewCaptured` then we call the
+                 * [DragFrameLayoutController.onDragDrop] method of our field [mDragFrameLayoutController]
+                 * with `false` and the [DragFrameLayoutController] that is constructed in the
+                 * `onCreateView` override of [ElevationDragFragment] will elevate the floating view
+                 * by 0f pixels and log the message "Drop".
+                 *
+                 * @param releasedChild The captured child view now being released
+                 * @param xvel X velocity of the pointer as it left the screen in pixels per second.
+                 * @param yvel Y velocity of the pointer as it left the screen in pixels per second.
+                 */
             override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
                 super.onViewReleased(releasedChild, xvel, yvel)
                 mDragFrameLayoutController.onDragDrop(false)
