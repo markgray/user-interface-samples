@@ -178,9 +178,9 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param pointerId ID of the pointer attempting the capture
                  * @return true if capture should be allowed, false otherwise
                  */
-            override fun tryCaptureView(child: View, pointerId: Int): Boolean {
-                return mDragViews.contains(child)
-            }
+                override fun tryCaptureView(child: View, pointerId: Int): Boolean {
+                    return mDragViews.contains(child)
+                }
 
                 /**
                  * Called when the captured view's position changes as the result of a drag or settle.
@@ -192,16 +192,16 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param dx Change in X position from the last call
                  * @param dy Change in Y position from the last call
                  */
-            @Suppress("RedundantOverride")
-            override fun onViewPositionChanged(
-                changedView: View,
-                left: Int,
-                top: Int,
-                dx: Int,
-                dy: Int
-            ) {
-                super.onViewPositionChanged(changedView, left, top, dx, dy)
-            }
+                @Suppress("RedundantOverride")
+                override fun onViewPositionChanged(
+                    changedView: View,
+                    left: Int,
+                    top: Int,
+                    dx: Int,
+                    dy: Int
+                ) {
+                    super.onViewPositionChanged(changedView, left, top, dx, dy)
+                }
 
                 /**
                  * Restrict the motion of the dragged child view along the horizontal axis. The
@@ -214,9 +214,9 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param dx Proposed change in position for left
                  * @return The new clamped position for left
                  */
-            override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int {
-                return left
-            }
+                override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int {
+                    return left
+                }
 
                 /**
                  * Restrict the motion of the dragged child view along the vertical axis. The
@@ -229,9 +229,9 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param dy Proposed change in position for top
                  * @return The new clamped position for top
                  */
-            override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
-                return top
-            }
+                override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
+                    return top
+                }
 
                 /**
                  * Called when a child view is captured for dragging or settling. First we call our
@@ -244,10 +244,10 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param capturedChild Child view that was captured
                  * @param activePointerId Pointer id tracking the child capture
                  */
-            override fun onViewCaptured(capturedChild: View, activePointerId: Int) {
-                super.onViewCaptured(capturedChild, activePointerId)
-                mDragFrameLayoutController.onDragDrop(true)
-            }
+                override fun onViewCaptured(capturedChild: View, activePointerId: Int) {
+                    super.onViewCaptured(capturedChild, activePointerId)
+                    mDragFrameLayoutController.onDragDrop(true)
+                }
 
                 /**
                  * Called when the child view is no longer being actively dragged. First we call our
@@ -261,10 +261,10 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param xvel X velocity of the pointer as it left the screen in pixels per second.
                  * @param yvel Y velocity of the pointer as it left the screen in pixels per second.
                  */
-            override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-                super.onViewReleased(releasedChild, xvel, yvel)
-                mDragFrameLayoutController.onDragDrop(false)
-            }
-        })
+                override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+                    super.onViewReleased(releasedChild, xvel, yvel)
+                    mDragFrameLayoutController.onDragDrop(false)
+                }
+            })
     }
 }
