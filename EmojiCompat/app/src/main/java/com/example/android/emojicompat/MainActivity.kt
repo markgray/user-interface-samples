@@ -25,7 +25,17 @@ import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import java.lang.ref.WeakReference
 
+/**
+ * This sample demonstrates usage of EmojiCompat support library. You can use this library
+ * to prevent your app from showing missing emoji characters in the form of tofu (□). You
+ * can use either bundled or downloadable emoji fonts. This sample shows both usages.
+ */
 class MainActivity : AppCompatActivity() {
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState We do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initEmojiCompat()
@@ -92,6 +102,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         private const val TAG = "MainActivity"
 
         /** Change this to `false` when you want to use the downloadable Emoji font.  */
