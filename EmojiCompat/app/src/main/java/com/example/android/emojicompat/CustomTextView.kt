@@ -18,6 +18,7 @@ package com.example.android.emojicompat
 import android.content.Context
 import android.text.InputFilter
 import android.util.AttributeSet
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.widget.EmojiTextViewHelper
@@ -39,21 +40,46 @@ class CustomTextView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : AppCompatTextView(context!!, attrs, defStyleAttr) {
+    /**
+     * The [EmojiTextViewHelper] instance whose [InputFilter]s we use to add [EmojiCompat] emojis
+     * to the text which is displayed when the `text` property of our super is changed. Private so
+     * that other classes cannot access it, read only access is provided by our [emojiTextViewHelper]
+     * property whose `get` method lazily initializes us.
+     */
     private var mEmojiTextViewHelper: EmojiTextViewHelper? = null
+
+    /**
+     * Appends [EmojiCompat] specific [InputFilter]s to the widget [InputFilter]s passed us in our
+     * [filters] parameter if they are not already there. We just call our super's implementation of
+     * `setFilters` with the list of [InputFilter]s that the [EmojiTextViewHelper.getFilters] method
+     * returns for our parameter [filters] (the [EmojiTextViewHelper.getFilters] method returns the
+     * same array if the array passed it already contains the [EmojiCompat] specific [InputFilter]
+     * or a new array copy if not).
+     *
+     * @param filters the current list of [InputFilter]s used by our [AppCompatTextView] super.
+     */
     override fun setFilters(filters: Array<InputFilter>) {
         super.setFilters(emojiTextViewHelper.getFilters(filters))
     }
 
+    /**
+     * Sets the properties the [AppCompatTextView] to transform input to ALL CAPS display if its
+     * [Boolean] parameter [allCaps] is `true`. It does this by calling the [TextView.setAllCaps]
+     * method of our super with [allCaps], and then calling the [EmojiTextViewHelper.setAllCaps]
+     * method of [emojiTextViewHelper] with [allCaps].
+     *
+     * @param allCaps if `true` transform input to ALL CAPS display.
+     */
     override fun setAllCaps(allCaps: Boolean) {
         super.setAllCaps(allCaps)
         emojiTextViewHelper.setAllCaps(allCaps)
     }
 
     /**
-     * Returns the [EmojiTextViewHelper] for this TextView.
-     *
-     *
-     * This method can be called from super constructors through [ ][.setFilters] or [.setAllCaps].
+     * Returns the [EmojiTextViewHelper] for this TextView. This field can be accessed from our
+     * super's constructor through [setFilters] or [setAllCaps]. Its `get` method will lazily
+     * initialize the backing field [mEmojiTextViewHelper] with a new instance the first time it
+     * is called.
      */
     private val emojiTextViewHelper: EmojiTextViewHelper
         get() {
@@ -64,6 +90,9 @@ class CustomTextView @JvmOverloads constructor(
         }
 
     init {
+        /**
+         * Updates widget's TransformationMethod so that the transformed text can be processed.
+         */
         emojiTextViewHelper.updateTransformationMethod()
     }
 }
