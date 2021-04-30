@@ -15,6 +15,7 @@
  */
 package com.example.android.emojicompat
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.provider.FontRequest
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
+import androidx.emoji.text.EmojiSpan
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import androidx.emoji.widget.EmojiAppCompatButton
 import androidx.emoji.widget.EmojiAppCompatEditText
@@ -103,6 +105,32 @@ class MainActivity : AppCompatActivity() {
         customTextView.text = getString(R.string.custom_text_view, EMOJI)
     }
 
+    /**
+     * Initialize the singleton instance of [EmojiCompat] with a configuration. If our static field
+     * [USE_BUNDLED_EMOJI] is `true` it will be configured to use the bundled font using an instance
+     * of [BundledEmojiCompatConfig] as its [EmojiCompat.Config], and if [USE_BUNDLED_EMOJI] is
+     * `false` it will be configured to use a downloadable font using an instance of
+     * [FontRequestEmojiCompatConfig] as its [EmojiCompat.Config].
+     *
+     * To do this an `if` expression is used to initialize our [EmojiCompat.Config] variable `val config`
+     * with an instance of [BundledEmojiCompatConfig] constructed using the context of the single,
+     * global Application object of the current process if [USE_BUNDLED_EMOJI] is `true` or `else`
+     * to an instance of [FontRequestEmojiCompatConfig] constructed using the context of the single,
+     * global Application object of the current process, and a [FontRequest] constructed to initialize
+     * our variable `val fontRequest` which requests the font "Noto Color Emoji Compat" from the font
+     * provider "com.google.android.gms.fonts".
+     *
+     * Having initialized `config` we call its [EmojiCompat.Config.setReplaceAll] method with `true`
+     * to have [EmojiCompat] replace all the emojis it finds with the [EmojiSpan]s rather than try
+     * to use the system provided emojis if they are available. We chain that call to a call to its
+     * [EmojiCompat.Config.registerInitCallback] method to register an anonymous [EmojiCompat.InitCallback]
+     * whose `onInitialized` override logs the message "EmojiCompat initialized", and whose `onFailed`
+     * override logs the message "EmojiCompat initialization failed" with the [Throwable] it is called
+     * with.
+     *
+     * Having configured `config` to our liking we call the [EmojiCompat.init] method with it to have
+     * it initialize the singleton instance with the configuration `config`.
+     */
     private fun initEmojiCompat() {
         val config: EmojiCompat.Config = if (USE_BUNDLED_EMOJI) {
             // Use the bundled font for EmojiCompat
@@ -129,13 +157,41 @@ class MainActivity : AppCompatActivity() {
         EmojiCompat.init(config)
     }
 
+    /**
+     * The custom [EmojiCompat.InitCallback] we use to allow our regular [TextView] (resource ID
+     * [R.id.regular_text_view]) to display the [EmojiCompat] emojis.
+     *
+     * We initialize our variable `val mRegularTextViewRef` to a [WeakReference] to our [TextView]
+     * parameter `regularTextView` and override the `onInitialized` method of [EmojiCompat.InitCallback]
+     * to have it have the [EmojiCompat] singleton instance process the formatted string which the
+     * [Context.getString] method creates using the [R.string.regular_text_view] string format
+     * "Regular TextView [EMOJI]", and set that [CharSequence] as the text of `regularTextView`.
+     *
+     * @param regularTextView the regular [TextView] instance in which we want to display the
+     * [EmojiCompat] emojis.
+     */
     private class InitCallback(regularTextView: TextView) : EmojiCompat.InitCallback() {
+        /**
+         * [WeakReference] to our [TextView] field `regularTextView`.
+         */
         private val mRegularTextViewRef: WeakReference<TextView> = WeakReference(regularTextView)
+
+        /**
+         * Called when [EmojiCompat] is initialized and the emoji data is loaded. We initialize our
+         * [TextView] variable `val regularTextView` to the referent of our [WeakReference] field
+         * [mRegularTextViewRef], and if that is not `null` we initialize our variable `val compat`
+         * to the singleton [EmojiCompat] instance, and our [Context] variable `val context` to the
+         * [Context] of `regularTextView`. We then set the `text` of `regularTextView` to the string
+         * returned by the [EmojiCompat.process] method of `compat` when it adds [EmojiSpan]s for the
+         * emojis in the [CharSequence] returned by the [Context.getString] method of `context` when
+         * it formats [EMOJI] into the format string "Regular TextView %s" (the string with resource
+         * ID [R.string.regular_text_view]).
+         */
         override fun onInitialized() {
-            val regularTextView = mRegularTextViewRef.get()
+            val regularTextView: TextView? = mRegularTextViewRef.get()
             if (regularTextView != null) {
                 val compat = EmojiCompat.get()
-                val context = regularTextView.context
+                val context: Context = regularTextView.context
                 regularTextView.text = compat.process(context.getString(R.string.regular_text_view, EMOJI))
             }
         }
