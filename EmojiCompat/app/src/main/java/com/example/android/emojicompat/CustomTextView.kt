@@ -13,62 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.emojicompat
 
-package com.example.android.emojicompat;
-
-import android.content.Context;
-import androidx.annotation.Nullable;
-import androidx.emoji.widget.EmojiTextViewHelper;
-import androidx.appcompat.widget.AppCompatTextView;
-import android.text.InputFilter;
-import android.util.AttributeSet;
-
+import android.content.Context
+import android.text.InputFilter
+import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.emoji.text.EmojiCompat
+import androidx.emoji.widget.EmojiTextViewHelper
 
 /**
- * A sample implementation of custom TextView.
+ * A sample implementation of a custom `TextView` which uses [EmojiTextViewHelper] to make it
+ * compatible with [EmojiCompat]. The constructor performs inflation from XML and applies a class
+ * specific base style from a theme attribute or style resource.
  *
- * <p>You can use {@link EmojiTextViewHelper} to make your custom TextView compatible with
- * EmojiCompat.</p>
+ * @param context The [Context] the view is running in, through which it can
+ *        access the current theme, resources, etc.
+ * @param attrs The attributes of the XML tag that is inflating the view.
+ * @param defStyleAttr An attribute in the current theme that contains a
+ *        reference to a style resource that supplies default values for
+ *        the view. Can be 0 to not look for defaults.
  */
-public class CustomTextView extends AppCompatTextView {
-
-    private EmojiTextViewHelper mEmojiTextViewHelper;
-
-    public CustomTextView(Context context) {
-        this(context, null);
+class CustomTextView @JvmOverloads constructor(
+    context: Context?,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AppCompatTextView(context!!, attrs, defStyleAttr) {
+    private var mEmojiTextViewHelper: EmojiTextViewHelper? = null
+    override fun setFilters(filters: Array<InputFilter>) {
+        super.setFilters(emojiTextViewHelper.getFilters(filters))
     }
 
-    public CustomTextView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public CustomTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        getEmojiTextViewHelper().updateTransformationMethod();
-    }
-
-    @Override
-    public void setFilters(InputFilter[] filters) {
-        super.setFilters(getEmojiTextViewHelper().getFilters(filters));
-    }
-
-    @Override
-    public void setAllCaps(boolean allCaps) {
-        super.setAllCaps(allCaps);
-        getEmojiTextViewHelper().setAllCaps(allCaps);
+    override fun setAllCaps(allCaps: Boolean) {
+        super.setAllCaps(allCaps)
+        emojiTextViewHelper.setAllCaps(allCaps)
     }
 
     /**
-     * Returns the {@link EmojiTextViewHelper} for this TextView.
+     * Returns the [EmojiTextViewHelper] for this TextView.
      *
-     * <p>This method can be called from super constructors through {@link
-     * #setFilters(InputFilter[])} or {@link #setAllCaps(boolean)}.</p>
+     *
+     * This method can be called from super constructors through [ ][.setFilters] or [.setAllCaps].
      */
-    private EmojiTextViewHelper getEmojiTextViewHelper() {
-        if (mEmojiTextViewHelper == null) {
-            mEmojiTextViewHelper = new EmojiTextViewHelper(this);
+    private val emojiTextViewHelper: EmojiTextViewHelper
+        get() {
+            if (mEmojiTextViewHelper == null) {
+                mEmojiTextViewHelper = EmojiTextViewHelper(this)
+            }
+            return mEmojiTextViewHelper!!
         }
-        return mEmojiTextViewHelper;
-    }
 
+    init {
+        emojiTextViewHelper.updateTransformationMethod()
+    }
 }

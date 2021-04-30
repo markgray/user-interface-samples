@@ -220,9 +220,14 @@ class MainActivity : AppCompatActivity() {
         private const val WOMAN_SINGER = "\uD83D\uDC69\u200D\uD83C\uDFA4"
 
         /**
-         * A closed mouth smiley face and an open mouth smiley face.
+         * A closed mouth smiley face with hearts for eyes and an open mouth smiley face with stars
+         * for eyes.
          */
         private const val EMOTIONS = "\uD83D\uDE0D\uD83E\uDD29\n"
+
+        /**
+         * The string formed by concatenating the emoji strings defined above
+         */
         const val EMOJI: String = "$WOMAN_TECHNOLOGIST $WOMAN_SINGER $EMOTIONS"
     }
 }
