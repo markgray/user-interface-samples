@@ -204,14 +204,24 @@ class MainActivity : AppCompatActivity() {
          */
         private const val TAG = "MainActivity"
 
-        /** Change this to `false` when you want to use the downloadable Emoji font.  */
+        /**
+         * Change this to `false` when you want to use the downloadable Emoji font.
+         */
         private const val USE_BUNDLED_EMOJI = true
 
-        // [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F4BB] (PERSONAL COMPUTER)
+        /**
+         * [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F4BB] (PERSONAL COMPUTER)
+         */
         private const val WOMAN_TECHNOLOGIST = "\uD83D\uDC69\u200D\uD83D\uDCBB"
 
-        // [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F3A4] (MICROPHONE)
+        /**
+         * [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F3A4] (MICROPHONE)
+         */
         private const val WOMAN_SINGER = "\uD83D\uDC69\u200D\uD83C\uDFA4"
+
+        /**
+         * A closed mouth smiley face and an open mouth smiley face.
+         */
         private const val EMOTIONS = "\uD83D\uDE0D\uD83E\uDD29\n"
         const val EMOJI: String = "$WOMAN_TECHNOLOGIST $WOMAN_SINGER $EMOTIONS"
     }
