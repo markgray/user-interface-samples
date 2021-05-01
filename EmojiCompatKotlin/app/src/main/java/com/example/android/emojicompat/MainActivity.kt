@@ -22,18 +22,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import java.lang.ref.WeakReference
 
-
+/**
+ * This sample demonstrates usage of [EmojiCompat] support library. You can use this library
+ * to prevent your app from showing missing emoji characters in the form of tofu (□). You
+ * can use either bundled or downloadable emoji fonts. This sample shows both usages.
+ */
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        // [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F4BB] (PERSONAL COMPUTER)
-        private val WOMAN_TECHNOLOGIST = "\uD83D\uDC69\u200D\uD83D\uDCBB"
+        /**
+         * [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F4BB] (PERSONAL COMPUTER)
+         */
+        private const val WOMAN_TECHNOLOGIST = "\uD83D\uDC69\u200D\uD83D\uDCBB"
 
-        // [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F3A4] (MICROPHONE)
-        private val WOMAN_SINGER = "\uD83D\uDC69\u200D\uD83C\uDFA4"
+        /**
+         * [U+1F469] (WOMAN) + [U+200D] (ZERO WIDTH JOINER) + [U+1F3A4] (MICROPHONE)
+         */
+        private const val WOMAN_SINGER = "\uD83D\uDC69\u200D\uD83C\uDFA4"
 
-        @JvmField
-        val EMOJI = WOMAN_TECHNOLOGIST + " " + WOMAN_SINGER
+        /**
+         * The emoji [String] that is displayed in each of our [TextView]s, it consists of the
+         * [String] field [WOMAN_TECHNOLOGIST] followed by the [String] field [WOMAN_SINGER]
+         */
+        const val EMOJI = "$WOMAN_TECHNOLOGIST $WOMAN_SINGER"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
