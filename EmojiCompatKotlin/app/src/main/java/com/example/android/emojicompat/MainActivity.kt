@@ -16,10 +16,15 @@
 
 package com.example.android.emojicompat
 
+import android.content.Context
 import android.os.Bundle
 import androidx.emoji.text.EmojiCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import androidx.emoji.text.EmojiSpan
+import androidx.emoji.widget.EmojiAppCompatButton
+import androidx.emoji.widget.EmojiAppCompatEditText
+import androidx.emoji.widget.EmojiAppCompatTextView
 import java.lang.ref.WeakReference
 
 /**
@@ -47,6 +52,45 @@ class MainActivity : AppCompatActivity() {
         const val EMOJI = "$WOMAN_TECHNOLOGIST $WOMAN_SINGER"
     }
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`.
+     * Then we set our content view to our layout file [R.layout.activity_main] which consists of a
+     * `ScrollView` root view holding a vertical `LinearLayout` with an [EmojiAppCompatTextView], an
+     * [EmojiAppCompatEditText], an [EmojiAppCompatButton], a [TextView] and our [CustomTextView]
+     * custom [TextView].
+     *
+     * We then proceed to locate each of the above text displaying views in order to set their text
+     * to a [CharSequence] which include emojis from [EmojiCompat]:
+     *  - `val emojiTextView` is initialized by finding the [TextView] in our UI with resource ID
+     *  [R.id.emoji_text_view]. It is an [EmojiAppCompatTextView] so we can just set its `text`
+     *  property to the emoji containing formatted string "Emoji TextView [EMOJI]" created by calling
+     *  the [getString] method with the resource ID [R.string.emoji_text_view] formatting string and
+     *  the [EMOJI] string constant.
+     *  - `val emojiEditText` is initialized by finding the [TextView] in our UI with resource ID
+     *  [R.id.emoji_edit_text]. It is an [EmojiAppCompatEditText] so we can just set its `text`
+     *  property to the emoji containing formatted string "Emoji EditText [EMOJI]" created by calling
+     *  the [getString] method with the resource ID [R.string.emoji_edit_text] formatting string and
+     *  the [EMOJI] string constant.
+     *  - `val emojiButton` is initialized by finding the [TextView] in our UI with resource ID
+     *  [R.id.emoji_button]. It is an [EmojiAppCompatButton] so we can just set its `text` property
+     *  to the emoji containing formatted string "Emoji Button [EMOJI]" created by calling the
+     *  [getString] method with the resource ID [R.string.emoji_button] formatting string and the
+     *  [EMOJI] string constant.
+     *  - `val regularTextView` is initialized by finding the [TextView] in our UI with resource ID
+     *  [R.id.regular_text_view]. This is a regular [TextView] without [EmojiCompat] support so we
+     *  have to manually process the text and to do this we fetch the singleton [EmojiCompat] instance
+     *  and register an instance of our initialization callback [InitCallback] constructed to use the
+     *  singleton [EmojiCompat] to process the text and set the text of `regularTextView` to it in
+     *  its `onInitialized` override (**Note:** if initialization has already occurred `onInitialized`
+     *  is called immediately).
+     *  - `val customTextView` is initialized by finding the [TextView] in our UI with resource ID
+     *  [R.id.emoji_custom_text_view]. It is an instance of our [CustomTextView] so we can just set
+     *  its `text` property  to the emoji containing formatted string "Custom TextView [EMOJI]" created
+     *  by calling the [getString] method with the resource ID [R.string.custom_text_view] formatting
+     *  string and the [EMOJI] string constant.
+     *
+     * @param savedInstanceState We do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -72,10 +116,36 @@ class MainActivity : AppCompatActivity() {
         customTextView.text = getString(R.string.custom_text_view, EMOJI)
     }
 
+    /**
+     * The custom [EmojiCompat.InitCallback] we use to allow our regular [TextView] (resource ID
+     * [R.id.regular_text_view]) to display the [EmojiCompat] emojis.
+     *
+     * We initialize our variable `val mRegularTextViewRef` to a [WeakReference] to our [TextView]
+     * parameter `regularTextView` and override the `onInitialized` method of [EmojiCompat.InitCallback]
+     * to have it have the [EmojiCompat] singleton instance process the formatted string which the
+     * [Context.getString] method creates using the [R.string.regular_text_view] string format
+     * "Regular TextView [EMOJI]", and set that [CharSequence] as the text of `regularTextView`.
+     *
+     * @param regularTextView the regular [TextView] instance in which we want to display the
+     * [EmojiCompat] emojis.
+     */
     private class InitCallback(regularTextView: TextView) : EmojiCompat.InitCallback() {
-
+        /**
+         * [WeakReference] to our [TextView] field `regularTextView`.
+         */
         val regularTextViewRef = WeakReference(regularTextView)
 
+        /**
+         * Called when [EmojiCompat] is initialized and the emoji data is loaded. We initialize our
+         * [TextView] variable `val regularTextView` to the referent of our [WeakReference] field
+         * [regularTextViewRef], and if that is not `null` we initialize our variable `val compat`
+         * to the singleton [EmojiCompat] instance, and our [Context] variable `val context` to the
+         * [Context] of `regularTextView`. We then set the `text` of `regularTextView` to the string
+         * returned by the [EmojiCompat.process] method of `compat` when it adds [EmojiSpan]s for the
+         * emojis in the [CharSequence] returned by the [Context.getString] method of `context` when
+         * it formats [EMOJI] into the format string "Regular TextView %s" (the string with resource
+         * ID [R.string.regular_text_view]).
+         */
         override fun onInitialized() {
             val regularTextView = regularTextViewRef.get()
             if (regularTextView != null) {
