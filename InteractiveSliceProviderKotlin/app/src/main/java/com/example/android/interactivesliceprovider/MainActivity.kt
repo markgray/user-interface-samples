@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.example.android.interactivesliceprovider
 
 import android.app.PendingIntent
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         grantNonDefaultSlicePermission()
 
 
-        val defaultUriEncoded = getResources().getString(R.string.default_slice_uri)
+        val defaultUriEncoded = resources.getString(R.string.default_slice_uri)
 
         // Decode for special characters that may appear in URI. Review Android documentation on
         // special characters for more information:
@@ -113,6 +115,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onClickIndexSlices (view: View) {
         val intent = Intent(this, AppIndexingUpdateReceiver::class.java)
         intent.action = FirebaseAppIndex.ACTION_UPDATE_INDEX

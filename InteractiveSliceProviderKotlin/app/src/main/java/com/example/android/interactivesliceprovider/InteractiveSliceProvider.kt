@@ -69,6 +69,7 @@ class InteractiveSliceProvider : SliceProvider() {
 
         val contextNonNull  = context ?: return false
 
+        @Suppress("DEPRECATION")
         repo = DataRepository(FakeDataSource(Handler()))
         contentNotifiers = LazyFunctionMap {
             contextNonNull.contentResolver.notifyChange(it, null)
@@ -104,10 +105,11 @@ class InteractiveSliceProvider : SliceProvider() {
      */
     override fun onMapIntentToUri(intent: Intent): Uri {
 
+        @Suppress("UNNECESSARY_SAFE_CALL")
         val intentPath = intent?.data?.path ?: "/"
         val uriWithoutPathSlash = intentPath.replace("/", "")
 
-        val uri = context.buildUriWithAuthority(uriWithoutPathSlash)
+        val uri = context!!.buildUriWithAuthority(uriWithoutPathSlash)
 
         Log.d(TAG, "onMapIntentToUri(): \nintentPath: $intentPath \nuri:$uri")
 
@@ -126,53 +128,53 @@ class InteractiveSliceProvider : SliceProvider() {
 
     private fun getSliceBuilder(sliceUri: Uri) = when (sliceUri.path) {
         defaultPath -> DefaultSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         wifiPath -> WifiSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         notePath -> NoteSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         ridePath -> RideSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         togglePath -> ToggleSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         galleryPath -> GallerySliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         weatherPath -> WeatherSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         reservationPath -> ReservationSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         loadListPath -> ListSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri,
                 repo = repo
         )
         loadGridPath -> GridSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri,
                 repo = repo
         )
         inputRangePath -> InputRangeSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         rangePath -> RangeSliceBuilder(
-                context = context,
+                context = context!!,
                 sliceUri = sliceUri
         )
         else -> {
