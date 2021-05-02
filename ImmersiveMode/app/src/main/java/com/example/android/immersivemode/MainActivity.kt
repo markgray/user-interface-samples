@@ -17,9 +17,9 @@
 package com.example.android.immersivemode
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
+import android.view.View
+import android.view.Window
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -130,7 +130,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var typeSpinner: Spinner
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.main_activity] whose root view is
+     * a vertical [LinearLayout] holding a:
+     *  - Horizontal [LinearLayout] holding a "HIDE" and a "SHOW" [Button] (ID [R.id.hide] and
+     *  [R.id.show])
+     *  - A [TextView] displaying the text "Behavior", above a [Spinner] with ID [R.id.behavior]
+     *  - A [TextView] displaying the text "Type", above a [Spinner] with ID [R.id.type]
+     *
+     * Next we initialize our [Spinner] field [behaviorSpinner] by finding the view in our UI with
+     * ID [R.id.behavior] and set its `adapter` to a new instance of [ArrayAdapter] which displays
+     * the `title` property of the constants of the [BehaviorOption] `enum` class in the system layout
+     * file [android.R.layout.simple_list_item_1], and we initialize our [Spinner] field [typeSpinner]
+     * by finding the view in our UI with ID [R.id.type] and set its `adapter` to a new instance of
+     * [ArrayAdapter] which displays the `title` property of the constants of the [TypeOption] `enum`
+     * class in the system layout file [android.R.layout.simple_list_item_1].
+     *
+     * We initialize our [Button] variable `val hideButton` by finding the view in our UI with ID
+     * [R.id.hide] and set its [View.OnClickListener] to a lambda which calls our [controlWindowInsets]
+     * method with `true` to have it hide the system bars the user selected using [typeSpinner] with
+     * the behavior he selected using [behaviorSpinner], and we initialize our [Button] variable
+     * `val showButton` by finding the view in our UI with ID [R.id.show] and set its [View.OnClickListener]
+     * to a lambda which calls our [controlWindowInsets] method with `false` to have it show the system
+     * bars the user selected using [typeSpinner] with the behavior he selected using [behaviorSpinner].
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
@@ -158,6 +180,27 @@ class MainActivity : AppCompatActivity() {
         showButton.setOnClickListener { controlWindowInsets(false) }
     }
 
+    /**
+     * Hides (if our [Boolean] parameter [hide] is `true`) or shows (if it is `false`) the system
+     * bars the user selected using [typeSpinner] with the behavior he selected using [behaviorSpinner].
+     * First we initialize our [WindowInsetsControllerCompat] variable `val insetsController` with a
+     * new instance constructed for the current [Window] of the activity and its top-level window
+     * decor view (containing the standard window frame/decorations and the client's content inside
+     * of that).
+     *
+     * We initialize our [Int] variable `val behavior` to the `value` property of the selected
+     * [BehaviorOption] in the [Spinner] field [behaviorSpinner], and initialize our [Int] variable
+     * `val type` to the `value` property of the selected [TypeOption] in the [Spinner] field
+     * [typeSpinner]. We set the `systemBarsBehavior` property of `insetsController` to `behavior`
+     * (determines how the bars behave when being hidden by the application), then we branch on the
+     * value of our [Boolean] parameter [hide]:
+     *  - `true` we call the [WindowInsetsControllerCompat.hide] method of `insetsController` to have
+     *  it hide the system bars specified by `type` (a bitmask of [WindowInsetsCompat.Type])
+     *  - `false` we call the [WindowInsetsControllerCompat.show] method of `insetsController` to
+     *  have it show the system bars specified by `type` (a bitmask of [WindowInsetsCompat.Type])
+     *
+     * @param hide if `true` hide the system bars, if `false` show the system bars.
+     */
     private fun controlWindowInsets(hide: Boolean) {
         // WindowInsetsController can hide or show specified system bars.
         val insetsController = WindowInsetsControllerCompat(window, window.decorView)
