@@ -24,16 +24,16 @@ import androidx.preference.PreferenceFragmentCompat
 private const val TITLE_TAG = "settingsActivityTitle"
 
 class MainActivity : AppCompatActivity(),
-        PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.settings, SettingsFragment())
-                    .commit()
+                .beginTransaction()
+                .replace(R.id.settings, SettingsFragment())
+                .commit()
         } else {
             title = savedInstanceState.getCharSequence(TITLE_TAG)
         }
@@ -59,23 +59,23 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onPreferenceStartFragment(
-            caller: PreferenceFragmentCompat,
-            pref: Preference
+        caller: PreferenceFragmentCompat,
+        pref: Preference
     ): Boolean {
         // Instantiate the new Fragment
         val args = pref.extras
         val fragment = supportFragmentManager.fragmentFactory.instantiate(
-                classLoader,
-                pref.fragment
+            classLoader,
+            pref.fragment
         ).apply {
             arguments = args
             setTargetFragment(caller, 0)
         }
         // Replace the existing Fragment with the new Fragment
         supportFragmentManager.beginTransaction()
-                .replace(R.id.settings, fragment)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.settings, fragment)
+            .addToBackStack(null)
+            .commit()
         title = pref.title
         return true
     }
@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates commonly used preference attributes.
      */
+    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class BasicPreferencesFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.basic_preferences, rootKey)
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates preferences which contain dynamic widgets.
      */
+    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class WidgetPreferencesFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.widgets, rootKey)
@@ -111,6 +113,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates preferences that launch a dialog when tapped.
      */
+    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class DialogPreferencesFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.dialogs, rootKey)
@@ -120,6 +123,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates more advanced attributes and functionality.
      */
+    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class AdvancedPreferencesFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.advanced, rootKey)
