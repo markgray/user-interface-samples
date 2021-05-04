@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceScreen
 
 /**
  * Key used to save the title associated with this activity in the [Bundle] passed to
@@ -32,7 +33,9 @@ private const val TITLE_TAG = "settingsActivityTitle"
 /**
  * The goal of this sample is to demonstrate various functionality present in the AndroidX Preference
  * Library. For more information on how to use the AndroidX Preference Library to build settings
- * screens, see [Settings](https://developer.android.com/guide/topics/ui/settings/).
+ * screens, see [Settings](https://developer.android.com/guide/topics/ui/settings/). As such all of
+ * the "functionality" of the demo is implemented using `PreferenceScreen` xml files in our
+ * res/xml/ directory.
  *
  * Note: The framework API (android.preference.*) is deprecated as of Q, and the AndroidX library
  * should be used instead.
@@ -124,12 +127,25 @@ class MainActivity : AppCompatActivity(),
         return super.onSupportNavigateUp()
     }
 
+    /**
+     * Called when the user has clicked on a preference that has a fragment class name associated
+     * with it. The implementation should instantiate and switch to an instance of the given
+     * fragment.
+     *
+     * This is called because a [Preference] in the [PreferenceScreen] defined in the xml/root.xml
+     * file has an "app:fragment" attribute for one of the [PreferenceFragmentCompat] classes that
+     * are defined in this file and the user has clicked on that [Preference].
+     *
+     * @param caller The fragment requesting navigation
+     * @param pref   The [Preference] requesting the fragment
+     * @return `true` if the fragment creation has been handled
+     */
     override fun onPreferenceStartFragment(
         caller: PreferenceFragmentCompat,
         pref: Preference
     ): Boolean {
         // Instantiate the new Fragment
-        val args = pref.extras
+        val args: Bundle = pref.extras
         val fragment = supportFragmentManager.fragmentFactory.instantiate(
             classLoader,
             pref.fragment
