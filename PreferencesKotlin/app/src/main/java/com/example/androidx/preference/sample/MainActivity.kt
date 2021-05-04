@@ -17,7 +17,10 @@
 package com.example.androidx.preference.sample
 
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.preference.Preference
@@ -136,6 +139,21 @@ class MainActivity : AppCompatActivity(),
      * file has an "app:fragment" attribute for one of the [PreferenceFragmentCompat] classes that
      * are defined in this file and the user has clicked on that [Preference].
      *
+     * First we initialize our [Bundle] variable `val args` to the `extras` property of our [Preference]
+     * parameter [pref]. We use the current [FragmentFactory] used to instantiate new Fragment instances
+     * of the [FragmentManager] for interacting with fragments associated with this activity to create a
+     * new instance of a [Fragment] whose class name is provided as the `fragment` property of [pref]
+     * using the default classloader and `apply` a lambda which sets the construction arguments for the
+     * fragment to `args` and sets the target for the fragment to our [PreferenceFragmentCompat] parameter
+     * [caller].
+     *
+     * We then use the [FragmentManager] for interacting with fragments associated with this activity
+     * to begin a new [FragmentTransaction] then use that [FragmentTransaction] to replace the current
+     * contents of the container view with ID [R.id.settings] with `fragment`, add the transaction to
+     * the back stack, and then commit the [FragmentTransaction]. Finally we set the title associated
+     * with this activity to the `title` property of [pref] and return `true` to report that the
+     * fragment creation has been handled.
+     *
      * @param caller The fragment requesting navigation
      * @param pref   The [Preference] requesting the fragment
      * @return `true` if the fragment creation has been handled
@@ -167,6 +185,30 @@ class MainActivity : AppCompatActivity(),
      * fragments below.
      */
     class SettingsFragment : PreferenceFragmentCompat() {
+        /**
+         * Called during [onCreate] to supply the preferences for this fragment. Subclasses are
+         * expected to call [setPreferenceScreen] either directly or via helper methods such as
+         * [addPreferencesFromResource].
+         *
+         * We just call the [setPreferencesFromResource] method with the resource ID of our root
+         * [PreferenceScreen] xml file [R.xml.root] (see the file xml/root.xml) and our [String]
+         * parameter [rootKey]. Our [PreferenceScreen] holds four [Preference] elements each having
+         * the attributes:
+         *  - "app:title" the `title` property of the [Preference] passed to our [onPreferenceStartFragment]
+         *  override which it uses to set the title associated with this activity, as well as the first
+         *  line of the view for the [Preference] in the inflated xml/root.xml file
+         *  - "app:summary" the second line of the view for the [Preference] in the inflated
+         *  xml/root.xml file
+         *  - "app:fragment" the `fragment` property of the [Preference] passed to our [onPreferenceStartFragment]
+         *  override which it uses as the class name of the [PreferenceFragmentCompat] which it constructs
+         *  and loads into the container with ID [R.id.settings] (the [FrameLayout] in our activity's
+         *  layout file layout/activity_main.xml)
+         *
+         * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+         *                           this is the state.
+         * @param rootKey            If non-`null`, this preference fragment should be rooted at the
+         *                           [PreferenceScreen] with this key.
+         */
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root, rootKey)
         }
