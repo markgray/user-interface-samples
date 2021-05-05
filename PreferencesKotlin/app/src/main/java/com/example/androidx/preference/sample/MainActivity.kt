@@ -215,7 +215,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     /**
-     * A preference fragment that demonstrates commonly used preference attributes.
+     * A preference fragment that demonstrates commonly used preference attributes:
+     *  -
      */
     @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class BasicPreferencesFragment : PreferenceFragmentCompat() {
