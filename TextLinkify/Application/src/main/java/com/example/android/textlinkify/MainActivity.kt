@@ -13,47 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.textlinkify
 
-package com.example.android.textlinkify;
-
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.StyleSpan;
-import android.text.style.URLSpan;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Typeface
+import android.os.Bundle
+import android.text.Html
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * This sample demonstrates how clickable links can be added to a
- * {@link android.widget.TextView}.
+ * [android.widget.TextView].
  *
- * <p>This can be done in three ways:
- * <ul>
- * <li><b>Automatically:</b> Text added to a TextView can automatically be linkified by enabling
+ * This can be done in three ways:
+ *
+ *  * **Automatically:** Text added to a TextView can automatically be linkified by enabling
  * autoLinking. In XML, use the android:autoLink property, programatically call
- * {@link android.widget.TextView#setAutoLinkMask(int)} using an option from
- * {@link android.text.util.Linkify}</li>
+ * [android.widget.TextView.setAutoLinkMask] using an option from
+ * [android.text.util.Linkify]
  *
- * <li><b>Parsing a String as HTML:</b> See {@link android.text.Html#fromHtml(String)})</li>
+ *  * **Parsing a String as HTML:** See [android.text.Html.fromHtml])
  *
- * <li><b>Manually by constructing a {@link android.text.SpannableString}:</b> Consisting of
- * {@link android.text.style.StyleSpan} and {@link android.text.style.URLSpan} objects that
- * are contained within a {@link android.text.SpannableString}</li>
- * </ul></p>
- *
+ *  * **Manually by constructing a [android.text.SpannableString]:** Consisting of
+ * [android.text.style.StyleSpan] and [android.text.style.URLSpan] objects that
+ * are contained within a [android.text.SpannableString]
  */
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.sample_main);
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.sample_main)
 
         // BEGIN_INCLUDE(text_auto_linkify)
         /*
@@ -76,10 +69,9 @@ public class MainActivity extends AppCompatActivity {
          * respond to user input. To make them active, you need to
          * call setMovementMethod() on the TextView object.
          */
-        TextView textViewResource = findViewById(R.id.text_html_resource);
-        textViewResource.setText(
-                Html.fromHtml(getResources().getString(R.string.link_text_manual)));
-        textViewResource.setMovementMethod(LinkMovementMethod.getInstance());
+        val textViewResource = findViewById<TextView>(R.id.text_html_resource)
+        textViewResource.text = Html.fromHtml(resources.getString(R.string.link_text_manual), 0)
+        textViewResource.movementMethod = LinkMovementMethod.getInstance()
         // END_INCLUDE(text_html_resource)
 
         // BEGIN_INCLUDE(text_html_program)
@@ -91,13 +83,14 @@ public class MainActivity extends AppCompatActivity {
          * illustrate how you might display text that came from a
          * dynamic source (eg, the network).
          */
-        TextView textViewHtml = findViewById(R.id.text_html_program);
-        textViewHtml.setText(
-                Html.fromHtml(
-                        "<b>text_html_program: Constructed from HTML programmatically.</b>"
-                                + "  Text with a <a href=\"http://www.google.com\">link</a> "
-                                + "created in the Java source code using HTML."));
-        textViewHtml.setMovementMethod(LinkMovementMethod.getInstance());
+        val textViewHtml = findViewById<TextView>(R.id.text_html_program)
+        textViewHtml.text = Html.fromHtml(
+            "<b>text_html_program: Constructed from HTML programmatically.</b>"
+                + "  Text with a <a href=\"http://www.google.com\">link</a> "
+                + "created in the Java source code using HTML.",
+            0
+        )
+        textViewHtml.movementMethod = LinkMovementMethod.getInstance()
         // END_INCLUDE(text_html_program)
 
         // BEGIN_INCLUDE(text_spannable)
@@ -107,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
          * you should probably be using a string resource, not a
          * hardcoded value.
          */
-        SpannableString ss = new SpannableString(
-                "text_spannable: Manually created spans. Click here to dial the phone.");
+        val ss = SpannableString(
+            "text_spannable: Manually created spans. Click here to dial the phone.")
 
         /*
          * Make the first 38 characters bold by applying a StyleSpan with bold typeface.
@@ -118,22 +111,18 @@ public class MainActivity extends AppCompatActivity {
          *
          * The SPAN_EXCLUSIVE_EXCLUSIVE flag defines this span as exclusive, which means
          * that it will not expand to include text inserted on either side of this span.
-         */
-        ss.setSpan(new StyleSpan(Typeface.BOLD), 0, 39,
-                Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        ss.setSpan(new URLSpan("tel:4155551212"), 40 + 6, 40 + 10,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        TextView textViewSpan = findViewById(R.id.text_spannable);
-        textViewSpan.setText(ss);
+         */ss.setSpan(StyleSpan(Typeface.BOLD), 0, 39,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+        ss.setSpan(URLSpan("tel:4155551212"), 40 + 6, 40 + 10,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val textViewSpan = findViewById<TextView>(R.id.text_spannable)
+        textViewSpan.text = ss
 
         /*
          * Set the movement method to move between links in this TextView.
          * This means that the user traverses through links in this TextView, automatically
          * handling appropriate scrolling and key commands.
-         */
-        textViewSpan.setMovementMethod(LinkMovementMethod.getInstance());
+         */textViewSpan.movementMethod = LinkMovementMethod.getInstance()
         // END_INCLUDE(text_spannable)
     }
-
 }
