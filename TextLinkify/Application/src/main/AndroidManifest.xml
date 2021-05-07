@@ -18,6 +18,7 @@
 
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.textlinkify"
     android:versionCode="1"
     android:versionName="1.0">
@@ -25,10 +26,11 @@
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >

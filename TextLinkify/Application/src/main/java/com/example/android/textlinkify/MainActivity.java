@@ -16,7 +16,6 @@
 
 package com.example.android.textlinkify;
 
-import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
@@ -26,6 +25,8 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This sample demonstrates how clickable links can be added to a
@@ -46,7 +47,7 @@ import android.widget.TextView;
  * </ul></p>
  *
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class MainActivity extends Activity {
          * respond to user input. To make them active, you need to
          * call setMovementMethod() on the TextView object.
          */
-        TextView textViewResource = (TextView) findViewById(R.id.text_html_resource);
+        TextView textViewResource = findViewById(R.id.text_html_resource);
         textViewResource.setText(
                 Html.fromHtml(getResources().getString(R.string.link_text_manual)));
         textViewResource.setMovementMethod(LinkMovementMethod.getInstance());
@@ -90,7 +91,7 @@ public class MainActivity extends Activity {
          * illustrate how you might display text that came from a
          * dynamic source (eg, the network).
          */
-        TextView textViewHtml = (TextView) findViewById(R.id.text_html_program);
+        TextView textViewHtml = findViewById(R.id.text_html_program);
         textViewHtml.setText(
                 Html.fromHtml(
                         "<b>text_html_program: Constructed from HTML programmatically.</b>"
@@ -123,7 +124,7 @@ public class MainActivity extends Activity {
         ss.setSpan(new URLSpan("tel:4155551212"), 40 + 6, 40 + 10,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        TextView textViewSpan = (TextView) findViewById(R.id.text_spannable);
+        TextView textViewSpan = findViewById(R.id.text_spannable);
         textViewSpan.setText(ss);
 
         /*
