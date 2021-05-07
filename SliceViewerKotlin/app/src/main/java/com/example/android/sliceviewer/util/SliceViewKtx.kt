@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("RemoveRedundantQualifierName")
+
 package com.example.android.sliceviewer.util
 
 import android.content.ContentResolver
@@ -44,7 +46,7 @@ fun SliceView.bind(
 ) {
     setOnSliceActionListener(onSliceActionListener)
     setOnClickListener(onClickListener)
-    setScrollable(scrollable)
+    isScrollable = scrollable
     setOnLongClickListener(onLongClickListener)
     if (uri.scheme == null) {
         Log.w(TAG, "Scheme is null for URI $uri")
@@ -52,8 +54,8 @@ fun SliceView.bind(
     }
     // If someone accidentally prepends the "slice-" prefix to their scheme, let's remove it.
     val scheme =
-        if (uri.scheme.startsWith("slice-")) {
-            uri.scheme.replace("slice-", "")
+        if ((uri.scheme as String).startsWith("slice-")) {
+            (uri.scheme as String).replace("slice-", "")
         }
         else {
             uri.scheme
@@ -64,9 +66,9 @@ fun SliceView.bind(
     ) {
         val intent = Intent(Intent.ACTION_VIEW, uri)
         val sliceLiveData = SliceLiveData.fromIntent(context, intent)
-        sliceLiveData?.removeObservers(lifecycleOwner)
+        sliceLiveData.removeObservers(lifecycleOwner)
         try {
-            sliceLiveData?.observe(lifecycleOwner, Observer { updatedSlice ->
+            sliceLiveData.observe(lifecycleOwner, Observer { updatedSlice ->
                 if (updatedSlice == null) return@Observer
                 slice = updatedSlice
                 val expiry = SliceMetadata.from(context, updatedSlice).expiry

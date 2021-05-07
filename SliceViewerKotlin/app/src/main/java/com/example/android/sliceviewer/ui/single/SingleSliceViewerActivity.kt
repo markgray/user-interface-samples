@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("RemoveRedundantQualifierName")
+
 package com.example.android.sliceviewer.ui.single
 
 import android.content.Intent
@@ -60,8 +62,8 @@ class SingleSliceViewerActivity : AppCompatActivity() {
 
         // If a URI was passed in has a supported slice scheme, present the Slice and save it to the
         // persistent list of Slices
-        if (intent.data != null && intent.data.hasSupportedSliceScheme()) {
-            val sliceUri = intent.data.convertToOriginalScheme()
+        if (intent.data != null && (intent.data as Uri).hasSupportedSliceScheme()) {
+            val sliceUri: Uri = (intent.data as Uri).convertToOriginalScheme()
             viewModel.addSlice(sliceUri)
             bindSlice(sliceUri)
         } else {
@@ -84,6 +86,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
             add(R.string.large_mode)
         }
 
+        @Suppress("RedundantSamConstructor")
         viewModel.selectedMode.observe(this, Observer {
             when (it) {
                 SliceView.MODE_SHORTCUT -> typeMenu.setIcon(R.drawable.ic_shortcut)
@@ -102,6 +105,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
             uri = uri,
             scrollable = true
         )
+        @Suppress("RedundantSamConstructor")
         viewModel.selectedMode.observe(this, Observer {
             sliceView.mode = it ?: SliceView.MODE_LARGE
         })

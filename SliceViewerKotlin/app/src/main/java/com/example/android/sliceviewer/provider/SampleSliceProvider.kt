@@ -29,11 +29,11 @@ import androidx.slice.builders.header
 import androidx.slice.builders.list
 import androidx.slice.builders.row
 import androidx.slice.core.SliceHints
-import androidx.slice.core.SliceHints.ICON_IMAGE
 import com.example.android.sliceviewer.R
 
 class SampleSliceProvider : SliceProvider() {
-    override fun onBindSlice(sliceUri: Uri?): Slice? {
+    override fun onBindSlice(sliceUri: Uri): Slice? {
+        @Suppress("NullChecksToSafeCall", "SENSELESS_COMPARISON")
         if (sliceUri == null || sliceUri.path == null) {
             return null
         }
@@ -46,17 +46,17 @@ class SampleSliceProvider : SliceProvider() {
 
     override fun onCreateSliceProvider() = true
 
-    override fun onMapIntentToUri(intent: Intent?): Uri {
-        val path = intent?.data?.path ?: ""
+    override fun onMapIntentToUri(intent: Intent): Uri {
+        val path = intent.data?.path ?: ""
         return Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
-            .authority(context.packageName)
+            .authority(context!!.packageName)
             .path(path)
             .build()
     }
 
     private fun createHelloWorldSlice(sliceUri: Uri): Slice {
-        return list(context, sliceUri, ListBuilder.INFINITY) {
+        return list(context!!, sliceUri, ListBuilder.INFINITY) {
             header {
                 title = "Hello World"
             }
@@ -67,7 +67,7 @@ class SampleSliceProvider : SliceProvider() {
         val activityAction = SliceAction.create(
             PendingIntent.getActivity(
                 context, 0,
-                MainActivity.getIntent(context), 0
+                MainActivity.getIntent(context!!), 0
             ),
             IconCompat.createWithResource(
                 context,
@@ -76,7 +76,7 @@ class SampleSliceProvider : SliceProvider() {
             ListBuilder.ICON_IMAGE,
             "Go to app."
         )
-        return list(context, sliceUri, SliceHints.INFINITY) {
+        return list(context!!, sliceUri, SliceHints.INFINITY) {
             setAccentColor(0x7f040047)
             header {
                 title = "Test Slice"
@@ -89,7 +89,7 @@ class SampleSliceProvider : SliceProvider() {
                 addEndItem(
                     IconCompat.createWithResource(
                         context, R.drawable.ic_arrow_forward_black_24dp
-                    ), ICON_IMAGE
+                    ), ListBuilder.ICON_IMAGE
                 )
             }
             addAction(activityAction)

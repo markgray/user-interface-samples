@@ -29,7 +29,7 @@ class LocalUriDataSource(
     override fun getAllUris(): MutableList<Uri> {
         return sharedPrefs.getStringSet(
             KEY_URI, setOf<String>()
-        ).map {
+        )!!.map {
             Uri.parse(it)
         }.toMutableList()
     }
