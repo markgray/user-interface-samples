@@ -27,17 +27,26 @@ import androidx.core.graphics.withTranslation
  * [TextRoundedBgHelper] for more information.
  *
  * See [TextRoundedBgAttributeReader] for supported attributes.
+ *
+ * @param context The [Context] the view is running in, through which it can
+ *        access the current theme, resources, etc.
+ * @param attrs The attributes of the XML tag that is inflating the view.
+ * @param defStyleAttr An attribute in the current theme that contains a
+ *        reference to a style resource that supplies default values for
+ *        the view. Can be 0 to not look for defaults.
  */
-class RoundedBgTextView : AppCompatTextView {
+class RoundedBgTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.textViewStyle
+) : AppCompatTextView(context, attrs, defStyleAttr) {
 
+    /**
+     * The [TextRoundedBgHelper] we use to draw the background of our view.
+     */
     private val textRoundedBgHelper: TextRoundedBgHelper
 
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = android.R.attr.textViewStyle
-    ) : super(context, attrs, defStyleAttr) {
+    init {
         val attributeReader = TextRoundedBgAttributeReader(context, attrs)
         textRoundedBgHelper = TextRoundedBgHelper(
             horizontalPadding = attributeReader.horizontalPadding,
