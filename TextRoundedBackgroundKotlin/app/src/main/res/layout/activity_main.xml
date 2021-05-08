@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".MainActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,103 +26,111 @@
         android:orientation="vertical">
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/ltr"
-            style="@style/Widget.RoundedBackground.SampleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
-
-        <View style="@style/Widget.RoundedBackground.Divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
-
-        <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/ltr_multi"
-            style="@style/Widget.RoundedBackground.SampleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
-
-        <View style="@style/Widget.RoundedBackground.Divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
-
-        <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/ltr_long"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/ltr" />
+
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dividerHeight" />
+
+        <com.android.example.text.styling.roundedbg.RoundedBgTextView
+            style="@style/Widget.RoundedBackground.SampleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/ltr_multi" />
+
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dividerHeight" />
+
+        <com.android.example.text.styling.roundedbg.RoundedBgTextView
+            style="@style/Widget.RoundedBackground.SampleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/ltr_long"
             app:roundedTextDrawable="@drawable/rounded"
             app:roundedTextDrawableLeft="@drawable/rounded_left"
             app:roundedTextDrawableMid="@drawable/rounded_mid"
-            app:roundedTextDrawableRight="@drawable/rounded_right"/>
+            app:roundedTextDrawableRight="@drawable/rounded_right" />
 
-        <View style="@style/Widget.RoundedBackground.Divider"
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
+            android:layout_height="@dimen/dividerHeight" />
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/rtl"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/rtl" />
 
-        <View style="@style/Widget.RoundedBackground.Divider"
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
+            android:layout_height="@dimen/dividerHeight" />
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/rtl_multi"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/rtl_multi" />
 
-        <View style="@style/Widget.RoundedBackground.Divider"
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
+            android:layout_height="@dimen/dividerHeight" />
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/lang1"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/lang1" />
 
-        <View style="@style/Widget.RoundedBackground.Divider"
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
+            android:layout_height="@dimen/dividerHeight" />
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/lang2"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/lang2" />
 
-        <View style="@style/Widget.RoundedBackground.Divider"
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
+            android:layout_height="@dimen/dividerHeight" />
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/lang3"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/lang3" />
 
-        <View style="@style/Widget.RoundedBackground.Divider"
+        <View
+            style="@style/Widget.RoundedBackground.Divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dividerHeight"/>
+            android:layout_height="@dimen/dividerHeight" />
 
         <com.android.example.text.styling.roundedbg.RoundedBgTextView
-            android:text="@string/lang4"
             style="@style/Widget.RoundedBackground.SampleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/textViewMargin"/>
+            android:layout_margin="@dimen/textViewMargin"
+            android:text="@string/lang4" />
 
     </LinearLayout>
 
