@@ -33,13 +33,22 @@ To position the background, we need to:
 * Find the start and end lines
 * Find the start and end offset depending on the paragraph direction
 
-All of these can be computed based on the text Layout. To render the background behind the text we need access to the Canvas. A custom TextView has access to all of the information necessary to position the drawables and render them.
+All of these can be computed based on the text Layout. To render the background behind the text we
+need access to the Canvas. A custom TextView has access to all of the information necessary to
+ position the drawables and render them.
 
-Our solution involves splitting our problem into 4 parts and creating classes dealing with them individually:
-* **Marking the position of the background** is done in the XML resources via Annotation spans and then, in the code, we read them in the `TextRoundedBgHelper`
-* Providing the background **drawables as attributes** of the TextView - implemented in `TextRoundedBgAttributeReader`
-* **Rendering the drawables** depending on whether the text runs across **one or multiple lines** - `TextRoundedBgHelper` interface and its implementations: `SingleLineRenderer` and `MultiLineRenderer`
-* Supporting **custom drawing** on a TextView - `RoundedBgTextView`, a class that extends `AppCompatTextView`, reads the attributes with the help of `TextRoundedBgAttributeReader`, overrides `onDraw` where it uses `TextRoundedBgHelper` to draw the background.
+Our solution involves splitting our problem into 4 parts and creating classes dealing with them
+individually:
+
+* **Marking the position of the background** is done in the XML resources via Annotation spans and
+then, in the code, we read them in the `TextRoundedBgHelper`
+* Providing the background **drawables as attributes** of the TextView - implemented in
+`TextRoundedBgAttributeReader`
+* **Rendering the drawables** depending on whether the text runs across **one or multiple lines** -
+`TextRoundedBgHelper` interface and its implementations: `SingleLineRenderer` and `MultiLineRenderer`
+* Supporting **custom drawing** on a TextView - `RoundedBgTextView`, a class that extends
+`AppCompatTextView`, reads the attributes with the help of `TextRoundedBgAttributeReader`,
+ overrides `onDraw` where it uses `TextRoundedBgHelper` to draw the background.
 
 Getting Started
 ---------------
