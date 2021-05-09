@@ -47,6 +47,12 @@ class RoundedBgTextView @JvmOverloads constructor(
     private val textRoundedBgHelper: TextRoundedBgHelper
 
     init {
+        /**
+         * A [TextRoundedBgAttributeReader] that reads our [AttributeSet] field [attrs] and sets its
+         * corresponding properties to the values of the custom attributes it finds therein or to
+         * the default values for those attributes. These are the attributes that the constructor of
+         * [TextRoundedBgAttributeReader] needs.
+         */
         val attributeReader = TextRoundedBgAttributeReader(context, attrs)
         textRoundedBgHelper = TextRoundedBgHelper(
             horizontalPadding = attributeReader.horizontalPadding,
@@ -58,6 +64,20 @@ class RoundedBgTextView @JvmOverloads constructor(
         )
     }
 
+    /**
+     * We implement this to do our drawing. If the `text` property of our [AppCompatTextView] super
+     * is an instance of [Spanned] and the `Layout` that it is currently using to display its text
+     * is not `null` we use the [Canvas.withTranslation] extension function of our [Canvas] parameter
+     * [canvas] to have it translate to the x coordinate of the total left padding of its view and
+     * y coordinate of the total top padding of its view and then execute the `draw` method of our
+     * [TextRoundedBgHelper] field [textRoundedBgHelper] to draw the background of the `text` on our
+     * [Canvas] parameter [canvas] with our super's `layout` property as the `Layout` to use.
+     * The translation and lambda are wrapped in in calls to [Canvas.save] and [Canvas.restoreToCount]
+     * so that the state of [canvas] is retored after doing the drawing. Finally we call our super's
+     * implementation of `onDraw` to have it draw the `text` on top of our rounded background.
+     *
+     * @param canvas the [Canvas] on which the background will be drawn
+     */
     override fun onDraw(canvas: Canvas) {
         // need to draw bg first so that text can be on top during super.onDraw()
         if (text is Spanned && layout != null) {
