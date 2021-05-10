@@ -21,7 +21,7 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.widget.TextViewRichContentReceiverCompat
+// import androidx.core.widget.TextViewRichContentReceiverCompat
 import com.example.android.people.R
 
 typealias OnImageAddedListener = (contentUri: Uri, mimeType: String, label: String) -> Unit
@@ -46,30 +46,30 @@ class ChatEditText @JvmOverloads constructor(
     private var onImageAddedListener: OnImageAddedListener? = null
 
     init {
-        richContentReceiverCompat = object : TextViewRichContentReceiverCompat() {
-            override fun onReceive(
-                textView: TextView,
-                clip: ClipData,
-                source: Int,
-                flags: Int
-            ): Boolean {
-                val mimeType = SUPPORTED_MIME_TYPES.find { clip.description.hasMimeType(it) }
-                return if (mimeType != null && clip.itemCount > 0) {
-                    onImageAddedListener?.invoke(
-                        clip.getItemAt(0).uri,
-                        mimeType,
-                        clip.description.label.toString()
-                    )
-                    true
-                } else {
-                    super.onReceive(textView, clip, source, flags)
-                }
-            }
-
-            override fun getSupportedMimeTypes(): Set<String> {
-                return SUPPORTED_MIME_TYPES + super.getSupportedMimeTypes()
-            }
-        }
+//        richContentReceiverCompat = object : TextViewRichContentReceiverCompat() {
+//            override fun onReceive(
+//                textView: TextView,
+//                clip: ClipData,
+//                source: Int,
+//                flags: Int
+//            ): Boolean {
+//                val mimeType = SUPPORTED_MIME_TYPES.find { clip.description.hasMimeType(it) }
+//                return if (mimeType != null && clip.itemCount > 0) {
+//                    onImageAddedListener?.invoke(
+//                        clip.getItemAt(0).uri,
+//                        mimeType,
+//                        clip.description.label.toString()
+//                    )
+//                    true
+//                } else {
+//                    super.onReceive(textView, clip, source, flags)
+//                }
+//            }
+//
+//            override fun getSupportedMimeTypes(): Set<String> {
+//                return SUPPORTED_MIME_TYPES + super.getSupportedMimeTypes()
+//            }
+//        }
     }
 
     /**
