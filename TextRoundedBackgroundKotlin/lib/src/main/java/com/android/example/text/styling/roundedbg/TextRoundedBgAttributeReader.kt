@@ -24,20 +24,52 @@ import androidx.core.content.res.getDrawableOrThrow
  * Reads default attributes that [TextRoundedBgHelper] needs from resources. The attributes read
  * are:
  *
- * - chHorizontalPadding: the padding to be applied to left & right of the background
- * - chVerticalPadding: the padding to be applied to top & bottom of the background
- * - chDrawable: the drawable used to draw the background
- * - chDrawableLeft: the drawable used to draw left edge of the background
- * - chDrawableMid: the drawable used to draw for whole line
- * - chDrawableRight: the drawable used to draw right edge of the background
+ * - roundedTextHorizontalPadding: the padding to be applied to left & right of the background
+ * - roundedTextVerticalPadding: the padding to be applied to top & bottom of the background
+ * - roundedTextDrawable: the drawable used to draw the background
+ * - roundedTextDrawableLeft: the drawable used to draw left edge of the background
+ * - roundedTextDrawableMid: the drawable used to draw for whole line
+ * - roundedTextDrawableRight: the drawable used to draw right edge of the background
  */
 class TextRoundedBgAttributeReader(context: Context, attrs: AttributeSet?) {
 
+    /**
+     * The value of the `roundedTextHorizontalPadding` attribute used, the default is 0. It is used
+     * in constructing a [TextRoundedBgHelper] as its `horizontalPadding` property.
+     */
     val horizontalPadding: Int
+
+    /**
+     * The value of the `roundedTextVerticalPadding` attribute used, the default is 0. It is used
+     * in constructing a [TextRoundedBgHelper] as its `verticalPadding` property.
+     */
     val verticalPadding: Int
+
+    /**
+     * The value of the `roundedTextDrawable` attribute used, throws [IllegalArgumentException] if
+     * not specified. It is used in constructing a [TextRoundedBgHelper] as its `drawable` property.
+     */
     val drawable: Drawable
+
+    /**
+     * The value of the `roundedTextDrawableLeft` attribute used, throws [IllegalArgumentException]
+     * if not specified. It is used in constructing a [TextRoundedBgHelper] as its `drawableLeft`
+     * property.
+     */
     val drawableLeft: Drawable
+
+    /**
+     * The value of the `roundedTextDrawableMid` attribute used, throws [IllegalArgumentException]
+     * if not specified. It is used in constructing a [TextRoundedBgHelper] as its `drawableMid`
+     * property.
+     */
     val drawableMid: Drawable
+
+    /**
+     * The value of the `roundedTextDrawableRight` attribute used, throws [IllegalArgumentException]
+     * if not specified. It is used in constructing a [TextRoundedBgHelper] as its `drawableRight`
+     * property.
+     */
     val drawableRight: Drawable
 
     init {
