@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.android.example.text.styling.roundedbg
 
 import android.graphics.Canvas
@@ -33,7 +35,7 @@ internal abstract class TextRoundedBgRenderer(
 ) {
 
     /**
-     * Draw the background that starts at the {@code startOffset} and ends at {@code endOffset}.
+     * Draw the background that starts at the `startOffset` and ends at `endOffset`.
      *
      * @param canvas Canvas to draw onto
      * @param layout Layout that contains the text
@@ -87,6 +89,16 @@ internal class SingleLineRenderer(
     val drawable: Drawable
 ) : TextRoundedBgRenderer(horizontalPadding, verticalPadding) {
 
+    /**
+     * Draw the background that starts at the `startOffset` and ends at `endOffset`.
+     *
+     * @param canvas Canvas to draw onto
+     * @param layout Layout that contains the text
+     * @param startLine the start line for the background
+     * @param endLine the end line for the background
+     * @param startOffset the character offset that the background should start at
+     * @param endOffset the character offset that the background should end at
+     */
     override fun draw(
         canvas: Canvas,
         layout: Layout,
@@ -123,6 +135,16 @@ internal class MultiLineRenderer(
     val drawableRight: Drawable
 ) : TextRoundedBgRenderer(horizontalPadding, verticalPadding) {
 
+    /**
+     * Draw the background that starts at the `startOffset` and ends at `endOffset`.
+     *
+     * @param canvas Canvas to draw onto
+     * @param layout Layout that contains the text
+     * @param startLine the start line for the background
+     * @param endLine the end line for the background
+     * @param startOffset the character offset that the background should start at
+     * @param endOffset the character offset that the background should end at
+     */
     override fun draw(
         canvas: Canvas,
         layout: Layout,
