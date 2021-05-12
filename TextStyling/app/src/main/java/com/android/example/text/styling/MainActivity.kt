@@ -42,6 +42,15 @@ class MainActivity : AppCompatActivity() {
      * which is defined in the font/inconsolata.xml file to download the "Inconsolata" font from the
      * font provider "com.google.android.gms.fonts".
      *
+     * We construct a [MarkdownBuilder] using `bulletPointColor` as the color to be used for bullet
+     * point spans, using `codeBackgroundColor` as the color to be used for the background color of
+     * code blocks, using `codeBlockTypeface` as the [Typeface] to be used for code blocks, and a
+     * new instance of [Parser] to be used to parse the markdown text. We then call the method
+     * `markdownToSpans` of that [MarkdownBuilder] to have it create a [CharSequence] from the
+     * markdown [String] with the resource ID [R.string.display_text] and use that [CharSequence] to
+     * initialize our variable `val text`. Finally we set the `text` of our [TextView] variable
+     * `textView` to our [CharSequence] variable `text`
+     *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,9 +67,12 @@ class MainActivity : AppCompatActivity() {
         val bulletPointColor = ContextCompat.getColor(this, R.color.colorAccent)
         val codeBackgroundColor = ContextCompat.getColor(this, R.color.code_background)
         val codeBlockTypeface: Typeface? = ResourcesCompat.getFont(this, R.font.inconsolata)
-        val text: CharSequence = MarkdownBuilder(bulletPointColor, codeBackgroundColor,
-            codeBlockTypeface, Parser())
-            .markdownToSpans(getString(R.string.display_text))
+        val text: CharSequence = MarkdownBuilder(
+            bulletPointColor,
+            codeBackgroundColor,
+            codeBlockTypeface,
+            Parser()
+        ).markdownToSpans(getString(R.string.display_text))
         textView.text = text
     }
 }

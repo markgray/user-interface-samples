@@ -49,10 +49,12 @@ public class MarkdownBuilder {
     @NonNull
     private final Parser parser;
 
-    public MarkdownBuilder(@ColorInt final int bulletPointColor,
-                           @ColorInt final int codeBackgroundColor,
-                           final Typeface codeBlockTypeface,
-                           @NonNull final Parser parser) {
+    public MarkdownBuilder(
+            @ColorInt final int bulletPointColor,
+            @ColorInt final int codeBackgroundColor,
+            final Typeface codeBlockTypeface,
+            @NonNull final Parser parser
+    ) {
         this.bulletPointColor = bulletPointColor;
         this.codeBackgroundColor = codeBackgroundColor;
         this.codeBlockTypeface = codeBlockTypeface;
