@@ -30,6 +30,11 @@ import com.android.example.text.styling.renderer.spans.CodeBlockSpan
 
 /**
  * Renders the text as simple markdown, using spans.
+ *
+ * @param bulletPointColor the color to use for bullet points.
+ * @param codeBackgroundColor the color to use for the background of code blocks.
+ * @param codeBlockTypeface the [Typeface] to use for code blocks
+ * @param parser the [Parser] to use to parse markdown text.
  */
 class MarkdownBuilder(
     @field:ColorInt @param:ColorInt private val bulletPointColor: Int,
