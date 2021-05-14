@@ -25,6 +25,7 @@ import android.text.style.StyleSpan
 import androidx.annotation.ColorInt
 import com.android.example.text.styling.parser.Element
 import com.android.example.text.styling.parser.Parser
+import com.android.example.text.styling.parser.TextMarkdown
 import com.android.example.text.styling.renderer.spans.BulletPointSpan
 import com.android.example.text.styling.renderer.spans.CodeBlockSpan
 
@@ -42,8 +43,21 @@ class MarkdownBuilder(
     private val codeBlockTypeface: Typeface?,
     private val parser: Parser
 ) {
+    /**
+     * Converts a [String] containing markdown formatted text into a [SpannedString] which can be
+     * used as a rich text [CharSequence] for display in a `TextView`. We initialize our variable
+     * `val markdown` to the [TextMarkdown] instance that our [Parser] field [parser] parses from
+     * our [String] parameter [string]. It consists of a [List] of [Element] objects each of which
+     * hold a substring of [string] and a [Element.Type] which describes what that substring should
+     * be treated as given the markdown formatting which is relevant for it.
+     *
+     * @param string the [String] we are to parse as markdown formatted text and convert into a
+     * rich text [SpannedString].
+     * @return the [SpannedString] which can be used as a rich text [CharSequence] for display in a
+     * `TextView`.
+     */
     fun markdownToSpans(string: String): SpannedString {
-        val markdown = parser.parse(string)
+        val markdown: TextMarkdown = parser.parse(string)
 
         // In the SpannableStringBuilder, the text and the markup are mutable.
         val builder = SpannableStringBuilder()
