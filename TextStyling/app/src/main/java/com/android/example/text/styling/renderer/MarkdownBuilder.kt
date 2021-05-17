@@ -49,7 +49,14 @@ class MarkdownBuilder(
      * `val markdown` to the [TextMarkdown] instance that our [Parser] field [parser] parses from
      * our [String] parameter [string]. It consists of a [List] of [Element] objects each of which
      * hold a substring of [string] and a [Element.Type] which describes what that substring should
-     * be treated as given the markdown formatting which is relevant for it.
+     * be treated as given the markdown formatting which is relevant for it. Next we initialize our
+     * [SpannableStringBuilder] variable `val builder` to a new instance, then loop over `i` for all
+     * of the indices in the `elements` list of [Element] objects field of `markdown` calling our
+     * method [buildSpans] with the `i`'th [Element] of the `elements` list of [Element] objects
+     * field of `markdown` and `builder` to have it interpret the [Element.type] property of the
+     * `i`'th [Element] and add the [Element.text] field with the appropriate rich text markup to
+     * `builder`. When done with all the [Element]'s in `markdown` we return a [SpannedString] that
+     * is constructed from `builder`.
      *
      * @param string the [String] we are to parse as markdown formatted text and convert into a
      * rich text [SpannedString].
@@ -68,7 +75,18 @@ class MarkdownBuilder(
     }
 
     /**
-     * Build the spans for an element and insert them in the builder
+     * Build the spans for an element and inserts them in the builder. We branch on the [Element.type]
+     * property of our [Element] parameter [element]:
+     *  - [Element.Type.CODE_BLOCK] we call our [buildCodeBlockSpan] method with our parameters to
+     *  have it apply a [CodeBlockSpan] to the [Element.text] string in [element] and add it to
+     *  [builder].
+     *  - [Element.Type.QUOTE] we call our [buildQuoteSpans] method with our parameters to have it
+     *  apply rich text formatting for a quote block to the [Element.text] string in [element] and
+     *  add it to [builder].
+     *  - [Element.Type.BULLET_POINT] we call our [buildBulletPointSpans] method with our parameters
+     *  to have it apply a [BulletPointSpan] to the child strings in [element] and add it to [builder].
+     *  - [Element.Type.TEXT] we just call the [SpannableStringBuilder.append] method of [builder] to
+     *  have it append the [Element.text] string in [element] to [builder] verbatim.
      *
      * @param element the element for which the spans are built
      * @param builder a [SpannableStringBuilder] that gathers all the spans
@@ -83,6 +101,24 @@ class MarkdownBuilder(
         }
     }
 
+    /**
+     * Applies the appropriate rich text formatting for an [Element.Type.BULLET_POINT] type of
+     * [Element] and adds all of the children [Element]'s of the [Element] paramter [element] to
+     * the [SpannableStringBuilder] parameter [builder]. We initialize our [Int] variable
+     * `val startIndex` to the current length of [builder] then we loop over the `child` [Element]'s
+     * in the [Element.elements] list of [Element]'s of [element] calling our method [buildSpans]
+     * with `child` and our [SpannableStringBuilder] parameter [builder] to have it add the child
+     * with rich text markup appropriate for the child to [builder]. Finally we call the method
+     * [SpannableStringBuilder.setSpan] method of [builder] to have it mark the range of text from
+     * `startIndex` to the new length of [builder] with a [BulletPointSpan] constructed with a gap
+     * width of 20 and the color [bulletPointColor] using the flag [Spanned.SPAN_EXCLUSIVE_EXCLUSIVE]
+     * (does not expand to include text inserted at either the starting or ending point, can never
+     * have a length of 0 and is automatically removed from the buffer if all the text it covers
+     * is removed).
+     *
+     * @param element the element for which the span is to be built
+     * @param builder a [SpannableStringBuilder] that gathers all the spans
+     */
     private fun buildBulletPointSpans(element: Element, builder: SpannableStringBuilder) {
         val startIndex = builder.length
         for (child in element.elements) {
@@ -96,6 +132,25 @@ class MarkdownBuilder(
         )
     }
 
+    /**
+     * Adds the [Element.text] string of its [Element] parameter [element] to its [SpannableStringBuilder]
+     * parameter [builder] and applies the appropriate rich text formatting for an [Element.Type.QUOTE]
+     * type of [Element]. We initialize our [Int] variable `val startIndex` to the current length of
+     * [builder]. Then we append the [Element.text] string of [element] to [builder]. We call the method
+     * [SpannableStringBuilder.setSpan] method of [builder] to have it mark the range of text from
+     * `startIndex` to the new length of [builder] with a [StyleSpan] for [Typeface.ITALIC], then call
+     * the method [SpannableStringBuilder.setSpan] method of [builder] to have it mark the range of
+     * text from `startIndex` to the new length of [builder] with a [LeadingMarginSpan.Standard] for
+     * an indent of 40, and finally call the method [SpannableStringBuilder.setSpan] method of [builder]
+     * to have it mark the range of text from `startIndex` to the new length of [builder] with a
+     * [RelativeSizeSpan] to scale the text by 1.1f. All of these spans use the flag
+     * [Spanned.SPAN_EXCLUSIVE_EXCLUSIVE] (does not expand to include text inserted at either the
+     * starting or ending point, can never have a length of 0 and is automatically removed from the
+     * buffer if all the text it covers is removed).
+     *
+     * @param element the element for which the span is to be built
+     * @param builder a [SpannableStringBuilder] that gathers all the spans
+     */
     private fun buildQuoteSpans(element: Element, builder: SpannableStringBuilder) {
         val startIndex = builder.length
         builder.append(element.text)
@@ -120,6 +175,21 @@ class MarkdownBuilder(
         )
     }
 
+    /**
+     * Adds the [Element.text] string of its [Element] parameter [element] to its [SpannableStringBuilder]
+     * parameter [builder] and applies the appropriate rich text formatting for an [Element.Type.CODE_BLOCK]
+     * type of [Element]. We initialize our [Int] variable `val startIndex` to the current length of
+     * [builder]. Then we append the [Element.text] string of [element] to [builder]. We call the method
+     * [SpannableStringBuilder.setSpan] method of [builder] to have it mark the range of text from
+     * `startIndex` to the new length of [builder] with a [CodeBlockSpan] constructed to use our
+     * [Typeface] field [codeBlockTypeface] as its typeface and the color [codeBackgroundColor] as
+     * the background color using the flag [Spanned.SPAN_EXCLUSIVE_EXCLUSIVE] (does not expand to
+     * include text inserted at either the starting or ending point, can never have a length of 0
+     * and is automatically removed from the buffer if all the text it covers is removed).
+     *
+     * @param element the element for which the span is to be built
+     * @param builder a [SpannableStringBuilder] that gathers all the spans
+     */
     private fun buildCodeBlockSpan(element: Element, builder: SpannableStringBuilder) {
         val startIndex = builder.length
         builder.append(element.text)
