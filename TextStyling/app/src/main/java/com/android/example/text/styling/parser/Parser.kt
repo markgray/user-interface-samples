@@ -35,7 +35,43 @@ class Parser {
     /**
      * Parse a text and extract a [TextMarkdown] which holds a list of [Element] objects, each of
      * which holds a substring of our [String] parameter [string] along with the type of markdown
-     * element it is to be treated as.
+     * element it is to be treated as. First we initialize our [MutableList] of [Element]s variable
+     * `val parents` to a new instance of [ArrayList].
+     *
+     * We initialize our [Pattern] variable `val quotePattern` to the results of using the
+     * [Pattern.compile] method to compile our [String] constant [QUOTE_REGEX] (this consists
+     * of am embedded flag expression (?m) which turns on multi-line mode followed by a ">"
+     * character occurring at the beginning of the line).
+     *
+     * We initialize our [Pattern] variable `val pattern` to the results of using the [Pattern.compile]
+     * method to compile our [String] constant [BULLET_POINT_CODE_BLOCK_REGEX] (which matches either
+     * our [String] constant [BULLET_POINT_REGEX] or our our [String] constant [CODE_BLOCK]).
+     *
+     * We initialize our [Matcher] variable `val matcher` to a matcher that will match our [String]
+     * parameter [string] against the `quotePattern` pattern, and initialize our [Int] variable
+     * `var lastStartIndex` to 0.
+     *
+     * Then we proceed to loop while a subsequence of the input sequence starting at the index
+     * `lastStartIndex` matches the pattern of `matcher`:
+     *  - We initialize our [Int] variable `val startIndex` to the start index of the match just made.
+     *  - We initialize our [Int] variable `val endIndex` to the index after the last character
+     *  matched of the match just made.
+     *  - If `lastStartIndex` is less than `startIndex` there are element before the quote block so
+     *  we initialize our [String] variable `val text` to the substring from `lastStartIndex` to
+     *  right before `startIndex` and add all our the [Element]s that our [findElements] method
+     *  finds in `text` using `pattern` as its [Pattern] to `parents`.
+     *  - Since a quote can only be a paragraph long, we next look for end of line by calling our
+     *  method [getEndOfParagraph] with [string] and `endIndex` as the index in [string] to start
+     *  looking for an end of line and use the [Int] it returns to initialize our `val endOfQuote`
+     *  variable.
+     *  - We set `lastStartIndex` to `endOfQuote` and initialize our [String] variable `val quotedText`
+     *  to the substring from `endIndex` to right before `endOfQuote`, then we add an [Element] of
+     *  type [Element.Type.QUOTE] containing `quotedText` as its text and an empty list as its
+     *  list of [Element] field `elements`.
+     *  - And now we loop around to look for the next quote in [string].
+     *
+     * Having found and processed all the quotes we check if there are any other elements after the
+     * last quote found
      *
      * @param string string to be parsed into markdown elements
      * @return the [TextMarkdown]
@@ -69,6 +105,7 @@ class Parser {
         return TextMarkdown(parents)
     }
 
+    @Suppress("ConvertToStringTemplate")
     companion object {
         private const val BULLET_PLUS = "+ "
         private const val BULLET_STAR = "* "
