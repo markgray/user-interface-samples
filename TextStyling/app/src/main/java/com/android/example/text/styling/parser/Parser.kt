@@ -16,6 +16,7 @@
 package com.android.example.text.styling.parser
 
 import java.util.ArrayList
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 /**
@@ -32,16 +33,18 @@ import java.util.regex.Pattern
  */
 class Parser {
     /**
-     * Parse a text and extract the [TextMarkdown].
+     * Parse a text and extract a [TextMarkdown] which holds a list of [Element] objects, each of
+     * which holds a substring of our [String] parameter [string] along with the type of markdown
+     * element it is to be treated as.
      *
      * @param string string to be parsed into markdown elements
      * @return the [TextMarkdown]
      */
     fun parse(string: String): TextMarkdown {
         val parents: MutableList<Element> = ArrayList()
-        val quotePattern = Pattern.compile(QUOTE_REGEX)
-        val pattern = Pattern.compile(BULLET_POINT_CODE_BLOCK_REGEX)
-        val matcher = quotePattern.matcher(string)
+        val quotePattern: Pattern = Pattern.compile(QUOTE_REGEX)
+        val pattern: Pattern = Pattern.compile(BULLET_POINT_CODE_BLOCK_REGEX)
+        val matcher: Matcher = quotePattern.matcher(string)
         var lastStartIndex = 0
         while (matcher.find(lastStartIndex)) {
             val startIndex = matcher.start()
@@ -69,14 +72,16 @@ class Parser {
     companion object {
         private const val BULLET_PLUS = "+ "
         private const val BULLET_STAR = "* "
+
+        /**
+         * Multiline mode is enabled via the embedded flag expression (?m)
+         */
         private const val QUOTE_REGEX = "(?m)^> "
         private const val BULLET_POINT_STAR = "(?m)^\\* "
         private const val BULLET_POINT_PLUS = "(?m)^\\+ "
-        private const val BULLET_POINT_REGEX = "(" + BULLET_POINT_STAR + "|" +
-            BULLET_POINT_PLUS + ")"
+        private const val BULLET_POINT_REGEX = "(" + BULLET_POINT_STAR + "|" + BULLET_POINT_PLUS + ")"
         private const val CODE_BLOCK = "`"
-        private const val BULLET_POINT_CODE_BLOCK_REGEX = "(" + BULLET_POINT_REGEX + "|" +
-            CODE_BLOCK + ")"
+        private const val BULLET_POINT_CODE_BLOCK_REGEX = "(" + BULLET_POINT_REGEX + "|" + CODE_BLOCK + ")"
         private val LINE_SEPARATOR = System.getProperty("line.separator")
         private fun getEndOfParagraph(string: String, endIndex: Int): Int {
             var endOfParagraph = string.indexOf(LINE_SEPARATOR, endIndex)
@@ -91,8 +96,7 @@ class Parser {
             return endOfParagraph
         }
 
-        private fun findElements(string: String,
-                                 pattern: Pattern): List<Element> {
+        private fun findElements(string: String, pattern: Pattern): List<Element> {
             val parents: MutableList<Element> = ArrayList()
             val matcher = pattern.matcher(string)
             var lastStartIndex = 0
