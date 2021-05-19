@@ -71,7 +71,14 @@ class Parser {
      *  - And now we loop around to look for the next quote in [string].
      *
      * Having found and processed all the quotes we check if there are any other elements after the
-     * last quote found
+     * last quote found by seeing it `lastStartIndex` is less than the length of [string], and if it
+     * is we initialize our [String] variable `val text` to the substring of [string] from
+     * `lastStartIndex` to right before the length of [string], call our method [findElements] with
+     * `text` as its [String] and `pattern` as its [Pattern] then add the list of [Element]s it
+     * extracts from `text` based on `pattern` to `parents`.
+     *
+     * Having finished parsing [string] into the list of [Element]s `parents` we return a [TextMarkdown]
+     * instance constructed from `parents` to the caller.
      *
      * @param string string to be parsed into markdown elements
      * @return the [TextMarkdown]
@@ -107,11 +114,22 @@ class Parser {
 
     @Suppress("ConvertToStringTemplate")
     companion object {
+        /**
+         * The character "+" followed by a space character which is used to mark a bullet point
+         */
         private const val BULLET_PLUS = "+ "
+
+        /**
+         * The character "*" followed by a space character which is used to mark a bullet point
+         */
         private const val BULLET_STAR = "* "
 
         /**
-         * Multiline mode is enabled via the embedded flag expression (?m)
+         * [String] which is compiled into a [Pattern] for matching a block quote. Multiline mode is
+         * enabled via the embedded flag expression (?m) (in multiline mode the expressions "^" and
+         * "$" match just after or just before, respectively, a line terminator or the end of the
+         * input sequence) and a ">" character followed by a space at the beginning of the line is
+         * used to indicate that the text is a block quote.
          */
         private const val QUOTE_REGEX = "(?m)^> "
         private const val BULLET_POINT_STAR = "(?m)^\\* "
