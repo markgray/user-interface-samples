@@ -189,7 +189,15 @@ class Parser {
 
         /**
          * Used to find the end of a line in its [String] parameter [string] starting at the index
-         * [endIndex].
+         * [endIndex]. We initialize our [Int] variable `var endOfParagraph` to the index within our
+         * [String] parameter [string] of the first occurrence of the [LINE_SEPARATOR] string, starting
+         * from our [Int] parameter [endIndex]. If `endOfParagraph` is equal to -1 (no [LINE_SEPARATOR]
+         * string was found) we set `endOfParagraph` to the length of [string] (if we don't have an
+         * end of line the quote is the last element in the text so we can consider that the end of
+         * the quote is the end of the text). Otherwise we add the length of [LINE_SEPARATOR] to
+         * `endOfParagraph` to add the new line as part of the element.
+         *
+         * Finally we return `endOfParagraph` to the caller.
          *
          * @param string the [String] we are to search for an end of line.
          * @param endIndex the index into [string] at which to start searching.
@@ -209,6 +217,42 @@ class Parser {
             return endOfParagraph
         }
 
+        /**
+         * Returns a [List] of all the [Element]s it finds in its [String] parameter [string] using
+         * its [Pattern] parameter [pattern] as the [Pattern] for the [Matcher] it uses to search
+         * for an [Element] in [string].
+         *
+         * We initialize our [MutableList] of [Element] variable `val parents` to an instance of
+         * [ArrayList], initialize our [Matcher] variable `val matcher` to a matcher that will match
+         * [string] against [pattern], and initialize our [Int] variable `var lastStartIndex` to 0.
+         *
+         * Then we loop while a subsequence of [string] starting at the index `lastStartIndex` matches
+         * the pattern of `matcher`:
+         *  - We initialize our [Int] variable `val startIndex` to the start index of the match just
+         *  made by `matcher` and our [Int] variable `val endIndex` to the offset after the last
+         *  character matched.
+         *  - We initialize our [String] variable `val mark` to the substring of [string] from
+         *  `startIndex` to just before `endIndex` (this is the substring that matched [pattern])
+         *  - If `lastStartIndex` is less than `startIndex` there is unprocessed text before our
+         *  match so we add the [List] of [Element]s that a recursive call to [findElements] returns
+         *  for the substring of [string] from `lastStartIndex` to just before `startIndex` to
+         *  `parents` before proceeding to process the [Element] that `matcher` found.
+         *  - Next we declare our [String] variable `var text` and branch on the contents of `mark`:
+         *      * [BULLET_PLUS] or [BULLET_STAR] we initialize our [Int] variable `val endOfBulletPoint`
+         *      to the value that our [getEndOfParagraph] returns when it searches [string] for a
+         *      line separator, and set `text` to substring of [string] from `endIndex` to just before
+         *      `endOfBulletPoint` and set `lastStartIndex` to `endOfBulletPoint`. We initialize our
+         *      [List] of [Element]s variable `val subMarks` to the [Element]s a recursive call to
+         *      [findElements] finds in `text` and then initialize our [Element] variable `val bulletPoint`
+         *      to a new instance of type [Element.Type.BULLET_POINT] holding `text` and `subMarks`.
+         *      And then we add `bulletPoint` to `parents`.
+         *      * [CODE_BLOCK] a code block is set between two backquotes so first we look for the
+         *      other one and if another backquote is not found, then this is not a code block
+         *
+         * @param string the [String] to search for [Element]s in.
+         * @param pattern the [Pattern] to use in a [Matcher] that will find [Element]s in [string].
+         * @return a [List] of all of the [Element]s found in [string].
+         */
         private fun findElements(string: String, pattern: Pattern): List<Element> {
             val parents: MutableList<Element> = ArrayList()
             val matcher: Matcher = pattern.matcher(string)
@@ -230,7 +274,7 @@ class Parser {
                         text = string.substring(endIndex, endOfBulletPoint)
                         lastStartIndex = endOfBulletPoint
                         // also see what else we have in the text
-                        val subMarks = findElements(text, pattern)
+                        val subMarks: List<Element> = findElements(text, pattern)
                         val bulletPoint = Element(Element.Type.BULLET_POINT, text, subMarks)
                         parents.add(bulletPoint)
                     }
