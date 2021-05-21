@@ -13,27 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.example.text.styling.parser;
-
-import androidx.annotation.NonNull;
-
-import java.util.List;
+package com.android.example.text.styling.parser
 
 /**
  * Simple markdown parsing of text.
- * Contains a list of markdown {@link Element}s
+ * Contains a list of markdown [Element]s
+ *
+ * @param elements the [List] of [Element]s we hold.
  */
-public class TextMarkdown {
-
-    @NonNull
-    private final List<Element> elements;
-
-    public TextMarkdown(@NonNull final List<Element> elements) {
-        this.elements = elements;
-    }
-
-    @NonNull
-    public List<Element> getElements() {
-        return elements;
-    }
-}
+class TextMarkdown(val elements: List<Element>)
