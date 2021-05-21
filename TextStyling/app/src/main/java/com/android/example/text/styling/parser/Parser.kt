@@ -240,14 +240,31 @@ class Parser {
          *  - Next we declare our [String] variable `var text` and branch on the contents of `mark`:
          *      * [BULLET_PLUS] or [BULLET_STAR] we initialize our [Int] variable `val endOfBulletPoint`
          *      to the value that our [getEndOfParagraph] returns when it searches [string] for a
-         *      line separator, and set `text` to substring of [string] from `endIndex` to just before
-         *      `endOfBulletPoint` and set `lastStartIndex` to `endOfBulletPoint`. We initialize our
-         *      [List] of [Element]s variable `val subMarks` to the [Element]s a recursive call to
+         *      line separator, and set `text` to the substring of [string] from `endIndex` to just
+         *      before `endOfBulletPoint` and set `lastStartIndex` to `endOfBulletPoint`. We initialize
+         *      our [List] of [Element]s variable `val subMarks` to the [Element]s a recursive call to
          *      [findElements] finds in `text` and then initialize our [Element] variable `val bulletPoint`
          *      to a new instance of type [Element.Type.BULLET_POINT] holding `text` and `subMarks`.
          *      And then we add `bulletPoint` to `parents`.
          *      * [CODE_BLOCK] a code block is set between two backquotes so first we look for the
-         *      other one and if another backquote is not found, then this is not a code block
+         *      other one and if another backquote is not found, then this is not a code block so
+         *      we set `markEnd` to the length of [string], set `text` to the substring of [string]
+         *      from `startIndex` to just before `markEnd`, and add to `parents` an [Element] of type
+         *      [Element.Type.TEXT] constructed from `text` and an [emptyList] for its `elements`
+         *      list of sub-elements. But if we do find another backquote we set `text` to the
+         *      substring of [string] from `endIndex` to just before `markEnd`, and add to `parents`
+         *      an [Element] of type [Element.Type.CODE_BLOCK] constructed from `text` and an
+         *      [emptyList] for its `elements` list of sub-elements -- then we set `lastStartIndex`
+         *      to `markEnd` plus 1 so we can ignore the ending backquote for the code block.
+         *  - We then loop around to handle the next match of `matcher`.
+         *
+         * When done processing all of the matches of `matcher` we check if there's any more text
+         * left (ie. `lastStartIndex` is less than the length of [string]) and if there is we
+         * initialize `val text` to the substring of [string] from `lastStartIndex` to just before
+         * the length of [string], and add an [Element] of type [Element.Type.TEXT] constructed from
+         * `text` and an [emptyList] for its `elements` list of sub-elements to `parents`.
+         *
+         * Finally we return `parents` to the caller.
          *
          * @param string the [String] to search for [Element]s in.
          * @param pattern the [Pattern] to use in a [Matcher] that will find [Element]s in [string].
