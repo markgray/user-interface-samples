@@ -13,52 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.example.text.styling.parser;
-
-import androidx.annotation.NonNull;
-
-import java.util.List;
+package com.android.example.text.styling.parser
 
 /**
  * Markdown like type of element.
+ *
+ * @param type the [Type] of the [Element], one of [Type.TEXT], [Type.QUOTE], [Type.BULLET_POINT],
+ * or [Type.CODE_BLOCK]
+ * @param text the text that this [Element] marks up.
+ * @param elements a list of sub-elements found inside this [Element].
  */
-public class Element {
-
-    public enum Type {TEXT, QUOTE, BULLET_POINT, CODE_BLOCK}
-
-    @NonNull
-    private final Type type;
-
-    @NonNull
-    private final String text;
-
-    @NonNull
-    private final List<Element> elements;
-
-    public Element(@NonNull final Type type, @NonNull final String text,
-            @NonNull final List<Element> elements) {
-        this.type = type;
-        this.text = text;
-        this.elements = elements;
+class Element(val type: Type, val text: String, val elements: List<Element>) {
+    /**
+     * Enum class used to classify the type of this [Element].
+     */
+    enum class Type {
+        /**
+         * A plain text only [Element].
+         */
+        TEXT,
+        /**
+         * A Blockquote [Element]
+         */
+        QUOTE,
+        /**
+         * The [Element] is a bullet in an unordered list.
+         */
+        BULLET_POINT,
+        /**
+         * The [Element] is a code block.
+         */
+        CODE_BLOCK
     }
 
-    @NonNull
-    public Type getType() {
-        return type;
-    }
-
-    @NonNull
-    public String getText() {
-        return text;
-    }
-
-    @NonNull
-    public List<Element> getElements() {
-        return elements;
-    }
-
-    @Override
-    public String toString() {
-        return type + " " + text;
+    /**
+     * Returns a [String] representation of the [Element].
+     *
+     * @return  the [String] representation of our [type] property concatenated to our [text] property.
+     */
+    override fun toString(): String {
+        return "$type $text"
     }
 }
