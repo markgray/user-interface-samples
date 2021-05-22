@@ -55,7 +55,20 @@ class BulletPointSpan(
      * Then we set the color of [paint] to our [color] property, and its style to [Paint.Style.FILL]
      * (Geometry and text drawn with this style will be filled, ignoring all stroke-related settings
      * in the paint). We initialize our [Float] variable `val y` to the sum of our [top] parameter
-     * and our [bottom] parameter divided by 2f.
+     * and our [bottom] parameter divided by 2f. Then we branch on whether or not our [Canvas] parameter
+     * [canvas] uses hardware acceleration:
+     *  - It **does** use hardware acceleration -- if our [Path] static field [bulletPath] is `null`
+     *  this is the first time we have been called for we initialize [bulletPath] to a new instance
+     *  of [Path] and add a circle to it centered at (0,0) of radius [BULLET_RADIUS] with a direction
+     *  of [Path.Direction.CW]. Now that we have a [Path] we save the state of [canvas] onto its
+     *  private stack, translate [canvas] to X coordinate [gapWidth] plus [x] plus [dir] times
+     *  [BULLET_RADIUS] and Y coordinate `y`, draw [bulletPath] on it using [paint] as the [paint],
+     *  and then restore the state of [canvas] to the state that existed before we were caller.
+     *  - It **does NOT** use hardware acceleration -- we just call the [Canvas.drawCircle] method
+     *  of [canvas] to have it draw a circle at X coordinate [gapWidth] plus [x] plus [dir] times
+     *  [BULLET_RADIUS] and Y coordinate `y`, of radius [BULLET_RADIUS] using [paint] as its [Paint].
+     *
+     * Finally we restore the color of [paint] to `oldcolor` and its style to `style`
      *
      * @param canvas the [Canvas] to draw on.
      * @param paint the [Paint] to use. The this should be left unchanged on exit.
@@ -111,8 +124,14 @@ class BulletPointSpan(
     }
 
     companion object {
+        /**
+         * The radius of the bullet point circle.
+         */
         @VisibleForTesting
         const val BULLET_RADIUS = 15.0f
+        /**
+         * The [Path] we use to draw a circle if the [Canvas] is hardware accelerated
+         */
         private var bulletPath: Path? = null
     }
 }
