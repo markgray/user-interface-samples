@@ -13,33 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.example.text.styling.renderer.spans;
+package com.android.example.text.styling.renderer.spans
 
-import android.graphics.Typeface;
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import android.text.TextPaint;
-import android.text.style.BackgroundColorSpan;
+import android.graphics.Typeface
+import android.text.TextPaint
+import android.text.style.BackgroundColorSpan
+import androidx.annotation.ColorInt
 
 /**
- * To draw a code block, we set a font for the text and a background color.
- * The same effect can be achieved if on a text block, we set two spans: {@link FontSpan} and
- * {@link BackgroundColorSpan}
+ * To draw a code block, we set a font for the text and a background color. The same effect can be
+ * achieved if on a text block, we set two spans: [FontSpan] and [BackgroundColorSpan]
+ *
+ * @param font the [Typeface] to use for a code block.
+ * @param backgroundColor the color to use for the background color of a code block.
  */
-public class CodeBlockSpan extends FontSpan {
-
-    private final @ColorInt int backgroundColor;
-
-    public CodeBlockSpan(@NonNull final Typeface font, final @ColorInt int backgroundColor) {
-        super(font);
-        this.backgroundColor = backgroundColor;
-    }
-
-    // Since we're only changing the background color, it will not affect the measure state, so
-    // just override the update draw state.
-    @Override
-    public void updateDrawState(TextPaint textPaint) {
-        super.updateDrawState(textPaint);
-        textPaint.bgColor = backgroundColor;
+class CodeBlockSpan(
+    font: Typeface,
+    @field:ColorInt @param:ColorInt private val backgroundColor: Int
+    ) : FontSpan(font) {
+    /**
+     * Updates the draw state by changing the background color of its [TextPaint] paramter [textPaint]
+     * to our property [backgroundColor]. Since this will not affect the measure state, we can just
+     * override [updateDrawState]. First we call our super's implementation of `updateDrawState` to
+     * have it set the [Typeface] of [textPaint] to our field [font]. Then we set the background color
+     * of [textPaint] to our [backgroundColor] property.
+     *
+     * @param textPaint the [TextPaint] that will be used to draw the text of our span.
+     */
+    override fun updateDrawState(textPaint: TextPaint) {
+        super.updateDrawState(textPaint)
+        textPaint.bgColor = backgroundColor
     }
 }
