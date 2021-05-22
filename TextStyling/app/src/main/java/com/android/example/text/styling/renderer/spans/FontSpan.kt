@@ -15,7 +15,6 @@
  */
 package com.android.example.text.styling.renderer.spans
 
-import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.style.MetricAffectingSpan
@@ -23,20 +22,40 @@ import android.text.style.MetricAffectingSpan
 /**
  * Span that changes the typeface of the text used to the one provided. The style set before will
  * be kept.
+ *
+ * @param font the [Typeface] to use for the text in our span.
  */
 open class FontSpan(private val font: Typeface?) : MetricAffectingSpan() {
+    /**
+     * Classes that extend [MetricAffectingSpan] implement this method to update the text formatting
+     * in a way that can change the width or height of characters. We just call our [update] method
+     * to have it install our [Typeface] field [font] into our [TextPaint] parameter [textPaint].
+     *
+     * @param textPaint the paint used for drawing the text
+     */
     override fun updateMeasureState(textPaint: TextPaint) {
         update(textPaint)
     }
 
+    /**
+     * Updates the draw state by calling our [update] method to have it install our [Typeface] field
+     * [font] into our [TextPaint] parameter [textPaint].
+     *
+     * @param textPaint the [TextPaint] that will be used to draw the text of our span.
+     */
     override fun updateDrawState(textPaint: TextPaint) {
         update(textPaint)
     }
 
-    @SuppressLint("WrongConstant")
+    /**
+     * Installs our [Typeface] field [font] into our [TextPaint] parameter [textPaint] while keeping
+     * the style of the old [Typeface] of [textPaint] the same.
+     *
+     * @param textPaint the [TextPaint] that will be used to draw the text of our span.
+     */
     private fun update(textPaint: TextPaint) {
-        val old = textPaint.typeface
-        val oldStyle = old?.style ?: 0
+        val old: Typeface? = textPaint.typeface
+        val oldStyle: Int = old?.style ?: 0
 
         // Typeface is already cached at the system level
         // keep the style set before
