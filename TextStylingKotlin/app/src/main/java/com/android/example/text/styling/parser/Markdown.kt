@@ -18,18 +18,41 @@ package com.android.example.text.styling.parser
 /**
  * Simple markdown parsing of text.
  * Contains a list of markdown [Element]s
+ *
+ * @param elements the [List] of [Element]s we hold.
  */
 data class TextMarkdown(val elements: List<Element>)
 
 /**
  * Markdown like type of element.
- */
-data class Element(val type: Type,
-                   val text: CharSequence,
-                   val elements: List<Element> = emptyList()
-) {
+ *
+ * @param type the [Type] of the [Element], one of [Type.TEXT], [Type.QUOTE], [Type.BULLET_POINT],
+ * or [Type.CODE_BLOCK]
+ * @param text the text that this [Element] marks up.
+ * @param elements a list of sub-elements found inside this [Element].
 
+ */
+data class Element(
+    val type: Type,
+    val text: CharSequence,
+    val elements: List<Element> = emptyList()
+) {
     enum class Type {
-        TEXT, QUOTE, BULLET_POINT, CODE_BLOCK
+        /**
+         * A plain text only [Element].
+         */
+        TEXT,
+        /**
+         * A Blockquote [Element]
+         */
+        QUOTE,
+        /**
+         * The [Element] is a bullet in an unordered list.
+         */
+        BULLET_POINT,
+        /**
+         * The [Element] is a code block.
+         */
+        CODE_BLOCK
     }
 }
