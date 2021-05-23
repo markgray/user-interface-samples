@@ -169,7 +169,7 @@ object Parser {
      *  match so we add the [List] of [Element]s that a recursive call to [findElements] returns
      *  for the substring of [string] from `lastStartIndex` to just before `startIndex` to
      *  `parents` before proceeding to process the [Element] that `matcher` found.
-     *  - Next we declare our [String] variable `var text` and branch on the contents of `mark`:
+     *  - Next we declare our [CharSequence] variable `var text` and branch on the contents of `mark`:
      *      * [BULLET_PLUS] or [BULLET_STAR] we initialize our [Int] variable `val endOfBulletPoint`
      *      to the value that our [getEndOfParagraph] returns when it searches [string] for a
      *      line separator, and set `text` to the substring of [string] from `endIndex` to just
@@ -214,8 +214,7 @@ object Parser {
             val mark = string.subSequence(startIndex, endIndex)
             if (lastStartIndex < startIndex) {
                 // check what was before the mark
-                parents.addAll(findElements(string.subSequence(lastStartIndex, startIndex),
-                        pattern))
+                parents.addAll(findElements(string.subSequence(lastStartIndex, startIndex), pattern))
             }
             val text: CharSequence
             // check what kind of mark this was
@@ -261,14 +260,69 @@ object Parser {
         return parents
     }
 
+    /**
+     * The character "+" followed by a space character which is used to mark a bullet point.
+     * This is used in our [findElements] method when the [Matcher] finds a match and the method
+     * must decide whether it is a bullet point or a code block.
+     */
     private const val BULLET_PLUS = "+ "
+    /**
+     * The character "*" followed by a space character which is used to mark a bullet point.
+     * This is used in our [findElements] method when the [Matcher] finds a match and the method
+     * must decide whether it is a bullet point or a code block.
+     */
     private const val BULLET_STAR = "* "
+    /**
+     * [String] which is compiled into a [Pattern] for matching a block quote. Multiline mode is
+     * enabled via the embedded flag expression `(?m)` (in multiline mode the expressions "^" and
+     * "$" match just after or just before, respectively, a line terminator or the end of the
+     * input sequence) and a ">" character followed by a space at the beginning of the line is
+     * used to indicate that the text is a block quote.
+     */
     private const val QUOTE_REGEX = "(?m)^> "
+    /**
+     * [String] which when compiled as part of a [Pattern] will match a bullet point which begins
+     * with a "*" character. Multiline mode is enabled via the embedded flag expression `(?m)`
+     * (in multiline mode the expressions "^" and "$" match just after or just before, respectively,
+     * a line terminator or the end of the input sequence) and a "*" character followed by a space
+     * at the beginning of the line is used to indicate that the text is a bullet point. It is
+     * used as part of the regular expression string [BULLET_POINT_REGEX] which in turn is used
+     * as part of the regular expression string [BULLET_POINT_CODE_BLOCK_REGEX].
+     */
     private const val BULLET_POINT_STAR = "(?m)^\\$BULLET_STAR"
-    private const val BULLET_POINT_PLUS = "(?m)^\\$BULLET_PLUS"
-    private const val BULLET_POINT_REGEX = "($BULLET_POINT_STAR|$BULLET_POINT_PLUS)"
-    private const val CODE_BLOCK = "`"
-    private const val BULLET_POINT_CODE_BLOCK_REGEX = "($BULLET_POINT_REGEX|$CODE_BLOCK)"
 
+    /**
+     * [String] which when compiled as part of a [Pattern] will match a bullet point which begins
+     * with a "+" character. Multiline mode is enabled via the embedded flag expression `(?m)`
+     * (in multiline mode the expressions "^" and "$" match just after or just before, respectively,
+     * a line terminator or the end of the input sequence) and a "*" character followed by a space
+     * at the beginning of the line is used to indicate that the text is a bullet point. It is
+     * used as part of the regular expression string [BULLET_POINT_REGEX] which in turn is used
+     * as part of the regular expression string [BULLET_POINT_CODE_BLOCK_REGEX].
+     */
+    private const val BULLET_POINT_PLUS = "(?m)^\\$BULLET_PLUS"
+    /**
+     * Regular expression string which when compiled as part of a [Pattern] will match either
+     * the regular expression string [BULLET_POINT_STAR] or the regular expression string
+     * [BULLET_POINT_STAR].
+     */
+    private const val BULLET_POINT_REGEX = "($BULLET_POINT_STAR|$BULLET_POINT_PLUS)"
+    /**
+     * Regular expression string which when compiled as part of a [Pattern] will match a back
+     * quote character which denotes a code block.
+     */
+    private const val CODE_BLOCK = "`"
+    /**
+     * Regular expression string which when compiled as part of a [Pattern] will match either
+     * the regular expression string [BULLET_POINT_REGEX] or the regular expression string
+     * [CODE_BLOCK]. The [Pattern] compiled from it is used as the [Pattern] in all or our calls
+     * to the [findElements] method.
+     */
+    private const val BULLET_POINT_CODE_BLOCK_REGEX = "($BULLET_POINT_REGEX|$CODE_BLOCK)"
+    /**
+     * The line separator used on this device. Used in our [getEndOfParagraph] method to search
+     * for a line separator in the [String] passed it, and to advance over the line separator if
+     * one is found (the new line is part of the element).
+     */
     private val LINE_SEPARATOR = System.getProperty("line.separator")
 }
