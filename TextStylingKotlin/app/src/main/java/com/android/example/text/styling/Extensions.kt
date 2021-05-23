@@ -18,8 +18,16 @@ package com.android.example.text.styling
 import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.FontRes
+import android.graphics.Typeface
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 
+/**
+ * Returns a color associated with the resource ID [colorRes].
+ */
 fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+
+/**
+ * Returns a font [Typeface] associated with the resource ID [fontRes]/
+ */
 fun Context.getFontCompat(@FontRes fontRes: Int) = ResourcesCompat.getFont(this, fontRes)
