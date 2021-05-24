@@ -139,20 +139,47 @@ class BulletPointSpan(
         }
     }
 
+    /**
+     * Convenience function to calculate the Y coordinate of the center of our bullet point circle
+     * on the [Canvas] it is to be drawn on.
+     *
+     * @param lineTop the Y coordinate of the top of the line
+     * @param lineBottom the Y coordinate of the bottom of the line
+     * @return the Y coordinate of the center of the line.
+     */
     private fun getCircleYLocation(lineTop: Int, lineBottom: Int) =
             (lineTop + lineBottom) / 2.0f
 
+    /**
+     * Convenience function to calculate the X coordinate of the center of our bullet point circle
+     * on the [Canvas] it is to be drawn on. We just return the value [gapWidth] plus [currentMarginLocation]
+     * plus [paragraphDirection] times [DEFAULT_BULLET_RADIUS]
+     *
+     * @param currentMarginLocation the current position of the margin.
+     * @param paragraphDirection the base direction of the paragraph; if negative, the margin
+     * is to the right of the text, otherwise it is to the left.
+     * @return the X coordinate on the [Canvas] at which the bullet point circle should be drawn.
+     */
     private fun getCircleXLocation(currentMarginLocation: Int, paragraphDirection: Int) =
             gapWidth + currentMarginLocation + paragraphDirection * DEFAULT_BULLET_RADIUS
 
     companion object {
+        /**
+         * The default value to use for our left margin.
+         */
         private const val DEFAULT_GAP_WIDTH = 2
+
+        /**
+         * The default value to use for the radius of our bullet point circle.
+         */
         @VisibleForTesting
         const val DEFAULT_BULLET_RADIUS = 15.0f
     }
 
-    // When a custom color is used for bullets, the default style and colors need to be saved to
-    // then be set again after the draw finishes. This extension hides the boilerplate.
+    /**
+     * When a custom color is used for bullets, the default style and colors need to be saved to
+     * then be set again after the draw finishes. This extension hides the boilerplate.
+     */
     private inline fun Paint.withCustomColor(block: () -> Unit) {
         val oldStyle = style
         val oldColor = if (useColor) color else Color.TRANSPARENT
