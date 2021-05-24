@@ -23,17 +23,26 @@ import android.text.style.BackgroundColorSpan
 
 /**
  * To draw a code block, we set a font for the text and a background color.
- *
  * The same effect can be achieved if on a text block, we set two spans: [FontSpan] and
  * [BackgroundColorSpan]
+ *
+ * @param font the [Typeface] to use for a code block.
+ * @param backgroundColor the color to use for the background color of a code block.
  */
 class CodeBlockSpan(
         font: Typeface?,
         @param:ColorInt private val backgroundColor: Int = Color.LTGRAY
 ) : FontSpan(font) {
 
-    // Since we're only changing the background color, it will not affect the measure state, so
-    // just override the update draw state.
+    /**
+     * Updates the draw state by changing the background color of its [TextPaint] paramter [textPaint]
+     * to our property [backgroundColor]. Since this will not affect the measure state, we can just
+     * override [updateDrawState]. First we call our super's implementation of `updateDrawState` to
+     * have it set the [Typeface] of [textPaint] to our field [font]. Then we set the background color
+     * of [textPaint] to our [backgroundColor] property.
+     *
+     * @param textPaint the [TextPaint] that will be used to draw the text of our span.
+     */
     override fun updateDrawState(textPaint: TextPaint) {
         super.updateDrawState(textPaint)
         textPaint.bgColor = backgroundColor
