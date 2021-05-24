@@ -26,11 +26,15 @@ import androidx.annotation.VisibleForTesting
 import android.text.Layout
 import android.text.Spanned
 import android.text.style.LeadingMarginSpan
+import android.text.style.BulletSpan
 import androidx.core.graphics.withTranslation
 
 /**
- * Creating a bullet span with bigger bullets than [android.text.style.BulletSpan]
- * and with a left margin.
+ * Creating a bullet span with bigger bullets than [BulletSpan] and with a left margin.
+ *
+ * @param gapWidth the size of the gap width (left margin) defaults to [DEFAULT_GAP_WIDTH]
+ * @param color custom color to be used for bullets
+ * @param useColor flag which if `true` tells us to use the custom color [color] for the bullet
  */
 class BulletPointSpan(
         @Px private val gapWidth: Int = DEFAULT_GAP_WIDTH,
@@ -38,23 +42,78 @@ class BulletPointSpan(
         private val useColor: Boolean = color != Color.BLACK
 ) : LeadingMarginSpan {
 
-    // By default, lazy is thread safe. This is good if this property can be accessed from different
-    // threads, but impacts performance otherwise. As this property is initialized in a draw method,
-    // it's important to be as fast as possible.
+    /**
+     * The [Path] we use to draw a circle if the [Canvas] is hardware accelerated.
+     *
+     * By default, lazy is thread safe. This is good if this property can be accessed from different
+     * threads, but impacts performance otherwise. As this property is initialized in a draw method,
+     * it's important to be as fast as possible.
+     */
     private val bulletPath: Path by lazy(LazyThreadSafetyMode.NONE) { Path() }
 
+    /**
+     * Returns the amount by which to adjust the leading margin. Positive values move away from the
+     * leading edge of the paragraph, negative values move towards it. We just return 2 times our
+     * constant [DEFAULT_BULLET_RADIUS] plus 2 times our property [gapWidth].
+     *
+     * @param first `true` if the request is for the first line of a paragraph, `false` for
+     * subsequent lines
+     * @return the offset for the margin in pixels.
+     */
     override fun getLeadingMargin(first: Boolean): Int {
         return (2 * DEFAULT_BULLET_RADIUS + 2 * gapWidth).toInt()
     }
 
     /**
-     * Using a similar drawing mechanism with [android.text.style.BulletSpan] but adding
-     * margins before the bullet.
+     * Using a similar drawing mechanism with [BulletSpan] but adding margins before the bullet.
+     * This is called before the margin has been adjusted by the value returned by [getLeadingMargin].
+     * If the beginning of the range of text to which our [CharSequence] parameter [text] is attached
+     * is not equal to our [Int] parameter [lineStart] we return having done nothing. Otherwise we
+     * use the [Paint.withCustomColor] extension function of our [Paint] parameter [paint] to have
+     * it save the style and color of [paint], execute a lambda and restore the old style and color
+     * of [paint] afterwards. The lambda branches on whether our [Canvas] parameter [canvas] is
+     * hardware accelerated:
+     *  - It _does_ use hardware acceleration -- we add a circle to our [Path] field [bulletPath]
+     *  centered at (0,0) of radius [DEFAULT_BULLET_RADIUS] with a direction of [Path.Direction.CW].
+     *  We use the [Canvas.withTranslation] extension function of [canvas] to translate [canvas] to
+     *  the X coordinate whose value is that returned by our [getCircleXLocation] method for our
+     *  parameters [currentMarginLocation], [paragraphDirection] and Y coordinate is the value
+     *  returned by our [getCircleYLocation] method for our parameters [lineTop], [lineBottom].
+     *  In the lambda of [Canvas.withTranslation] we draw [bulletPath] on [canvas] using [paint] as
+     *  the [paint].
+     *  - It **does NOT** use hardware acceleration -- we just call the [Canvas.drawCircle] method
+     *  of [canvas] to have it draw a circle whose X coordinate is the value returned by our
+     *  [getCircleXLocation] method for our parameters [currentMarginLocation], [paragraphDirection]
+     *  and Y coordinate is the value returned by our [getCircleYLocation] method for our parameters
+     *  [lineTop], [lineBottom], of radius [DEFAULT_BULLET_RADIUS] using [paint] as its [Paint].
+     *
+     * @param canvas the [Canvas] to draw on.
+     * @param paint the [Paint] to use. The this should be left unchanged on exit.
+     * @param currentMarginLocation the current position of the margin.
+     * @param paragraphDirection the base direction of the paragraph; if negative, the margin
+     * is to the right of the text, otherwise it is to the left.
+     * @param lineTop the top of the line
+     * @param lineBaseline the baseline of the line
+     * @param lineBottom the bottom of the line
+     * @param text the text
+     * @param lineStart the start of the line
+     * @param lineEnd the end of the line
+     * @param isFirstLine true if this is the first line of its paragraph
+     * @param layout the layout containing this line
      */
     override fun drawLeadingMargin(
-            canvas: Canvas, paint: Paint, currentMarginLocation: Int, paragraphDirection: Int,
-            lineTop: Int, lineBaseline: Int, lineBottom: Int, text: CharSequence, lineStart: Int,
-            lineEnd: Int, isFirstLine: Boolean, layout: Layout
+        canvas: Canvas,
+        paint: Paint,
+        currentMarginLocation: Int,
+        paragraphDirection: Int,
+        lineTop: Int,
+        lineBaseline: Int,
+        lineBottom: Int,
+        text: CharSequence,
+        lineStart: Int,
+        lineEnd: Int,
+        isFirstLine: Boolean,
+        layout: Layout
     ) {
         if ((text as Spanned).getSpanStart(this) == lineStart) {
             paint.withCustomColor {
@@ -63,17 +122,17 @@ class BulletPointSpan(
                     bulletPath.addCircle(0.0f, 0.0f, 1.2f * DEFAULT_BULLET_RADIUS, Direction.CW)
 
                     canvas.withTranslation(
-                            getCircleXLocation(currentMarginLocation, paragraphDirection),
-                            getCircleYLocation(lineTop, lineBottom)
+                        getCircleXLocation(currentMarginLocation, paragraphDirection),
+                        getCircleYLocation(lineTop, lineBottom)
                     ) {
                         drawPath(bulletPath, paint)
                     }
                 } else {
                     canvas.drawCircle(
-                            getCircleXLocation(currentMarginLocation, paragraphDirection),
-                            getCircleYLocation(lineTop, lineBottom),
-                            DEFAULT_BULLET_RADIUS,
-                            paint
+                        getCircleXLocation(currentMarginLocation, paragraphDirection),
+                        getCircleYLocation(lineTop, lineBottom),
+                        DEFAULT_BULLET_RADIUS,
+                        paint
                     )
                 }
             }
