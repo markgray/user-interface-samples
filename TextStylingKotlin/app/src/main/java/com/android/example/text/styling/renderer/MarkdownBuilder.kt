@@ -26,24 +26,45 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import com.android.example.text.styling.parser.Element
 import com.android.example.text.styling.parser.Parser
+import com.android.example.text.styling.parser.TextMarkdown
 import com.android.example.text.styling.renderer.spans.BulletPointSpan
 import com.android.example.text.styling.renderer.spans.CodeBlockSpan
 
 /**
  * Renders the text as simple markdown, using spans.
+ *
+ * @param bulletPointColor the color to use for bullet points.
+ * @param codeBackgroundColor the color to use for the background of code blocks.
+ * @param codeBlockTypeface the [Typeface] to use for code blocks
+ * @param parser the [Parser] to use to parse markdown text.
  */
 class MarkdownBuilder(
-        @ColorInt private val bulletPointColor: Int,
-        @ColorInt private val codeBackgroundColor: Int,
-        private val codeBlockTypeface: Typeface?,
-        private val parser: Parser
+    @ColorInt private val bulletPointColor: Int,
+    @ColorInt private val codeBackgroundColor: Int,
+    private val codeBlockTypeface: Typeface?,
+    private val parser: Parser
 ) {
 
+    /**
+     * Converts a [String] containing markdown formatted text into a [SpannedString] which can be
+     * used as a rich text [CharSequence] for display in a `TextView`. We initialize our variable
+     * `val markdown` to the [TextMarkdown] instance that our [Parser] field [parser] parses from
+     * our [String] parameter [string]. It consists of a [List] of [Element] objects each of which
+     * holds a substring of [string] and a [Element.Type] which describes what that substring should
+     * be treated as given the markdown formatting which is relevant for it.
+     *
+     * @param string the [String] we are to parse as markdown formatted text and convert into a
+     * rich text [SpannedString].
+     * @return the [SpannedString] which can be used as a rich text [CharSequence] for display in a
+     * `TextView`.
+     */
     fun markdownToSpans(string: String): SpannedString {
-        val markdown = parser.parse(string)
+        val markdown: TextMarkdown = parser.parse(string)
 
         return buildSpannedString {
-            markdown.elements.forEach { it -> buildElement(it, this) }
+            markdown.elements.forEach {
+                buildElement(it, this)
+            }
         }
     }
 
@@ -59,8 +80,8 @@ class MarkdownBuilder(
                 Element.Type.QUOTE -> {
                     // You can set multiple spans for the same text
                     inSpans(StyleSpan(Typeface.ITALIC),
-                            LeadingMarginSpan.Standard(40),
-                            RelativeSizeSpan(1.1f)) {
+                        LeadingMarginSpan.Standard(40),
+                        RelativeSizeSpan(1.1f)) {
                         append(element.text)
                     }
                 }
