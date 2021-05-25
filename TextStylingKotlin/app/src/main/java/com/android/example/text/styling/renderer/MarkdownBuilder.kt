@@ -51,7 +51,12 @@ class MarkdownBuilder(
      * `val markdown` to the [TextMarkdown] instance that our [Parser] field [parser] parses from
      * our [String] parameter [string]. It consists of a [List] of [Element] objects each of which
      * holds a substring of [string] and a [Element.Type] which describes what that substring should
-     * be treated as given the markdown formatting which is relevant for it.
+     * be treated as given the markdown formatting which is relevant for it. We then return the
+     * [SpannedString] returned by the [buildSpannedString] method when it uses our supplied lambda
+     * to populate a newly created [SpannableStringBuilder] receiver which it then converts to a
+     * [SpannedString]. In our lambda we iterate over all of the [Element]s in the `elements` list
+     * of `markdown` calling our [buildElement] method with each element using `this` as the
+     * [SpannableStringBuilder] it adds spans to for each [Element].
      *
      * @param string the [String] we are to parse as markdown formatted text and convert into a
      * rich text [SpannedString].
