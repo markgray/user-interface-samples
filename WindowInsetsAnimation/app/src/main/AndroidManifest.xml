@@ -16,14 +16,16 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.android.samples.insetsanimation">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Chat">
+        android:theme="@style/Theme.Chat"
+        tools:ignore="AllowBackup">
 
         <activity
             android:name="com.google.android.samples.insetsanimation.MainActivity"
