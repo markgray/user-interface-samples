@@ -31,9 +31,40 @@ import com.google.android.samples.insetsanimation.databinding.FragmentConversati
  * the sample works.
  */
 class ConversationFragment : Fragment() {
+    /**
+     * The "backing" field for our read only [FragmentConversationBinding] field [binding]. It exists
+     * apparently only to avoid having to use !! every time we reference [binding]. It is initialize
+     * in our [onCreateView] override by using the [FragmentConversationBinding.inflate] method to
+     * inflate its layout file layout/fragment_conversation.xml into a binding object.
+     */
     private var _binding: FragmentConversationBinding? = null
+
+    /**
+     * Read only access to our null-able [FragmentConversationBinding] field [_binding].
+     */
     private val binding: FragmentConversationBinding get() = _binding!!
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This will be called between
+     * [onCreate] and [onViewCreated]. It is recommended to **only** inflate the layout in this method
+     * and move logic that operates on the returned View to [onViewCreated]. If you return a [View]
+     * from here, you will later be called in [onDestroyView] when the view is being released. We
+     * initialize our [FragmentConversationBinding] field [_binding] to the binding object that the
+     * [FragmentConversationBinding.inflate] method inflates from its associated layout file
+     * layout/fragment_conversation.xml using our parameter [inflater] as the [LayoutInflater], and
+     * our [ViewGroup] parameter [container] for the `LayoutParams` without attaching to the view.
+     * Then we return the outermost [View] in the associated layout file to the caller.
+     *
+     * @param inflater The [LayoutInflater] object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-`null`, this is the parent view that the fragment's
+     * UI will be attached to. The fragment should not add the view itself,
+     * but this can be used to generate the `LayoutParams` of the view.
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return Return the [View] for the fragment's UI, or `null`.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

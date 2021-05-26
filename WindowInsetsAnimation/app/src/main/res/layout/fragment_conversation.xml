@@ -15,7 +15,8 @@
   ~ limitations under the License.
 -->
 
-<com.google.android.samples.insetsanimation.InsetsAnimationLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.samples.insetsanimation.InsetsAnimationLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -37,7 +38,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginEnd="@dimen/spacing_small"
-            app:srcCompat="@drawable/ic_face" />
+            app:srcCompat="@drawable/ic_face"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -79,7 +81,8 @@
                 android:id="@+id/message_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/message_hint" />
+                android:hint="@string/message_hint"
+                tools:ignore="Autofill,TextFields" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +95,8 @@
             android:minHeight="48dp"
             android:padding="@dimen/spacing_medium"
             app:srcCompat="@drawable/ic_send"
-            app:tint="?attr/colorPrimary" />
+            app:tint="?attr/colorPrimary"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
