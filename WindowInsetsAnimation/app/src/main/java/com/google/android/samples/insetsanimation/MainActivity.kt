@@ -16,7 +16,11 @@
 
 package com.google.android.samples.insetsanimation
 
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.android.samples.insetsanimation.databinding.ActivityMainBinding
@@ -26,8 +30,23 @@ import com.google.android.samples.insetsanimation.databinding.ActivityMainBindin
  * is where the main entry point for this sample is.
  */
 class MainActivity : AppCompatActivity() {
+    /**
+     * The [ActivityMainBinding] that is inflated from our layout file layout/activity_main.xml
+     */
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we initialize our [ActivityMainBinding] field [binding] to the value returned when the
+     * [ActivityMainBinding.inflate] uses the [LayoutInflater] instance that this Window retrieved
+     * from its [Context] to inflate its associated layout file layout/activity_main.xml, and we
+     * set our content view to the outermost [View] in the layout file associated with [binding].
+     * Finally we call the [WindowCompat.setDecorFitsSystemWindows] method with the current [Window]
+     * of the activity and `false` for its `decorFitsSystemWindows` flag to tell the Window that our
+     * app is going to be responsible for fitting any system windows.
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
