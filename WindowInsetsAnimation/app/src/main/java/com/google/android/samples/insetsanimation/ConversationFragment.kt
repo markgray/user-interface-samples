@@ -20,10 +20,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsetsAnimation
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.samples.insetsanimation.databinding.FragmentConversationBinding
 
 /**
@@ -74,6 +76,19 @@ class ConversationFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Called immediately after [onCreateView] has returned, but before any saved state has been
+     * restored in to the view. This gives subclasses a chance to initialize themselves once they
+     * know their view hierarchy has been completely created. First we set the `adapter` of the
+     * [RecyclerView] in the [binding] to our layout file with ID [R.id.conversation_recyclerview]
+     * (ie. the [FragmentConversationBinding.conversationRecyclerview] property of [binding]) to a
+     * new instance of [ConversationAdapter]. The rest of the override sets our activity up to use
+     * [WindowInsetsAnimation] to animate its views and the ime, and is well documented in the code.
+     *
+     * @param view The [View] returned by [onCreateView].
+     * @param savedInstanceState If non-`null`, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Set our conversation adapter on the RecyclerView
         binding.conversationRecyclerview.adapter = ConversationAdapter()
@@ -169,6 +184,15 @@ class ConversationFragment : Fragment() {
          */
     }
 
+    /**
+     * Called when the view previously created by [onCreateView] has been detached from the fragment.
+     * The next time the fragment needs to be displayed, a new view will be created. This is called
+     * after [onStop] and before [onDestroy].  It is called regardless of whether [onCreateView]
+     * returned a non-`null` view. Internally it is called after the view's state has been saved but
+     * before it has been removed from its parent. We call our super's implementation of `onDestroyView`
+     * then set our [FragmentConversationBinding] field [_binding] to `null` (our [onCreateView]
+     * override will recreate it for us if we are re-started).
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
