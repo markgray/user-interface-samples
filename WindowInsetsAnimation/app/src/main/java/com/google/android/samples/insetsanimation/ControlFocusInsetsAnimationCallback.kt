@@ -39,6 +39,24 @@ class ControlFocusInsetsAnimationCallback(
     dispatchMode: Int = DISPATCH_MODE_STOP
 ) : WindowInsetsAnimationCompat.Callback(dispatchMode) {
 
+    /**
+     * Called when the insets change as part of running an animation. Note that even if multiple
+     * animations for different types are running, there will only be one progress callback per
+     * frame. The [insets] passed as an argument represents the overall state and will include all
+     * types, regardless of whether they are animating or not.
+     *
+     * Note that insets dispatch is hierarchical: It will start at the root of the view hierarchy,
+     * and then traverse it and invoke the callback of the specific [View] being traversed. The
+     * method may return a modified instance by calling [WindowInsetsCompat.inset] to indicate that
+     * a part of the insets have been used to offset or clip its children, and the children shouldn't
+     * worry about that part anymore. Furthermore, if [getDispatchMode] returns `DISPATCH_MODE_STOP`,
+     * children of this view will not receive the callback anymore. We just return our [insets]
+     * parameter to pass it on to our children.
+     *
+     * @param insets            The current insets.
+     * @param runningAnimations The currently running animations.
+     * @return The insets to dispatch to the subtree of the hierarchy.
+     */
     override fun onProgress(
         insets: WindowInsetsCompat,
         runningAnimations: List<WindowInsetsAnimationCompat>
