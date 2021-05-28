@@ -17,6 +17,7 @@
 package com.google.android.samples.insetsanimation
 
 import android.view.View
+import android.widget.EditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,7 +28,10 @@ import androidx.core.view.WindowInsetsCompat
  * [WindowInsetsAnimationCompat] has finished.
  *
  * This is primarily used when animating the [WindowInsetsCompat.Type.ime], so that the
- * appropriate view is focused for accepting input from the IME.
+ * appropriate view is focused for accepting input from the IME. One is added using the
+ * method [ViewCompat.setWindowInsetsAnimationCallback] for the [EditText] in the layout
+ * field layout/fragment_conversation.xml with ID [R.id.message_edittext] in the `onViewCreated`
+ * override of [ConversationFragment].
  *
  * @param view the view to request/clear focus
  * @param dispatchMode The dispatch mode for this callback.
@@ -65,6 +69,17 @@ class ControlFocusInsetsAnimationCallback(
         return insets
     }
 
+    /**
+     * Called when an insets animation has ended. If the type mask of our [WindowInsetsAnimationCompat]
+     * parameter [animation] has the insets type representing the window of an InputMethod bit set
+     * the IME animation has now finished, so we post a Runnable to the message queue of our [View]
+     * field [view] (the view to request/clear focus) which calls our [checkFocus] method to have it
+     * do what needs to be done to the focus status of [view] (the check needs to posted because the
+     * rootWindowInsets has not yet been updated, but will be in the next message traversal).
+     *
+     * @param animation The animation that has ended. This will be the same instance as passed into
+     * [WindowInsetsAnimationCompat.Callback.onStart]
+     */
     override fun onEnd(animation: WindowInsetsAnimationCompat) {
         if (animation.typeMask and WindowInsetsCompat.Type.ime() != 0) {
             // The animation has now finished, so we can check the view's focus state.
@@ -76,6 +91,10 @@ class ControlFocusInsetsAnimationCallback(
         }
     }
 
+    /**
+     * Called from a [Runnable] posted to our [View] field [view] from our [onEnd] override when the
+     * IME animation has ended so that we can request that focus be assigned appropriately.
+     */
     private fun checkFocus() {
         val imeVisible = ViewCompat.getRootWindowInsets(view)
             ?.isVisible(WindowInsetsCompat.Type.ime()) == true
