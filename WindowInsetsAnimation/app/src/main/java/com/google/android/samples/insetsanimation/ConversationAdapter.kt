@@ -25,6 +25,14 @@ import androidx.recyclerview.widget.RecyclerView
  * A simple [RecyclerView.Adapter] which displays a fake conversation.
  */
 internal class ConversationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    /**
+     * Called when [RecyclerView] needs a new [RecyclerView.ViewHolder] of the given type to
+     * represent an item.
+     *
+     * @param parent The [ViewGroup] into which the new View will be added after it is bound to
+     * an adapter position.
+     * @param viewType The view type of the new View.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = when (viewType) {
