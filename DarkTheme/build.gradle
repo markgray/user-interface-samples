@@ -3,14 +3,13 @@ if(hasProperty('target') && target == 'android') {
   android.vectorDrawables.useSupportLibrary = true
 }
 buildscript {
-  ext.kotlin_version = '1.5.0'
+  ext.kotlin_version = '1.5.10'
   repositories {
     google()
     mavenCentral()
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:4.2.1'
-    //noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
