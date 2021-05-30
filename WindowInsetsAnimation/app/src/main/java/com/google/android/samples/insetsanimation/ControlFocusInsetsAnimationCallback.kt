@@ -94,9 +94,16 @@ class ControlFocusInsetsAnimationCallback(
     /**
      * Called from a [Runnable] posted to our [View] field [view] from our [onEnd] override when the
      * IME animation has ended so that we can request that focus be assigned appropriately.
+     *
+     * We initialize our [Boolean] variable `val imeVisible` to `true` if the [WindowInsetsCompat]
+     * from the top of the view hierarchy of [view] is non-`null` and the insets type representing
+     * the window of an InputMethod is visible. Then if `imeVisible` is `true` and the topmost view
+     * in the current view hierarchy of [view] reports that no view in the hierarchy has focus we
+     * request focus for [view]. Otherwise if `imeVisible` is `false` and [view] has focus we give
+     * up [view]'s focus.
      */
     private fun checkFocus() {
-        val imeVisible = ViewCompat.getRootWindowInsets(view)
+        val imeVisible: Boolean = ViewCompat.getRootWindowInsets(view)
             ?.isVisible(WindowInsetsCompat.Type.ime()) == true
         if (imeVisible && view.rootView.findFocus() == null) {
             // If the IME will be visible, and there is not a currently focused view in
