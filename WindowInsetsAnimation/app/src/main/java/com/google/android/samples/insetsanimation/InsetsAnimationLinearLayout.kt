@@ -17,11 +17,13 @@
 package com.google.android.samples.insetsanimation
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
@@ -35,24 +37,35 @@ import androidx.core.view.WindowInsetsCompat
  * such as a [androidx.recyclerview.widget.RecyclerView].
  *
  * This class triggers a request to control the IME insets via
- * [SimpleImeAnimationController.startControlRequest] once it detect a scroll in an appropriate direction
- * to [onNestedPreScroll] and [onNestedScroll]. Once in control, the class will inset (move)
- * the IME in/off screen based on the user's scroll position, using
+ * [SimpleImeAnimationController.startControlRequest] once it detects a scroll in an appropriate
+ * direction to [onNestedPreScroll] and [onNestedScroll]. Once in control, the class will inset
+ * (move) the IME in/off screen based on the user's scroll position, using
  * [SimpleImeAnimationController.insetBy].
  *
  * The class supports both animating the IME onto screen (from not visible), and animating it
- * off-screen (from visible). This can be customize through the [scrollImeOnScreenWhenNotVisible]
+ * off-screen (from visible). This can be customized through the [scrollImeOnScreenWhenNotVisible]
  * and [scrollImeOffScreenWhenVisible] properties.
  *
  * Note: all of the nested scrolling logic could be extracted to a `CoordinatorLayout.Behavior`
  * if desired.
+ *
+ * @param context The Context the view is running in, through which it can
+ * access the current theme, resources, etc.
+ * @param attrs The attributes of the XML tag that is inflating the view.
+ * @param defStyleAttr An attribute in the current theme that contains a
+ * reference to a style resource that supplies default values for the view.
+ * Can be 0 to not look for defaults.
  */
+@RequiresApi(Build.VERSION_CODES.R)
 class InsetsAnimationLinearLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), NestedScrollingParent3 {
 
+    /**
+     * 
+     */
     private val nestedScrollingParentHelper = NestedScrollingParentHelper(this)
     private var currentNestedScrollingChild: View? = null
 
@@ -65,12 +78,14 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * Set to true to allow scrolling the IME off screen (from being visible),
      * by an downwards scroll. Defaults to `true`.
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     var scrollImeOffScreenWhenVisible = true
 
     /**
      * Set to true to allow scrolling the IME on screen (from not being visible),
      * by an upwards scroll. Defaults to `true`.
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     var scrollImeOnScreenWhenNotVisible = true
 
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
