@@ -42,7 +42,7 @@ class AppIndexingUpdateService : JobIntentService() {
 
         // Convert list of AppIndexingMetadata objects (custom class) to a list of Indexable
         // objects, so FirebaseAppIndex can consume them.
-        val firebaseAppIndex = FirebaseAppIndex.getInstance()
+        val firebaseAppIndex = FirebaseAppIndex.getInstance(getApplicationContext())
         val appIndexDataList = mutableListOf<Indexable>()
 
         for(indexableData in sliceIndexableDataList) {
