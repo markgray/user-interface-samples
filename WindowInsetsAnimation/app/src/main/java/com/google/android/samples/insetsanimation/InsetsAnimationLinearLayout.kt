@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
 import android.widget.LinearLayout
@@ -27,6 +28,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsAnimationControllerCompat
 import androidx.core.view.WindowInsetsCompat
 
 /**
@@ -64,14 +66,39 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr), NestedScrollingParent3 {
 
     /**
-     * 
+     * Our [NestedScrollingParentHelper] helper class for implementing nested scrolling parent views
+     * compatible with Android platform versions earlier than Android 5.0 Lollipop (API 21).
+     * [ViewGroup] subclasses should instantiate a final instance of this class as a field at
+     * construction. For each [ViewGroup] method that has a matching method signature in this class,
+     * delegate the operation to the helper instance in an overridden method implementation. This
+     * implements the standard framework policy for nested scrolling.
      */
     private val nestedScrollingParentHelper = NestedScrollingParentHelper(this)
+
+    /**
+     * Our nested scrolling [View]. It is a Direct child of this ViewParent which contains the target
+     * which has successfully claimed a nested scroll operation. It is set in our override of the
+     * [onNestedScrollAccepted] to the `child` [View] passed to the method.
+     */
     private var currentNestedScrollingChild: View? = null
 
+    /**
+     * The [SimpleImeAnimationController] which wraps a [WindowInsetsAnimationControllerCompat] to
+     * simplify the implementation of common use-cases around the app-driven animation of the IME.
+     */
     private val imeAnimController = SimpleImeAnimationController()
 
+    /**
+     * The change in location of the nested scrolling view. TODO: expand once you understand better.
+     */
     private var dropNextY = 0
+
+    /**
+     * The current location of the nested scrolling view [currentNestedScrollingChild] when our
+     * [startControlRequest] method is called to start an IME control request. It is used in our
+     * [onControllerReady] method to calculate [dropNextY] (the difference in the view's Y in the
+     * window. We store that to find the offset at the next nested scroll)
+     */
     private val startViewLocation = IntArray(2)
 
     /**
@@ -88,6 +115,29 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
     @Suppress("MemberVisibilityCanBePrivate")
     var scrollImeOnScreenWhenNotVisible = true
 
+    /**
+     * React to a descendant view initiating a nestable scroll operation, claiming the nested scroll
+     * operation if appropriate. This method will be called in response to a descendant view invoking
+     * `ViewCompat.startNestedScroll(View, int)`. Each parent up the view hierarchy will be given an
+     * opportunity to respond and claim the nested scrolling operation by returning `true`.
+     *
+     * This method may be overridden by `ViewParent` implementations to indicate when the view
+     * is willing to support a nested scrolling operation that is about to begin. If it returns
+     * `true`, this `ViewParent` will become the target view's nested scrolling parent for the
+     * duration of the scroll operation in progress. When the nested scroll is finished this
+     * `ViewParent` will receive a call to `onStopNestedScroll(View, int)`.
+     *
+     * We return `true` if the [ViewCompat.SCROLL_AXIS_VERTICAL] bit in our [axes] parameter is set,
+     * and our [type] parameter is [ViewCompat.TYPE_TOUCH], otherwise we return `false`. (ie. We
+     * only want to track vertical scrolls, which are driven from a direct touch event)
+     *
+     * @param child Direct child of this `ViewParent` containing target
+     * @param target View that initiated the nested scroll
+     * @param axes Flags consisting of [ViewCompat.SCROLL_AXIS_HORIZONTAL],
+     * [ViewCompat.SCROLL_AXIS_VERTICAL] or both
+     * @param type the type of input which caused this scroll event
+     * @return `true` if this `ViewParent` accepts the nested scroll operation
+     */
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
         // We only want to track vertical scrolls, which are driven from a direct touch event.
         return (axes and ViewCompat.SCROLL_AXIS_VERTICAL) != 0 && type == ViewCompat.TYPE_TOUCH
