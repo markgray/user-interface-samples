@@ -194,7 +194,16 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * so we can update the IME insets using the [SimpleImeAnimationController.insetBy] method of
      * [imeAnimController] which we call with minus `deltaY`, and subtract the amount of dy consumed
      * by the inset animation in pixels from `consumed[1]`. If an inset animation is NOT in progress
-     * we check if
+     * we check if:
+     *  - scroll IME away when visible' is enabled ([scrollImeOffScreenWhenVisible] is `true`
+     *  - we're not in control (the [SimpleImeAnimationController.isInsetAnimationRequestPending]
+     *  method of [imeAnimController] returns `false`)
+     *  - AND the IME is currently open (the [WindowInsetsCompat] from the top of the view hierarchy
+     *  reports that the Bit mask of `WindowInsetsCompat.Types.ime` is visible).
+     *
+     * If all or the above are `true` we start a control request by calling our [startControlRequest]
+     * method, and consume the scroll to stop the list scrolling while we wait for a controller by
+     * setting `consumed[1]` to `deltaY`.
      *
      * @param target [View] that initiated the nested scroll
      * @param dx Horizontal scroll distance in pixels
@@ -245,6 +254,38 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         }
     }
 
+    /**
+     * React to a nested scroll in progress. This method will be called when the [ViewParent]'s
+     * current nested scrolling child view dispatches a nested scroll event. To receive calls to
+     * this method the [ViewParent] must have previously returned `true` for a call to
+     * [onStartNestedScroll].
+     *
+     * Both the consumed and unconsumed portions of the scroll distance are reported to the
+     * [ViewParent]. An implementation may choose to use the consumed portion to match or chase
+     * scroll position of multiple child elements, for example. The unconsumed portion may be used
+     * to allow continuous dragging of multiple scrolling or draggable elements, such as scrolling
+     * a list within a vertical drawer where the drawer begins dragging once the edge of inner
+     * scrolling content is reached.
+     *
+     * This method is called when a nested scrolling child invokes
+     * `NestedScrollingChild3.dispatchNestedScroll` or one of methods it overloads.
+     *
+     * An implementation must report how many pixels of the the x and y scroll distances were
+     * consumed by this nested scrolling parent by adding the consumed distances to the [consumed]
+     * parameter. If this [View] also implements `NestedScrollingChild3`, [consumed] should also be
+     * passed up to it's nested scrolling parent so that the parent may also add any scroll distance
+     * it consumes. Index 0 corresponds to dx and index 1 corresponds to dy.
+     *
+     * @param target The descendant view controlling the nested scroll
+     * @param dxConsumed Horizontal scroll distance in pixels already consumed by target
+     * @param dyConsumed Vertical scroll distance in pixels already consumed by target
+     * @param dxUnconsumed Horizontal scroll distance in pixels not consumed by target
+     * @param dyUnconsumed Vertical scroll distance in pixels not consumed by target
+     * @param type the type of input which caused this scroll event
+     * @param consumed Output. Upon this method returning, will contain the scroll distances
+     * consumed by this nested scrolling parent and the scroll distances consumed by any other
+     * parent up the view hierarchy
+     */
     override fun onNestedScroll(
         target: View,
         dxConsumed: Int,
