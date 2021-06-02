@@ -21,6 +21,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
 import android.widget.LinearLayout
@@ -91,7 +92,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
     /**
      * The change in location of the nested scrolling view. TODO: expand once you understand better.
      */
-    private var dropNextY = 0
+    private var dropNextY: Int = 0
 
     /**
      * The current location of the nested scrolling view [currentNestedScrollingChild] when our
@@ -143,11 +144,64 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         return (axes and ViewCompat.SCROLL_AXIS_VERTICAL) != 0 && type == ViewCompat.TYPE_TOUCH
     }
 
+    /**
+     * React to the successful claiming of a nested scroll operation. This method will be called
+     * after [onStartNestedScroll] returns `true`. It offers an opportunity for the view and its
+     * superclasses to perform initial configuration for the nested scroll. Implementations of this
+     * method should always call their superclass's implementation of this method if one is present.
+     *
+     * We call the `onNestedScrollAccepted` method of our [NestedScrollingParentHelper] field
+     * [nestedScrollingParentHelper], then set our [View] field [currentNestedScrollingChild] to
+     * our parameter [child].
+     *
+     * @param child Direct child of this [ViewParent] containing target
+     * @param target View that initiated the nested scroll
+     * @param axes Flags consisting of [ViewCompat.SCROLL_AXIS_HORIZONTAL],
+     * [ViewCompat.SCROLL_AXIS_VERTICAL] or both.
+     * @param type the type of input which caused this scroll event. This will be
+     * [ViewCompat.TYPE_TOUCH] since that is the only type our [onStartNestedScroll]
+     * override returns `true` for.
+     */
     override fun onNestedScrollAccepted(child: View, target: View, axes: Int, type: Int) {
         nestedScrollingParentHelper.onNestedScrollAccepted(child, target, axes, type)
         currentNestedScrollingChild = child
     }
 
+    /**
+     * React to a nested scroll in progress before the target view consumes a portion of the scroll.
+     * When working with nested scrolling often the parent view may want an opportunity to consume
+     * the scroll before the nested scrolling child does. An example of this is a drawer that
+     * contains a scrollable list. The user will want to be able to scroll the list fully into view
+     * before the list itself begins scrolling.
+     *
+     * [onNestedPreScroll] is called when a nested scrolling child invokes [View.dispatchNestedPreScroll].
+     * The implementation should report how any pixels of the scroll reported by dx, dy were consumed
+     * in the [consumed] array. Index 0 corresponds to dx and index 1 corresponds to dy. This parameter
+     * will never be null. Initial values for `consumed[0]` and `consumed[1]` will always be 0.
+     *
+     * If the [SimpleImeAnimationController.isInsetAnimationRequestPending] method of our field
+     * [imeAnimController] returns `true` We're waiting for a controller to become ready so we
+     * consume and no-op the scroll by setting `consumed[0]` to [dx] and `consumed[1]` to [dy]
+     * and return.
+     *
+     * Otherwise we initialize our [Int] variable `var deltaY` to [dy], then if our [Int] field
+     * [dropNextY] is not 0 we set `consumed[1]` to [dropNextY], subtract [dropNextY] from `deltaY`
+     * and set [dropNextY] to 0.
+     *
+     * If `deltaY` is less than 0 the user is scrolling down, so we check if we currently have
+     * control by calling the [SimpleImeAnimationController.isInsetAnimationInProgress] method of
+     * our field [imeAnimController] (it returns true if an inset animation is in progress) and if
+     * so we can update the IME insets using the [SimpleImeAnimationController.insetBy] method of
+     * [imeAnimController] which we call with minus `deltaY`, and subtract the amount of dy consumed
+     * by the inset animation in pixels from `consumed[1]`. If an inset animation is NOT in progress
+     * we check if
+     *
+     * @param target [View] that initiated the nested scroll
+     * @param dx Horizontal scroll distance in pixels
+     * @param dy Vertical scroll distance in pixels
+     * @param consumed Output. The horizontal and vertical scroll distance consumed by this parent
+     * @param type the type of input which caused this scroll event
+     */
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
         if (imeAnimController.isInsetAnimationRequestPending()) {
             // We're waiting for a controller to become ready. Consume and no-op the scroll
@@ -156,7 +210,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
             return
         }
 
-        var deltaY = dy
+        var deltaY: Int = dy
         if (dropNextY != 0) {
             consumed[1] = dropNextY
             deltaY -= dropNextY
