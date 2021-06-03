@@ -201,7 +201,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      *  - AND the IME is currently open (the [WindowInsetsCompat] from the top of the view hierarchy
      *  reports that the Bit mask of `WindowInsetsCompat.Types.ime` is visible).
      *
-     * If all or the above are `true` we start a control request by calling our [startControlRequest]
+     * If all of the above are `true` we start a control request by calling our [startControlRequest]
      * method, and consume the scroll to stop the list scrolling while we wait for a controller by
      * setting `consumed[1]` to `deltaY`.
      *
@@ -276,6 +276,23 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * passed up to it's nested scrolling parent so that the parent may also add any scroll distance
      * it consumes. Index 0 corresponds to dx and index 1 corresponds to dy.
      *
+     * If our [Int] parameter [dyUnconsumed] is greater than 0 then the user is scrolling up, and
+     * the scrolling view isn't consuming the scroll so we check whether we currently have control
+     * by calling the [SimpleImeAnimationController.isInsetAnimationInProgress] method of
+     * [imeAnimController] and if it returns `true` we set `consumed[1]` to minus the value returned
+     * by the [SimpleImeAnimationController.insetBy] when it is passed minus [dyUnconsumed] as the
+     * value to update the inset position of the IME to (it returns the amount of [dyUnconsumed]
+     * consumed by the inset animation). If an inset animation is NOT in progress we check if:
+     *  - scroll IME away when visible' is enabled ([scrollImeOffScreenWhenVisible] is `true`
+     *  - we're not in control (the [SimpleImeAnimationController.isInsetAnimationRequestPending]
+     *  method of [imeAnimController] returns `false`)
+     *  - AND the IME is currently open (the [WindowInsetsCompat] from the top of the view hierarchy
+     *  reports that the Bit mask of `WindowInsetsCompat.Types.ime` is visible).
+     *
+     * If all the above  are `true` we start a control request by calling our [startControlRequest]
+     * method, and consume the scroll to stop the list scrolling while we wait for a controller by
+     * setting `consumed[1]` to `dyUnconsumed`.
+     *
      * @param target The descendant view controlling the nested scroll
      * @param dxConsumed Horizontal scroll distance in pixels already consumed by target
      * @param dyConsumed Vertical scroll distance in pixels already consumed by target
@@ -317,6 +334,21 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Request a fling from a nested scroll. This method signifies that a nested scrolling child has
+     * detected suitable conditions for a fling. Generally this means that a touch scroll has ended
+     * with a `VelocityTracker velocity` in the direction of scrolling that meets or exceeds the
+     * `ViewConfiguration.getScaledMinimumFlingVelocity` minimum fling velocity along a scrollable
+     * axis. If a nested scrolling child view would normally fling but it is at the edge of its own
+     * content, it can use this method to delegate the fling to its nested scrolling parent instead.
+     * The parent may optionally consume the fling or observe a child fling.
+     *
+     * @param target View that initiated the nested scroll
+     * @param velocityX Horizontal velocity in pixels per second
+     * @param velocityY Vertical velocity in pixels per second
+     * @param consumed true if the child consumed the fling, false otherwise
+     * @return true if this parent consumed or otherwise reacted to the fling
+     */
     override fun onNestedFling(
         target: View,
         velocityX: Float,
