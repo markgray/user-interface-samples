@@ -16,6 +16,7 @@
 
 package com.google.android.samples.insetsanimation
 
+import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -41,7 +42,7 @@ import kotlin.math.roundToInt
  * consume scrolling, overscrolling, and flinging interactions.
  *
  * The class supports both animating the IME onto screen (from not visible), and animating it
- * off-screen (from visible). This can be customize through the [scrollImeOnScreenWhenNotVisible]
+ * off-screen (from visible). This can be customized through the [scrollImeOnScreenWhenNotVisible]
  * and [scrollImeOffScreenWhenVisible] constructor parameters.
  *
  * This class is not actually used in the sample, but is left here as an example of how to
@@ -56,7 +57,17 @@ class InsetsAnimationTouchListener(
     private val scrollImeOffScreenWhenVisible: Boolean = true,
     private val scrollImeOnScreenWhenNotVisible: Boolean = true
 ) : View.OnTouchListener {
+    /**
+     * `true` if we are currently handling the touch gesture. We to `true` in our [onTouch] override
+     * if the gesture is mostly vertical, and larger than the touch slop.
+     */
     private var isHandling = false
+
+    /**
+     * X coordinate of the [MotionEvent] that triggered the call to our [onTouch] override for the
+     * actions [MotionEvent.ACTION_DOWN] and [MotionEvent.ACTION_MOVE], and set to 0 by our [reset]
+     * method which is called for actions [MotionEvent.ACTION_UP] and [MotionEvent.ACTION_CANCEL].
+     */
     private var lastTouchX = 0f
     private var lastTouchY = 0f
     private var lastWindowY = 0
@@ -67,6 +78,7 @@ class InsetsAnimationTouchListener(
 
     private var velocityTracker: VelocityTracker? = null
 
+    @SuppressLint("NewApi", "ClickableViewAccessibility")
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (velocityTracker == null) {
             // Obtain a VelocityTracker if we don't have one yet
