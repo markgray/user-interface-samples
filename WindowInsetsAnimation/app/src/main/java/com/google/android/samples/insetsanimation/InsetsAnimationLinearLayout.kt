@@ -465,7 +465,14 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
     /**
      * This starts a control request. First we call the [suppressLayoutCompat] method with `true`
      * to suppress layout so that nothing interrupts or is re-laid out while the IME animation
-     * starts.
+     * starts. Then we call the [getLocationInWindow] method of our nested scrolling [View] field
+     * [currentNestedScrollingChild] to have it compute the coordinates of that view in its window
+     * and store them in our [IntArray] field [startViewLocation] (this allows us to track any
+     * changes in its location as the animation prepares and starts). Then we call the
+     * [SimpleImeAnimationController.startControlRequest] method of [imeAnimController] using `this`
+     * [View] as the view which is triggering this request, and a lambda that calls our [onControllerReady]
+     * method as its `onRequestReady` listener that will be called when the request is ready and the
+     * animation can proceed.
      */
     private fun startControlRequest() {
         // Suppress layout, so that nothing interrupts or is re-laid out while the IME
@@ -483,6 +490,21 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         )
     }
 
+    /**
+     * This is the callback that the [SimpleImeAnimationController.startControlRequest] method calls
+     * when the request it starts is ready and the animation can proceed. First we initialize our
+     * varible `val scrollingChild` to our nested scrolling [View] field [currentNestedScrollingChild].
+     * Then if `scrollingChild` is not `null` we call the [SimpleImeAnimationController.insetBy] method
+     * of [imeAnimController] with 0 in order to have it dispatch an IME insets update now, to trigger
+     * any [WindowInsetsAnimation.Callback]s in the hierarchy, allowing them to setup for the animation.
+     * We initialize our [IntArray] variable `val location` to our field [tempIntArray2] then call the
+     * [getLocationInWindow] method of `scrollingChild` to have it compute the coordinates of that
+     * view in its window and store them in `location`. We then set our [Int] field [dropNextY] to
+     * `location[1]` (the current Y coordinate) minus the Y coordinate in our field [startViewLocation]
+     * (this is the difference in the view's Y in the window since [startControlRequest] was called).
+     * This is then used in our [onNestedPreScroll] override to calculate how much of the scroll to
+     * consume before the nested scrolling child sees the scroll.
+     */
     private fun onControllerReady() {
         val scrollingChild = currentNestedScrollingChild
         if (scrollingChild != null) {
@@ -499,7 +521,9 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
     }
 
     /**
-     * Resets all of our internal state.
+     * Resets all of our internal state. We set our [Int] field [dropNextY] to 0, fill our [IntArray]
+     * field [startViewLocation] with two 0's, then call the [suppressLayoutCompat] method with `false`
+     * to un-suppress layout just to make sure we do not suppress layout forever.
      */
     private fun reset() {
         // Clear all of our internal state
@@ -553,4 +577,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
     }
 }
 
+/**
+ * The temporary [IntArray] we use to store the location of our nested scrolling child.
+ */
 private val tempIntArray2 = IntArray(2)
