@@ -19,6 +19,7 @@ package com.google.android.samples.insetsanimation
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewParent
@@ -343,6 +344,32 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * content, it can use this method to delegate the fling to its nested scrolling parent instead.
      * The parent may optionally consume the fling or observe a child fling.
      *
+     * If the [SimpleImeAnimationController.isInsetAnimationInProgress] method of [imeAnimController]
+     * returns `true` we have an IME animation in progress from the user scrolling, so we can animate
+     * to the end state using the velocity by calling the `animateToFinish` method of [imeAnimController]
+     * with the Vertical velocity in pixels per second argument [velocityY] and return `true` to
+     * indicate that we reacted to the fling.
+     *
+     * Otherwise we may need to start a control request and immediately fling using [velocityY], so
+     * we initialize our [Boolean] variable `val imeVisible` to `true` if the [WindowInsetsCompat]
+     * returned by the [getRootWindowInsets] method of `this` [View] reports that the IME window
+     * inset is visible. Then when [velocityY] is greater than 0 (the fling is in a upwards direction)
+     * and [scrollImeOnScreenWhenNotVisible] is `true` (allows scrolling the IME on screen by an
+     * upwards scroll), and `imeVisible` is `false` (the IME is not visible yet) we start a control
+     * request by calling the [SimpleImeAnimationController.startAndFling] method of [imeAnimController]
+     * to have it start a control request for `this` [View] and immediately fling to a finish using
+     * [velocityY] once ready, then we return `true` to indicate that we reacted to the fling.
+     *
+     * If [velocityY] is less than 0 (the fling is in a downwards direction), and
+     * [scrollImeOnScreenWhenNotVisible] is `true` (allows scrolling the IME on screen by an upwards
+     * scroll), and `imeVisible` is `true` (the IME is visible) we also start a control request by
+     * calling the [SimpleImeAnimationController.startAndFling] method of [imeAnimController]
+     * to have it start a control request for `this` [View] and immediately fling to a finish using
+     * [velocityY] once ready, then we return `true` to indicate that we reacted to the fling.
+     *
+     * If none of the above situations are in effect we return `false` to indicate that we did not
+     * react to the fling.
+     *
      * @param target View that initiated the nested scroll
      * @param velocityX Horizontal velocity in pixels per second
      * @param velocityY Vertical velocity in pixels per second
@@ -364,7 +391,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         } else {
             // Otherwise we may need to start a control request and immediately fling
             // using the velocityY
-            val imeVisible = ViewCompat.getRootWindowInsets(this)
+            val imeVisible: Boolean = ViewCompat.getRootWindowInsets(this)
                 ?.isVisible(WindowInsets.Type.ime()) == true
             when {
                 velocityY > 0 && scrollImeOnScreenWhenNotVisible && !imeVisible -> {
@@ -389,6 +416,25 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         return false
     }
 
+    /**
+     * React to a nested scroll operation ending. Perform cleanup after a nested scrolling operation.
+     * This method will be called when a nested scroll stops, for example when a nested touch scroll
+     * ends with a [MotionEvent.ACTION_UP] or [MotionEvent.ACTION_CANCEL] event. Implementations of
+     * this method should always call their superclass's implementation of this method if one is
+     * present.
+     *
+     * First we call the `onStopNestedScroll` method of our [NestedScrollingParentHelper] field
+     * [nestedScrollingParentHelper]. Then if the [SimpleImeAnimationController.isInsetAnimationInProgress]
+     * method of [imeAnimController] indicates that an inset animation is in progress and its
+     * [SimpleImeAnimationController.isInsetAnimationFinishing] method indicates that an inset
+     * animation is NOT currently finishing, we call its [SimpleImeAnimationController.animateToFinish]
+     * method to finish the animation, animating to the end state if necessary.
+     *
+     * Finally we call our [reset] method to have it clear all of our internal state.
+     *
+     * @param target [View] that initiated the nested scroll
+     * @param type the type of input which caused this scroll event
+     */
     override fun onStopNestedScroll(target: View, type: Int) {
         nestedScrollingParentHelper.onStopNestedScroll(target, type)
 
@@ -400,6 +446,15 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         reset()
     }
 
+    /**
+     * Dispatches [WindowInsetsAnimation.Callback.onPrepare] when Window Insets animation is being
+     * prepared (which is called when an insets animation is about to start and before the views
+     * have been laid out in the end state of the animation). First we call our super's implementation
+     * of `dispatchWindowInsetsAnimationPrepare`, then since we suppressed layout in [startControlRequest]
+     * we need to un-suppress it now by calling [suppressLayoutCompat] with `false`.
+     *
+     * @param animation current animation
+     */
     override fun dispatchWindowInsetsAnimationPrepare(animation: WindowInsetsAnimation) {
         super.dispatchWindowInsetsAnimationPrepare(animation)
 
@@ -408,7 +463,9 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
     }
 
     /**
-     * This starts a control request.
+     * This starts a control request. First we call the [suppressLayoutCompat] method with `true`
+     * to suppress layout so that nothing interrupts or is re-laid out while the IME animation
+     * starts.
      */
     private fun startControlRequest() {
         // Suppress layout, so that nothing interrupts or is re-laid out while the IME
