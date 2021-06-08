@@ -113,7 +113,30 @@ class InsetsAnimationTouchListener(
 
     /**
      * Called when a touch event is dispatched to a [View]. This allows listeners to get a chance to
-     * respond before the target view.
+     * respond before the target view. First off, if our [VelocityTracker] field [velocityTracker]
+     * is `null` we initialize it to the new [VelocityTracker] instance returned by the method
+     * [VelocityTracker.obtain] (this will happen when we receive the first [MotionEvent.ACTION_DOWN]
+     * action for a new user gesture since it is set to `null` in our [reset] method whenever a
+     * gesture ends). We then branch on the action type of the [MotionEvent] parameter [event]:
+     *  - [MotionEvent.ACTION_DOWN] A pressed gesture has started, the motion contains the initial
+     *  starting location. We call the [VelocityTracker.addMovement] method of [velocityTracker] to
+     *  add the user's movement contained in [event] to the tracker (ie. the starting position and
+     *  starting time). We initialize our [Float] field [lastTouchX] to the X coordinate of [event]
+     *  and our [Float] field [lastTouchY] to the Y coordinate of [event]. We call our extension
+     *  function [View.copyBoundsInWindow] on our [View] parameter [v] to have it update the [Rect]
+     *  field [bounds] with the [View]'s position and bounds in its window, then initialize our
+     *  [Int] field [lastWindowY] to the top Y coordinate of [bounds].
+     *  - [MotionEvent.ACTION_MOVE] A change has happened during a press gesture (between ACTION_DOWN
+     *  and ACTION_UP). The motion contains the most recent point, as well as any intermediate points
+     *  since the last down or move event. We call our extension function [View.copyBoundsInWindow]
+     *  on our [View] parameter [v] to have it update the [Rect] field [bounds] with the [View]'s
+     *  position and bounds in its window, then initialize our [Int] variable `val windowOffsetY` to
+     *  the top Y coordinate of [bounds] minus our [Int] field [lastWindowY]. This is the movement
+     *  of the IME that may have occurred due to the progression of the `WindowInsetsAnimation`. We
+     *  then make a copy of the [MotionEvent] parameter [event] for our variable `val vtev`, offset
+     *  it by this calculated `windowOffsetY` using the [MotionEvent.offsetLocation] method, and then
+     *  call the [VelocityTracker.addMovement] method of [velocityTracker] to have it add `vtev` to
+     *  the movement in progress.
      *
      * @param v The [View] the touch event has been dispatched to.
      * @param event The [MotionEvent] object containing full information about the event.
@@ -142,7 +165,7 @@ class InsetsAnimationTouchListener(
                 // handling. We do that by keeping track of the view's Y position in the window,
                 // and detecting the difference between the current bounds.
                 v.copyBoundsInWindow(bounds)
-                val windowOffsetY = bounds.top - lastWindowY
+                val windowOffsetY: Int = bounds.top - lastWindowY
 
                 // We then make a copy of the MotionEvent, and offset it with the calculated
                 // windowOffsetY. We can then pass it to the VelocityTracker.
