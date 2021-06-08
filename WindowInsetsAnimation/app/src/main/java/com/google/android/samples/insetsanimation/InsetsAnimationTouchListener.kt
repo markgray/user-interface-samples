@@ -69,15 +69,56 @@ class InsetsAnimationTouchListener(
      * method which is called for actions [MotionEvent.ACTION_UP] and [MotionEvent.ACTION_CANCEL].
      */
     private var lastTouchX = 0f
+
+    /**
+     * Y coordinate of the [MotionEvent] that triggered the call to our [onTouch] override for the
+     * actions [MotionEvent.ACTION_DOWN] and [MotionEvent.ACTION_MOVE], and set to 0 by our [reset]
+     * method which is called for actions [MotionEvent.ACTION_UP] and [MotionEvent.ACTION_CANCEL].
+     * It is used to compute the change in Y of [MotionEvent.ACTION_MOVE] actions in our [onTouch]
+     * override, and that change between events is used to make decisions about the IME position.
+     */
     private var lastTouchY = 0f
+
+    /**
+     * The top Y coordinate in its window of the [View] in the touch event that was reported to our
+     * [onTouch] override. It is used for [MotionEvent.ACTION_MOVE] actions to detect the difference
+     * between the current bounds of the [View] as the `WindowInsetsAnimation` progresses in order
+     * to account for that change in our touch handling.
+     */
     private var lastWindowY = 0
 
+    /**
+     * The [Rect] we use when we call our [View.copyBoundsInWindow] extension function to contain
+     * the [View]'s position and bounds in its window. It is always used in our [onTouch] override
+     * for the [View] whose touch is being reported.
+     */
     private val bounds = Rect()
 
+    /**
+     * The [SimpleImeAnimationController] we use to animate our IME on and off the screen.
+     */
     private val simpleController = SimpleImeAnimationController()
 
+    /**
+     * The [VelocityTracker] helper we use for tracking the velocity of touch events. We call its
+     * [VelocityTracker.addMovement] method to add the movement of each [MotionEvent] received by
+     * our [onTouch] override, as well adding the movement of a [MotionEvent] which is offset to
+     * account for any animation of the IME that may have occurred, then we use its method
+     * [VelocityTracker.computeCurrentVelocity] to calculate the current velocity when we receive
+     * a [MotionEvent.ACTION_UP] action in order to use its `yVelocity` in a call to the method
+     * [SimpleImeAnimationController.animateToFinish] of [simpleController] to finish the current
+     * animation of the IME.
+     */
     private var velocityTracker: VelocityTracker? = null
 
+    /**
+     * Called when a touch event is dispatched to a [View]. This allows listeners to get a chance to
+     * respond before the target view.
+     *
+     * @param v The [View] the touch event has been dispatched to.
+     * @param event The [MotionEvent] object containing full information about the event.
+     * @return `true` if the listener has consumed the event, `false` otherwise.
+     */
     @SuppressLint("NewApi", "ClickableViewAccessibility")
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (velocityTracker == null) {
