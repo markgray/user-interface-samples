@@ -17,6 +17,7 @@
 package com.google.android.samples.insetsanimation
 
 import android.view.View
+import androidx.core.graphics.Insets
 import androidx.core.view.OnApplyWindowInsetsListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationCompat
@@ -67,11 +68,36 @@ class RootViewDeferringInsetsCallback(
         }
     }
 
+    /**
+     * The [View] applying window insets that is passed to our [onApplyWindowInsets] override.
+     */
     private var view: View? = null
+
+    /**
+     * The [WindowInsetsCompat] insets to apply that is passed to our [onApplyWindowInsets] override.
+     */
     private var lastWindowInsets: WindowInsetsCompat? = null
 
+    /**
+     * Flag to indicate whether there are deferred insets for our [onEnd] override to apply when
+     * the insets animation has ended. Set to `true` in our [onPrepare] override if the `typeMask`
+     * of the [WindowInsetsAnimationCompat] passed it has at least one bit set in it which is also
+     * set in our [deferredInsetTypes] property. Set back to `false` in our [onEnd] override.
+     */
     private var deferredInsets = false
 
+    /**
+     * Part of the [OnApplyWindowInsetsListener] interface. When this class is set as the
+     * [OnApplyWindowInsetsListener] of a [View] using the [ViewCompat.setOnApplyWindowInsetsListener]
+     * method, this method will be called instead of the view's own [View.onApplyWindowInsets] method.
+     *
+     * First we save our [View] parameter [v] in our field [view] and our [WindowInsetsCompat] parameter
+     * [windowInsets] in our field [lastWindowInsets] for later use in our [onEnd] override.
+     *
+     * @param v The view applying window insets
+     * @param windowInsets The insets to apply
+     * @return The insets supplied, minus any insets that were consumed
+     */
     override fun onApplyWindowInsets(
         v: View,
         windowInsets: WindowInsetsCompat
@@ -80,7 +106,7 @@ class RootViewDeferringInsetsCallback(
         view = v
         lastWindowInsets = windowInsets
 
-        val types = when {
+        val types: Int = when {
             // When the deferred flag is enabled, we only use the systemBars() insets
             deferredInsets -> persistentInsetTypes
             // Otherwise we handle the combination of the the systemBars() and ime() insets
@@ -88,7 +114,7 @@ class RootViewDeferringInsetsCallback(
         }
 
         // Finally we apply the resolved insets by setting them as padding
-        val typeInsets = windowInsets.getInsets(types)
+        val typeInsets: Insets = windowInsets.getInsets(types)
         v.setPadding(typeInsets.left, typeInsets.top, typeInsets.right, typeInsets.bottom)
 
         // We return the new WindowInsetsCompat.CONSUMED to stop the insets being dispatched any
