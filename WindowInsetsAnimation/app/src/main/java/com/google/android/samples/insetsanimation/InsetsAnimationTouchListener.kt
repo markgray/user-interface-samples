@@ -136,7 +136,36 @@ class InsetsAnimationTouchListener(
      *  then make a copy of the [MotionEvent] parameter [event] for our variable `val vtev`, offset
      *  it by this calculated `windowOffsetY` using the [MotionEvent.offsetLocation] method, and then
      *  call the [VelocityTracker.addMovement] method of [velocityTracker] to have it add `vtev` to
-     *  the movement in progress.
+     *  the movement in progress. Next we initialize our [Float] variable `val dx` to the X coordinate
+     *  of `vtev` minus [lastTouchX] and our [Float] variable `val dy` to the Y coordinate of `vtev`
+     *  minus [lastTouchY] (these are the changes in position of the window since the previous touch
+     *  gesture). If [isHandling] is `false` we're not currently handling the touch gesture, so we
+     *  check if we should start handling, by seeing if the gesture is majorly vertical (the absolute
+     *  value of `dy` is greater than absolute value of `dx`), and the absolute value of `dy` is
+     *  larger than the touch slop) and we save this [Boolean] value in [isHandling]. Next we check
+     *  if [isHandling] is now `true` and if so we check if [simpleController] has an inset animation
+     *  in progress and if so we update the IME insets to 'scroll' the IME in by `dy`. If no inset
+     *  animation is in progress we check that [simpleController] has no animation pending and our
+     *  [shouldStartRequest] method determines if given `dy` and the visibility of the IME support
+     *  a IME animation request and if so we call the [SimpleImeAnimationController.startControlRequest]
+     *  method of [simpleController] to start the inset animation of the IME. As a last step when
+     *  [isHandling] is `true` we record the event's Y coordinate in [lastTouchY], its X coordinate
+     *  in [lastTouchX], and view's Y window position (the `top` of our [Rect] field [bounds]) in
+     *  [lastWindowY], for the next touch event.
+     *  - [MotionEvent.ACTION_UP] A pressed gesture has finished, the motion contains the final
+     *  release location as well as any intermediate points since the last down or move event. We
+     *  call the [VelocityTracker.addMovement] method of [velocityTracker] to add the final movement
+     *  to the tracker, then we call its [VelocityTracker.computeCurrentVelocity] method to have it
+     *  compute the current velocity based on the points that have been collected in pixels per
+     *  second, and then initialize our [Float] variable `val velocityY` to the Y component of the
+     *  velocity is calculated. We then call our [SimpleImeAnimationController.animateToFinish]
+     *  method of [velocityTracker] to have it finish the animation, and finally call our [reset]
+     *  method to reset our touch handling state.
+     *  - [MotionEvent.ACTION_CANCEL] The current gesture has been aborted. We call the
+     *  [SimpleImeAnimationController.cancel] method of [simpleController] then call our [reset]
+     *  method to reset our touch handling state.
+     *
+     * Finally we return `false` to indicate that we did not consume the event.
      *
      * @param v The [View] the touch event has been dispatched to.
      * @param event The [MotionEvent] object containing full information about the event.
@@ -173,8 +202,8 @@ class InsetsAnimationTouchListener(
                 vtev.offsetLocation(0f, windowOffsetY.toFloat())
                 velocityTracker?.addMovement(vtev)
 
-                val dx = vtev.x - lastTouchX
-                val dy = vtev.y - lastTouchY
+                val dx: Float = vtev.x - lastTouchX
+                val dy: Float = vtev.y - lastTouchY
 
                 if (!isHandling) {
                     // If we're not currently handling the touch gesture, lets check if we should
@@ -216,7 +245,7 @@ class InsetsAnimationTouchListener(
 
                 // Calculate the current velocityY, over 1000 milliseconds
                 velocityTracker?.computeCurrentVelocity(1000)
-                val velocityY = velocityTracker?.yVelocity
+                val velocityY: Float? = velocityTracker?.yVelocity
 
                 // If we received a ACTION_UP event, end any current WindowInsetsAnimation passing
                 // in the calculated Y velocity
@@ -254,6 +283,18 @@ class InsetsAnimationTouchListener(
     /**
      * Returns true if the given [dy], [IME visibility][imeVisible], and constructor options
      * support a IME animation request.
+     *  - If [dy] is less than 0 (the user is scrolling up), the [imeVisible] parameter is `false`
+     *  (the IME is not currently visible) and [scrollImeOnScreenWhenNotVisible] is `true` we return
+     *  `true`
+     *  - If [dy] is greater than 0 (the user is scrolling down), the [imeVisible] parameter is
+     *  `true` (the IME is currently visible) and [scrollImeOffScreenWhenVisible] is `true` we
+     *  return `true`
+     *
+     * For all other cases we return `false`.
+     *
+     * @param dy the change in the Y coordinate which has occurred.
+     * @param imeVisible `true` if the IME is currently on screen.
+     * @return `true` if we decide that an IME animation request is called for.
      */
     private fun shouldStartRequest(dy: Float, imeVisible: Boolean) = when {
         // If the user is scroll up, return true if scrollImeOnScreenWhenNotVisible is true, and
