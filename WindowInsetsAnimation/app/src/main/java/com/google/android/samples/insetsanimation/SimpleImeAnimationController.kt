@@ -44,7 +44,20 @@ internal class SimpleImeAnimationController {
      * The [WindowInsetsAnimationControllerCompat] that we use to animate the IME.
      */
     private var insetsAnimationController: WindowInsetsAnimationControllerCompat? = null
+
+    /**
+     * The [CancellationSignal] we use to cancel the controlWindowInsetsAnimation() request which is
+     * made in our [startControlRequest] method. Its [CancellationSignal.cancel] method is called by
+     * our methods [animateToFinish], [cancel], and [finish].
+     */
     private var pendingRequestCancellationSignal: CancellationSignal? = null
+
+    /**
+     * This is the lambda passed to our [startControlRequest] method which will be `invoked` in our
+     * [onRequestReady] method on our [WindowInsetsAnimationControllerCompat] when the `onReady`
+     * override of our [WindowInsetsAnimationControlListenerCompat] field [animationControlListener]
+     * is called when the animation is ready to be controlled.
+     */
     private var pendingRequestOnReady: ((WindowInsetsAnimationControllerCompat) -> Unit)? = null
 
     /**
@@ -55,7 +68,16 @@ internal class SimpleImeAnimationController {
     private val animationControlListener by lazy {
         object : WindowInsetsAnimationControlListenerCompat {
             /**
-             * Once the request is ready, call our [onRequestReady] function
+             * Called when the animation is ready to be controlled. This may be delayed when the IME
+             * needs to redraw because of an `EditorInfo` change, or when the window is starting up.
+             * Once the request is ready, we call our [onRequestReady] function.
+             *
+             * @param controller The controller to control the inset animation.
+             * @param types The `Type`s it was able to gain control over. Note that this may be
+             * different than the types passed into the [WindowInsetsAnimationControllerCompat]
+             * method `controlWindowInsetsAnimation` in case the window wasn't able to gain the
+             * controls because it wasn't the IME target or not currently the window that's
+             * controlling the system bars.
              */
             override fun onReady(
                 controller: WindowInsetsAnimationControllerCompat,
@@ -63,19 +85,29 @@ internal class SimpleImeAnimationController {
             ) = onRequestReady(controller)
 
             /**
-             * If the request is finished, we should reset our internal state
+             * Called when the request for control over the insets has finished. If the request is
+             * finished we should reset our internal state, which we do by calling our [reset] method.
+             *
+             * @param controller the controller which has finished.
              */
             override fun onFinished(controller: WindowInsetsAnimationControllerCompat) = reset()
 
             /**
-             * If the request is cancelled, we should reset our internal state
+             * Called when the request for control over the insets has been cancelled, either because
+             * the [CancellationSignal] associated with the window insets animation request} has been
+             * invoked, or the window has lost control over the insets (e.g. because it lost focus).
+             * If the request is cancelled, we should reset our internal state, which we do by calling
+             * our [reset] method.
+             *
+             * @param controller the controller which has been cancelled, or `null` if the reques
+             * t was cancelled before [onReady] was invoked.
              */
             override fun onCancelled(controller: WindowInsetsAnimationControllerCompat?) = reset()
         }
     }
 
     /**
-     * True if the IME was shown at the start of the current animation.
+     * `true` if the IME was shown at the start of the current animation.
      */
     private var isImeShownAtStart = false
 
