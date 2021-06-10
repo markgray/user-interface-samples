@@ -40,13 +40,18 @@ import kotlin.math.roundToInt
  * to use this class.
  */
 internal class SimpleImeAnimationController {
+    /**
+     * The [WindowInsetsAnimationControllerCompat] that we use to animate the IME.
+     */
     private var insetsAnimationController: WindowInsetsAnimationControllerCompat? = null
     private var pendingRequestCancellationSignal: CancellationSignal? = null
     private var pendingRequestOnReady: ((WindowInsetsAnimationControllerCompat) -> Unit)? = null
 
-    /* To take control of the an WindowInsetsAnimation, we need to pass in a listener to
-       controlWindowInsetsAnimation() in startControlRequest(). The listener created here
-       keeps track of the current WindowInsetsAnimationController and resets our state. */
+    /**
+     * To take control of the an WindowInsetsAnimation, we need to pass in a listener to
+     * controlWindowInsetsAnimation() in startControlRequest(). The listener created here
+     * keeps track of the current WindowInsetsAnimationController and resets our state.
+     */
     private val animationControlListener by lazy {
         object : WindowInsetsAnimationControlListenerCompat {
             /**
