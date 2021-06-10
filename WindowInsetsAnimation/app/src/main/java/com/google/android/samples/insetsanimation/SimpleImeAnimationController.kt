@@ -99,8 +99,8 @@ internal class SimpleImeAnimationController {
              * If the request is cancelled, we should reset our internal state, which we do by calling
              * our [reset] method.
              *
-             * @param controller the controller which has been cancelled, or `null` if the reques
-             * t was cancelled before [onReady] was invoked.
+             * @param controller the controller which has been cancelled, or `null` if the request
+             * was cancelled before [onReady] was invoked.
              */
             override fun onCancelled(controller: WindowInsetsAnimationControllerCompat?) = reset()
         }
