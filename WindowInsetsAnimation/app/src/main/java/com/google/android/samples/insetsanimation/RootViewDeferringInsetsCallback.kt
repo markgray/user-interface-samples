@@ -92,7 +92,17 @@ class RootViewDeferringInsetsCallback(
      * method, this method will be called instead of the view's own [View.onApplyWindowInsets] method.
      *
      * First we save our [View] parameter [v] in our field [view] and our [WindowInsetsCompat] parameter
-     * [windowInsets] in our field [lastWindowInsets] for later use in our [onEnd] override.
+     * [windowInsets] in our field [lastWindowInsets] for later use in our [onEnd] override. Then we
+     * initialize our [Int] variable `val types` to [persistentInsetTypes] if [deferredInsets] is
+     * `true` (when the deferred flag is enabled, we only use the systemBars() insets) or to the
+     * combination of the the systemBars() and ime() insets (bitwise `or` of [persistentInsetTypes]
+     * and [deferredInsetTypes]) if it is `false`. We initialize our [Insets] variable `val typeInsets`
+     * to the value returned by the [WindowInsetsCompat.getInsets] method of our parameter [windowInsets]
+     * for the inset types specified by `types` and we apply the resolved insets by setting them as
+     * padding for our [View] parameter [v]. Finally we return the new [WindowInsetsCompat.CONSUMED]
+     * to stop the insets being dispatched any further into the view hierarchy (this is a
+     * [WindowInsetsCompat] instance whose [WindowInsetsCompat.isConsumed] returns `true` and replaces
+     * the deprecated [WindowInsetsCompat.consumeSystemWindowInsets] and related functions).
      *
      * @param v The view applying window insets
      * @param windowInsets The insets to apply
@@ -123,6 +133,17 @@ class RootViewDeferringInsetsCallback(
         return WindowInsetsCompat.CONSUMED
     }
 
+    /**
+     * Part of the abstract [WindowInsetsAnimationCompat.Callback] class. Called when an insets
+     * animation is about to start and before the views have been re-laid out due to an animation.
+     * If one of the bits in our field [deferredInsetTypes] is set in the mask returned by the method
+     * [WindowInsetsAnimationCompat.getTypeMask] (aka kotlin `typeMask` property) of our parameter
+     * [animation] we set our field [deferredInsets] to `true` (We defer the IME insets if the IME
+     * is currently not visible. This results in only the [WindowInsetsCompat.Type.systemBars] being
+     * applied, allowing the scrolling view to remain at it's larger size).
+     *
+     * @param animation The animation that is about to start.
+     */
     override fun onPrepare(animation: WindowInsetsAnimationCompat) {
         if (animation.typeMask and deferredInsetTypes != 0) {
             // We defer the WindowInsetsCompat.Type.ime() insets if the IME is currently not visible.
@@ -132,6 +153,15 @@ class RootViewDeferringInsetsCallback(
         }
     }
 
+    /**
+     * Part of the abstract [WindowInsetsAnimationCompat.Callback] class. Called when the insets
+     * change as part of running an animation. This is a no-op. We don't actually want to handle any
+     * [WindowInsetsAnimationCompat] animations.
+     *
+     * @param insets The current [WindowInsetsCompat] insets.
+     * @param runningAnims The currently running animations.
+     * @return The [WindowInsetsCompat] insets to dispatch to the subtree of the hierarchy.
+     */
     override fun onProgress(
         insets: WindowInsetsCompat,
         runningAnims: List<WindowInsetsAnimationCompat>
@@ -140,6 +170,20 @@ class RootViewDeferringInsetsCallback(
         return insets
     }
 
+    /**
+     * Part of the abstract [WindowInsetsAnimationCompat.Callback] class. Called when an insets
+     * animation has ended. If our field [deferredInsets] is `true` (we have deferred IME insets)
+     * and one of the bits in our field [deferredInsetTypes] is set in the mask returned by the method
+     * [WindowInsetsAnimationCompat.getTypeMask] (aka kotlin `typeMask` property) of our parameter
+     * [animation] we set [deferredInsets] to `false` (we deferred the IME insets and an IME animation
+     * has finished, so we need to reset the flag), then if our [WindowInsetsCompat] field
+     * [lastWindowInsets] is not `null` and our [View] field [view] is not `null` we use the
+     * [ViewCompat.dispatchApplyWindowInsets] method to dispatch the deferred insets in [lastWindowInsets]
+     * to [view] now.
+     *
+     * @param animation The animation that has ended. This will be the same instance as passed into
+     * [onStart].
+     */
     override fun onEnd(animation: WindowInsetsAnimationCompat) {
         if (deferredInsets && (animation.typeMask and deferredInsetTypes) != 0) {
             // If we deferred the IME insets and an IME animation has finished, we need to reset
