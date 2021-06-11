@@ -26,6 +26,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsAnimationControlListenerCompat
 import androidx.core.view.WindowInsetsAnimationControllerCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import androidx.dynamicanimation.animation.springAnimationOf
@@ -111,11 +112,23 @@ internal class SimpleImeAnimationController {
      */
     private var isImeShownAtStart = false
 
+    /**
+     * [SpringAnimation] that our [animateImeToVisibility] method uses to animate the IME to it's
+     * fully shown state, or to it's fully hidden state.
+     */
     private var currentSpringAnimation: SpringAnimation? = null
 
     /**
      * Start a control request to the [view]s [android.view.WindowInsetsController]. This should
-     * be called once the view is in a position to take control over the position of the IME.
+     * be called once the view is in a position to take control over the position of the IME. First
+     * we [check] that [isInsetAnimationInProgress] is `false` and throw an [IllegalStateException]
+     * if it is `true` ("Animation in progress. Can not start a new request..."). Then we initialize
+     * our [isImeShownAtStart] field to `true` if the original [WindowInsetsCompat] that was dispatched
+     * to the view hierarchy indicates that the IME is visible. We initalize our [CancellationSignal]
+     * field [pendingRequestCancellationSignal] to a new instance and save a reference to our
+     * [onRequestReady] parameter in our function reference field [pendingRequestOnReady].
+     *
+     * Finally we make the [WindowInsetsControllerCompat.controlWindowInsetsAnimation] request:
      *
      * @param view The view which is triggering this request
      * @param onRequestReady optional listener which will be called when the request is ready and
