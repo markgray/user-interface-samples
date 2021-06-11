@@ -128,7 +128,18 @@ internal class SimpleImeAnimationController {
      * field [pendingRequestCancellationSignal] to a new instance and save a reference to our
      * [onRequestReady] parameter in our function reference field [pendingRequestOnReady].
      *
-     * Finally we make the [WindowInsetsControllerCompat.controlWindowInsetsAnimation] request:
+     * Finally we make the [WindowInsetsControllerCompat.controlWindowInsetsAnimation] request by
+     * retrieving a [WindowInsetsControllerCompat] of the window that our [View] parameter view is
+     * attached to and calling its [WindowInsetsControllerCompat.controlWindowInsetsAnimation] method
+     * which requests the control of the IME window inset type, with a undetermined duration (a -1 is
+     * used to indicate that we're not starting a finite animation, and it will be completely
+     * controlled by the user's touch), our [LinearInterpolator] field [linearInterpolator] as the
+     * interpolator used for the animation, our [CancellationSignal] field [pendingRequestCancellationSignal]
+     * as the cancellation signal that we can use to cancel the request to obtain control, or once
+     * we have control, to cancel the control, and our [WindowInsetsAnimationControlListenerCompat]
+     * field [animationControlListener] as the listener that will be called when the window is ready
+     * to be controlled (its `onReady` callback), along with its callbacks `onFinished` and
+     * `onCancelled`.
      *
      * @param view The view which is triggering this request
      * @param onRequestReady optional listener which will be called when the request is ready and
@@ -177,6 +188,11 @@ internal class SimpleImeAnimationController {
      * [startControlRequest], but immediately fling to a finish using [velocityY] once ready.
      *
      * This function is useful for fire-and-forget operations to animate the IME.
+     *
+     * It consists of a call to [startControlRequest] with our [View] parameter [view] as the [View]
+     * to use to get a [WindowInsetsControllerCompat] and a lambda as the function to call when the
+     * controller is ready which calls our [animateToFinish] method with [velocityY] as the velocity
+     * to use to determine the direction.
      *
      * @param view The view which is triggering this request
      * @param velocityY the velocity of the touch gesture which caused this call
