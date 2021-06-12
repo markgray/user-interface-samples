@@ -204,9 +204,14 @@ internal class SimpleImeAnimationController {
     /**
      * Update the inset position of the IME by the given [dy] value. This value will be coerced
      * into the hidden and shown inset values.
-     *
      * This function should only be called if [isInsetAnimationInProgress] returns true.
      *
+     * We initialize our [WindowInsetsAnimationControllerCompat] variable `val controller` to our
+     * field [insetsAnimationController], throwing [IllegalStateException] if it is `null`. Then we
+     * return the value returned by our [insetTo] method when it updates the inset position of the
+     * IME to the current bottom inset minus our [Int] parameter [dy].
+     *
+     * @param dy the number of pixels to change the inset position of the IME by.
      * @return the amount of [dy] consumed by the inset animation, in pixels
      */
     fun insetBy(dy: Int): Int {
@@ -223,9 +228,29 @@ internal class SimpleImeAnimationController {
     /**
      * Update the inset position of the IME to be the given [inset] value. This value will be
      * coerced into the hidden and shown inset values.
-     *
      * This function should only be called if [isInsetAnimationInProgress] returns true.
      *
+     * We initialize our [WindowInsetsAnimationControllerCompat] variable `val controller` to our
+     * field [insetsAnimationController], throwing [IllegalStateException] if it is `null`. We
+     * initialize our [Int] variable `val hiddenBottom` to the bottom inset of the IME inset when
+     * the IME is fully hidden, and our [Int] variable `val shownBottom` to the bottom inset of the
+     * IME inset when the IME is fully shown. We initialize our [Int] variable `val startBottom` to
+     * `shownBottom` if [isImeShownAtStart] is `true` or to `hiddenBottom` if it is `false`. We
+     * initialize our [Int] variable `val endBottom` to `hiddenBottom` if [isImeShownAtStart] is
+     * `true` or to `shownBottom` if it is `false`. We use the [Int.coerceIn] extension method to
+     * coerce our [Int] parameter [inset] to a value between `hiddenBottom` and `shownBottom` and
+     * use this value to initialize our [Int] variable `val coercedBottom`. We initialize our [Int]
+     * variable `val consumedDy` to the current bottom inset of the IME minus `coercedBottom`.
+     *
+     * As a last step we use the [WindowInsetsAnimationControllerCompat.setInsetsAndAlpha] method of
+     * `controller` to  update the insets of the IME to an [Insets] whose bottom is `coercedBottom`,
+     * using an alpha of 1f to avoid altering the alpha, and using as the fraction of the animation
+     * progress `coercedBottom` minus `startBottom` divided by `endBottom` minus `startBottom` as a
+     * [Float] (this value is passed to any window insets animation callbacks that are interested).
+     *
+     * Finally we return `consumedDy` to the caller as the distance "consumed" by the call.
+     *
+     * @param inset the inset position of the IME to move to in pixels.
      * @return the distance moved by the inset animation, in pixels
      */
     fun insetTo(inset: Int): Int {
