@@ -287,29 +287,47 @@ internal class SimpleImeAnimationController {
     }
 
     /**
-     * Return `true` if an inset animation is in progress.
+     * Convenience function to test if our [WindowInsetsAnimationControllerCompat] field
+     * [insetsAnimationController] is not `null` which indicates that an inset animation
+     * is in progress.
+     *
+     * @return `true` if an inset animation is in progress.
      */
     fun isInsetAnimationInProgress(): Boolean {
         return insetsAnimationController != null
     }
 
     /**
-     * Return `true` if an inset animation is currently finishing.
+     * Convenience function to test if our [SpringAnimation] field [currentSpringAnimation] is not
+     * `null` which indicates that an inset animation is currently finishing.
+     *
+     * @return `true` if an inset animation is currently finishing.
      */
     fun isInsetAnimationFinishing(): Boolean {
         return currentSpringAnimation != null
     }
 
     /**
-     * Return `true` if a request to control an inset animation is in progress.
+     * Convenience function to test if our [CancellationSignal] field [pendingRequestCancellationSignal]
+     * is not `null` which indicates that a request to control an inset animation is in progress.
+     *
+     * @return `true` if a request to control an inset animation is in progress.
      */
     fun isInsetAnimationRequestPending(): Boolean {
         return pendingRequestCancellationSignal != null
     }
 
     /**
-     * Cancel the current [WindowInsetsAnimationControllerCompat]. We immediately finish
-     * the animation, reverting back to the state at the start of the gesture.
+     * Cancel the current [WindowInsetsAnimationControllerCompat]. We immediately finish the
+     * animation by calling the [WindowInsetsAnimationControllerCompat.finish] method of our
+     * field [insetsAnimationController] if [insetsAnimationController] is not `null`, call the
+     * [CancellationSignal.cancel] method of our field [pendingRequestCancellationSignal] if
+     * [pendingRequestCancellationSignal] is not `null` to cancel the request to control started
+     * by our [startControlRequest] method, and call the [SpringAnimation.cancel] method of our
+     * field [currentSpringAnimation] if [currentSpringAnimation] is not `null` to cancel the
+     * current spring animation that may have been started by our [animateImeToVisibility] method.
+     *
+     * Finally we call our [reset] method to reset all of our internal state.
      */
     fun cancel() {
         insetsAnimationController?.finish(isImeShownAtStart)
@@ -322,7 +340,13 @@ internal class SimpleImeAnimationController {
     }
 
     /**
-     * Finish the current [WindowInsetsAnimationControllerCompat] immediately.
+     * Finish the current [WindowInsetsAnimationControllerCompat] immediately. We initialize our
+     * [WindowInsetsAnimationControllerCompat] variable `val controller` to our field
+     * [insetsAnimationController] and if it is `null` we call the [CancellationSignal.cancel]
+     * method of our field [pendingRequestCancellationSignal] if [pendingRequestCancellationSignal]
+     * is not `null` to cancel the request to control and return.
+     *
+     * Otherwise
      */
     fun finish() {
         val controller = insetsAnimationController
