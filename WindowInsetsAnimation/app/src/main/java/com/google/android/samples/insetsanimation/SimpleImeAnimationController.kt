@@ -459,7 +459,20 @@ internal class SimpleImeAnimationController {
     }
 
     /**
+     * This is called from the [WindowInsetsAnimationControlListenerCompat.onReady] override of our
+     * [WindowInsetsAnimationControlListenerCompat] field [animationControlListener] which is used
+     * in our [startControlRequest] method when it calls `controlWindowInsetsAnimation` to make a
+     * window insets animation request as the `listener` parameter that gets called when the windows
+     * are ready to be controlled.
      *
+     * The request is now ready so first we clear the pending cancellation signal by setting our
+     * [CancellationSignal] field [pendingRequestCancellationSignal] to `null`, then we save our
+     * current [WindowInsetsAnimationControllerCompat] parameter [controller] in our field
+     * [insetsAnimationController]. If our [pendingRequestOnReady] field is not `null` we invoke it
+     * on [controller] to call any pending callback, then set [pendingRequestOnReady] to `null`.
+     *
+     * @param controller the [WindowInsetsAnimationControllerCompat] instance which is to be used to
+     * control the IME insets animation.
      */
     private fun onRequestReady(controller: WindowInsetsAnimationControllerCompat) {
         // The request is ready, so clear out the pending cancellation signal
@@ -473,7 +486,12 @@ internal class SimpleImeAnimationController {
     }
 
     /**
-     * Resets all of our internal state.
+     * Resets all of our internal state. We set our [WindowInsetsAnimationControllerCompat] field
+     * [insetsAnimationController] to `null`, our [CancellationSignal] field [pendingRequestCancellationSignal]
+     * to `null`, and our [Boolean] field [isImeShownAtStart] to `false`. If our [SpringAnimation] field
+     * [currentSpringAnimation] is not `null` we call its [SpringAnimation.cancel] method to cancel
+     * any on-going animation and sset [currentSpringAnimation] to `null`. Finally we set our field
+     * [pendingRequestOnReady] to `null`.
      */
     private fun reset() {
         // Clear all of our internal state
@@ -490,6 +508,25 @@ internal class SimpleImeAnimationController {
 
     /**
      * Animate the IME to a given visibility.
+     *
+     * First we initialize our [WindowInsetsAnimationControllerCompat] variable `val controller` to
+     * our field [insetsAnimationController], throwing [IllegalStateException] if it is `null`. We
+     * initialize our [SpringAnimation] field [currentSpringAnimation] to an instance whose `setter`
+     * calls our [insetTo] method with the [Float] value passed it rounded to [Int], whose `getter`
+     * returns the [Float] value of the `bottom` Y coordinate of the the current insets of the IME,
+     * and whose `finalPosition` is the [Float] value of the `bottom` Y coordinate of the IME when
+     * it is fully shown if our [visible] parameter is `true` or else the [Float] value of the `bottom`
+     * Y coordinate of the IME when it is fully hidden. We chain a call to `withSpringForceProperties`
+     * to that [SpringAnimation] to update its spring force properties for a `dampingRatio` of
+     * [SpringForce.DAMPING_RATIO_NO_BOUNCY] (spring with no bounciness) and a `stiffness` of
+     * [SpringForce.STIFFNESS_MEDIUM] (medium stiff spring). We use the `apply` extension function
+     * on the [SpringAnimation] we are building which if our [velocityY] parameter is not `null` calls
+     * the [SpringAnimation.setStartVelocity] method with it, and adds an `OnAnimationEndListener`
+     * sets our [SpringAnimation] field [currentSpringAnimation] to `null` if the animation which
+     * is ending is equal to [currentSpringAnimation] then calls our [finish] method to finish the
+     * current [WindowInsetsAnimationControllerCompat] immediately. Finally we use the `also` extension
+     * function on the [SpringAnimation] we just build to call its [SpringAnimation.start] method
+     * to start the animation running.
      *
      * @param visible `true` to animate the IME to it's fully shown state, `false` to it's
      * fully hidden state.
