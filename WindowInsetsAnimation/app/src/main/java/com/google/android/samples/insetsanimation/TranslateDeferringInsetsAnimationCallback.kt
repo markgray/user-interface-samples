@@ -51,6 +51,31 @@ class TranslateDeferringInsetsAnimationCallback(
         }
     }
 
+    /**
+     * Called when the insets change as part of running an animation. Note that even if multiple
+     * animations for different types are running, there will only be one progress callback per
+     * frame. The [insets] passed as an argument represents the overall state and will include all
+     * types, regardless of whether they are animating or not.
+     *
+     * Note that insets dispatch is hierarchical: It will start at the root of the view hierarchy,
+     * and then traverse it and invoke the callback of the specific [View] being traversed. The
+     * method may return a modified instance by calling [WindowInsetsCompat.inset] to indicate that
+     * a part of the insets have been used to offset or clip its children, and the children shouldn't
+     * worry about that part anymore. Furthermore, if [getDispatchMode] returns `DISPATCH_MODE_STOP`,
+     * children of this view will not receive the callback anymore.
+     *
+     * First we initialize our [Insets] variable `val typesInset` to the insets which are potentially
+     * deferred by calling the [WindowInsetsCompat.getInsets] method of our parameter [insets] with
+     * our [deferredInsetTypes] mask of insets types which should be deferred until after any
+     * [WindowInsetsAnimationCompat]s have ended. Then we initialize our [Insets] variable
+     * `val otherInset` to the insets which are applied as padding during layout by calling the
+     * [WindowInsetsCompat.getInsets] method of our parameter [insets] with our [deferredInsetTypes]
+     * mask of insets types which were handled as part of the layout.
+     *
+     * @param insets The current insets.
+     * @param runningAnimations The currently running animations.
+     * @return The insets to dispatch to the subtree of the hierarchy.
+     */
     override fun onProgress(
         insets: WindowInsetsCompat,
         runningAnimations: List<WindowInsetsAnimationCompat>
@@ -58,13 +83,13 @@ class TranslateDeferringInsetsAnimationCallback(
         // onProgress() is called when any of the running animations progress...
 
         // First we get the insets which are potentially deferred
-        val typesInset = insets.getInsets(deferredInsetTypes)
+        val typesInset: Insets = insets.getInsets(deferredInsetTypes)
         // Then we get the persistent inset types which are applied as padding during layout
-        val otherInset = insets.getInsets(persistentInsetTypes)
+        val otherInset: Insets = insets.getInsets(persistentInsetTypes)
 
         // Now that we subtract the two insets, to calculate the difference. We also coerce
         // the insets to be >= 0, to make sure we don't use negative insets.
-        val diff = Insets.subtract(typesInset, otherInset).let {
+        val diff: Insets = Insets.subtract(typesInset, otherInset).let {
             Insets.max(it, Insets.NONE)
         }
 
