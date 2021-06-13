@@ -346,7 +346,20 @@ internal class SimpleImeAnimationController {
      * method of our field [pendingRequestCancellationSignal] if [pendingRequestCancellationSignal]
      * is not `null` to cancel the request to control and return.
      *
-     * Otherwise
+     * Otherwise we initialize our [Int] variable `val current` to the bottom Y coordinate of the
+     * the current insets, our [Int] variable `val shown` to the bottom Y coordinate of the Insets
+     * when the IME is fully shown, and our [Int] variable `val hidden` to the bottom Y coordinate
+     * of the Insets when the IME is fully hidden. We then branch on the value of `current`:
+     *  - same as `shown` -- we call the [WindowInsetsAnimationControllerCompat.finish] method of
+     *  `controller` with `true` so that the IME will be shown after finishing the animation.
+     *  - same as `hidden` -- we call the [WindowInsetsAnimationControllerCompat.finish] method of
+     *  `controller` with `false` so that the IME will be hidden after finishing the animation.
+     *  - for all other values of `current` we look at the current position and if the current
+     *  fraction of `controller` is greater than or equal to [SCROLL_THRESHOLD] we snap to the
+     *  toggled state by calling the [WindowInsetsAnimationControllerCompat.finish] method of
+     *  `controller` with the inverse of [isImeShownAtStart], otherwise we snap back to the original
+     *  visibility by calling the [WindowInsetsAnimationControllerCompat.finish] method of
+     *  `controller` with [isImeShownAtStart].
      */
     fun finish() {
         val controller = insetsAnimationController
@@ -381,6 +394,30 @@ internal class SimpleImeAnimationController {
     /**
      * Finish the current [WindowInsetsAnimationControllerCompat]. We finish the animation,
      * animating to the end state if necessary.
+     *
+     * First we initialize our [WindowInsetsAnimationControllerCompat] variable `val controller` to
+     * our field [insetsAnimationController] and if it is `null` we call the [CancellationSignal.cancel]
+     * method of our field [pendingRequestCancellationSignal] if [pendingRequestCancellationSignal]
+     * is not `null` to cancel the request to control and return.
+     *
+     * Otherwise we initialize our [Int] variable `val current` to the bottom Y coordinate of the
+     * the current insets, our [Int] variable `val shown` to the bottom Y coordinate of the Insets
+     * when the IME is fully shown, and our [Int] variable `val hidden` to the bottom Y coordinate
+     * of the Insets when the IME is fully hidden. We then branch in a `when` block:
+     *  - If our [Float] parameter [velocityY] is not `null` we use its direction to determine the
+     *  visibility by calling our [animateImeToVisibility] method with `true` if [velocityY] is
+     *  greater than 0 (Upwards == visible) and with `false` otherwise (downwards == hidden), in
+     *  both cases passing [velocityY] as the `velocityY` parameter of [animateImeToVisibility].
+     *  - if `current` is equal to `shown` we call the [WindowInsetsAnimationControllerCompat.finish]
+     *  method of `controller` with `true` so that the IME will be shown after finishing the animation.
+     *  - if `current` is equal to `hidden` we call the [WindowInsetsAnimationControllerCompat.finish]
+     *  method of `controller` with `false` so that the IME will be hidden after finishing the animation.
+     *  - for all other values we look at the current position and if the current fraction of
+     *  `controller` is greater than or equal to [SCROLL_THRESHOLD] we snap to the toggled state by
+     *  calling the [WindowInsetsAnimationControllerCompat.finish] method of `controller` with the
+     *  inverse of [isImeShownAtStart], otherwise we snap back to the original visibility by calling
+     *  the [WindowInsetsAnimationControllerCompat.finish] method of `controller` with
+     *  [isImeShownAtStart].
      *
      * @param velocityY the velocity of the touch gesture which caused this call to [animateToFinish].
      * Can be `null` if velocity is not available.
@@ -421,6 +458,9 @@ internal class SimpleImeAnimationController {
         }
     }
 
+    /**
+     *
+     */
     private fun onRequestReady(controller: WindowInsetsAnimationControllerCompat) {
         // The request is ready, so clear out the pending cancellation signal
         pendingRequestCancellationSignal = null
