@@ -20,15 +20,20 @@ library allows you to handle all of these devices through a common API as well
 as through different versions of Android.
 
 You can determine what `DisplayFeatures`s are available on the device and their
-`Rect` location. The alpha02 release introduces a new `DisplayFeature` class with an updated callback contract to notify your application when a `DisplayFeature` changes. You can register/unregister the callback using these methods:
+`Rect` location. The alpha02 release introduces a new `DisplayFeature` class with
+ an updated callback contract to notify your application when a `DisplayFeature`
+  changes. You can register/unregister the callback using these methods:
+
 ``` java
 registerLayoutChangeCallback(@NonNull Executor executor, @NonNull Consumer<WindowLayoutInfo> callback)
 unregisterLayoutChangeCallback(@NonNull Consumer<WindowLayoutInfo> callback)
 ```
 
-The `WindowLayoutInfo` contains a list of the instances of `DisplayFeature` that are located within the window.
+The `WindowLayoutInfo` contains a list of the instances of `DisplayFeature` that are located
+ within the window.
 
-The `FoldingFeature` class implements the `DisplayFeature` interface, which includes information about these types of features:
+The `FoldingFeature` class implements the `DisplayFeature` interface, which includes information
+ about these types of features:
 
 ```
 TYPE_FOLD
@@ -58,9 +63,14 @@ You can see an example of this in the `SplitLayoutActivity` class.
 WindowMetrics
 -------------
 
-The WindowManager library includes a new WindowMetrics API to get information about your current window state and the maximum window size for the current state of the system.
+The WindowManager library includes a new WindowMetrics API to get information about your current
+ window state and the maximum window size for the current state of the system.
 
-The API results don’t include information about the system insets such as the status bar or action bar, since those values aren’t available before the first layout pass. These bounds also don’t react to any changes in layout params that might occur when your layout is inflated. If you are looking for specific information for laying out views you should get the width/height from the Configuration object or the DecorView.
+The API results don’t include information about the system insets such as the status bar or
+ action bar, since those values aren’t available before the first layout pass. These bounds
+  also don’t react to any changes in layout params that might occur when your layout is inflated.
+   If you are looking for specific information for laying out views you should get the width/height
+    from the Configuration object or the DecorView.
 
 To access these APIs, you need to get an instance of the WindowManager object.
 
