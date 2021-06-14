@@ -111,6 +111,13 @@ class TranslateDeferringInsetsAnimationCallback(
         return insets
     }
 
+    /**
+     * Called when an insets animation has ended. Once the animation has ended, reset the translation
+     * values of [view] to 0f.
+     *
+     * @param animation The animation that has ended. This will be the same instance as passed into
+     * [onStart].
+     */
     override fun onEnd(animation: WindowInsetsAnimationCompat) {
         // Once the animation has ended, reset the translation values
         view.translationX = 0f
