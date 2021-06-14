@@ -69,8 +69,18 @@ class TranslateDeferringInsetsAnimationCallback(
      * our [deferredInsetTypes] mask of insets types which should be deferred until after any
      * [WindowInsetsAnimationCompat]s have ended. Then we initialize our [Insets] variable
      * `val otherInset` to the insets which are applied as padding during layout by calling the
-     * [WindowInsetsCompat.getInsets] method of our parameter [insets] with our [deferredInsetTypes]
+     * [WindowInsetsCompat.getInsets] method of our parameter [insets] with our [persistentInsetTypes]
      * mask of insets types which were handled as part of the layout.
+     *
+     * We initialize our [Insets] variable `val diff` by using the [Insets.subtract] method to
+     * subtract `otherInset` from `typesInset` and then using the `let` extension function to make
+     * sure that each of the four inset values are greater than or equal to 0. The resulting `diff`
+     * insets contain the values for us to apply as a translation to the view which we do by setting
+     * the [View.setTranslationX] (kotlin `translationX` property) of [view] to the [Insets.left]
+     * of `diff` minus the [Insets.right] of `diff`, and setting the [View.setTranslationY] (kotlin
+     * `translationY` property) of [view] to the [Insets.top] of `diff` minus the [Insets.bottom]
+     * of `diff`. Finally we return [insets] to the caller to have it dispatch them to the subtree
+     * of the hierarchy.
      *
      * @param insets The current insets.
      * @param runningAnimations The currently running animations.
