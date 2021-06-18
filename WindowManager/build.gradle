@@ -16,6 +16,7 @@
 
 buildscript {
     ext.kotlin_version = '1.5.10'
+    ext.coroutines_version = '1.5.0'
     ext.ktlint_version = '0.40.0'
     repositories {
         google()
@@ -37,16 +38,13 @@ subprojects {
         kotlin {
             target '**/*.kt'
             ktlint(ktlint_version).userData(['android': 'true'])
-            //noinspection GroovyAccessibility
             licenseHeaderFile project.rootProject.file('scripts/copyright')
         }
         groovyGradle {
             target '**/*.gradle' // default target of groovyGradle
             // the Groovy Eclipse formatter extends the Java Eclipse formatter,
             // so it formats Java files by default (unless `excludeJava` is used).
-            //noinspection GroovyAccessibility
             greclipse().configFile(project.rootProject.file('scripts/greclipse.properties'))
-            //noinspection GroovyAccessibility
             licenseHeaderFile project.rootProject.file('scripts/copyright'), '(buildscript|apply)'
         }
     }
