@@ -29,7 +29,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
 import com.example.android.sliceviewer.R.drawable
@@ -54,7 +54,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_single_slice_viewer)
         val viewModelFactory = ViewModelFactory.getInstance(application)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
+        viewModel = ViewModelProvider(this, viewModelFactory!!)
             .get(SingleSliceViewModel::class.java)
 
         sliceView = findViewById(R.id.slice)

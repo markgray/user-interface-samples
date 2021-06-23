@@ -26,17 +26,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
-import com.example.android.sliceviewer.R.drawable
-import com.example.android.sliceviewer.R.id
-import com.example.android.sliceviewer.R.layout
-import com.example.android.sliceviewer.R.string
 import com.example.android.sliceviewer.ui.ViewModelFactory
 
 /**
@@ -52,15 +46,13 @@ class SliceViewerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout.activity_slice_viewer)
+        setContentView(R.layout.activity_slice_viewer)
         val viewModelFactory = ViewModelFactory.getInstance(application)
-        findViewById<Toolbar>(id.search_toolbar).let {
-            setSupportActionBar(it)
-        }
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
+        setSupportActionBar(findViewById(R.id.search_toolbar))
+        viewModel = ViewModelProvider(this, viewModelFactory!!)
             .get(SliceViewModel::class.java)
 
-        searchView = findViewById<SearchView>(id.search_view).apply {
+        searchView = findViewById<SearchView>(R.id.search_view).apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?) = false
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -80,7 +72,7 @@ class SliceViewerActivity : AppCompatActivity() {
                         .hideSoftInputFromWindow(v.windowToken, 0)
                 }
             }
-            queryHint = getString(string.uri_input_hint)
+            queryHint = getString(R.string.uri_input_hint)
         }
 
         sliceAdapter = SliceAdapter(
@@ -88,7 +80,7 @@ class SliceViewerActivity : AppCompatActivity() {
             selectedMode = viewModel.selectedMode
         )
 
-        findViewById<RecyclerView>(id.slice_list).apply {
+        findViewById<RecyclerView>(R.id.slice_list).apply {
             adapter = sliceAdapter
             ItemTouchHelper(SwipeCallback()).attachToRecyclerView(this)
         }
@@ -104,21 +96,21 @@ class SliceViewerActivity : AppCompatActivity() {
         ) = false
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            viewModel.removeFromPosition(viewHolder.adapterPosition)
+            viewModel.removeFromPosition(viewHolder.bindingAdapterPosition)
             sliceAdapter.submitList(viewModel.slices)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
-            setIcon(drawable.ic_large)
+            setIcon(R.drawable.ic_large)
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             add(R.string.shortcut_mode)
             add(R.string.small_mode)
             add(R.string.large_mode)
         }
 
-        viewModel.selectedMode.observe(this, Observer {
+        viewModel.selectedMode.observe(this, {
             when (it) {
                 SliceView.MODE_SHORTCUT -> typeMenu.setIcon(R.drawable.ic_shortcut)
                 SliceView.MODE_SMALL -> typeMenu.setIcon(R.drawable.ic_small)

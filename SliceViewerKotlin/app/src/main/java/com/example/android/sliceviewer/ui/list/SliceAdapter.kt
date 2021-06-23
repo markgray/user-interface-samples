@@ -25,12 +25,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.slice.widget.SliceView
-import androidx.slice.widget.SliceView.SliceMode
 import com.example.android.sliceviewer.R
 import com.example.android.sliceviewer.R.layout
 import com.example.android.sliceviewer.util.bind
@@ -55,7 +53,7 @@ class SliceAdapter(
 
 class SliceViewHolder(
     view: View,
-    @SliceMode val selectedMode: LiveData<Int>,
+    private val selectedMode: LiveData<Int>,
     private val lifecycleOwner: LifecycleOwner
 ) : ViewHolder(view) {
 
@@ -76,7 +74,7 @@ class SliceViewHolder(
         uriGroup.setOnClickListener {
             context.startActivity(Intent(Intent.ACTION_VIEW, uri.convertToSliceViewerScheme()))
         }
-        selectedMode.observe(lifecycleOwner, Observer {
+        selectedMode.observe(lifecycleOwner, {
             sliceView.mode = it ?: SliceView.MODE_LARGE
         })
         uriValue.text = uri.toString()
