@@ -16,4 +16,7 @@ Will add more as I analyze the source code.
 The starting Activity is .ui.list.SliceViewerActivity, and its UI consists of a LinearLayout root
 view, which holds a FrameLayout which contains a CardView holding a Toolbar holding a SearchView.
 Below this in the LinearLayout is a RecyclerView which holds view holders for each of the slices
-that have been searched for in the SearchView.
+that have been searched for in the SearchView. Each of these slices can be swiped to remove them
+from the RecyclerView, and they are preserved in the SharedPreferences of the app by the CRUD local
+data source LocalUriDataSource.
+
