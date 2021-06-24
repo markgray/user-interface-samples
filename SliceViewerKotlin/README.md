@@ -12,3 +12,8 @@ content://com.example.android.sliceviewer/test
 Will add more as I analyze the source code.
 
 (A whole lot of typing to get right in the search view in my opinion)
+
+The starting Activity is .ui.list.SliceViewerActivity, and its UI consists of a LinearLayout root
+view, which holds a FrameLayout which contains a CardView holding a Toolbar holding a SearchView.
+Below this in the LinearLayout is a RecyclerView which holds view holders for each of the slices
+that have been searched for in the SearchView.
