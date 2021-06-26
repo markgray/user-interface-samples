@@ -29,8 +29,10 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.slice.Slice
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
+import com.example.android.sliceviewer.domain.UriDataSource
 import com.example.android.sliceviewer.ui.ViewModelFactory
 
 /**
@@ -39,9 +41,33 @@ import com.example.android.sliceviewer.ui.ViewModelFactory
  */
 class SliceViewerActivity : AppCompatActivity() {
 
+    /**
+     * The [SearchView] in our layout file with ID [R.id.search_view] which allows the user to enter
+     * a [Slice] URI that he wants to view.
+     */
     private lateinit var searchView: SearchView
+
+    /**
+     * The [SliceAdapter] which feeds views created from its dataset of [Slice] URIs that are then
+     * displayed in our [RecyclerView].
+     */
     private lateinit var sliceAdapter: SliceAdapter
+
+    /**
+     * The [SliceViewModel] which provides methods to read, write, and remove the [Slice] URIs that
+     * are stored by [UriDataSource] in our shared preferences file.
+     */
     private lateinit var viewModel: SliceViewModel
+
+    /**
+     * The [SubMenu] of our options menu with the title "Mode" that allows the user to select from
+     * the 3 different modes for presenting a slice:
+     *  - [SliceView.MODE_SHORTCUT] slice should be presented as a tappable icon.
+     *  - [SliceView.MODE_SMALL] slice should be presented in small format, only top-level
+     *  information and actions from the slice are shown.
+     *  - [SliceView.MODE_LARGE] slice should be presented in large format, as much or all of the
+     *  slice contents are shown
+     */
     private lateinit var typeMenu: SubMenu
 
     override fun onCreate(savedInstanceState: Bundle?) {
