@@ -24,14 +24,19 @@ import android.view.MenuItem
 import android.view.SubMenu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.slice.Slice
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
+import com.example.android.sliceviewer.domain.LocalUriDataSource
 import com.example.android.sliceviewer.domain.UriDataSource
 import com.example.android.sliceviewer.ui.ViewModelFactory
 
@@ -70,10 +75,30 @@ class SliceViewerActivity : AppCompatActivity() {
      */
     private lateinit var typeMenu: SubMenu
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_slice_viewer]. It consists
+     * of a [LinearLayout] root view, which holds a [FrameLayout] which contains a [CardView] holding
+     * a [Toolbar] holding a [SearchView]. Below this in the [LinearLayout] is a [RecyclerView] which
+     * holds view holders for each of the slices that have been searched for in the [SearchView].
+     * Each of these slices can be swiped to remove them from the [RecyclerView], and they are
+     * preserved in the SharedPreferences of the app by the CRUD local data source [LocalUriDataSource].
+     *
+     * Next we initialize our [ViewModelFactory] variable `val viewModelFactory` to the singleton
+     * instance of our [ViewModelFactory] (creating it if need be). We use the [setSupportActionBar]
+     * method to set the [Toolbar] in our UI with ID [R.id.search_toolbar] as the `ActionBar` for
+     * our Activity window. We initialize our [SliceViewModel] field [viewModel] by creating the
+     * [ViewModelProvider], which will create ViewModels via the Factory `viewModelFactory` and
+     * retain them in a store of `this` ViewModelStoreOwner and calling its [ViewModelProvider.get]
+     * method to retrieve an existing [SliceViewModel] or create a new one in the scope it is
+     * associated with.
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_slice_viewer)
-        val viewModelFactory = ViewModelFactory.getInstance(application)
+        val viewModelFactory: ViewModelFactory? = ViewModelFactory.getInstance(application)
         setSupportActionBar(findViewById(R.id.search_toolbar))
         viewModel = ViewModelProvider(this, viewModelFactory!!)
             .get(SliceViewModel::class.java)
