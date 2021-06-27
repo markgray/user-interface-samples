@@ -30,8 +30,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.slice.Slice
 import androidx.slice.widget.SliceView
@@ -92,6 +94,40 @@ class SliceViewerActivity : AppCompatActivity() {
      * retain them in a store of `this` ViewModelStoreOwner and calling its [ViewModelProvider.get]
      * method to retrieve an existing [SliceViewModel] or create a new one in the scope it is
      * associated with.
+     *
+     * Next we initialize our [SearchView] field [searchView] by finding the view with the ID
+     * [R.id.search_view] immediately using the [apply] extension function on it to:
+     *  - Set its [SearchView.OnQueryTextListener] to an anonymous instance whose `onQueryTextChange`
+     *  override always returns `false` when the query text is changed by the user to have the default
+     *  action performed, and overrides its `onQueryTextSubmit` to add the [Slice] that the [Uri]
+     *  entered references to our [viewModel], submit the updated list of slices to [sliceAdapter]
+     *  for it to diff and display, clears the [searchView] for the next query, and returns `false`
+     *  to let the [SearchView] perform the default action.
+     *  - Set its [View.OnClickListener] to a lambda which sets the `isIconified` property of
+     *  [searchView] to `false` to expand the [SearchView].
+     *  - Set its [View.OnFocusChangeListener] to a lambda which will, if the [SearchView] has lost
+     *  focus, request to hide the soft input window.
+     *  - Set the hint text to display in the query text field to the [String] "Enter Slice URIs."
+     *
+     * Next we initialize our [SliceAdapter] field [sliceAdapter] with a new instance which uses
+     * `this` as its [LifecycleOwner], and the [SliceViewModel.selectedMode] field of [viewModel]
+     * as the "mode" to display each of the slices at (one of:
+     *  - [SliceView.MODE_SHORTCUT] slice should be presented as a tappable icon.
+     *  - [SliceView.MODE_SMALL] slice should be presented in small format, only top-level
+     *  information and actions from the slice are shown.
+     *  - [SliceView.MODE_LARGE] slice should be presented in large format, as much or all of the
+     *  slice contents are shown.
+     *
+     * Next we find the [RecyclerView] in our UI with ID [R.id.slice_list] immediately using the
+     * [apply] extension function on it to:
+     *  - Set its adapter to [sliceAdapter]
+     *  - Construct an [ItemTouchHelper] which uses an instance of our [SwipeCallback] custom
+     *  [ItemTouchHelper.SimpleCallback] as its call back, and attach the [ItemTouchHelper] to
+     *  the [RecyclerView] (`this` in the lambda).
+     *
+     * Finally we call the [ListAdapter.submitList] method of [sliceAdapter] to have it diff the
+     * list of [Slice]s in the [SliceViewModel.slices] field of [viewModel] and display them in the
+     * [RecyclerView].
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
