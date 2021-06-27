@@ -174,20 +174,57 @@ class SliceViewerActivity : AppCompatActivity() {
         sliceAdapter.submitList(viewModel.slices)
     }
 
+    /**
+     * This custom [ItemTouchHelper.SimpleCallback] is used as the callback of the [ItemTouchHelper]
+     * that is attached to our [RecyclerView]. It allows the user to remove a [Slice] from the
+     * [RecyclerView] by swiping it to one side or the other.
+     */
     inner class SwipeCallback :
         ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        /**
+         * Called when [ItemTouchHelper] wants to move the dragged item from its old position to the
+         * new position. If this method returns `true`, ItemTouchHelper assumes [viewHolder] has been
+         * moved to the adapter position of [target] ViewHolder. We always return `false` since we do
+         * not support dragging our [RecyclerView.ViewHolder] items to new locations.
+         *
+         * @param recyclerView The [RecyclerView] to which [ItemTouchHelper] is attached to.
+         * @param viewHolder   The [RecyclerView.ViewHolder] which is being dragged by the user.
+         * @param target       The [RecyclerView.ViewHolder] over which the currently active item
+         * is being dragged.
+         * @return `true` if the [viewHolder] has been moved to the adapter position of [target].
+         */
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ) = false
 
+        /**
+         * Called when a [RecyclerView.ViewHolder] is swiped by the user. We call the method
+         * [SliceViewModel.removeFromPosition] method of [viewModel] to have its [UriDataSource]
+         * remove the item at the Adapter position of [viewHolder] from its dataset, then call the
+         * [SliceAdapter.submitList] method of [sliceAdapter] to have it diff the update list of
+         * [Slice]s in the [SliceViewModel.slices] field of [viewModel] and display them in the
+         * [RecyclerView].
+         *
+         * @param viewHolder The [RecyclerView.ViewHolder] which has been swiped by the user.
+         * @param direction  The direction to which the ViewHolder is swiped. We ignore.
+         */
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             viewModel.removeFromPosition(viewHolder.bindingAdapterPosition)
             sliceAdapter.submitList(viewModel.slices)
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in to [menu]. This is only called once, the first time the options menu is displayed.
+     * To update the menu every time it is displayed, see [onPrepareOptionsMenu].
+     *
+     * @param menu The options [Menu] in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
             setIcon(R.drawable.ic_large)
