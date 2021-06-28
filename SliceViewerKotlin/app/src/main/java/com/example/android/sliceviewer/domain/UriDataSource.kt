@@ -18,8 +18,31 @@ package com.example.android.sliceviewer.domain
 
 import android.net.Uri
 
+/**
+ * Abstract interface declaring methods for accessing a database of slice [Uri]s. It serves as the
+ * supertype of our [LocalUriDataSource] class which stores the slice [Uri]s in the app's shared
+ * preference file.
+ */
 interface UriDataSource {
+    /**
+     * Returns the entire [List] of [Uri]s stored in our database.
+     *
+     * @return the entire [List] of [Uri]s stored in our database.
+     */
     fun getAllUris(): List<Uri>
+
+    /**
+     * Adds its [Uri] parameter [uri] to our database of slice [Uri]s.
+     *
+     * @param uri the [Uri] to add to our database of slice [Uri]s.
+     */
     fun addUri(uri: Uri)
+
+    /**
+     * Removes the slice [Uri] at position [index] in our database of slice [Uri]s.
+     *
+     * @param index the position of the slice [Uri] in our database of slice [Uri]s that we want to
+     * remove.
+     */
     fun removeFromPosition(index: Int)
 }
