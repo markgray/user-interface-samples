@@ -31,6 +31,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
@@ -221,6 +223,29 @@ class SliceViewerActivity : AppCompatActivity() {
      * items in to [menu]. This is only called once, the first time the options menu is displayed.
      * To update the menu every time it is displayed, see [onPrepareOptionsMenu].
      *
+     * We initialize our [SubMenu] field [typeMenu] by using the [Menu.addSubMenu] method of our
+     * [Menu] parameter [menu] to add a new sub-menu to it, using the [apply] extension function to
+     * immediately:
+     *  - Set its icon to the drawable with resource ID [R.drawable.ic_large]
+     *  - Configure the sub-menu item's display option to [MenuItem.SHOW_AS_ACTION_ALWAYS] (Always
+     *  show this item as a button in an Action Bar)
+     *  - Add an item to the sub-menu whose title is "Shortcut"
+     *  - Add an item to the sub-menu whose title is "Small"
+     *  - Add an item to the sub-menu whose title is "Large"
+     *
+     * We then set an [Observer] on the [MutableLiveData] wrapped [Int] `selectedMode` property of
+     * [viewModel] whose [LifecycleOwner] is `this` and whose [Observer] lambda branches on the
+     * value of `selectedMode`:
+     *  - [SliceView.MODE_SHORTCUT] sets the icon of [typeMenu] to the drawable with resource ID
+     *  [R.drawable.ic_shortcut]
+     *  - [SliceView.MODE_SMALL] sets the icon of [typeMenu] to the drawable with resource ID
+     *  [R.drawable.ic_small]
+     *  - [SliceView.MODE_LARGE] sets the icon of [typeMenu] to the drawable with resource ID
+     *  [R.drawable.ic_large]
+     *
+     * Finally we call our super's implementation of `onCreateOptionsMenu` and return `true` so that
+     * the [Menu] will be displayed.
+     *
      * @param menu The options [Menu] in which you place your items.
      * @return You must return `true` for the menu to be displayed, if you return `false` it will
      * not be shown.
@@ -245,6 +270,20 @@ class SliceViewerActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. We branch on the string
+     * value of the `title` property of our [MenuItem] parameter [item]:
+     *  - "Shortcut" we set the value of the [MutableLiveData] wrapped [Int] `selectedMode` property
+     *  of [viewModel] to [SliceView.MODE_SHORTCUT]
+     *  - "Small" we set the value of the [MutableLiveData] wrapped [Int] `selectedMode` property
+     *  of [viewModel] to [SliceView.MODE_SMALL]
+     *  - "Large" we set the value of the [MutableLiveData] wrapped [Int] `selectedMode` property
+     *  of [viewModel] to [SliceView.MODE_LARGE]
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return `false` to allow normal menu processing to proceed,
+     * `true` to consume it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.title.toString()) {
             getString(R.string.shortcut_mode) ->
@@ -258,6 +297,9 @@ class SliceViewerActivity : AppCompatActivity() {
     }
 
     companion object {
+        /**
+         * TAG used for logging
+         */
         const val TAG = "SliceViewer"
     }
 }
