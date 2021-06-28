@@ -21,11 +21,20 @@ import android.net.Uri
 import androidx.core.content.edit
 
 /**
- * Simple CRUD local data source for persisting list of slice URIs.
+ * Simple CRUD local data source for persisting list of slice URIs in the app's [SharedPreferences]
+ * file. Implements the [UriDataSource] interface.
+ *
+ * @param sharedPrefs a handle to the [SharedPreferences] for access to the prefences file with the
+ * name [SHARED_PREFS_NAME] ("shared_prefs").
  */
 class LocalUriDataSource(
     private val sharedPrefs: SharedPreferences
 ) : UriDataSource {
+    /**
+     * Returns the entire [List] of [Uri]s stored in our database.
+     *
+     * @return the entire [List] of [Uri]s stored in our database.
+     */
     override fun getAllUris(): MutableList<Uri> {
         return sharedPrefs.getStringSet(
             KEY_URI, setOf<String>()
@@ -49,7 +58,15 @@ class LocalUriDataSource(
     }
 
     companion object {
+        /**
+         * The name of the shared preferences file we use for our database.
+         */
         const val SHARED_PREFS_NAME = "shared_prefs"
+
+        /**
+         * The name of the preference under which we store the set of [String] values that serves as
+         * our database of slice [Uri]s.
+         */
         const val KEY_URI = "com.example.android.sliceviewer.sliceuris"
     }
 }
