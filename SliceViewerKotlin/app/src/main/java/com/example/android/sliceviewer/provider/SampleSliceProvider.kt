@@ -31,6 +31,21 @@ import androidx.slice.builders.row
 import androidx.slice.core.SliceHints
 import com.example.android.sliceviewer.R
 
+/**
+ * This is the [SliceProvider] for the four [Slice]s contained in our app:
+ *  - content://com.example.android.sliceviewer/hello
+ *  - content://com.example.android.sliceviewer/test
+ *  - https://sliceviewer.android.example.com/hello
+ *  - https://sliceviewer.android.example.com/test
+ *
+ * It is named as such by a `provider` element in our AndroidManifest.xml file. The attribute
+ * `android:authorities` assigns it the authority "com.example.android.sliceviewer", and it has
+ * an `intent-filter` with an `action` name "android.intent.action.VIEW", and a `category` name
+ * "android.app.slice.category.SLICE" (Category used to resolve intents that can be rendered as
+ * slices. This category should be included on intent filters of providers that extend
+ * [SliceProvider]). The `intent-filter` also has a `data` element which defines the android:scheme
+ * "https" for the `android:host` "sliceviewer.android.example.com"
+ */
 class SampleSliceProvider : SliceProvider() {
     override fun onBindSlice(sliceUri: Uri): Slice? {
         @Suppress("NullChecksToSafeCall", "SENSELESS_COMPARISON")
