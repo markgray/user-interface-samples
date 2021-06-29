@@ -16,13 +16,30 @@
 
 package com.example.android.sliceviewer.provider
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.slice.builders.SliceAction
 
+/**
+ * This activity is used as the destination of the `SliceAction` of the slice URI:
+ *
+ *     content://com.example.android.sliceviewer/test
+ *
+ * and is launched when that slice URI is clicked in the `RecycleView`.
+ */
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        /**
+         * Convenience function for constructing an [Intent] to launch the [MainActivity] activity.
+         * Used in the `createTestSlice` method of [SampleSliceProvider] to create the [PendingIntent]
+         * that is invoked when the [SliceAction] of the slice URI is executed.
+         *
+         * @param origin the [Context] that the [SampleSliceProvider] provider is running in.
+         * @return an [Intent] which will launch our [MainActivity] activity.
+         */
         fun getIntent(origin: Context): Intent {
             return Intent(origin, MainActivity::class.java)
         }
