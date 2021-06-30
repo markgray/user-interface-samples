@@ -18,6 +18,7 @@ package com.example.android.sliceviewer.provider
 
 import android.app.PendingIntent
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
@@ -94,10 +95,16 @@ class SampleSliceProvider : SliceProvider() {
      * that case, this method can be called and is expected to return a non-null [Uri] representing
      * a [Slice]. Otherwise this will throw [UnsupportedOperationException].
      *
+     * We initialize our [String] variable `val path` to the `path` property of the `data` [Uri] of
+     * our [Intent] parameter [intent]. Then we construct a new instance of [Uri.Builder], set its
+     * scheme to [ContentResolver.SCHEME_CONTENT] ("content"), set its authority to our application's
+     * package name, and set its path to `path`. We build this [Uri.Builder] and return the [Uri]
+     * that is created to the caller.
+     *
      * @return [Uri] representing the slice associated with the provided [Intent] parameter [intent].
      */
     override fun onMapIntentToUri(intent: Intent): Uri {
-        val path = intent.data?.path ?: ""
+        val path: String = intent.data?.path ?: ""
         return Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
             .authority(context!!.packageName)
@@ -105,6 +112,17 @@ class SampleSliceProvider : SliceProvider() {
             .build()
     }
 
+    /**
+     * Creates a minimalist [Slice] which consists of only a header displaying the text "Hello World".
+     * We use the [list] method found in `androidx.slice.builders.ListBuilder.kt` to construct a
+     * `ListBuilderDsl` using the [Context] this provider is running in, our [Uri] parameter [sliceUri],
+     * and a time to live of [ListBuilder.INFINITY] (Constant representing infinity) and then apply
+     * a lambda to that `ListBuilderDsl` which adds a [header] with the `title`: "Hello World". The
+     * [list] method then builds the [ListBuilder] into a [Slice] which we return to the caller.
+     *
+     * @param sliceUri a [Uri] whose `path` is "/hello".
+     * @return a [Slice] consisting only of a header displaying the text "Hello World".
+     */
     private fun createHelloWorldSlice(sliceUri: Uri): Slice {
         return list(context!!, sliceUri, ListBuilder.INFINITY) {
             header {
