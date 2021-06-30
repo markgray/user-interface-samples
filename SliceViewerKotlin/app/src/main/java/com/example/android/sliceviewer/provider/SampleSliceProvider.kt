@@ -19,6 +19,7 @@ package com.example.android.sliceviewer.provider
 import android.app.PendingIntent
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import androidx.core.graphics.drawable.IconCompat
 import androidx.slice.Slice
@@ -47,6 +48,24 @@ import com.example.android.sliceviewer.R
  * "https" for the `android:host` "sliceviewer.android.example.com"
  */
 class SampleSliceProvider : SliceProvider() {
+    /**
+     * Implemented to create a slice. [onBindSlice] should return as quickly as possible so that
+     * the UI tied to this slice can be responsive. No network or other IO will be allowed during
+     * [onBindSlice]. Any loading that needs to be done should happen in the background with a call
+     * to `ContentResolver.notifyChange` when the app is ready to provide the complete data in
+     * [onBindSlice].
+     *
+     * If our [Uri] parameter [sliceUri] is `null` or its `path` property is `null` we return `null`
+     * having done nothing. Otherwise we branch on the `path` property of [sliceUri]:
+     *  - "/hello" -> we return the [Slice] created by our [createHelloWorldSlice] method from
+     *  [sliceUri] to the caller.
+     *  - "/test" -> we return the [Slice] created by our [createTestSlice] method from [sliceUri]
+     *  to the caller.
+     *  - any other `path` -> we return `null`.
+     *
+     * @param sliceUri the [Uri] of the [Slice] we are to create.
+     * @return the [Slice] corresponding to the slice [Uri] parameter [sliceUri] or `null`.
+     */
     override fun onBindSlice(sliceUri: Uri): Slice? {
         @Suppress("NullChecksToSafeCall", "SENSELESS_COMPARISON")
         if (sliceUri == null || sliceUri.path == null) {
@@ -59,8 +78,24 @@ class SampleSliceProvider : SliceProvider() {
         }
     }
 
+    /**
+     * Implement this to initialize your slice provider on startup. This method is called for all
+     * registered slice providers on the application main thread at application launch time. It must
+     * not perform lengthy operations, or application startup will be delayed.
+     *
+     * We just return `true` to indicate that we were successfully loaded.
+     *
+     * @return `true` if the provider was successfully loaded, `false` otherwise
+     */
     override fun onCreateSliceProvider() = true
 
+    /**
+     * This method must be overridden if an [IntentFilter] is specified on the [SliceProvider]. In
+     * that case, this method can be called and is expected to return a non-null [Uri] representing
+     * a [Slice]. Otherwise this will throw [UnsupportedOperationException].
+     *
+     * @return [Uri] representing the slice associated with the provided [Intent] parameter [intent].
+     */
     override fun onMapIntentToUri(intent: Intent): Uri {
         val path = intent.data?.path ?: ""
         return Uri.Builder()
