@@ -50,8 +50,32 @@ class SliceAdapter(
 ) : ListAdapter<Uri, SliceViewHolder>(
     SlicesDiff
 ) {
+    /**
+     * Called when RecyclerView needs a new [SliceViewHolder] of the given type to represent
+     * an item. This new ViewHolder should be constructed with a new View that can represent
+     * the items of the given type. You can either create a new View manually or inflate it
+     * from an XML layout file.
+     *
+     * The new [SliceViewHolder] will be used to display items of the adapter using [onBindViewHolder].
+     * Since it will be re-used to display different items in the data set, it is a good idea to cache
+     * references to sub views of the [View] to avoid unnecessary [View.findViewById] calls.
+     *
+     * We initialize our [View] variable `val itemView` to the [View] that the [LayoutInflater] from
+     * the [Context] of our [ViewGroup] parameter [parent] inflates from the layout file with resource
+     * ID [layout.slice_row] using [parent] for the layout params without attaching to it. This [View]
+     * has a `ConstraintLayout` as its root view which holds a vertical `LinearLayout` with two
+     * [TextView]s, and below the `LinearLayout` is a `FrameLayout` holding a [SliceView].
+     *
+     * We then return a new instance of [SliceViewHolder] constructed from `itemView`, [selectedMode],
+     * and [lifecycleOwner].
+     *
+     * @param parent   The [ViewGroup] into which the new [View] will be added after it is bound to
+     * an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new [SliceViewHolder] that holds a [View] of the given view type.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliceViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
+        val itemView: View = LayoutInflater.from(parent.context)
             .inflate(layout.slice_row, parent, false)
         return SliceViewHolder(itemView, selectedMode, lifecycleOwner)
     }
