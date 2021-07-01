@@ -27,6 +27,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
@@ -34,6 +35,15 @@ import com.example.android.sliceviewer.R.layout
 import com.example.android.sliceviewer.util.bind
 import com.example.android.sliceviewer.util.convertToSliceViewerScheme
 
+/**
+ * [ListAdapter] that provides views that display slice [Uri] values in the [RecyclerView] that is
+ * part of the UI of [SliceViewerActivity]
+ *
+ * @param lifecycleOwner the [LifecycleOwner] we are associated with (`this` in the `onCreate`
+ * override of [SliceViewerActivity]
+ * @param selectedMode the slice view mode selected by the options menu, one of [SliceView.MODE_LARGE]
+ * [SliceView.MODE_SMALL], or [SliceView.MODE_SHORTCUT].
+ */
 class SliceAdapter(
     val lifecycleOwner: LifecycleOwner,
     val selectedMode: LiveData<Int>
