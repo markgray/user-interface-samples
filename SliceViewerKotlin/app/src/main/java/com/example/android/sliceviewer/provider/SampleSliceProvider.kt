@@ -131,6 +131,18 @@ class SampleSliceProvider : SliceProvider() {
         }
     }
 
+    /**
+     * Creates a [Slice] which consists of a header with the title "Test Slice", subtitle "Slice for
+     * testing purposes", and a summary "Welcome to the basic Slice presenter." It also has a row
+     * following the header whose title is "Example Row", subtitle is "Row Subtitle", and whose end
+     * icon is the drawable with resource ID [R.drawable.ic_arrow_forward_black_24dp]. This [Slice]
+     * has an explicit action intended to launch our activity [MainActivity].
+     *
+     * TODO: This [Slice] does not display the way it is supposed to, figure out why
+     *
+     * @param sliceUri the [Uri] for the [Slice] we are to create.
+     * @return a [Slice] with the header "Test Slice"
+     */
     private fun createTestSlice(sliceUri: Uri): Slice {
         val activityAction = SliceAction.create(
             PendingIntent.getActivity(
