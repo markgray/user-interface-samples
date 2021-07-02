@@ -80,11 +80,24 @@ class SliceAdapter(
         return SliceViewHolder(itemView, selectedMode, lifecycleOwner)
     }
 
+    /**
+     * Called by [RecyclerView] to display the data at the specified position. This method should
+     * update the contents of the [ViewHolder.itemView] to reflect the item at the given position.
+     * We call the [SliceViewHolder.bind] method of our parameter [holder] with the [Uri] that the
+     * [ListAdapter.getItem] method returns for the item in its dataset at position [position].
+     *
+     * @param holder   The [SliceViewHolder] which should be updated to represent the contents of
+     * the item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     override fun onBindViewHolder(holder: SliceViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }
 
+/**
+ * This is the ViewHolder
+ */
 class SliceViewHolder(
     view: View,
     private val selectedMode: LiveData<Int>,

@@ -138,8 +138,6 @@ class SampleSliceProvider : SliceProvider() {
      * icon is the drawable with resource ID [R.drawable.ic_arrow_forward_black_24dp]. This [Slice]
      * has an explicit action intended to launch our activity [MainActivity].
      *
-     * TODO: This [Slice] does not display the way it is supposed to, figure out why
-     *
      * @param sliceUri the [Uri] for the [Slice] we are to create.
      * @return a [Slice] with the header "Test Slice"
      */
@@ -162,6 +160,7 @@ class SampleSliceProvider : SliceProvider() {
                 title = "Test Slice"
                 subtitle = "Slice for testing purposes"
                 summary = "Welcome to the basic Slice presenter."
+                primaryAction = activityAction
             }
             row {
                 title = "Example Row"
