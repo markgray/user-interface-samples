@@ -20,8 +20,16 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.slice.widget.SliceView
+import com.example.android.sliceviewer.domain.LocalUriDataSource
 import com.example.android.sliceviewer.domain.UriDataSource
+import com.example.android.sliceviewer.ui.ViewModelFactory
 
+/**
+ * The [ViewModel] used by [SliceViewerActivity].
+ *
+ * @param uriDataSource the [UriDataSource] interface used for persistent storage of slice [Uri]s.
+ * In our case it is the instance of [LocalUriDataSource] passed to us by our [ViewModelFactory].
+ */
 class SliceViewModel(
     private val uriDataSource: UriDataSource
 ) : ViewModel() {
