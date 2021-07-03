@@ -96,7 +96,15 @@ class SliceAdapter(
 }
 
 /**
- * This is the ViewHolder
+ * This is the ViewHolder which holds the [View] that is used by our [RecyclerView] to display the
+ * slice [Uri]s in the dataset of its [SliceAdapter].
+ *
+ * @param view the [ViewGroup] that will display all the information pertaining to the slice [Uri]
+ * @param selectedMode the [LiveData] wrapped [Int] flag for the [SliceView] display mode, one of
+ * [SliceView.MODE_SHORTCUT], [SliceView.MODE_SMALL] or [SliceView.MODE_LARGE].
+ * @param lifecycleOwner the [LifecycleOwner] which controls the observer of our [LiveData] wrapped
+ * fields. It is `this` [SliceViewerActivity] when our constructor is called from its `onCreate`
+ * override.
  */
 class SliceViewHolder(
     view: View,
@@ -104,7 +112,14 @@ class SliceViewHolder(
     private val lifecycleOwner: LifecycleOwner
 ) : ViewHolder(view) {
 
+    /**
+     * The [Context] that our [View] field `view` is running in
+     */
     private val context: Context = view.context
+
+    /**
+     * The [SliceView] with ID [R.id.slice] in `view`
+     */
     private val sliceView: SliceView = view.findViewById(R.id.slice)
     private val uriValue: TextView = view.findViewById(R.id.uri_value)
     private val uriGroup: ViewGroup = view.findViewById(R.id.uri_group)
