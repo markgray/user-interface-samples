@@ -135,11 +135,33 @@ class SliceViewHolder(
      * the string value of the slice [Uri] we are bound to (ID [R.id.uri_value], ie. our [uriValue]
      * field). Its [View.OnClickListener] is set to a lambda which launches an activity using an
      * [Intent] which uses a [Uri] formed by adding a "slice-" prefix to the scheme of the [Uri] we
-     * are bound to.
+     * are bound to. `SingleSliceViewerActivity` has an `intent-filter` in AndroidManifest for these
+     * schemes so it will be the activity launched to display the slice [Uri].
      */
     private val uriGroup: ViewGroup = view.findViewById(R.id.uri_group)
 
     // Context, LifecycleOwner, onSliceActionListener, OnClickListener, scrollable, OnLongClickListener,
+    /**
+     * Called to bind this [SliceViewHolder] to its [Uri] parameter [uri]. We call our [SliceView.bind]
+     * extension function with the [Context] that our [View] field `view` is running in as its `context`
+     * parameter, our [LifecycleOwner] field [lifecycleOwner] as its `lifecycleOwner` parameter, our
+     * [Uri] parameter [uri] as its `uri` parameter, and `false` for its `scrollable` parameter.
+     *
+     * Then we set the [View.OnClickListener] of our [ViewGroup] field [uriGroup] to a lambda which
+     * calls the [Context.startActivity] of our [context] field to launch a new activity using an
+     * [Intent] whose action is [Intent.ACTION_VIEW] and whose data url is a [Uri] that our extension
+     * function [Uri.convertToSliceViewerScheme] creates from our [Uri] parameter [uri] by prefixing
+     * "slice-" to the scheme of [uri] (our `SingleSliceViewerActivity` has an `intent-filter` in
+     * AndroidManifest for these schemes so it will be the activity launched to display the [Uri]).
+     *
+     * We then add an observer to our [LiveData] wrapped [Int] field [selectedMode] whose lambda sets
+     * the display mode of our [SliceView] field [sliceView] to the new value of [selectedMode] when
+     * it changes value, defaulting to [SliceView.MODE_LARGE] if it is `null`.
+     *
+     * Finally we set the text of our [TextView] field [uriValue] to the string value of [uri].
+     *
+     * @param uri the slice [Uri] we are to display in our [itemView].
+     */
     fun bind(uri: Uri) {
         sliceView.bind(
             context = context,
@@ -158,8 +180,32 @@ class SliceViewHolder(
     }
 }
 
+/**
+ * The [DiffUtil.ItemCallback] used by the [ListAdapter.submitList] method to determine which items
+ * have changed in its dataset of [Uri] and need to be redisplayed.
+ */
 object SlicesDiff : DiffUtil.ItemCallback<Uri>() {
+    /**
+     * Called to check whether two objects represent the same item. For example, if your items have
+     * unique ids, this method should check their id equality. We return `true` if our [oldItem] and
+     * [newItem] parameters have "Referential equality" (ie. point to the same object).
+     *
+     * @param oldItem The item in the old list.
+     * @param newItem The item in the new list.
+     * @return `true` if the two items represent the same object or `false` if they are different.
+     */
     override fun areItemsTheSame(oldItem: Uri, newItem: Uri) = oldItem === newItem
 
+    /**
+     * Called to check whether two items have the same data. This information is used to detect if
+     * the contents of an item have changed. This method to check equality instead of [equals] so
+     * that you can change its behavior depending on your UI. We return `true` if our [oldItem] and
+     * [newItem] parameters have "Structural equality" (the [Uri.equals] method of [oldItem] returns
+     * `true` when passed [newItem] as its argument).
+     *
+     * @param oldItem The item in the old list.
+     * @param newItem The item in the new list.
+     * @return True if the contents of the items are the same or false if they are different.
+     */
     override fun areContentsTheSame(oldItem: Uri, newItem: Uri) = oldItem == newItem
 }
