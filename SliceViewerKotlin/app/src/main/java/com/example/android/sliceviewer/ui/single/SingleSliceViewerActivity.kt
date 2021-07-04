@@ -28,12 +28,15 @@ import android.view.SubMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.slice.Slice
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
 import com.example.android.sliceviewer.R.drawable
 import com.example.android.sliceviewer.R.layout
+import com.example.android.sliceviewer.domain.UriDataSource
 import com.example.android.sliceviewer.ui.ViewModelFactory
 import com.example.android.sliceviewer.ui.list.SliceViewerActivity
 import com.example.android.sliceviewer.util.bind
@@ -41,15 +44,49 @@ import com.example.android.sliceviewer.util.convertToOriginalScheme
 import com.example.android.sliceviewer.util.hasSupportedSliceScheme
 
 /**
- * Example use of SliceView.
+ * Example use of [SliceView]. This activity is launched when a [Uri] displayed in the `RecyclerView`
+ * of [SliceViewerActivity] is clicked (that is when the `ViewGroup` holding the [TextView] that is
+ * displaying the string value of the slice [Uri] is clicked, not when the [SliceView] beneath that
+ * `ViewGroup` is clicked. When the [SliceView] is clicked the /hello `Slice` does nothing, but the
+ * /test `Slice` launches `MainActivity`, and that same behavior of the [SliceView] occurs here as
+ * well).
  */
 class SingleSliceViewerActivity : AppCompatActivity() {
 
+    /**
+     * The [SingleSliceViewModel] view model we use to store data that needs to survive activity
+     * restart, in our case the [UriDataSource] used to reference our persistent store of slice
+     * [Uri]s, and the [MutableLiveData] wrapped [Int] property [SingleSliceViewModel.selectedMode]
+     * that stores the display mode of our [SliceView] that is selected by the options menu, one of
+     * [SliceView.MODE_LARGE], [SliceView.MODE_SMALL], or [SliceView.MODE_SHORTCUT].
+     */
     private lateinit var viewModel: SingleSliceViewModel
+
+    /**
+     * The [SliceView] in our UI with ID [R.id.slice], displays our [Slice]
+     */
     private lateinit var sliceView: SliceView
+
+    /**
+     * The [TextView] in our UI with ID [R.id.uri_value], displays the string value of the slice
+     * [Uri] we were passed in the [Intent] that launched us.
+     */
     private lateinit var uriValue: TextView
+
+    /**
+     * The [SubMenu] in our options menu which allows the user to select the display mode of our
+     * [SliceView]. It is added to the options [Menu] programmatically in our [onCreateOptionsMenu]
+     * override, and has [MenuItem]s that allow the user to choose one of [SliceView.MODE_LARGE],
+     * [SliceView.MODE_SMALL], or [SliceView.MODE_SHORTCUT]. Its current selection is used to update
+     * the [SingleSliceViewModel.selectedMode] property of our [viewModel] field.
+     */
     private lateinit var typeMenu: SubMenu
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_single_slice_viewer)
