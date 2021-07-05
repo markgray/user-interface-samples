@@ -141,6 +141,32 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu. You should place your menu
+     * items in to the [Menu] parameter [menu]. This is only called once, the first time the options
+     * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
+     * We initialize our [SubMenu] field [typeMenu] by using the [Menu.addSubMenu] method of [menu]
+     * to add a new [SubMenu] to [menu] with the title whose resource ID is [R.string.slice_mode_title]
+     * ("Mode") and use the [apply] extension function of that [SubMenu] to:
+     *  - set its icon to the drawable with resource ID [R.drawable.ic_large]
+     *  - specify that the item should always be shown as a button in the action bar
+     *  - Add a [MenuItem] with the title "Shortcut"
+     *  - Add a [MenuItem] with the title "Small"
+     *  - Add a [MenuItem] with the title "Large"
+     *
+     * Then we add an observer to the [SingleSliceViewModel.selectedMode] property of [viewModel]
+     * which when the property changes value to:
+     *  - [SliceView.MODE_SHORTCUT] sets the icon of [typeMenu] to the drawable [R.drawable.ic_shortcut]
+     *  - [SliceView.MODE_SMALL] sets the icon of [typeMenu] to the drawable [R.drawable.ic_small]
+     *  - [SliceView.MODE_LARGE] sets the icon of [typeMenu] to the drawable [R.drawable.ic_large]
+     *
+     * Finally we call our super's implementation of `onCreateOptionsMenu` and return `true` so that
+     * our [Menu] will be displayed.
+     *
+     * @param menu The options [Menu] in which you place your items.
+     * @return You must return `true` for the menu to be displayed, if you return `false` it will
+     * not be shown.
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
             setIcon(R.drawable.ic_large)
@@ -162,6 +188,18 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Does all that is necessary to display its slice [Uri] parameter [uri] in our UI. We call the
+     * [SliceView.bind] extension function of our field [sliceView] to have it begin to display the
+     * [Slice] which our slice [Uri] parameter [uri] resolves to. Then we add an observer to the
+     * [SingleSliceViewModel.selectedMode] property of [viewModel] whose lambda sets the display
+     * mode property of [sliceView] to whatever value it changes to, defaulting to [SliceView.MODE_LARGE]
+     * if it is `null`. Finally we set the text of our [TextView] field [uriValue] to the string value
+     * of [uri].
+     *
+     * @param uri the slice [Uri] created from the data [Uri] of the [Intent] we were launched with
+     * which we want to be displayed.
+     */
     private fun bindSlice(uri: Uri) {
         sliceView.bind(
             context = this,
@@ -176,6 +214,22 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         uriValue.text = uri.toString()
     }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected. We branch on the string
+     * value of the title of our [MenuItem] parameter [item]:
+     *  - "Shortcut" we set the value of the [SingleSliceViewModel.selectedMode] property of
+     *  [viewModel] to [SliceView.MODE_SHORTCUT]
+     *  - "Small" we set the value of the [SingleSliceViewModel.selectedMode] property of
+     *  [viewModel] to [SliceView.MODE_SMALL]
+     *  - "Large" we set the value of the [SingleSliceViewModel.selectedMode] property of
+     *  [viewModel] to [SliceView.MODE_LARGE]
+     *
+     * Then we return `true` to consume the event here.
+     *
+     * @param item The [MenuItem] that was selected.
+     * @return boolean Return `false` to allow normal menu processing to proceed, `true` to consume
+     * it here.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.title.toString()) {
             getString(R.string.shortcut_mode) ->
@@ -189,6 +243,9 @@ class SingleSliceViewerActivity : AppCompatActivity() {
     }
 
     companion object {
+        /**
+         * TAG used for logging.
+         */
         const val TAG = "SingleSliceViewer"
     }
 }
