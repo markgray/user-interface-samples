@@ -31,11 +31,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.slice.Slice
 import androidx.slice.widget.SliceView
 import com.example.android.sliceviewer.R
-import com.example.android.sliceviewer.R.drawable
-import com.example.android.sliceviewer.R.layout
 import com.example.android.sliceviewer.domain.UriDataSource
 import com.example.android.sliceviewer.ui.ViewModelFactory
 import com.example.android.sliceviewer.ui.list.SliceViewerActivity
@@ -83,14 +82,42 @@ class SingleSliceViewerActivity : AppCompatActivity() {
     private lateinit var typeMenu: SubMenu
 
     /**
-     * Called when the activity is starting.
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_single_slice_viewer] which
+     * consists of a `ConstraintLayout` root view holding a [TextView] for the label "URI", above a
+     * [TextView] holding the string value of the slice [Uri] we were launched to display, with a
+     * `ScrollView` holding the [SliceView] we display the [Slice] in below that.
+     *
+     * We initialize our [ViewModelFactory] variable `val viewModelFactory` to the application's
+     * singleton instance, then initialize our [SingleSliceViewModel] field [viewModel] by using
+     * the [ViewModelProvider.get] method of a [ViewModelProvider] which will create ViewModels
+     * via the Factory `viewModelFactory` and retain them in a store of `this` [ViewModelStoreOwner]
+     * to return an existing [SingleSliceViewModel] or create a new one.
+     *
+     * We initialize our [SliceView] field [sliceView] by finding the view with ID [R.id.slice], and
+     * our [TextView] field [uriValue] by finding the view with ID [R.id.uri_value]. If the [Intent]
+     * that started this activity has a non-`null` data [Uri], and our [Uri.hasSupportedSliceScheme]
+     * extension function determines that that [Uri] has a supported slice scheme we initialize our
+     * [Uri] variable `val sliceUri` to the [Uri] that our [Uri.convertToOriginalScheme] creates from
+     * our data [Uri], use the [SingleSliceViewModel.addSlice] method of [viewModel] to save it to
+     * the persistent [Set] of Slices, and call our [bindSlice] method with `sliceUri` to have it do
+     * what needs to be done to have our [SliceView] field [sliceView] display the slice referenced
+     * by the [Uri].
+     *
+     * If our [Intent] does not contain a data [Uri] for a [Slice] we log the message "No Slice URI
+     * found, sending to SliceViewerActivity", [Toast] this message as well, and re-launch the
+     * [SliceViewerActivity] activity with the [Intent] flag [Intent.FLAG_ACTIVITY_CLEAR_TOP] (when
+     * this flag is set and the activity being launched is already running in the current task, then
+     * instead of launching a new instance of that activity, all of the other activities on top of
+     * it will be closed and this [Intent] will be delivered to the (now on top) old activity as a
+     * new [Intent]).
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layout.activity_single_slice_viewer)
-        val viewModelFactory = ViewModelFactory.getInstance(application)
+        setContentView(R.layout.activity_single_slice_viewer)
+        val viewModelFactory: ViewModelFactory? = ViewModelFactory.getInstance(application)
         viewModel = ViewModelProvider(this, viewModelFactory!!)
             .get(SingleSliceViewModel::class.java)
 
@@ -116,7 +143,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
-            setIcon(drawable.ic_large)
+            setIcon(R.drawable.ic_large)
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             add(R.string.shortcut_mode)
             add(R.string.small_mode)
