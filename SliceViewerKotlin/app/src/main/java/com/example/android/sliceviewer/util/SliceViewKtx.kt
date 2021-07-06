@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("RemoveRedundantQualifierName")
 
 package com.example.android.sliceviewer.util
 
@@ -27,14 +26,27 @@ import android.view.View.OnClickListener
 import android.view.View.OnLongClickListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.slice.Slice
 import androidx.slice.SliceMetadata
 import androidx.slice.core.SliceHints
 import androidx.slice.widget.SliceLiveData
 import androidx.slice.widget.SliceView
 import androidx.slice.widget.SliceView.OnSliceActionListener
+import com.example.android.sliceviewer.ui.single.SingleSliceViewerActivity
+import com.example.android.sliceviewer.ui.list.SliceAdapter
 import com.example.android.sliceviewer.ui.list.SliceViewerActivity
 import com.example.android.sliceviewer.ui.list.SliceViewerActivity.Companion.TAG
 
+/**
+ * Configures its [SliceView] receiver to display a slice [Uri].
+ *
+ * @param context the [Context] that our [SliceView] is running in, either the [Context] of
+ * [SingleSliceViewerActivity] or the [Context] that the view of an item view in the [SliceAdapter]
+ * feeding the `RecyclerView` of [SliceViewerActivity] is running in.
+ * @param lifecycleOwner the [LifecycleOwner] which we should use when we add an observer to the
+ * LiveData that tracks a Slice
+ * @param uri the slice [Uri] of the [Slice] we are supposed to display.
+ */
 fun SliceView.bind(
     context: Context,
     lifecycleOwner: LifecycleOwner,
@@ -79,15 +91,15 @@ fun SliceView.bind(
                         expiry - System.currentTimeMillis() + 15
                     )
                 }
-                Log.d(SliceViewerActivity.TAG, "Update Slice: $updatedSlice")
+                Log.d(TAG, "Update Slice: $updatedSlice")
             })
         } catch (e: Exception) {
             Log.e(
-                SliceViewerActivity.TAG,
+                TAG,
                 "Failed to find a valid ContentProvider for authority: $uri"
             )
         }
     } else {
-        Log.w(SliceViewerActivity.TAG, "Invalid uri, skipping slice: $uri")
+        Log.w(TAG, "Invalid uri, skipping slice: $uri")
     }
 }
