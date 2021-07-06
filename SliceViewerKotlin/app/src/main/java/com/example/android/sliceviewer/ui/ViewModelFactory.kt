@@ -18,14 +18,20 @@ package com.example.android.sliceviewer.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.sliceviewer.domain.LocalUriDataSource
 import com.example.android.sliceviewer.domain.UriDataSource
 import com.example.android.sliceviewer.ui.list.SliceViewModel
+import com.example.android.sliceviewer.ui.list.SliceViewerActivity
 import com.example.android.sliceviewer.ui.single.SingleSliceViewModel
+import com.example.android.sliceviewer.ui.single.SingleSliceViewerActivity
 
+/**
+ * This is the [ViewModelProvider.NewInstanceFactory] that is used to create both a
+ * [SliceViewModel] view model for [SliceViewerActivity] and a [SingleSliceViewModel]
+ * view model for [SingleSliceViewerActivity].
+ */
 class ViewModelFactory private constructor(
     private val uriDataSource: UriDataSource
 ) : ViewModelProvider.NewInstanceFactory() {
