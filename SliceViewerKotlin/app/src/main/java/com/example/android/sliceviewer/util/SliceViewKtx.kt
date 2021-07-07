@@ -46,6 +46,14 @@ import com.example.android.sliceviewer.ui.list.SliceViewerActivity.Companion.TAG
  * @param lifecycleOwner the [LifecycleOwner] which we should use when we add an observer to the
  * LiveData that tracks a Slice
  * @param uri the slice [Uri] of the [Slice] we are supposed to display.
+ * @param onSliceActionListener the [OnSliceActionListener] to notify when an interaction event
+ * occurs on the [SliceView]. Defaults to a no-op.
+ * @param onClickListener the [OnClickListener] callback to be invoked when this view is clicked.
+ * Defaults to a no-op.
+ * @param onLongClickListener the [OnLongClickListener] callback to be invoked when this view is
+ * clicked and held. The default returns `false` to indicate that it did not consume the event.
+ * @param scrollable `true` if this view should allow scrollable content when presenting in
+ * [SliceView.MODE_LARGE]. Defaults to `false`.
  */
 fun SliceView.bind(
     context: Context,
