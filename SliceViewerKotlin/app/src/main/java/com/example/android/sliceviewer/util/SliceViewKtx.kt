@@ -25,6 +25,7 @@ import android.util.Log
 import android.view.View.OnClickListener
 import android.view.View.OnLongClickListener
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.slice.Slice
 import androidx.slice.SliceMetadata
@@ -38,7 +39,33 @@ import com.example.android.sliceviewer.ui.list.SliceViewerActivity
 import com.example.android.sliceviewer.ui.list.SliceViewerActivity.Companion.TAG
 
 /**
- * Configures its [SliceView] receiver to display a slice [Uri].
+ * Configures its [SliceView] receiver to display a slice [Uri]. First we use the method
+ * [SliceView.setOnSliceActionListener] to set the listener to notify when an interaction event
+ * occurs on `this` [SliceView] to our [OnSliceActionListener] parameter [onSliceActionListener].
+ * Then we use the method [SliceView.setOnClickListener] to register our [OnClickListener] parameter
+ * [onClickListener] as a callback to be invoked when `this` [SliceView] is clicked. We set the
+ * `isScrollable` property of `this` [SliceView] to our [Boolean] parameter [scrollable] and use
+ * the [SliceView.setOnLongClickListener] method to set our [OnLongClickListener] parameter
+ * [onLongClickListener] to be the callback to be invoked when `this` [SliceView] is clicked and
+ * held.
+ *
+ * If the [Uri.getScheme] method (kotlin `scheme` property) of our [Uri] parameter [uri] is `null`
+ * we log the error message "Scheme is null for URI..." and return.
+ *
+ * We initialize our [String] variable `val scheme` to the `scheme` property of our [Uri] parameter
+ * [uri], taking care to remove the prefix "slice-" first if the user accidentally prepended it to
+ * their scheme.
+ *
+ * If `scheme` is not one of the schemes our app supports: [ContentResolver.SCHEME_CONTENT] ("content")
+ * "https" or "http" we log the warning "Invalid uri, skipping slice..." and return. If it is one of
+ * our supported schemes we:
+ *  - Initialize our [Intent] variable `val intent` to a new instance whose action is [Intent.ACTION_VIEW]
+ *  and whose data [Uri] is [uri].
+ *  - Initialize our [LiveData] wrapped [Slice] variable `val sliceLiveData` to an instance which
+ *  tracks the [Slice] specified by the [Intent] `intent`.
+ *  - We use the [LiveData.removeObservers] method to remove all observers that are tied to our
+ *  [LifecycleOwner] parameter [lifecycleOwner].
+ *  - Then, wrapped in a `try` block intended to catch and log any [Exception] we
  *
  * @param context the [Context] that our [SliceView] is running in, either the [Context] of
  * [SingleSliceViewerActivity] or the [Context] that the view of an item view in the [SliceAdapter]
@@ -68,24 +95,26 @@ fun SliceView.bind(
     setOnClickListener(onClickListener)
     isScrollable = scrollable
     setOnLongClickListener(onLongClickListener)
+
     if (uri.scheme == null) {
         Log.w(TAG, "Scheme is null for URI $uri")
         return
     }
     // If someone accidentally prepends the "slice-" prefix to their scheme, let's remove it.
-    val scheme =
+    val scheme: String? =
         if ((uri.scheme as String).startsWith("slice-")) {
             (uri.scheme as String).replace("slice-", "")
         }
         else {
             uri.scheme
         }
+
     if (scheme == ContentResolver.SCHEME_CONTENT ||
         scheme.equals("https", true) ||
         scheme.equals("http", true)
     ) {
         val intent = Intent(Intent.ACTION_VIEW, uri)
-        val sliceLiveData = SliceLiveData.fromIntent(context, intent)
+        val sliceLiveData: LiveData<Slice> = SliceLiveData.fromIntent(context, intent)
         sliceLiveData.removeObservers(lifecycleOwner)
         try {
             sliceLiveData.observe(lifecycleOwner, Observer { updatedSlice ->
