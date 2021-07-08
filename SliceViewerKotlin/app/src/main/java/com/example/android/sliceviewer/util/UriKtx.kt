@@ -20,6 +20,9 @@ import android.net.Uri
 
 /**
  * Copy a URI but remove the "slice-" prefix from its scheme.
+ *
+ * @return a copy of `this` [Uri] with all fields the same except for the `scheme` which has the
+ * "slice-" prefix removed from it.
  */
 fun Uri.convertToOriginalScheme(): Uri {
     var builder = Uri.Builder()
@@ -38,6 +41,9 @@ fun Uri.convertToOriginalScheme(): Uri {
 
 /**
  * Copy a URI but add a "slice-" prefix to its scheme.
+ *
+ * @return a copy of `this` [Uri] with all fields the same except for the `scheme` which has a
+ * "slice-" prefix added to it.
  */
 fun Uri.convertToSliceViewerScheme(): Uri {
     var builder = Uri.Builder()
@@ -58,6 +64,9 @@ fun Uri.convertToSliceViewerScheme(): Uri {
  * We have to have an explicit list of schemes in our manifest that our SingleSliceViewer listens
  * to. Right now, these are "http", "https", and "content"; likely the only schemes used in the vast
  * majority of cases.
+ *
+ * @return `true` if the `scheme` of `this` [Uri] is one of "slice-http". "slice-https", or
+ * "slice-content"
  */
 fun Uri.hasSupportedSliceScheme(): Boolean {
     return scheme != null && (scheme.equals("slice-http", true)
