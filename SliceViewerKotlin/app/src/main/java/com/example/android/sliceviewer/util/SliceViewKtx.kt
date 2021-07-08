@@ -65,7 +65,12 @@ import com.example.android.sliceviewer.ui.list.SliceViewerActivity.Companion.TAG
  *  tracks the [Slice] specified by the [Intent] `intent`.
  *  - We use the [LiveData.removeObservers] method to remove all observers that are tied to our
  *  [LifecycleOwner] parameter [lifecycleOwner].
- *  - Then, wrapped in a `try` block intended to catch and log any [Exception] we
+ *  - Then, wrapped in a `try` block intended to catch and log any [Exception] we add an observer to
+ *  `sliceLiveData` which returns if its [Slice] parameter `updatedSlice` is `null`, and if it is
+ *  not sets the [Slice] field `slice` of `this` [SliceView] to `updatedSlice`. It initializes its
+ *  [Long] variable `val expiry` to the `expiry` property of the [SliceMetadata] of `updatedSlice`
+ *  and if it is not equal to [SliceHints.INFINITY] uses the `postDelayed` method to update the
+ *  [Slice] field `slice` of `this` [SliceView] to `updatedSlice` after the TTL expires.
  *
  * @param context the [Context] that our [SliceView] is running in, either the [Context] of
  * [SingleSliceViewerActivity] or the [Context] that the view of an item view in the [SliceAdapter]
@@ -120,7 +125,7 @@ fun SliceView.bind(
             sliceLiveData.observe(lifecycleOwner, Observer { updatedSlice ->
                 if (updatedSlice == null) return@Observer
                 slice = updatedSlice
-                val expiry = SliceMetadata.from(context, updatedSlice).expiry
+                val expiry: Long = SliceMetadata.from(context, updatedSlice).expiry
                 if (expiry != SliceHints.INFINITY) {
                     // Shows the updated text after the TTL expires.
                     postDelayed(
