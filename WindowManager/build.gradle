@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.5.10'
+    ext.kotlin_version = '1.5.20'
     ext.coroutines_version = '1.5.0'
     ext.ktlint_version = '0.40.0'
     repositories {
@@ -23,7 +23,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -32,23 +32,23 @@ plugins {
     id 'com.diffplug.spotless'  version '5.7.0'
 }
 
-subprojects {
-    apply plugin: 'com.diffplug.spotless'
-    spotless {
-        kotlin {
-            target '**/*.kt'
-            ktlint(ktlint_version).userData(['android': 'true'])
-            licenseHeaderFile project.rootProject.file('scripts/copyright')
-        }
-        groovyGradle {
-            target '**/*.gradle' // default target of groovyGradle
-            // the Groovy Eclipse formatter extends the Java Eclipse formatter,
-            // so it formats Java files by default (unless `excludeJava` is used).
-            greclipse().configFile(project.rootProject.file('scripts/greclipse.properties'))
-            licenseHeaderFile project.rootProject.file('scripts/copyright'), '(buildscript|apply)'
-        }
-    }
-}
+//subprojects {
+//    apply plugin: 'com.diffplug.spotless'
+//    spotless {
+//        kotlin {
+//            target '**/*.kt'
+//            ktlint(ktlint_version).userData(['android': 'true'])
+//            licenseHeaderFile project.rootProject.file('scripts/copyright')
+//        }
+//        groovyGradle {
+//            target '**/*.gradle' // default target of groovyGradle
+//            // the Groovy Eclipse formatter extends the Java Eclipse formatter,
+//            // so it formats Java files by default (unless `excludeJava` is used).
+//            greclipse().configFile(project.rootProject.file('scripts/greclipse.properties'))
+//            licenseHeaderFile project.rootProject.file('scripts/copyright'), '(buildscript|apply)'
+//        }
+//    }
+//}
 
 allprojects {
     repositories {
