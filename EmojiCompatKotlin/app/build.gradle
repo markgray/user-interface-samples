@@ -16,7 +16,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.5.10'
+        kotlin_version = '1.5.20'
     }
     repositories {
         google()
@@ -57,8 +57,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Test
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.3.0"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.4.0"
 
     testImplementation 'junit:junit:4.13.2'
 }
