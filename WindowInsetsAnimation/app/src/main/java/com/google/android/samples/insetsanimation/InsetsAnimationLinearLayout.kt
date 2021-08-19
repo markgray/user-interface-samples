@@ -16,6 +16,7 @@
 
 package com.google.android.samples.insetsanimation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -304,6 +305,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * consumed by this nested scrolling parent and the scroll distances consumed by any other
      * parent up the view hierarchy
      */
+    @SuppressLint("WrongConstant")
     override fun onNestedScroll(
         target: View,
         dxConsumed: Int,
@@ -322,7 +324,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
             } else if (scrollImeOnScreenWhenNotVisible &&
                 !imeAnimController.isInsetAnimationRequestPending() &&
                 ViewCompat.getRootWindowInsets(this)
-                    ?.isVisible(WindowInsets.Type.ime()) == false
+                    ?.isVisible(1 shl 3) == false
             ) {
                 // If we don't currently have control, the IME is not shown,
                 // the user is scrolling up, and the view can't scroll up any more
@@ -376,6 +378,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * @param consumed true if the child consumed the fling, false otherwise
      * @return true if this parent consumed or otherwise reacted to the fling
      */
+    @SuppressLint("WrongConstant")
     override fun onNestedFling(
         target: View,
         velocityX: Float,
@@ -392,7 +395,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
             // Otherwise we may need to start a control request and immediately fling
             // using the velocityY
             val imeVisible: Boolean = ViewCompat.getRootWindowInsets(this)
-                ?.isVisible(WindowInsets.Type.ime()) == true
+                ?.isVisible(1 shl 3) == true
             when {
                 velocityY > 0 && scrollImeOnScreenWhenNotVisible && !imeVisible -> {
                     // If the fling is in a upwards direction, and the IME is not visible,
