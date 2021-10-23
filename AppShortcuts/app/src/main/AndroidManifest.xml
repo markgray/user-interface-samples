@@ -29,7 +29,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup">
 
-        <activity android:name="com.example.android.appshortcuts.Main">
+        <activity android:name="com.example.android.appshortcuts.Main"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -37,7 +38,8 @@
             </intent-filter>
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts"/>
         </activity>
-        <receiver android:name="com.example.android.appshortcuts.MyReceiver">
+        <receiver android:name="com.example.android.appshortcuts.MyReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
