@@ -26,21 +26,23 @@ import android.net.Uri
 import android.os.PersistableBundle
 import android.util.Log
 import com.example.android.appshortcuts.Utils.showToast
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
-import java.util.ArrayList
-import java.util.HashSet
 import java.util.function.BooleanSupplier
+import kotlin.coroutines.CoroutineContext
 
 /**
  * This class exists to make it easier to interact with the [ShortcutManager] system level service.
  */
-@DelicateCoroutinesApi
-class ShortcutHelper(private val mContext: Context) {
+class ShortcutHelper(private val mContext: Context) : CoroutineScope {
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
+
     /**
      * Our handle to the [ShortcutManager] system level service.
      */
@@ -142,7 +144,8 @@ class ShortcutHelper(private val mContext: Context) {
      * Called when the activity starts from the `onCreate` override of [Main] and from the `onReceive`
      * override of [MyReceiver] when it receives an ACTION_LOCALE_CHANGED broadcast `Intent`. Looks
      * for shortcuts that have been pushed and refreshes them (but the refresh part isn't implemented
-     * yet...). We use an anonymous [CoroutinesAsyncTask] to do the following in a background thread:
+     * yet...). We call the [CoroutineScope.noParamNoResultAsync] extension function to do the
+     * following in a background thread:
      *  - We log the fact that we are "refreshingShortcuts...".
      *  - We initialize our [Long] variable `val now` to the current time in milliseconds.
      *  - We initialize our [Long] variable `val staleThreshold` to `now` if [force] is `true` or to
@@ -167,7 +170,6 @@ class ShortcutHelper(private val mContext: Context) {
      *  [callShortcutManager] with a lambda that calls the [ShortcutManager.updateShortcuts] method
      *  of our  [ShortcutManager] field [mShortcutManager] with `updateList` to update all existing
      *  shortcuts with the same IDs as those in `updateList`.
-     *  - Finally we return `null`.
      *
      * @param force if `true` force an immediate refresh of all shortcuts, if `false` a refresh of a
      * shortcut is performed only if the shortcut is older than [REFRESH_INTERVAL_MS] milliseconds
@@ -175,8 +177,8 @@ class ShortcutHelper(private val mContext: Context) {
      * from the `onReceive` override of [MyReceiver]
      */
     fun refreshShortcuts(force: Boolean) {
-        object : CoroutinesAsyncTask<Void?, Void?, Void?>() {
-            override fun doInBackground(vararg params: Void?): Void? {
+        CoroutineScope(coroutineContext).noParamNoResultAsync(
+            doInBackground = {
                 Log.i(TAG, "refreshingShortcuts...")
                 val now = System.currentTimeMillis()
                 val staleThreshold = if (force) now else now - REFRESH_INTERVAL_MS
@@ -203,9 +205,11 @@ class ShortcutHelper(private val mContext: Context) {
                 if (updateList.size > 0) {
                     callShortcutManager { mShortcutManager.updateShortcuts(updateList) }
                 }
-                return null
+            },
+            onPostExecute = {
             }
-        }.execute()
+        )
+
     }
 
     /**

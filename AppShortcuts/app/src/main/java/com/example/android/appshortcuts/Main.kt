@@ -36,8 +36,11 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.DelicateCoroutinesApi
-import java.util.ArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * This sample demonstrates how to use the Launcher Shortcuts API introduced in Android 7.1 (API 25).
@@ -50,8 +53,18 @@ import java.util.ArrayList
  * [ShortcutInfo] objects which are displayed in our [ListView] and which are accessed when a user
  * long-presses on our app's launcher icon.
  */
-@DelicateCoroutinesApi
-class Main : AppCompatActivity(), View.OnClickListener {
+class Main : AppCompatActivity(), CoroutineScope, View.OnClickListener {
+    /**
+     * The context of this scope. Context is encapsulated by the scope and used for implementation
+     * of coroutine builders that are extensions on the scope. Accessing this property in general
+     * code is not recommended for any purposes except accessing the [Job] instance for advanced
+     * usages.
+     *
+     * By convention, should contain an instance of a [Job] to enforce structured concurrency.
+     */
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
+
     /**
      * The [MyAdapter] custom [ListAdapter] used to populate our [ListView].
      */
@@ -114,7 +127,6 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param v the [View] that was clicked.
      */
-    @DelicateCoroutinesApi
     @Suppress("UNUSED_PARAMETER")
     fun onAddPressed(v: View?) {
         addWebSite()
@@ -137,7 +149,6 @@ class Main : AppCompatActivity(), View.OnClickListener {
      * shortcut using the [ShortcutHelper.addWebSiteShortcut] method of [ShortcutHelper] field
      * [mHelper]. Finally we show the [AlertDialog.Builder] we constructed to the user.
      */
-    @DelicateCoroutinesApi
     private fun addWebSite() {
         Log.i(TAG, "addWebSite")
 
@@ -168,19 +179,17 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param uri a web site URL which the user wants to add to our short cut list.
      */
-    @DelicateCoroutinesApi
     @SuppressLint("StaticFieldLeak")
     private fun addUriAsync(uri: String) {
-        object : CoroutinesAsyncTask<Void?, Void?, Void?>() {
-            override fun doInBackground(vararg params: Void?): Void? {
+        CoroutineScope(coroutineContext).noParamNoResultAsync(
+            doInBackground = {
                 mHelper.addWebSiteShortcut(uri)
-                return null
-            }
-
-            override fun onPostExecute(result: Void?) {
+            },
+            onPostExecute = {
                 refreshList()
             }
-        }.execute()
+        )
+
     }
 
     /**
