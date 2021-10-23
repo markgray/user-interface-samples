@@ -1,6 +1,7 @@
 package com.example.android.appshortcuts
 
 import android.util.Log
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -79,6 +80,7 @@ abstract class CoroutinesAsyncTask<Params, Progress, Result> {
      *
      * @param params The parameters of the task.
      */
+    @DelicateCoroutinesApi
     fun execute(vararg params: Params) {
 
         when (status) {
@@ -130,6 +132,7 @@ abstract class CoroutinesAsyncTask<Params, Progress, Result> {
      * @param mayInterruptIfRunning `<tt></tt>` if the thread executing this task should be
      * interrupted; otherwise, in-progress tasks are allowed to complete.
      */
+    @DelicateCoroutinesApi
     @Suppress("MemberVisibilityCanBePrivate")
     fun cancel(mayInterruptIfRunning: Boolean) {
         if(!mayInterruptIfRunning) Log.d("cancel", "cancel called with mayInterruptIfRunning false")
@@ -150,6 +153,7 @@ abstract class CoroutinesAsyncTask<Params, Progress, Result> {
      *
      * @param progress The progress values to update the UI with.
      */
+    @DelicateCoroutinesApi
     fun publishProgress(vararg progress: Progress) {
         //need to update main thread
         GlobalScope.launch(Dispatchers.Main) {

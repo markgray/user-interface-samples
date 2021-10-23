@@ -19,12 +19,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 /**
  * This is named as a [BroadcastReceiver] for the action "android.intent.action.LOCALE_CHANGED" in
  * our AndroidManifest.xml file. It will receive this [Intent] when the current device's locale has
  * changed.
  */
+@DelicateCoroutinesApi
 class MyReceiver : BroadcastReceiver() {
     /**
      * This method is called when the [BroadcastReceiver] is receiving an [Intent] broadcast.
@@ -51,6 +53,7 @@ class MyReceiver : BroadcastReceiver() {
         /**
          * TAG used for logging.
          */
+        @DelicateCoroutinesApi
         private const val TAG = Main.TAG
     }
 }

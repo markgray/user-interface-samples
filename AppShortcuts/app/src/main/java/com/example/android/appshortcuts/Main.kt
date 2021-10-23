@@ -36,6 +36,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.util.ArrayList
 
 /**
@@ -49,6 +50,7 @@ import java.util.ArrayList
  * [ShortcutInfo] objects which are displayed in our [ListView] and which are accessed when a user
  * long-presses on our app's launcher icon.
  */
+@DelicateCoroutinesApi
 class Main : AppCompatActivity(), View.OnClickListener {
     /**
      * The [MyAdapter] custom [ListAdapter] used to populate our [ListView].
@@ -112,6 +114,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param v the [View] that was clicked.
      */
+    @DelicateCoroutinesApi
     @Suppress("UNUSED_PARAMETER")
     fun onAddPressed(v: View?) {
         addWebSite()
@@ -134,6 +137,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      * shortcut using the [ShortcutHelper.addWebSiteShortcut] method of [ShortcutHelper] field
      * [mHelper]. Finally we show the [AlertDialog.Builder] we constructed to the user.
      */
+    @DelicateCoroutinesApi
     private fun addWebSite() {
         Log.i(TAG, "addWebSite")
 
@@ -164,6 +168,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param uri a web site URL which the user wants to add to our short cut list.
      */
+    @DelicateCoroutinesApi
     @SuppressLint("StaticFieldLeak")
     private fun addUriAsync(uri: String) {
         object : CoroutinesAsyncTask<Void?, Void?, Void?>() {
@@ -182,7 +187,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      * Refreshes the dataset held by our [MyAdapter] field [mAdapter] with all mutable shortcuts for
      * this app in order for them to be displayed in our [ListView]. It does this by calling the
      * [MyAdapter.setShortcuts] method of our [MyAdapter] field [mAdapter] with the [List] of
-     * [ShortcutInfo] that the [ShortcutHelper.getShortcuts] method of our [ShortcutHelper] field
+     * [ShortcutInfo] that the [ShortcutHelper.shortcuts] property of our [ShortcutHelper] field
      * [mHelper] returns when it queries the [ShortcutManager] for all mutable shortcuts for this
      * app.
      */

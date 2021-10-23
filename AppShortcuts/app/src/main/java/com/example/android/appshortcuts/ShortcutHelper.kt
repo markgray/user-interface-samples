@@ -26,6 +26,7 @@ import android.net.Uri
 import android.os.PersistableBundle
 import android.util.Log
 import com.example.android.appshortcuts.Utils.showToast
+import kotlinx.coroutines.DelicateCoroutinesApi
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -38,6 +39,7 @@ import java.util.function.BooleanSupplier
 /**
  * This class exists to make it easier to interact with the [ShortcutManager] system level service.
  */
+@DelicateCoroutinesApi
 class ShortcutHelper(private val mContext: Context) {
     /**
      * Our handle to the [ShortcutManager] system level service.
