@@ -309,7 +309,7 @@ class AdvancedImmersiveModeFragment : Fragment() {
         // one to find from within a fragment, since there's a handy helper method to pull it, and
         // we don't have to bother with picking a view somewhere deeper in the hierarchy and calling
         // "findViewById" on it.
-        val decorView: View = activity!!.window.decorView
+        val decorView: View = requireActivity().window.decorView
         val uiOptions: Int = decorView.systemUiVisibility
         var newUiOptions: Int = uiOptions
         // END_INCLUDE (get_current_ui_flags)
