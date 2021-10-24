@@ -30,23 +30,23 @@ object ListSharedPrefsUtil {
         appWidgetId: Int,
         @LayoutRes layoutId: Int
     ) {
-        context.getSharedPreferences(name = PREFS_NAME, mode = 0).edit {
+        context.getSharedPreferencesByNamedArgument(name = PREFS_NAME, mode = 0).edit {
             putInt(PREF_PREFIX_KEY + appWidgetId, layoutId)
         }
     }
 
     internal fun loadWidgetLayoutIdPref(context: Context, appWidgetId: Int): Int =
-        context.getSharedPreferences(name = PREFS_NAME, mode = 0)
+        context.getSharedPreferencesByNamedArgument(name = PREFS_NAME, mode = 0)
             .getInt(PREF_PREFIX_KEY + appWidgetId, R.layout.widget_grocery_list)
 
     internal fun deleteWidgetLayoutIdPref(context: Context, appWidgetId: Int) {
-        context.getSharedPreferences(name = PREFS_NAME, mode = 0).edit {
+        context.getSharedPreferencesByNamedArgument(name = PREFS_NAME, mode = 0).edit {
             remove(PREF_PREFIX_KEY + appWidgetId)
         }
     }
 
     // Wrapper for Context.getSharedPreferences to support named arguments
-    private fun Context.getSharedPreferences(name: String, mode: Int): SharedPreferences {
+    private fun Context.getSharedPreferencesByNamedArgument(name: String, mode: Int): SharedPreferences {
         return getSharedPreferences(name, mode)
     }
 }
