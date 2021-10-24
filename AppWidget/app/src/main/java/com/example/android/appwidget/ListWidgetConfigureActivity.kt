@@ -28,7 +28,7 @@ import com.example.android.appwidget.databinding.ActivityWidgetConfigureBinding
  */
 class ListWidgetConfigureActivity : AppCompatActivity() {
 
-    var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
