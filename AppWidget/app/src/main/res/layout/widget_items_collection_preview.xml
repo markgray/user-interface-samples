@@ -13,6 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<!--
+This layout file is meant to be used only for the previewLayout attribute
+to mimic the fake items in the ListView to follow the recommended practice
+at https://developer.android.com/guide/topics/appwidgets/advanced#build-accurate-previews.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Widget.AppWidget.AppWidget.Container"
     android:layout_width="match_parent"
@@ -20,7 +25,23 @@
     android:orientation="vertical"
     android:theme="@style/Theme.AppWidget.AppWidgetContainer">
 
-    <include layout="@layout/widget_checkbox_list_title_region" />
+    <include layout="@layout/widget_items_collection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-    <include layout="@layout/widget_grocery_list_left_items" />
+    <include layout="@layout/item_checkboxes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <include layout="@layout/item_radio_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <include layout="@layout/item_switches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>
