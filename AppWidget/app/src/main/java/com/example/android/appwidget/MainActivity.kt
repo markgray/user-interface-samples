@@ -19,8 +19,22 @@ package com.example.android.appwidget
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
+/**
+ * This sample demonstrates how to use the new Widgets APIs introduced in API level 31.
+ * The new set of APIs allows an application to build more engaging and beautiful widgets.
+ * The initial set of new APIs focuses on improving existing `RemoteViews` APIs.
+ */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_main]. This consists of a
+     * `ConstraintLayout` root view holding a single `TextView` displaying the text: "This is an
+     * Activity of the `AppWidget` sample. Long press the app icon and choose the widget picker to
+     * try the widgets in the sample".
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
