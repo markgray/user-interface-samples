@@ -39,8 +39,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 /**
  * This sample demonstrates how to use the Launcher Shortcuts API introduced in Android 7.1 (API 25).
@@ -53,17 +51,22 @@ import kotlin.coroutines.CoroutineContext
  * [ShortcutInfo] objects which are displayed in our [ListView] and which are accessed when a user
  * long-presses on our app's launcher icon.
  */
-class Main : AppCompatActivity(), CoroutineScope, View.OnClickListener {
+class Main : AppCompatActivity(), View.OnClickListener {
+    /** Coroutine variables */
+
     /**
-     * The context of this scope. Context is encapsulated by the scope and used for implementation
-     * of coroutine builders that are extensions on the scope. Accessing this property in general
-     * code is not recommended for any purposes except accessing the [Job] instance for advanced
-     * usages.
-     *
-     * By convention, should contain an instance of a [Job] to enforce structured concurrency.
+     * [mainJob] allows us to cancel all coroutines started by [Main].
      */
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+    private var mainJob = Job()
+
+    /**
+     * A [CoroutineScope] that keeps track of all coroutines started by [Main]. Because we
+     * pass it [mainJob], any coroutine started in this scope can be cancelled by calling
+     * `viewModelJob.cancel()`. By default, all coroutines started in [uiScope] will launch in
+     * [Dispatchers.Main] which is the main thread on Android. This is a sensible default because
+     * most coroutines started by [Main] update the UI after performing some processing.
+     */
+    private val uiScope = CoroutineScope(Dispatchers.Main + mainJob)
 
     /**
      * The [MyAdapter] custom [ListAdapter] used to populate our [ListView].
@@ -181,7 +184,7 @@ class Main : AppCompatActivity(), CoroutineScope, View.OnClickListener {
      */
     @SuppressLint("StaticFieldLeak")
     private fun addUriAsync(uri: String) {
-        CoroutineScope(coroutineContext).noParamNoResultAsync(
+        uiScope.noParamNoResultAsync(
             doInBackground = {
                 mHelper.addWebSiteShortcut(uri)
             },

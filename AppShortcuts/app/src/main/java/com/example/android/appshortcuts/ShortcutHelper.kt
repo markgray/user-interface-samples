@@ -28,20 +28,33 @@ import android.util.Log
 import com.example.android.appshortcuts.Utils.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
 import java.util.function.BooleanSupplier
-import kotlin.coroutines.CoroutineContext
 
 /**
  * This class exists to make it easier to interact with the [ShortcutManager] system level service.
  */
-class ShortcutHelper(private val mContext: Context) : CoroutineScope {
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+class ShortcutHelper(private val mContext: Context) {
+    /** Coroutine variables */
+
+    /**
+     * [shortcutHelperJob] allows us to cancel all coroutines started by [ShortcutHelper].
+     */
+    private var shortcutHelperJob = Job()
+
+    /**
+     * A [CoroutineScope] that keeps track of all coroutines started by [ShortcutHelper]. Because we
+     * pass it [shortcutHelperJob], any coroutine started in this scope can be cancelled by calling
+     * `viewModelJob.cancel()`. By default, all coroutines started in [uiScope] will launch in
+     * [Dispatchers.Main] which is the main thread on Android. This is a sensible default because
+     * most coroutines started by [ShortcutHelper] update the UI after performing some processing.
+     */
+    private val uiScope = CoroutineScope(Dispatchers.Main + shortcutHelperJob)
 
     /**
      * Our handle to the [ShortcutManager] system level service.
@@ -177,7 +190,7 @@ class ShortcutHelper(private val mContext: Context) : CoroutineScope {
      * from the `onReceive` override of [MyReceiver]
      */
     fun refreshShortcuts(force: Boolean) {
-        CoroutineScope(coroutineContext).noParamNoResultAsync(
+        uiScope.noParamNoResultAsync(
             doInBackground = {
                 Log.i(TAG, "refreshingShortcuts...")
                 val now = System.currentTimeMillis()
