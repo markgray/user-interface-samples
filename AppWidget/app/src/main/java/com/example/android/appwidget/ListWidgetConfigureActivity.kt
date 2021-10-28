@@ -19,6 +19,7 @@ package com.example.android.appwidget
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -121,6 +122,31 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * This is the [View.OnClickListener] that is called when the user clicks either `LinearLayout`
+     * [ActivityWidgetConfigureBinding.groceryListContainer] or `LinearLayout`
+     * [ActivityWidgetConfigureBinding.todoListContainer] to select the layout used by the
+     * [ListAppWidget] whose `appWidgetId` is our [appWidgetId] field (the `LinearLayout`'s
+     * hold non-functional representations of what a "Grocery list" or a "To-do list" will look
+     * like when [ListAppWidget] uses our [widgetLayoutResId] `LayoutRes` parameter as the layout
+     * file for the `AppWidget`).
+     *
+     * First we call our [ListSharedPrefsUtil.saveWidgetLayoutIdPref] method to have it store our
+     * [widgetLayoutResId] parameter in our shared preferences file under a key generated from our
+     * `appWidgetId` field [appWidgetId]. Next we initialize our [AppWidgetManager] variable
+     * `val appWidgetManager` to the [AppWidgetManager] instance to use for our [Context]. Then we
+     * call the [ListAppWidget.updateAppWidget] method with `this` as the [Context] to use when
+     * a [Context] is needed, `appWidgetManager` as the [AppWidgetManager] to interact with and
+     * [appWidgetId] as the `appWidgetId` of the [ListAppWidget] that it should update to use the
+     * new layout file whose resource ID is [widgetLayoutResId].
+     *
+     * Next we initialize our [Intent] variable `val resultValue` to a new instance, and add
+     * [appWidgetId] to it as an extra under the key [AppWidgetManager.EXTRA_APPWIDGET_ID]
+     * (we do this to pass back the original appWidgetId so that the result we return can be
+     * properly identified). Then we set the result that our activity will return to its caller
+     * to the `resultCode` [Activity.RESULT_OK] with `resultValue` as the data to propagate back to
+     * the originating activity. Finally we call [finish] to close our activity.
+     */
     private fun onWidgetContainerClicked(@LayoutRes widgetLayoutResId: Int) {
         ListSharedPrefsUtil.saveWidgetLayoutIdPref(this, appWidgetId, widgetLayoutResId)
         // It is the responsibility of the configuration activity to update the app widget
