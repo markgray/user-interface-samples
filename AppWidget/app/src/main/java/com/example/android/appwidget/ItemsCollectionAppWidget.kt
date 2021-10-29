@@ -16,6 +16,7 @@
 
 package com.example.android.appwidget
 
+import android.app.Application
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -63,6 +64,16 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * method of `remoteViews` to set its adapter to a simple adapter for the `ListView` with the
      * ID [R.id.items_list_view] in the layout file layout/widget_items_collection.xml used by
      * `remoteViews` with `collectionItems` as the items to display in the AdapterView.
+     * If [BuildCompat.isAtLeastS] returns `false` indicating that the device we are running on uses
+     * a version of Android older than Android S we call the [RemoteViews.setRemoteAdapter] method
+     * of `remoteViews` with [R.id.items_list_view] as the ID of the `AdapterView` and an [Intent]
+     * for our [ItemsCollectionRemoteViewsService] custom [RemoteViewsService] which will be the
+     * service that will be providing data to the `RemoteViewsAdapter`
+     *
+     * Finally no matter what version of Android our device is running we all the method
+     * [AppWidgetManager.updateAppWidget] of our [appWidgetManager] parameter with our [IntArray]
+     * parameter [appWidgetIds] as the `AppWidget` instances that need their RemoteViews set, and
+     * our [RemoteViews] variable `remoteViews` as the RemoteViews object they should show.
      *
      * @param context The [Context] in which this receiver is running.
      * @param appWidgetManager An [AppWidgetManager] object you can use to call
@@ -77,7 +88,8 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
     ) {
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_items_collection)
         if (BuildCompat.isAtLeastS()) {
-            val collectionItems: RemoteViews.RemoteCollectionItems = getRemoteCollectionItems(context)
+            val collectionItems: RemoteViews.RemoteCollectionItems =
+                getRemoteCollectionItems(context)
             remoteViews.setRemoteAdapter(R.id.items_list_view, collectionItems)
         } else {
             remoteViews.setRemoteAdapter(
@@ -88,12 +100,27 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews)
     }
 
+    /**
+     * Implements [BroadcastReceiver.onReceive] to dispatch calls to the various other methods of
+     * [AppWidgetProvider]. First we call our super's implementation of `onReceive`. Then if
+     * [BuildCompat.isAtLeastS] returns `true` (we are running on Android S or newer) and the
+     * [Intent] parameter [intent] that we are receiving has an [REQUEST_CODE_FROM_COLLECTION_WIDGET]
+     * extra stored under the key [REQUEST_CODE] we:
+     *  - initialize our [Boolean] variable `val checked` to the [Boolean] stored as an extra in
+     *  [intent] under the key [RemoteViews.EXTRA_CHECKED] (defaulting to `false` if there is no
+     *  value stored under that key in [intent])
+     *  - we toast a string constructed from the "ViewId:", the [Int] stored under the key
+     *  [EXTRA_VIEW_ID] in `intent` and the current checked status: `checked`.
+     *
+     * @param context The [Context] in which the receiver is running.
+     * @param intent The [Intent] being received.
+     */
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         if (BuildCompat.isAtLeastS() &&
             intent?.extras?.getInt(REQUEST_CODE) == REQUEST_CODE_FROM_COLLECTION_WIDGET
         ) {
-            val checked = intent.extras?.getBoolean(
+            val checked: Boolean? = intent.extras?.getBoolean(
                 RemoteViews.EXTRA_CHECKED,
                 false
             )
@@ -106,15 +133,38 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
     }
 }
 
+/**
+ * This is the custom [RemoteViewsService] that this AppWidget uses to feed data to its
+ * `RemoteViewsAdapter`. It is declared to be a `<service>` in our AndroidManifest and needs
+ * the android:permission="android.permission.BIND_REMOTEVIEWS"
+ */
 class ItemsCollectionRemoteViewsService : RemoteViewsService() {
 
+    /**
+     * Returns an instance of our [ItemsCollectionRemoteViewsFactory] implementation of a
+     * [RemoteViewsService.RemoteViewsFactory] constructed to use the [Context] of the single,
+     * global [Application] object of the current process as its [Context].
+     *
+     * @param data The [Intent] that was used to bind to this service, as given to
+     * [Context.bindService]
+     * @return a [ItemsCollectionRemoteViewsFactory] that generates appropriate factories for the
+     * data we provide.
+     */
     override fun onGetViewFactory(data: Intent?): RemoteViewsFactory {
         return ItemsCollectionRemoteViewsFactory(applicationContext)
     }
 }
 
-class ItemsCollectionRemoteViewsFactory(private val context: Context) :
-    RemoteViewsService.RemoteViewsFactory {
+/**
+ * An interface for an adapter between a remote collection view (ListView, GridView, etc) and the
+ * underlying data for that view. The implementor is responsible for making a RemoteView for each
+ * item in the data set. This interface is a thin wrapper around Adapter.
+ *
+ * @param context the [Context] that we are running in.
+ */
+class ItemsCollectionRemoteViewsFactory(
+    private val context: Context
+) : RemoteViewsService.RemoteViewsFactory {
 
     override fun onCreate() {}
 
