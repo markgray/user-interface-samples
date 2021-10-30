@@ -156,7 +156,7 @@ class ItemsCollectionRemoteViewsService : RemoteViewsService() {
 }
 
 /**
- * An interface for an adapter between a remote collection view (ListView, GridView, etc) and the
+ * An interface for an adapter between a remote collection view (`ListView`, `GridView`, etc) and the
  * underlying data for that view. The implementor is responsible for making a RemoteView for each
  * item in the data set. This interface is a thin wrapper around Adapter.
  *
@@ -166,35 +166,120 @@ class ItemsCollectionRemoteViewsFactory(
     private val context: Context
 ) : RemoteViewsService.RemoteViewsFactory {
 
+    /**
+     * Called when your factory is first constructed. The same factory may be shared across
+     * multiple RemoteViewAdapters depending on the intent passed.
+     */
     override fun onCreate() {}
 
+    /**
+     * Called when notifyDataSetChanged() is triggered on the remote adapter. This allows a
+     * RemoteViewsFactory to respond to data changes by updating any internal references.
+     *
+     * Note: expensive tasks can be safely performed synchronously within this method. In the
+     * interim, the old data will be displayed within the widget.
+     *
+     * See also [AppWidgetManager.notifyAppWidgetViewDataChanged]
+     */
     override fun onDataSetChanged() {}
 
+    /**
+     * Called when the last RemoteViewsAdapter that is associated with this factory is unbound.
+     */
     override fun onDestroy() {}
 
+    /**
+     * Returns the number of objects in our dataset. We return the number of elements in our
+     * [List] of layout resource IDs [items].
+     *
+     * @return Count of items.
+     */
     override fun getCount(): Int = items.count()
 
+    /**
+     * Get a [RemoteViews] that displays the data at the specified position in the data set. We
+     * return the [RemoteViews] that our [constructRemoteViews] method builds given the layout file
+     * resource ID found at index [position] of [items].
+     *
+     * Note: expensive tasks can be safely performed synchronously within this method, and a
+     * loading view will be displayed in the interim. See [getLoadingView].
+     *
+     * @param position The position of the item within the Factory's data set of the item whose
+     * [RemoteViews] we want.
+     * @return A [RemoteViews] object corresponding to the data at the specified position.
+     */
     override fun getViewAt(position: Int): RemoteViews {
         return constructRemoteViews(context, items[position])
     }
 
+    /**
+     * This allows for the use of a custom loading view which appears between the time that
+     * [getViewAt] is called and returns. If `null` is returned, a default loading view will
+     * be used, and we do return `null` here.
+     *
+     * @return The [RemoteViews] representing the desired loading view.
+     */
     override fun getLoadingView(): RemoteViews? = null
 
+    /**
+     * Returns the number of types of [RemoteViews] that will be created by [getViewAt]. We return
+     * the number of elements in our [List] of layout resource IDs [items].
+     *
+     * @return The number of types of Views that will be returned by this factory.
+     */
     override fun getViewTypeCount(): Int = items.count()
 
+    /**
+     * Get the row id associated with the specified position in the list. We use the position of the
+     * item within the data set as its row id so we just return that (converted to a [Long]).
+     *
+     * @param position The position of the item within the data set whose row id we want.
+     * @return The id of the item at the specified position.
+     */
     override fun getItemId(position: Int): Long = position.toLong()
 
+    /**
+     * Indicates whether the item ids are stable across changes to the underlying data. In our case
+     * they are, so we return `true`.
+     *
+     * @return True if the same id always refers to the same object.
+     */
     override fun hasStableIds(): Boolean = true
 
     companion object {
+        /**
+         * Our dataset of layout file resource IDs, which are used to create [RemoteViews] objects
+         * that will display the views contained in the layout file.
+         */
         val items = listOf(
             R.layout.item_checkboxes,
             R.layout.item_radio_buttons,
             R.layout.item_switches,
         )
 
+        /**
+         * The value stored as an extra under the key [REQUEST_CODE] in the [Intent] that we receive
+         * in the `onReceive` override of [ItemsCollectionAppWidget] when the [R.id.item_switch]
+         * `Switch` in the [RemoteViews] constructed from layout file [R.layout.item_switches] changes
+         * checked state. It is included in the [PendingIntent] that [constructRemoteViews] uses in
+         * its call to [RemoteViews.setOnCheckedChangeResponse].
+         */
         const val REQUEST_CODE_FROM_COLLECTION_WIDGET = 2
+
+        /**
+         * The key used to store the resource ID of the [R.id.item_switch] `Switch` in layout file
+         * [R.layout.item_switches] as an extra in the [PendingIntent] that [constructRemoteViews]
+         * uses in its call to [RemoteViews.setOnCheckedChangeResponse].
+         */
         const val EXTRA_VIEW_ID = "extra_view_id"
+
+        /**
+         * The key used to store the value [REQUEST_CODE_FROM_COLLECTION_WIDGET] as an extra in the
+         * [PendingIntent] that [constructRemoteViews] uses when it builds the [PendingIntent] for
+         * the [R.id.item_switch] `Switch` in layout file [R.layout.item_switches] that will be
+         * launched when the `Switch` changes state. It is used in the [PendingIntent] that
+         * [constructRemoteViews] uses in its call to [RemoteViews.setOnCheckedChangeResponse].
+         */
         const val REQUEST_CODE = "request_code"
 
         @RequiresApi(31)
