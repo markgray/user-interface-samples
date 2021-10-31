@@ -282,6 +282,27 @@ class ItemsCollectionRemoteViewsFactory(
          */
         const val REQUEST_CODE = "request_code"
 
+        /**
+         * Constructs a [RemoteViews.RemoteCollectionItems] object containing [RemoteViews] for each
+         * of the layout resource IDs in our [List] of resource IDs field [items]. We initialize our
+         * [RemoteViews.RemoteCollectionItems.Builder] variable to a new instance, then we use the
+         * [forEachIndexed] extension function on [items] to loop through the three layout resource
+         * IDs in the [List] calling the [RemoteViews.RemoteCollectionItems.Builder.addItem] method
+         * of `builder` to add the [RemoteViews] that our [constructRemoteViews] method constructs
+         * for the current `layoutId` using the `index` of the current entry in [items] that
+         * [forEachIndexed] is supplying us as the ID to associate with the row (0-2).
+         *
+         * When done adding [RemoteViews] to `builder` we set the "Has Stable IDs" property of
+         * `builder` to `true` (indicates that the item IDs are stable across changes to the underlying
+         * data), we set the view type count of `builder` to the number of elements in [items], and
+         * build `builder` into the [RemoteViews.RemoteCollectionItems] object that we return.
+         *
+         * @param context our application [Context] which our [constructRemoteViews] method needs to
+         * construct [RemoteViews].
+         * @return a [RemoteViews.RemoteCollectionItems] object whose rows contain [RemoteViews] to
+         * display for each row which are constructed to display the views in the layout files whose
+         * resource IDs are in our [List] of resource IDs field [items].
+         */
         @RequiresApi(31)
         fun getRemoteCollectionItems(context: Context): RemoteViews.RemoteCollectionItems {
             val builder = RemoteViews.RemoteCollectionItems.Builder()
@@ -291,6 +312,45 @@ class ItemsCollectionRemoteViewsFactory(
             return builder.setHasStableIds(true).setViewTypeCount(items.count()).build()
         }
 
+        /**
+         * Creates a new [RemoteViews] object that will display the views contained in the layout
+         * file whose resource ID is our parameter [layoutId], and if the device is running a
+         * version of Android older than Android S returns that object as is. If the device is
+         * running Android S or newer we branch on the value of [layoutId]:
+         *  - [R.layout.item_checkboxes] (a `LinearLayout` holding a single `CheckBox`) we call the
+         *  [RemoteViews.setCompoundButtonChecked] method of `remoteViews` to "Check" the `CheckBox`
+         *  in the layout file whose ID is [R.id.item_checkbox].
+         *  - [R.layout.item_radio_buttons] (a `RadioGroup` holding two `RadioButton` widgets) we
+         *  call the [RemoteViews.setRadioGroupChecked] method of `remoteViews` to "Check" the
+         *  [R.id.item_radio_button2] `RadioButton` in the [R.id.item_radio_button2] `RadioGroup`.
+         *  - [R.layout.item_switches] (a `LinearLayout` holding a single `Switch` widget) we
+         *  initialize our [Int] variable `val viewId` to the resource ID [R.id.item_switch] (the
+         *  ID of the `Switch` in the layout file) then initialize our [PendingIntent] variable
+         *  `val onCheckedChangePendingIntent` to a [PendingIntent] that will perform a broadcast
+         *  using [REQUEST_CODE_FROM_COLLECTION_WIDGET] as the private request code, an [Intent]
+         *  constructed to launch [ItemsCollectionAppWidget] as the [Intent] to be broadcast with
+         *  two extras: `viewId` stored under the key [EXTRA_VIEW_ID] and
+         *  [REQUEST_CODE_FROM_COLLECTION_WIDGET] stored under the key [REQUEST_CODE]. API level 31
+         *  requires specifying either [PendingIntent.FLAG_IMMUTABLE] or [PendingIntent.FLAG_MUTABLE]
+         *  so we add the flags [PendingIntent.FLAG_UPDATE_CURRENT] and [PendingIntent.FLAG_MUTABLE]
+         *  to the [PendingIntent] as well. We then call the [RemoteViews.setOnCheckedChangeResponse]
+         *  method of `remoteViews` with `viewId` as the ID of the view that will trigger the
+         *  [PendingIntent] when checked state changes, and the [RemoteViews.RemoteResponse] that
+         *  the [RemoteViews.RemoteResponse.fromPendingIntent] method creates from `onCheckedChangePendingIntent`
+         *  as the [RemoteViews.RemoteResponse] to send when the checked state changes (this starts
+         *  us listening for change events).
+         *
+         * Finally we return `remoteViews` to our caller.
+         *
+         * @param context the application [Context] to use to construct a [RemoteViews], [PendingIntent],
+         * and [Intent].
+         * @param layoutId the resource ID of the layout file whose views the [RemoteViews] object
+         * that we construct should display.
+         * @return a [RemoteViews] object constructed to display the views contained in the layout
+         * file whose resource ID is our parameter [layoutId]. If we are running on a device that is
+         * running Android S and above the [RemoteViews] object will also be configured to use some
+         * of the nifty new APIs added to [RemoteViews] in Android S.
+         */
         internal fun constructRemoteViews(
             context: Context,
             @LayoutRes layoutId: Int
@@ -314,8 +374,8 @@ class ItemsCollectionRemoteViewsFactory(
                     )
                 }
                 R.layout.item_switches -> {
-                    val viewId = R.id.item_switch
-                    val onCheckedChangePendingIntent = PendingIntent.getBroadcast(
+                    val viewId: Int = R.id.item_switch
+                    val onCheckedChangePendingIntent: PendingIntent = PendingIntent.getBroadcast(
                         context,
                         REQUEST_CODE_FROM_COLLECTION_WIDGET,
                         Intent(context, ItemsCollectionAppWidget::class.java).apply {
