@@ -31,17 +31,55 @@ import androidx.annotation.LayoutRes
  */
 class ListAppWidget : AppWidgetProvider() {
 
+    /**
+     * Called in response to the [AppWidgetManager.ACTION_APPWIDGET_UPDATE] broadcast (sent when it
+     * is time to update your `AppWidget` which may be sent in response to a new instance for this
+     * `AppWidget` provider having been instantiated, the requested update interval having lapsed,
+     * or the system booting) and [AppWidgetManager.ACTION_APPWIDGET_RESTORED] broadcast (sent to an
+     * [AppWidgetProvider] after `AppWidget` state related to that provider has been restored from
+     * backup) when this [AppWidgetManager] is being asked to provide [RemoteViews] for a set of
+     * `AppWidgets`. Override this method to implement your own `AppWidget` functionality.
+     *
+     * We loop over [Int] variable `appWidgetId` for all of the `appWidgetId` in our [IntArray]
+     * parameter [appWidgetIds] calling our [updateAppWidget] method with our [Context] parameter
+     * [context], our [AppWidgetManager] parameter [appWidgetManager], and the current `appWidgetId`.
+     * [updateAppWidget] will create, configure and update the [RemoteViews] for the app widget ID
+     * `appWidgetId` based on the layout file whose resource ID is stored for that `appWidgetId` in
+     * our shared preferences file.
+     *
+     * @param context The [Context] in which this receiver is running.
+     * @param appWidgetManager A [AppWidgetManager] object you can call
+     * [AppWidgetManager.updateAppWidget] on.
+     * @param appWidgetIds The `appWidgetIds` for which an update is needed. Note that this may be
+     * all of the `AppWidget` instances for this provider, or just a subset of them. An `appWidgetId`
+     * is a unique ID that each [RemoteViews] instance is assigned at the time of binding. This ID
+     * is persistent across the lifetime of the widget, that is, until it is deleted from the
+     * `AppWidgetHost`.
+     */
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
         // There may be multiple widgets active, so update all of them
-        for (appWidgetId in appWidgetIds) {
+        for (appWidgetId: Int in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
+    /**
+     * Called in response to the [AppWidgetManager.ACTION_APPWIDGET_DELETED] broadcast which is sent
+     * when one or more `AppWidget` instances have been deleted from their host. Override this
+     * method to implement your own `AppWidget` functionality. We loop over [Int] variable
+     * `appWidgetId` for all of the `appWidgetId` in our [IntArray] parameter [appWidgetIds] calling
+     * our [ListSharedPrefsUtil.deleteWidgetLayoutIdPref] method with our [Context] parameter
+     * [context], and the current `appWidgetId`. [ListSharedPrefsUtil.deleteWidgetLayoutIdPref]
+     * deletes the layout file resource ID that is stored in our shared preferences file for
+     * `appWidgetId` (thereby preventing it from being recreated in our [onUpdate] override.
+     *
+     * @param context The [Context] in which this receiver is running.
+     * @param appWidgetIds The `appWidgetIds` that have been deleted from their host.
+     */
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
@@ -51,6 +89,10 @@ class ListAppWidget : AppWidgetProvider() {
 
     companion object {
 
+        /**
+         * Private request code used for the [PendingIntent] which is launched when the user clicks
+         * on one of our 'AppWidget`'s
+         */
         private const val REQUEST_CODE_OPEN_ACTIVITY = 1
 
         @SuppressLint("RemoteViewLayout")
