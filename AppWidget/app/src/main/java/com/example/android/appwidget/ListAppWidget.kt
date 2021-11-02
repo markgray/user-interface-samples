@@ -95,6 +95,36 @@ class ListAppWidget : AppWidgetProvider() {
          */
         private const val REQUEST_CODE_OPEN_ACTIVITY = 1
 
+        /**
+         * Constructs a [RemoteViews] that will display the views in the current layout file whose
+         * resource ID is stored in our shared preferences file under a key which is associated with
+         * our [Int] parameter [appWidgetId] then has our [AppWidgetManager] parameter
+         * [appWidgetManager] set the [RemoteViews] to use for the specified [appWidgetId] to this
+         * [RemoteViews]. First we initialize our [Intent] variable `val activityIntent` with a new
+         * instance intended to launch our [MainActivity] class, and using the [apply] extension
+         * function on the new instance set the special flags controlling how this intent is handled
+         * to [Intent.FLAG_ACTIVITY_CLEAR_TASK] (if set in an Intent passed to [Context.startActivity],
+         * this flag will cause any existing task that would be associated with the activity to be
+         * cleared before the activity is started), and [Intent.FLAG_ACTIVITY_NEW_TASK] (if set,
+         * this activity will become the start of a new task on this history stack). Next we
+         * initalize our [PendingIntent] variable `val appOpenIntent` with a [PendingIntent] that
+         * will start a new activity using our [Context] parameter [context] as the [Context] in
+         * which this [PendingIntent] should start the activity, [REQUEST_CODE_OPEN_ACTIVITY] as the
+         * private request code for the sender, `activityIntent` as the [Intent] of the activity to
+         * be launched, and the flags [PendingIntent.FLAG_CANCEL_CURRENT] (flag indicating that if
+         * the described PendingIntent already exists, the current one should be canceled before
+         * generating a new one), and [PendingIntent.FLAG_IMMUTABLE] (flag indicating that the
+         * created PendingIntent should be immutable, this means that the additional intent argument
+         * passed to the send methods to fill in unpopulated properties of this intent will be
+         * ignored) as the flags of the [PendingIntent]
+         *
+         * @param context the [Context] in which this receiver is running.
+         * @param appWidgetManager the [AppWidgetManager] instance to use for the supplied [Context]
+         * object.
+         * @param appWidgetId a unique ID that each [RemoteViews] instance is assigned at the time
+         * of binding. It is one of the app widget IDs that is passed to our [onUpdate] override in
+         * its [IntArray] parameter `appWidgetIds`.
+         */
         @SuppressLint("RemoteViewLayout")
         internal fun updateAppWidget(
             context: Context,
@@ -114,6 +144,16 @@ class ListAppWidget : AppWidgetProvider() {
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
+            /**
+             * Nested function called from [updateAppWidget] to construct a [RemoteViews] that will
+             * display the views in the layout file whose resource ID is our [Int] parameter
+             * `widgetLayoutId`
+             *
+             * @param widgetLayoutId the resource ID of the layout file whose views the [RemoteViews]
+             * object we construct and return are supposed to display.
+             * @return a [RemoteViews] constructed to display the views in the layout file whose
+             * resource ID is our [Int] parameter [widgetLayoutId].
+             */
             fun constructRemoteViews(
                 @LayoutRes widgetLayoutId: Int
             ) = RemoteViews(context.packageName, widgetLayoutId).apply {
