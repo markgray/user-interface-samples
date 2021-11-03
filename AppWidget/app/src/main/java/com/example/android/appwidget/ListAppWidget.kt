@@ -116,7 +116,26 @@ class ListAppWidget : AppWidgetProvider() {
          * generating a new one), and [PendingIntent.FLAG_IMMUTABLE] (flag indicating that the
          * created PendingIntent should be immutable, this means that the additional intent argument
          * passed to the send methods to fill in unpopulated properties of this intent will be
-         * ignored) as the flags of the [PendingIntent]
+         * ignored) as the flags of the [PendingIntent]. Next we initialize our [Int] variable
+         * `val layoutId` to the layout resource ID that the [ListSharedPrefsUtil.loadWidgetLayoutIdPref]
+         * method retrieves from our shared preference for the app widget ID `appWidgetId`. Then
+         * we initialize our [RemoteViews] variable `val remoteViews` depending on the value of
+         * `layoutId`:
+         *  - `layoutId` is [R.layout.widget_grocery_list]: we initialize our [Map] of [SizeF] to
+         *  [RemoteViews] variable `val viewMapping` to an instance with two entries, one mapping a
+         *  150f by 150f [SizeF] to the [RemoteViews] that our `constructRemoteViews` method constructs
+         *  to display the views in the layout file whose resource ID is [R.layout.widget_grocery_list]
+         *  and one mapping a 250f by 150f [SizeF] to the [RemoteViews] that `constructRemoteViews`
+         *  constructs to display the views in the layout file whose resource ID is
+         *  [R.layout.widget_grocery_grid]. We then "return" a [RemoteViews] instance constructed to
+         *  inflate the layout with the closest size specification in `viewMapping` as the value
+         *  to be assigned to `remoteViews`.
+         *  - any other value of `layoutId` just returns a [RemoteViews] constructed to display the
+         *  views in the layout file whose resource ID is `layoutId` as the value to be assigned to
+         *  `remoteViews`.
+         *
+         * Finally we call the [AppWidgetManager.updateAppWidget] method of [appWidgetManager] to
+         * have it set the [RemoteViews] to use for the [appWidgetId] app widget ID.
          *
          * @param context the [Context] in which this receiver is running.
          * @param appWidgetManager the [AppWidgetManager] instance to use for the supplied [Context]
@@ -177,7 +196,7 @@ class ListAppWidget : AppWidgetProvider() {
             val remoteViews = if (layoutId == R.layout.widget_grocery_list) {
                 // Specify the maximum width and height in dp and a layout, which you want to use
                 // for the specified size
-                val viewMapping = mapOf(
+                val viewMapping: Map<SizeF, RemoteViews> = mapOf(
                     SizeF(150f, 150f) to constructRemoteViews(
                         R.layout.widget_grocery_list
                     ), SizeF(250f, 150f) to constructRemoteViews(
@@ -186,9 +205,7 @@ class ListAppWidget : AppWidgetProvider() {
                 )
                 RemoteViews(viewMapping)
             } else {
-                constructRemoteViews(
-                    layoutId
-                )
+                constructRemoteViews(layoutId)
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
         }
