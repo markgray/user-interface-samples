@@ -63,8 +63,11 @@ class BasicImmersiveModeFragment : Fragment() {
      * this is the state. We do not override [onSaveInstanceState] so do not use.
      */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        // TODO: To get a callback specifically when a Fragment activity's Activity.onCreate(Bundle)
+        //  is called, register a androidx.lifecycle.LifecycleObserver on the Activity's Lifecycle
+        //  in onAttach(Context), removing it when it receives the Lifecycle.State.CREATED callback
         super.onActivityCreated(savedInstanceState)
-        val decorView: View = activity!!.window.decorView
+        val decorView: View = requireActivity().window.decorView
         @Suppress("DEPRECATION")
         decorView.setOnSystemUiVisibilityChangeListener {
             val height = decorView.height
@@ -112,7 +115,7 @@ class BasicImmersiveModeFragment : Fragment() {
         // The UI options currently enabled are represented by a bitfield.
         // getSystemUiVisibility() gives us that bitfield.
         @Suppress("DEPRECATION")
-        val uiOptions = activity!!.window.decorView.systemUiVisibility
+        val uiOptions = requireActivity().window.decorView.systemUiVisibility
         var newUiOptions = uiOptions
         // END_INCLUDE (get_current_ui_flags)
         // BEGIN_INCLUDE (toggle_ui_flags)
@@ -137,7 +140,7 @@ class BasicImmersiveModeFragment : Fragment() {
         @Suppress("DEPRECATION")
         newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         @Suppress("DEPRECATION")
-        activity!!.window.decorView.systemUiVisibility = newUiOptions
+        requireActivity().window.decorView.systemUiVisibility = newUiOptions
         //END_INCLUDE (set_ui_flags)
     }
 
