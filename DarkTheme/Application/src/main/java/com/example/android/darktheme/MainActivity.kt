@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 
 /**
  * Sample demonstrating the different ways to support Dark Mode on Android. Uses the Material Design
@@ -63,19 +64,19 @@ class MainActivity : AppCompatActivity() {
      * the latest fragment. If the `itemID` is not one of ours we return `false` so the item will
      * not be selected.
      */
-    private val mOnNavigationListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private val mOnNavigationListener = NavigationBarView.OnItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
                 showFragment(WelcomeFragment.TAG)
-                return@OnNavigationItemSelectedListener true
+                return@OnItemSelectedListener true
             }
             R.id.navigation_preferences -> {
                 showFragment(PreferencesFragment.TAG)
-                return@OnNavigationItemSelectedListener true
+                return@OnItemSelectedListener true
             }
             R.id.navigation_settings -> {
                 showFragment(SettingsFragment.TAG)
-                return@OnNavigationItemSelectedListener true
+                return@OnItemSelectedListener true
             }
         }
         false
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById<View>(R.id.toolbar) as Toolbar)
         val navigation = findViewById<BottomNavigationView>(R.id.navigation)
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationListener)
+        navigation.setOnItemSelectedListener (mOnNavigationListener)
         if (savedInstanceState == null) {
             showFragment(WelcomeFragment.TAG)
         }
