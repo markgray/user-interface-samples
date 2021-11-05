@@ -243,7 +243,7 @@ class DragSourceFragment : Fragment() {
             // read out by the target app.
             val clipDescription = ClipDescription(
                 "",
-                arrayOf(context!!.contentResolver.getType(imageUri!!))
+                arrayOf(requireContext().contentResolver.getType(imageUri!!))
             )
             // Extras are stored within a PersistableBundle.
             val extras = PersistableBundle(1)
@@ -291,7 +291,7 @@ class DragSourceFragment : Fragment() {
      */
     private fun getFileUri(sourceResourceId: Int, targetName: String): Uri? {
         // Create the images/ sub directory if it does not exist yet.
-        val filePath = File(context!!.filesDir, "images")
+        val filePath = File(requireContext().filesDir, "images")
         if (!filePath.exists() && !filePath.mkdir()) {
             return null
         }
@@ -303,7 +303,7 @@ class DragSourceFragment : Fragment() {
         }
 
         // Make the file accessible via the FileProvider and retrieve its URI.
-        return FileProvider.getUriForFile(context!!, CONTENT_AUTHORITY, newFile)
+        return FileProvider.getUriForFile(requireContext(), CONTENT_AUTHORITY, newFile)
     }
 
     /**
