@@ -20,10 +20,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.droptarget">
 
-    <application android:label="DropTarget Sample"
+    <application
         android:icon="@mipmap/ic_launcher"
+        android:label="DropTarget Sample"
         tools:ignore="AllowBackup">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
