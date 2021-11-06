@@ -15,6 +15,7 @@
  */
 package com.example.android.interactivesliceprovider
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.slice.Slice.EXTRA_RANGE_VALUE
 import android.app.slice.Slice.EXTRA_TOGGLE_STATE
@@ -23,11 +24,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.example.android.interactivesliceprovider.util.buildUriWithAuthority
 
 class SliceActionsBroadcastReceiver : BroadcastReceiver() {
 
+    @SuppressLint("InlinedApi")
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         when (action) {
@@ -37,7 +40,7 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
                 val newState = intent.getBooleanExtra(EXTRA_TOGGLE_STATE, wm.isWifiEnabled)
                 wm.isWifiEnabled = newState
                 // Wait a bit for wifi to update (TODO: is there a better way to do this?)
-                val h = Handler()
+                val h = Handler(Looper.myLooper()!!)
                 h.postDelayed({
                     val uri = context.buildUriWithAuthority("wifi")
                     context.contentResolver.notifyChange(uri, null)
@@ -69,7 +72,7 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
             }
             return PendingIntent.getBroadcast(
                 context, requestCode, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         }
     }

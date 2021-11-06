@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +19,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
     <application
@@ -32,7 +32,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <meta-data
                 android:name="android.metadata.SLICE_URI"
                 android:value="@string/default_slice_uri" />
@@ -44,11 +46,14 @@
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/default_slice_path" />
+                    android:pathPrefix="@string/default_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
@@ -95,124 +100,179 @@
         do not need the meta-data element with android:name="android.metadata.SLICE_URI" and the
         custom slice URI.
         -->
-        <activity android:name=".sliceactivities.GallerySliceActivity">
+        <activity
+            android:name=".sliceactivities.GallerySliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/gallery_slice_path" />
+                    android:pathPrefix="@string/gallery_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.GridSliceActivity">
+        <activity
+            android:name=".sliceactivities.GridSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/grid_slice_path" />
+                    android:pathPrefix="@string/grid_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.InputRangeSliceActivity">
+        <activity
+            android:name=".sliceactivities.InputRangeSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/input_slice_path" />
+                    android:pathPrefix="@string/input_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.ListSliceActivity">
+        <activity
+            android:name=".sliceactivities.ListSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/list_slice_path" />
+                    android:pathPrefix="@string/list_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.NoteSliceActivity">
+        <activity
+            android:name=".sliceactivities.NoteSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/note_slice_path" />
+                    android:pathPrefix="@string/note_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.RangeSliceActivity">
+        <activity
+            android:name=".sliceactivities.RangeSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/range_slice_path" />
+                    android:pathPrefix="@string/range_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.ReservationSliceActivity">
+        <activity
+            android:name=".sliceactivities.ReservationSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/reservation_slice_path" />
+                    android:pathPrefix="@string/reservation_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.RideSliceActivity">
+        <activity
+            android:name=".sliceactivities.RideSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/ride_slice_path" />
+                    android:pathPrefix="@string/ride_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.ToggleSliceActivity">
+        <activity
+            android:name=".sliceactivities.ToggleSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/toggle_slice_path" />
+                    android:pathPrefix="@string/toggle_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.WeatherSliceActivity">
+        <activity
+            android:name=".sliceactivities.WeatherSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/weather_slice_path" />
+                    android:pathPrefix="@string/weather_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".sliceactivities.WifiSliceActivity">
+        <activity
+            android:name=".sliceactivities.WifiSliceActivity"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/scheme_slice_url"
+
+                <data
                     android:host="@string/host_slice_url"
-                    android:pathPrefix="@string/wifi_slice_path" />
+                    android:pathPrefix="@string/wifi_slice_path"
+                    android:scheme="@string/scheme_slice_url" />
             </intent-filter>
         </activity>
     </application>
