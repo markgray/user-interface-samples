@@ -32,12 +32,12 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
 
     @SuppressLint("InlinedApi")
     override fun onReceive(context: Context, intent: Intent) {
-        val action = intent.action
-        when (action) {
+        when (intent.action) {
             InteractiveSliceProvider.ACTION_WIFI_CHANGED -> {
                 val wm = context.applicationContext
                     .getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val newState = intent.getBooleanExtra(EXTRA_TOGGLE_STATE, wm.isWifiEnabled)
+                @Suppress("DEPRECATION")
                 wm.isWifiEnabled = newState
                 // Wait a bit for wifi to update (TODO: is there a better way to do this?)
                 val h = Handler(Looper.myLooper()!!)
