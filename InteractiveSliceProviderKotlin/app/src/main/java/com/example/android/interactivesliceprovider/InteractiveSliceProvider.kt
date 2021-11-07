@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.slice.Slice
 import androidx.slice.SliceProvider
@@ -69,8 +70,7 @@ class InteractiveSliceProvider : SliceProvider() {
 
         val contextNonNull  = context ?: return false
 
-        @Suppress("DEPRECATION")
-        repo = DataRepository(FakeDataSource(Handler()))
+        repo = DataRepository(FakeDataSource(Handler(Looper.myLooper()!!)))
         contentNotifiers = LazyFunctionMap {
             contextNonNull.contentResolver.notifyChange(it, null)
         }
@@ -213,7 +213,7 @@ class InteractiveSliceProvider : SliceProvider() {
 
         fun getPendingIntent(context: Context, action: String): PendingIntent {
             val intent = Intent(action)
-            return PendingIntent.getActivity(context, 0, intent, 0)
+            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
     }
 }
