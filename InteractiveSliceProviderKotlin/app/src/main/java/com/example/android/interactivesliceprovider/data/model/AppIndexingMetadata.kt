@@ -15,8 +15,35 @@
  */
 package com.example.android.interactivesliceprovider.data.model
 
+import com.example.android.interactivesliceprovider.AppIndexingUpdateService
+import com.google.firebase.appindexing.FirebaseAppIndex
+
+/**
+ * Information about each of the slices of this sample is stored in instances of this class. An
+ * index of our slices is returned by the [AppIndexingUpdateService.getIndexableData] in a [List]
+ * of [AppIndexingMetadata] to the [AppIndexingUpdateService.onHandleWork] method which calls the
+ * [FirebaseAppIndex.update] method with `Indexable` objects built from the [AppIndexingMetadata]
+ * in the [List].
+ */
 data class AppIndexingMetadata(
-        val httpUrl: String,
-        val contentUri: String,
-        val name: String,
-        val keywords: List<String>)
+    /**
+     * httpUrl = https://interactivesliceprovider.android.example.com/wifi
+     * Becomes the URL of the `Indexable` object to be updated by [FirebaseAppIndex]
+     */
+    val httpUrl: String,
+    /**
+     * contentUri = content://com.example.android.interactivesliceprovider/wifi
+     * Becomes the Uri of the Slice that represents the `Indexable` object.
+     */
+    val contentUri: String,
+    /**
+     * name = Wifi
+     * Becomes the name of the content of the `Indexable` object.
+     */
+    val name: String,
+    /**
+     * keywords = "wifi", "wifitest1234"
+     * Becomes the keywords of the `Indexable` object.
+     */
+    val keywords: List<String>
+)

@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@file:Suppress("DEPRECATION")
+
 package com.example.android.interactivesliceprovider
 
 import android.content.Context
@@ -26,13 +29,13 @@ import com.google.firebase.appindexing.Indexable
 
 class AppIndexingUpdateService : JobIntentService() {
 
-    private val TAG = AppIndexingUpdateService::class.java.simpleName
-
     companion object {
         private const val UNIQUE_JOB_ID = 42
         fun enqueueWork(context: Context) {
             enqueueWork(context, AppIndexingUpdateService::class.java, UNIQUE_JOB_ID, Intent())
         }
+
+        private val TAG = AppIndexingUpdateService::class.java.simpleName
     }
 
     override fun onHandleWork(intent: Intent) {
@@ -42,7 +45,7 @@ class AppIndexingUpdateService : JobIntentService() {
 
         // Convert list of AppIndexingMetadata objects (custom class) to a list of Indexable
         // objects, so FirebaseAppIndex can consume them.
-        val firebaseAppIndex = FirebaseAppIndex.getInstance(getApplicationContext())
+        val firebaseAppIndex: FirebaseAppIndex = FirebaseAppIndex.getInstance(applicationContext)
         val appIndexDataList = mutableListOf<Indexable>()
 
         for(indexableData in sliceIndexableDataList) {
@@ -82,7 +85,7 @@ class AppIndexingUpdateService : JobIntentService() {
 
         // To support a Slice in search, the Indexable must include the content URI mapping to the
         // correct Slice.
-        val hostContentUri = "${application.resources.getString(R.string.host_slice_uri)}"
+        val hostContentUri = application.resources.getString(R.string.host_slice_uri)
 
         // The resource string for scheme doesn't include "://" because android:scheme for the
         // data element in the manifest doesn't allow it. Therefore, we must add it here to via the
