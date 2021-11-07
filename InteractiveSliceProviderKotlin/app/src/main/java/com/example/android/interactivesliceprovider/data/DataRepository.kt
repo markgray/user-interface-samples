@@ -15,7 +15,7 @@
  */
 package com.example.android.interactivesliceprovider.data
 
-class DataRepository(val dataSource: FakeDataSource) {
+class DataRepository(private val dataSource: FakeDataSource) {
 
     fun getGridData() = dataSource.gridData
     fun getListData() = dataSource.listData

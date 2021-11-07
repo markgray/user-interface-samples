@@ -18,7 +18,7 @@ package com.example.android.interactivesliceprovider.data
 
 import android.os.Handler
 
-class FakeDataSource(val handler: Handler) : DataSource {
+class FakeDataSource(private val handler: Handler) : DataSource {
     override var gridData = GridData(title = "", subtitle = "", home = "", work = "", school = "")
     override var listData = ListData(home = "", work = "", school = "")
 
