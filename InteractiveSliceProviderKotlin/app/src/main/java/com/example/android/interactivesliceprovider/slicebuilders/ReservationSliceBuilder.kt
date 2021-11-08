@@ -41,14 +41,14 @@ class ReservationSliceBuilder(
             title = "Upcoming trip to Seattle"
             subtitle = "Feb 1 - 19 | 2 guests"
             primaryAction = SliceAction.create(
-                    SliceActionsBroadcastReceiver.getIntent(
-                            context,
-                            InteractiveSliceProvider.ACTION_TOAST,
-                            "Primary Action for Reservation Slice"
-                    ),
-                    IconCompat.createWithResource(context, drawable.ic_location),
-                    ListBuilder.ICON_IMAGE,
-                    "Primary"
+                SliceActionsBroadcastReceiver.getIntent(
+                    context,
+                    InteractiveSliceProvider.ACTION_TOAST,
+                    "Primary Action for Reservation Slice"
+                ),
+                IconCompat.createWithResource(context, drawable.ic_location),
+                ListBuilder.ICON_IMAGE,
+                "Primary"
             )
         }
         addAction(

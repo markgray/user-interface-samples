@@ -48,16 +48,16 @@ class AppIndexingUpdateService : JobIntentService() {
         val firebaseAppIndex: FirebaseAppIndex = FirebaseAppIndex.getInstance(applicationContext)
         val appIndexDataList = mutableListOf<Indexable>()
 
-        for(indexableData in sliceIndexableDataList) {
+        for (indexableData in sliceIndexableDataList) {
             appIndexDataList.add(
-                    Indexable.Builder()
-                            .setUrl(indexableData.httpUrl)
-                            .setName(indexableData.name)
-                            .setKeywords(*indexableData.keywords.toTypedArray())
-                            .setMetadata(
-                                    Indexable.Metadata.Builder()
-                                            .setSliceUri(Uri.parse(indexableData.contentUri)))
-                            .build()
+                Indexable.Builder()
+                    .setUrl(indexableData.httpUrl)
+                    .setName(indexableData.name)
+                    .setKeywords(*indexableData.keywords.toTypedArray())
+                    .setMetadata(
+                        Indexable.Metadata.Builder()
+                            .setSliceUri(Uri.parse(indexableData.contentUri)))
+                    .build()
             )
         }
 
@@ -65,8 +65,8 @@ class AppIndexingUpdateService : JobIntentService() {
         // we can handle the batching on our side. Make sure you test your complete Indexable list.
         // If one Indexable is invalid, the entire update() call will fail.
         firebaseAppIndex.update(*appIndexDataList.toTypedArray())
-                .addOnSuccessListener { Log.d(TAG, "App Indexing succeeded.") }
-                .addOnFailureListener { Log.d(TAG, "App Indexing failed: $it") }
+            .addOnSuccessListener { Log.d(TAG, "App Indexing succeeded.") }
+            .addOnFailureListener { Log.d(TAG, "App Indexing failed: $it") }
     }
 
     /*
@@ -92,10 +92,10 @@ class AppIndexingUpdateService : JobIntentService() {
         // URI.Builder class to create a complete HTTPS URL.
         // In this case, it is the website scheme/host part of the URL.
         val hostHttpsUrl = Uri.Builder()
-                .scheme(application.resources.getString(R.string.scheme_slice_url))
-                .authority(applicationContext.resources.getString(R.string.host_slice_url))
-                .build()
-                .toString()
+            .scheme(application.resources.getString(R.string.scheme_slice_url))
+            .authority(applicationContext.resources.getString(R.string.host_slice_url))
+            .build()
+            .toString()
 
         val defaultPath = application.resources.getString(R.string.default_slice_path)
 
@@ -115,78 +115,78 @@ class AppIndexingUpdateService : JobIntentService() {
         val rangePath = application.resources.getString(R.string.range_slice_path)
 
         return listOf(
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + defaultPath,
-                        contentUri = hostContentUri + defaultPath,
-                        name = "Default",
-                        keywords = listOf("default", "defaultest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + wifiPath,
-                        contentUri = hostContentUri + wifiPath,
-                        name = "Wifi",
-                        keywords = listOf("wifi", "wifitest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + notePath,
-                        contentUri = hostContentUri + notePath,
-                        name = "Note",
-                        keywords = listOf("note", "notetest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + ridePath,
-                        contentUri = hostContentUri + ridePath,
-                        name = "Ride",
-                        keywords = listOf("ride", "ridetest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + togglePath,
-                        contentUri = hostContentUri + togglePath,
-                        name = "Toggle",
-                        keywords = listOf("toggle", "toggletest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + galleryPath,
-                        contentUri = hostContentUri + galleryPath,
-                        name = "Gallery",
-                        keywords = listOf("gallery", "gallerytest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + weatherPath,
-                        contentUri = hostContentUri + weatherPath,
-                        name = "Weather",
-                        keywords = listOf("weather", "weathertest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + reservationPath,
-                        contentUri = hostContentUri + reservationPath,
-                        name = "Reservation",
-                        keywords = listOf("reservation", "reservationtest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + loadListPath,
-                        contentUri = hostContentUri + loadListPath,
-                        name = "Load List",
-                        keywords = listOf("list", "loadlist", "loadlisttest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + loadGridPath,
-                        contentUri = hostContentUri + loadGridPath,
-                        name = "Load Grid",
-                        keywords = listOf("grid", "loadgrid", "loadgridtest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + inputRangePath,
-                        contentUri = hostContentUri + inputRangePath,
-                        name = "Input Range",
-                        keywords = listOf("input", "range", "inputrange", "inputrangetest1234")
-                ),
-                AppIndexingMetadata(
-                        httpUrl = hostHttpsUrl + rangePath,
-                        contentUri = hostContentUri + rangePath,
-                        name = "Range",
-                        keywords = listOf("range", "rangetest1234")
-                )
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + defaultPath,
+                contentUri = hostContentUri + defaultPath,
+                name = "Default",
+                keywords = listOf("default", "defaultest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + wifiPath,
+                contentUri = hostContentUri + wifiPath,
+                name = "Wifi",
+                keywords = listOf("wifi", "wifitest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + notePath,
+                contentUri = hostContentUri + notePath,
+                name = "Note",
+                keywords = listOf("note", "notetest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + ridePath,
+                contentUri = hostContentUri + ridePath,
+                name = "Ride",
+                keywords = listOf("ride", "ridetest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + togglePath,
+                contentUri = hostContentUri + togglePath,
+                name = "Toggle",
+                keywords = listOf("toggle", "toggletest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + galleryPath,
+                contentUri = hostContentUri + galleryPath,
+                name = "Gallery",
+                keywords = listOf("gallery", "gallerytest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + weatherPath,
+                contentUri = hostContentUri + weatherPath,
+                name = "Weather",
+                keywords = listOf("weather", "weathertest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + reservationPath,
+                contentUri = hostContentUri + reservationPath,
+                name = "Reservation",
+                keywords = listOf("reservation", "reservationtest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + loadListPath,
+                contentUri = hostContentUri + loadListPath,
+                name = "Load List",
+                keywords = listOf("list", "loadlist", "loadlisttest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + loadGridPath,
+                contentUri = hostContentUri + loadGridPath,
+                name = "Load Grid",
+                keywords = listOf("grid", "loadgrid", "loadgridtest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + inputRangePath,
+                contentUri = hostContentUri + inputRangePath,
+                name = "Input Range",
+                keywords = listOf("input", "range", "inputrange", "inputrangetest1234")
+            ),
+            AppIndexingMetadata(
+                httpUrl = hostHttpsUrl + rangePath,
+                contentUri = hostContentUri + rangePath,
+                name = "Range",
+                keywords = listOf("range", "rangetest1234")
+            )
         )
     }
 }

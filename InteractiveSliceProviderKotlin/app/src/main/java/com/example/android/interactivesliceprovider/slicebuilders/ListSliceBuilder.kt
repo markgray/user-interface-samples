@@ -44,14 +44,14 @@ class ListSliceBuilder(
                 title = "Times to Destinations"
                 subtitle = "List Slice Type"
                 primaryAction = SliceAction.create(
-                        SliceActionsBroadcastReceiver.getIntent(
-                                context,
-                                InteractiveSliceProvider.ACTION_TOAST,
-                                "Primary Action for List Slice"
-                        ),
-                        IconCompat.createWithResource(context, R.drawable.ic_work),
-                        ListBuilder.ICON_IMAGE,
-                        "Primary"
+                    SliceActionsBroadcastReceiver.getIntent(
+                        context,
+                        InteractiveSliceProvider.ACTION_TOAST,
+                        "Primary Action for List Slice"
+                    ),
+                    IconCompat.createWithResource(context, R.drawable.ic_work),
+                    ListBuilder.ICON_IMAGE,
+                    "Primary"
                 )
             }
             row {

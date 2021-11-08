@@ -40,14 +40,14 @@ class NoteSliceBuilder(
         header {
             title = "Create new note"
             primaryAction = SliceAction.create(
-                    SliceActionsBroadcastReceiver.getIntent(
-                            context,
-                            InteractiveSliceProvider.ACTION_TOAST,
-                            "Primary Action for Note Slice"
-                    ),
-                    IconCompat.createWithResource(context, drawable.ic_create),
-                    ListBuilder.ICON_IMAGE,
-                    "Primary"
+                SliceActionsBroadcastReceiver.getIntent(
+                    context,
+                    InteractiveSliceProvider.ACTION_TOAST,
+                    "Primary Action for Note Slice"
+                ),
+                IconCompat.createWithResource(context, drawable.ic_create),
+                ListBuilder.ICON_IMAGE,
+                "Primary"
             )
         }
         addAction(

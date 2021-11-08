@@ -45,10 +45,10 @@ class InputRangeSliceBuilder(
                 min = 0
                 thumb = icon
                 inputAction =
-                        SliceActionsBroadcastReceiver.getIntent(
-                            context,
-                            InteractiveSliceProvider.ACTION_TOAST_RANGE_VALUE, null
-                        )
+                    SliceActionsBroadcastReceiver.getIntent(
+                        context,
+                        InteractiveSliceProvider.ACTION_TOAST_RANGE_VALUE, null
+                    )
                 max = 10
                 value = 8
                 primaryAction = SliceAction.create(

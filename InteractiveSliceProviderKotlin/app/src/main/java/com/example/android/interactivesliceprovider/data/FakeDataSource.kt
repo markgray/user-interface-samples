@@ -23,21 +23,21 @@ class FakeDataSource(private val handler: Handler) : DataSource {
     override var listData = ListData(home = "", work = "", school = "")
 
     private val fakeGridData =
-            GridData(
-                    title = "Heavy traffic in your area",
-                    subtitle = "Typical conditions, with delays up to 28 min.",
-                    home = "41 min",
-                    work = "33 min",
-                    school = "12 min"
-            )
+        GridData(
+            title = "Heavy traffic in your area",
+            subtitle = "Typical conditions, with delays up to 28 min.",
+            home = "41 min",
+            work = "33 min",
+            school = "12 min"
+        )
     private val gridDataCallbacks = mutableSetOf<Runnable>()
 
     private val fakeListData =
-            ListData(
-                    home = "41 min",
-                    work = "33 min",
-                    school = "12 min"
-            )
+        ListData(
+            home = "41 min",
+            work = "33 min",
+            school = "12 min"
+        )
     private val listDataCallbacks = mutableSetOf<Runnable>()
 
     override fun triggerGridDataFetch() {

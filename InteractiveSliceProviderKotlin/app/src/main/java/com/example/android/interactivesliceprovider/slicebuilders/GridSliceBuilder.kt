@@ -44,14 +44,14 @@ class GridSliceBuilder(
             setTitle(data.title, data.title.isEmpty())
             setSubtitle(data.subtitle, data.subtitle.isEmpty())
             primaryAction = SliceAction.create(
-                    SliceActionsBroadcastReceiver.getIntent(
-                            context,
-                            InteractiveSliceProvider.ACTION_TOAST,
-                            "Primary Action for Grid Slice"
-                    ),
-                    IconCompat.createWithResource(context, drawable.ic_home),
-                    ListBuilder.ICON_IMAGE,
-                    "Primary"
+                SliceActionsBroadcastReceiver.getIntent(
+                    context,
+                    InteractiveSliceProvider.ACTION_TOAST,
+                    "Primary Action for Grid Slice"
+                ),
+                IconCompat.createWithResource(context, drawable.ic_home),
+                ListBuilder.ICON_IMAGE,
+                "Primary"
             )
         }
         gridRow {

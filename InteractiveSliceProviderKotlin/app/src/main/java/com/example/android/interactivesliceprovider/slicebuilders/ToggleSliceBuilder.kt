@@ -41,14 +41,14 @@ class ToggleSliceBuilder(
             title = "Custom toggle"
             subtitle = "It can support two states"
             primaryAction = SliceAction.createToggle(
-                    SliceActionsBroadcastReceiver.getIntent(
-                            context,
-                            InteractiveSliceProvider.ACTION_TOAST,
-                            "star toggled"
-                    ),
-                    IconCompat.createWithResource(context, drawable.toggle_star),
-                    "Toggle start",
-                    true /* isChecked */
+                SliceActionsBroadcastReceiver.getIntent(
+                    context,
+                    InteractiveSliceProvider.ACTION_TOAST,
+                    "star toggled"
+                ),
+                IconCompat.createWithResource(context, drawable.toggle_star),
+                "Toggle start",
+                true /* isChecked */
             )
         }
     }

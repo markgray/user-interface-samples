@@ -49,7 +49,7 @@ class WifiSliceBuilder(
         val state: String
         when (wifiState) {
             WifiManager.WIFI_STATE_DISABLED, WifiManager.WIFI_STATE_DISABLING -> state =
-                    "disconnected"
+                "disconnected"
             WifiManager.WIFI_STATE_ENABLED, WifiManager.WIFI_STATE_ENABLING -> {
                 state = wifiManager.connectionInfo.ssid
                 wifiEnabled = true
@@ -110,15 +110,15 @@ class WifiSliceBuilder(
                         setContentDescription("Connect to $networkName")
                     }
                     val message =
-                            if (locked) "Open wifi password dialog" else "Connect to $networkName"
+                        if (locked) "Open wifi password dialog" else "Connect to $networkName"
 
                     primaryAction = SliceAction.create(
-                            SliceActionsBroadcastReceiver.getIntent(
-                                    context, InteractiveSliceProvider.ACTION_TOAST, message
-                            ),
-                            icon,
-                            ListBuilder.ICON_IMAGE,
-                            message
+                        SliceActionsBroadcastReceiver.getIntent(
+                            context, InteractiveSliceProvider.ACTION_TOAST, message
+                        ),
+                        icon,
+                        ListBuilder.ICON_IMAGE,
+                        message
                     )
                 }
             }

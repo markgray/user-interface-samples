@@ -29,16 +29,16 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 class DefaultSliceBuilder(
-        val context: Context,
-        sliceUri: Uri
+    val context: Context,
+    sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     override fun buildSlice() = list(context, sliceUri, ListBuilder.INFINITY) {
         val activityAction = SliceAction.create(
-                MainActivity.getPendingIntent(context),
-                IconCompat.createWithResource(context, R.mipmap.ic_launcher),
-                ListBuilder.LARGE_IMAGE,
-                "Open app"
+            MainActivity.getPendingIntent(context),
+            IconCompat.createWithResource(context, R.mipmap.ic_launcher),
+            ListBuilder.LARGE_IMAGE,
+            "Open app"
         )
         return list(context, sliceUri, ListBuilder.INFINITY) {
             setAccentColor(ContextCompat.getColor(context, R.color.slice_accent_color))
@@ -74,7 +74,7 @@ class DefaultSliceBuilder(
                 // reserved for the header).
                 setTitleItem(activityAction)
                 primaryAction = activityAction
-                }
+            }
             row {
                 title = "Try this third row!"
                 subtitle = "Subtitle for row 3!"

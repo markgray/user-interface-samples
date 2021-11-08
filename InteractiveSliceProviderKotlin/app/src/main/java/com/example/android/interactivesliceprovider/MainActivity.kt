@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             // signals of your app and hence impact your app’s ranking. One way to
             // do this is to use shared preferences.
             val sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
             if (!sharedPreferences.getBoolean(PREF_GRANT_SLICE_PERMISSION, false)) {
                 contentResolver.notifyChange(uri, null /* content observer */)
@@ -91,32 +91,32 @@ class MainActivity : AppCompatActivity() {
      * IMPORTANT NOTE: As stated earlier, this will not be required soon (and not for launch), so
      * you can assume you won't need to loop through all your non-default slice URIs for the launch.
      */
-    private fun grantNonDefaultSlicePermission () {
+    private fun grantNonDefaultSlicePermission() {
 
         val nonDefaultUris = listOf(
-                applicationContext.resources.getString(R.string.wifi_slice_uri),
-                applicationContext.resources.getString(R.string.note_slice_uri),
-                applicationContext.resources.getString(R.string.ride_slice_uri),
-                applicationContext.resources.getString(R.string.toggle_slice_uri),
-                applicationContext.resources.getString(R.string.gallery_slice_uri),
-                applicationContext.resources.getString(R.string.weather_slice_uri),
-                applicationContext.resources.getString(R.string.reservation_slice_uri),
-                applicationContext.resources.getString(R.string.list_slice_uri),
-                applicationContext.resources.getString(R.string.grid_slice_uri),
-                applicationContext.resources.getString(R.string.input_slice_uri),
-                applicationContext.resources.getString(R.string.range_slice_uri)
+            applicationContext.resources.getString(R.string.wifi_slice_uri),
+            applicationContext.resources.getString(R.string.note_slice_uri),
+            applicationContext.resources.getString(R.string.ride_slice_uri),
+            applicationContext.resources.getString(R.string.toggle_slice_uri),
+            applicationContext.resources.getString(R.string.gallery_slice_uri),
+            applicationContext.resources.getString(R.string.weather_slice_uri),
+            applicationContext.resources.getString(R.string.reservation_slice_uri),
+            applicationContext.resources.getString(R.string.list_slice_uri),
+            applicationContext.resources.getString(R.string.grid_slice_uri),
+            applicationContext.resources.getString(R.string.input_slice_uri),
+            applicationContext.resources.getString(R.string.range_slice_uri)
         )
 
-        for(nonDefaultUri in nonDefaultUris) {
+        for (nonDefaultUri in nonDefaultUris) {
             grantSlicePermissions(
-                    Uri.parse(nonDefaultUri),
-                    false
+                Uri.parse(nonDefaultUri),
+                false
             )
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun onClickIndexSlices (view: View) {
+    fun onClickIndexSlices(view: View) {
         val intent = Intent(this, AppIndexingUpdateReceiver::class.java)
         intent.action = FirebaseAppIndex.ACTION_UPDATE_INDEX
         sendBroadcast(intent)
