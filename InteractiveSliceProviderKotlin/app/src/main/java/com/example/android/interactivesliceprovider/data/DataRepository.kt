@@ -18,6 +18,8 @@ package com.example.android.interactivesliceprovider.data
 import android.content.ContentResolver
 import android.net.Uri
 import com.example.android.interactivesliceprovider.InteractiveSliceProvider
+import com.example.android.interactivesliceprovider.slicebuilders.GridSliceBuilder
+import com.example.android.interactivesliceprovider.slicebuilders.ListSliceBuilder
 
 /**
  * This class defines an API for fetching data and registering callbacks for a data source which
@@ -70,36 +72,99 @@ class DataRepository(private val dataSource: FakeDataSource) {
         dataSource.triggerGridDataFetch()
     }
 
+    /**
+     * Calls the [FakeDataSource.unregisterGridDataCallbacks] method of our [dataSource] field to
+     * have it remove all the entries in its [MutableSet] of [Runnable] field `gridDataCallbacks`.
+     */
     fun unregisterGridSliceDataCallbacks() {
         dataSource.unregisterGridDataCallbacks()
     }
 
+    /**
+     * Registers its [Runnable] parameter [r] as a callback that will be called when the delayed
+     * [Runnable] posted by the [FakeDataSource.triggerListDataFetch] method runs (delayed for 1500
+     * milliseconds to simulate network access), then calls the [FakeDataSource.triggerListDataFetch]
+     * method which posts a [Runnable] that delays 1500 milliseconds, sets its [FakeDataSource.listData]
+     * field to its [FakeDataSource.fakeListData] field, and then runs all the [Runnable] instances
+     * in its [MutableSet] of [Runnable] field [FakeDataSource.listDataCallbacks] (which its method
+     * [FakeDataSource.registerListDataCallback] has been adding [Runnable]'s to).
+     *
+     * This is called by the [InteractiveSliceProvider.onSlicePinned] method when it is called to
+     * inform our app that a slice has been pinned. Pinning is a way that slice hosts use to notify
+     * apps of which slices they care about updates for. When a slice is pinned the content is
+     * expected to be relatively fresh and kept up to date. [InteractiveSliceProvider.onSlicePinned]
+     * is called with the [Uri] of the slice that was pinned, and the [Runnable] that it registers
+     * for that [Uri] calls the [ContentResolver.notifyChange] method with that [Uri] to notify
+     * registered observers that a row was updated and attempt to sync changes to the network.
+     *
+     * @param r the [Runnable] we are to have the [FakeDataSource.registerListDataCallback] method
+     * add to its [MutableSet] of [Runnable] field [FakeDataSource.listDataCallbacks].
+     */
     fun registerListSliceDataCallback(r: Runnable) {
         dataSource.registerListDataCallback(r)
         dataSource.triggerListDataFetch()
     }
 
+    /**
+     * Calls the [FakeDataSource.unregisterListDataCallbacks] method of our [dataSource] field to
+     * have it remove all the entries in its [MutableSet] of [Runnable] field `listDataCallbacks`.
+     */
     fun unregisterListSliceDataCallbacks() {
         dataSource.unregisterListDataCallbacks()
     }
 
     companion object {
+        /**
+         * Unused.
+         */
         const val TAG = "DataRepository"
     }
 }
 
 // Model classes
 
+/**
+ * Data class holding data that the [GridSliceBuilder.buildSlice] method uses when it builds its
+ * `Slice`
+ */
 data class GridData(
+    /**
+     * Used as the title for the header of the `Slice`: "Heavy traffic in your area"
+     */
     val title: String,
+    /**
+     * Used as the subtitle for the header of the `Slice`: "Typical conditions, with delays up to 28 min."
+     */
     val subtitle: String,
+    /**
+     * Used as text in a cell of a `gridRow`, its title: "Home" example: "41 min"
+     */
     val home: String,
+    /**
+     * Used as text in a cell of a `gridRow`, its title: "Work" example: "33 min"
+     */
     val work: String,
+    /**
+     * Used as text in a cell of a `gridRow`, its title: "School" example: "12 min"
+      */
     val school: String
 )
 
+/**
+ * Data class holding data that the [ListSliceBuilder.buildSlice] method uses when it builds its
+ * `Slice`
+ */
 data class ListData(
+    /**
+     * Used as text in a `row` of a `list`, its title: "Home" example: "41 min"
+     */
     val home: String,
+    /**
+     * Used as text in a `row` of a `list`, its title: "Work" example: "33 min"
+     */
     val work: String,
+    /**
+     * Used as text in a `row` of a `list`, its title: "School" example: "12 min"
+     */
     val school: String
 )
