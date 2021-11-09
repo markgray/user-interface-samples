@@ -16,6 +16,15 @@
 
 package com.example.android.interactivesliceprovider.data
 
+import com.example.android.interactivesliceprovider.slicebuilders.GridSliceBuilder
+import com.example.android.interactivesliceprovider.slicebuilders.ListSliceBuilder
+
+/**
+ * Defines the `interface` used by [ListSliceBuilder] and [GridSliceBuilder] to access the data
+ * that it uses to build their Slices. It is currently only implemented by [FakeDataSource] but
+ * could be implemented by data sources supplying real data without changing the slice building
+ * code (theoretically).
+ */
 interface DataSource {
     val gridData: GridData
     val listData: ListData
