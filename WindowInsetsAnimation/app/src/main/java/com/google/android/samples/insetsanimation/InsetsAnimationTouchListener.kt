@@ -171,7 +171,7 @@ class InsetsAnimationTouchListener(
      * @param event The [MotionEvent] object containing full information about the event.
      * @return `true` if the listener has consumed the event, `false` otherwise.
      */
-    @SuppressLint("NewApi", "ClickableViewAccessibility")
+    @SuppressLint("NewApi", "ClickableViewAccessibility", "WrongConstant")
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (velocityTracker == null) {
             // Obtain a VelocityTracker if we don't have one yet
