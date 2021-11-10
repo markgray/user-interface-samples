@@ -31,7 +31,8 @@
         -->
         <activity
             android:name="com.example.android.people.MainActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <!--
                 This activity is the one that's shown on the launcher.
             -->
@@ -88,7 +89,8 @@
             android:name="com.example.android.people.BubbleActivity"
             android:allowEmbedded="true"
             android:documentLaunchMode="always"
-            android:resizeableActivity="true">
+            android:resizeableActivity="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
