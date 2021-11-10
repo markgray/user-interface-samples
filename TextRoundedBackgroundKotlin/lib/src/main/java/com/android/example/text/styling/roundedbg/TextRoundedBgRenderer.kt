@@ -30,8 +30,8 @@ import kotlin.math.min
  * @param verticalPadding the padding to be applied to top & bottom of the background
  */
 internal abstract class TextRoundedBgRenderer(
-        val horizontalPadding: Int,
-        val verticalPadding: Int
+    val horizontalPadding: Int,
+    val verticalPadding: Int
 ) {
 
     /**
