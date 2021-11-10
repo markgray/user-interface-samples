@@ -144,7 +144,7 @@ object Parser {
             endOfParagraph = string.length
         } else {
             // add the line separator as part of the element
-            endOfParagraph += LINE_SEPARATOR!!.length
+            endOfParagraph += LINE_SEPARATOR.length
         }
         return endOfParagraph
     }
@@ -324,5 +324,5 @@ object Parser {
      * for a line separator in the [String] passed it, and to advance over the line separator if
      * one is found (the new line is part of the element).
      */
-    private val LINE_SEPARATOR = System.getProperty("line.separator")
+    private val LINE_SEPARATOR = System.getProperty("line.separator")!!
 }
