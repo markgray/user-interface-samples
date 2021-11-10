@@ -185,7 +185,7 @@ class Parser {
          * for a line separator in the [String] passed it, and to advance over the line separator if
          * one is found (the new line is part of the element).
          */
-        private val LINE_SEPARATOR = System.getProperty("line.separator")
+        private val LINE_SEPARATOR = System.getProperty("line.separator")!!
 
         /**
          * Used to find the end of a line in its [String] parameter [string] starting at the index
@@ -212,7 +212,7 @@ class Parser {
                 endOfParagraph = string.length
             } else {
                 // add the new line as part of the element
-                endOfParagraph += LINE_SEPARATOR!!.length
+                endOfParagraph += LINE_SEPARATOR.length
             }
             return endOfParagraph
         }
