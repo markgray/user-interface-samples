@@ -18,6 +18,7 @@ package com.example.android.people.data
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.NotificationManager.BUBBLE_PREFERENCE_NONE
 import android.app.PendingIntent
 import android.app.Person
 import android.app.RemoteInput
@@ -30,6 +31,7 @@ import android.content.pm.ShortcutManager
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
 import android.net.Uri
+import android.os.Build
 import androidx.annotation.WorkerThread
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -136,7 +138,7 @@ class NotificationHelper(private val context: Context) {
             Intent(context, BubbleActivity::class.java)
                 .setAction(Intent.ACTION_VIEW)
                 .setData(contentUri),
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val builder = Notification.Builder(context, CHANNEL_NEW_MESSAGES)
@@ -179,7 +181,7 @@ class NotificationHelper(private val context: Context) {
                     Intent(context, MainActivity::class.java)
                         .setAction(Intent.ACTION_VIEW)
                         .setData(contentUri),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
             )
             // Direct Reply
@@ -192,7 +194,7 @@ class NotificationHelper(private val context: Context) {
                             context,
                             REQUEST_CONTENT,
                             Intent(context, ReplyReceiver::class.java).setData(contentUri),
-                            PendingIntent.FLAG_UPDATE_CURRENT
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                         )
                     )
                     .addRemoteInput(
@@ -245,7 +247,13 @@ class NotificationHelper(private val context: Context) {
             CHANNEL_NEW_MESSAGES,
             contact.shortcutId
         )
-        return notificationManager.areBubblesAllowed() || channel?.canBubble() == true
+        val areBubblesPreferred: Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            notificationManager.bubblePreference != BUBBLE_PREFERENCE_NONE
+        } else {
+            @Suppress("DEPRECATION")
+            notificationManager.areBubblesAllowed()
+        }
+        return areBubblesPreferred || channel?.canBubble() == true
     }
 
     fun updateNotification(chat: Chat, chatId: Long, prepopulatedMsgs: Boolean) {
