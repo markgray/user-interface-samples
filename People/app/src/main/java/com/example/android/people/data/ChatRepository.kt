@@ -57,7 +57,7 @@ class DefaultChatRepository internal constructor(
 
     private var currentChat: Long = 0L
 
-    private val chats = Contact.CONTACTS.map { contact ->
+    private val chats = Contact.CONTACTS.map { contact: Contact ->
         contact.id to Chat(contact)
     }.toMap()
 
@@ -123,12 +123,13 @@ class DefaultChatRepository internal constructor(
 
     override fun updateNotification(id: Long) {
         val chat = chats.getValue(id)
-        notificationHelper.showNotification(chat, false, true)
+        notificationHelper.showNotification(chat, fromUser = false, update = true)
     }
 
     override fun activateChat(id: Long) {
         val chat = chats.getValue(id)
         currentChat = id
+        @Suppress("SENSELESS_COMPARISON")
         val isPrepopulatedMsgs =
             chat.messages.size == 2 && chat.messages[0] != null && chat.messages[1] != null
         notificationHelper.updateNotification(chat, id, isPrepopulatedMsgs)
