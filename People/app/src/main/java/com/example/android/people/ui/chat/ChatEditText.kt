@@ -15,17 +15,16 @@
 
 package com.example.android.people.ui.chat
 
-import android.content.ClipData
+// import androidx.core.widget.TextViewRichContentReceiverCompat
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
-// import androidx.core.widget.TextViewRichContentReceiverCompat
 import com.example.android.people.R
 
 typealias OnImageAddedListener = (contentUri: Uri, mimeType: String, label: String) -> Unit
 
+@Suppress("unused")
 private val SUPPORTED_MIME_TYPES = setOf(
     "image/jpeg",
     "image/jpg",
@@ -45,7 +44,7 @@ class ChatEditText @JvmOverloads constructor(
 
     private var onImageAddedListener: OnImageAddedListener? = null
 
-    init {
+//  init {
 //        richContentReceiverCompat = object : TextViewRichContentReceiverCompat() {
 //            override fun onReceive(
 //                textView: TextView,
@@ -70,7 +69,7 @@ class ChatEditText @JvmOverloads constructor(
 //                return SUPPORTED_MIME_TYPES + super.getSupportedMimeTypes()
 //            }
 //        }
-    }
+//  }
 
     /**
      * Sets a listener to be called when a new image is added. This might be coming from copy &
