@@ -3,7 +3,7 @@ if(hasProperty('target') && target == 'android') {
   android.vectorDrawables.useSupportLibrary = true
 }
 buildscript {
-  ext.kotlin_version = '1.5.31'
+  ext.kotlin_version = '1.6.0'
   repositories {
     google()
     mavenCentral()
