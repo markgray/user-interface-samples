@@ -15,4 +15,6 @@
   -->
 <resources>
     <string name="app_name">DragAndDropDemo</string>
+    <string name="drag_me">Drag Me!</string>
+    <string name="drop_things_here">Drop Things Here!</string>
 </resources>
