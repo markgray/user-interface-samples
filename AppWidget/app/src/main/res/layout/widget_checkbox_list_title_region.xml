@@ -13,7 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,6 +39,6 @@
             android:clickable="true"
             android:contentDescription="@string/add_button_grocery_list_content_description"
             android:src="@drawable/ic_add_24"
-            android:tint="?android:attr/colorAccent" />
+            app:tint="?android:attr/colorAccent" />
     </LinearLayout>
 </merge>
