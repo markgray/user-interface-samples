@@ -22,5 +22,5 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     android:scaleType="fitCenter"
-    tools:src="@drawable/sheep_full"
-    android:contentDescription="@string/description_photo" />
+    android:contentDescription="@string/description_photo"
+    tools:ignore="Overdraw" />
