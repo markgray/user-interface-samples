@@ -31,6 +31,7 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+@Suppress("RemoveRedundantQualifierName")
 class ReservationSliceBuilder(
     val context: Context,
     sliceUri: Uri

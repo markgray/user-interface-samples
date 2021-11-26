@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("RemoveRedundantQualifierName")
+
 package com.example.android.interactivesliceprovider.slicebuilders
 
 import android.content.Context
@@ -32,6 +34,7 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+@Suppress("RemoveRedundantQualifierName")
 class GallerySliceBuilder(
     val context: Context,
     sliceUri: Uri

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("RemoveRedundantQualifierName", "RemoveRedundantQualifierName", "RemoveRedundantQualifierName", "RemoveRedundantQualifierName", "RemoveRedundantQualifierName")
+
 package com.example.android.interactivesliceprovider.slicebuilders
 
 import android.content.Context
@@ -40,6 +42,14 @@ class WifiSliceBuilder(
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
+    /**
+     * Note: WifiManager.connectionInfo was deprecated in API level 31.
+     * Starting with Build.VERSION_CODES#S, WifiInfo retrieval is moved to ConnectivityManager API
+     * surface. WifiInfo is attached in NetworkCapabilities#getTransportInfo() which is available
+     * via callback in NetworkCallback#onCapabilitiesChanged(Network, NetworkCapabilities) or
+     * on-demand from ConnectivityManager#getNetworkCapabilities(Network).
+     */
+    @Suppress("DEPRECATION")
     override fun buildSlice(): Slice {
         // Get wifi state
         val wifiManager = context.applicationContext

@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
         fun getPendingIntent(context: Context): PendingIntent {
             val intent = Intent(context, MainActivity::class.java)
-            return PendingIntent.getActivity(context, 0, intent, 0)
+            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
     }
 }
