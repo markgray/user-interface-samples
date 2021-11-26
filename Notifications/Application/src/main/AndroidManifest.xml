@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
  Copyright 2013 The Android Open Source Project
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +16,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.wearable.wear.wearnotifications"
-          android:versionCode="1"
-          android:versionName="1.0">
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <application
         android:allowBackup="false"
@@ -28,10 +27,12 @@
         android:theme="@style/AppThemeOverride"
         tools:ignore="AllowBackup">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -39,15 +40,14 @@
             android:name=".handlers.BigTextMainActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_big_text_main"
-            android:taskAffinity="">
-        </activity>
+            android:taskAffinity="" />
 
         <activity
             android:name=".handlers.BigPictureSocialMainActivity"
             android:label="@string/title_activity_big_picture_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
 
 
@@ -56,7 +56,7 @@
             android:label="@string/title_activity_inbox_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
 
         <activity
@@ -64,22 +64,19 @@
             android:label="@string/title_activity_messaging_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
 
         <service
             android:name=".handlers.BigTextIntentService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <service
             android:name=".handlers.MessagingIntentService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <service
             android:name=".handlers.BigPictureSocialIntentService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
     </application>
 </manifest>

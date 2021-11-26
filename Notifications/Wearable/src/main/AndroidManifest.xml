@@ -55,6 +55,7 @@
 
         <activity
             android:name=".StandaloneMainActivity"
+            android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,38 +63,37 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".handlers.BigTextMainActivity"
             android:label="@string/title_activity_big_text_main"
-            android:taskAffinity=""></activity>
+            android:taskAffinity="" />
 
         <activity
             android:name=".handlers.BigPictureSocialMainActivity"
             android:label="@string/title_activity_big_picture_main"
-            android:taskAffinity=""></activity>
+            android:taskAffinity="" />
 
 
         <activity
             android:name=".handlers.InboxMainActivity"
             android:label="@string/title_activity_inbox_main"
-            android:taskAffinity=""></activity>
+            android:taskAffinity="" />
 
         <activity
             android:name=".handlers.MessagingMainActivity"
             android:label="@string/title_activity_messaging_main"
-            android:taskAffinity=""></activity>
+            android:taskAffinity="" />
 
         <service
             android:name=".handlers.BigTextIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <service
             android:name=".handlers.MessagingIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <service
             android:name=".handlers.BigPictureSocialIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 </manifest>
