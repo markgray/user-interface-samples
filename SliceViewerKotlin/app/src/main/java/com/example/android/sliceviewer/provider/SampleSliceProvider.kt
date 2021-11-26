@@ -16,6 +16,7 @@
 
 package com.example.android.sliceviewer.provider
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.ContentResolver
 import android.content.Context
@@ -141,11 +142,13 @@ class SampleSliceProvider : SliceProvider() {
      * @param sliceUri the [Uri] for the [Slice] we are to create.
      * @return a [Slice] with the header "Test Slice"
      */
+    @SuppressLint("InlinedApi")
     private fun createTestSlice(sliceUri: Uri): Slice {
         val activityAction = SliceAction.create(
             PendingIntent.getActivity(
                 context, 0,
-                MainActivity.getIntent(context!!), 0
+                MainActivity.getIntent(context!!),
+                PendingIntent.FLAG_IMMUTABLE
             ),
             IconCompat.createWithResource(
                 context,
