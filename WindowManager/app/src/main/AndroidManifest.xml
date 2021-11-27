@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2020 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,MissingApplicationIcon">
-        <activity android:name=".WindowDemosActivity"
+        <activity
+            android:name=".WindowDemosActivity"
+            android:exported="true"
             android:label="@string/window_manager_demos">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

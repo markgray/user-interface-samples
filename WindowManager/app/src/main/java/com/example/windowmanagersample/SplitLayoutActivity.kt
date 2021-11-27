@@ -16,15 +16,14 @@
 
 package com.example.windowmanagersample
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.window.WindowInfoRepo
-import androidx.window.windowInfoRepository
+import androidx.window.layout.WindowInfoTracker
 import com.example.windowmanagersample.databinding.ActivitySplitLayoutBinding
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -32,16 +31,16 @@ import kotlinx.coroutines.launch
 class SplitLayoutActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplitLayoutBinding
-    private lateinit var windowInfoRepo: WindowInfoRepo
+    private lateinit var windowInfoRepo: WindowInfoTracker
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val activity: Activity = this
 
         binding = ActivitySplitLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        windowInfoRepo = windowInfoRepository()
+        windowInfoRepo = WindowInfoTracker.getOrCreate(this)
         // Create a new coroutine since repeatOnLifecycle is a suspend function
         lifecycleScope.launch {
             // The block passed to repeatOnLifecycle is executed when the lifecycle
@@ -50,7 +49,7 @@ class SplitLayoutActivity : AppCompatActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // Safely collect from windowInfoRepo when the lifecycle is STARTED
                 // and stops collection when the lifecycle is STOPPED
-                windowInfoRepo.windowLayoutInfo()
+                windowInfoRepo.windowLayoutInfo(activity)
                     // Throttle first event 10ms to allow the UI to pickup the posture
                     .throttleFirst(10)
                     .collect { newLayoutInfo ->
