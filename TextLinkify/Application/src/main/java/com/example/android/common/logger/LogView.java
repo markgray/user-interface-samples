@@ -17,12 +17,11 @@ package com.example.android.common.logger;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.*;
-import android.widget.TextView;
+import android.util.AttributeSet;
 
 /** Simple TextView which is used to output log data received through the LogNode interface.
 */
-public class LogView extends TextView implements LogNode {
+public class LogView extends androidx.appcompat.widget.AppCompatTextView implements LogNode {
 
     public LogView(Context context) {
         super(context);
@@ -92,12 +91,9 @@ public class LogView extends TextView implements LogNode {
 
         // In case this was originally called from an AsyncTask or some other off-UI thread,
         // make sure the update occurs within the UI thread.
-        ((Activity) getContext()).runOnUiThread( (new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Display the text we just generated within the LogView.
-                appendToLog(outputBuilder.toString());
-            }
+        ((Activity) getContext()).runOnUiThread( (new Thread(() -> {
+            // Display the text we just generated within the LogView.
+            appendToLog(outputBuilder.toString());
         })));
 
         if (mNext != null) {
@@ -105,10 +101,12 @@ public class LogView extends TextView implements LogNode {
         }
     }
 
+    @SuppressWarnings("unused")
     public LogNode getNext() {
         return mNext;
     }
 
+    @SuppressWarnings("unused")
     public void setNext(LogNode node) {
         mNext = node;
     }
@@ -122,6 +120,7 @@ public class LogView extends TextView implements LogNode {
      *                  for instance.
      * @return The fully concatenated String as a StringBuilder
      */
+    @SuppressWarnings("UnusedReturnValue")
     private StringBuilder appendIfNotNull(StringBuilder source, String addStr, String delimiter) {
         if (addStr != null) {
             if (addStr.length() == 0) {
