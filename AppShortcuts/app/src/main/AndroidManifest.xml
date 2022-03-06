@@ -27,7 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:resizeableActivity="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup,DataExtractionRules">
 
         <activity android:name="com.example.android.appshortcuts.Main"
             android:exported="true">
