@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.EmojiCompat"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,DataExtractionRules,GoogleAppIndexingWarning">
 
         <!-- Adding this meta-data will download the font when application is installed from
         Google Play Store. This way the font will be downloaded and ready when your app starts

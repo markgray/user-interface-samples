@@ -16,7 +16,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.6.0'
+        kotlin_version = '1.6.10'
     }
     repositories {
         google()
@@ -50,11 +50,10 @@ android {
 
 dependencies {
     // Support Libraries
-    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.emoji:emoji:1.1.0'
     implementation 'androidx.emoji:emoji-appcompat:1.1.0'
     implementation 'androidx.emoji:emoji-bundled:1.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Test
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
