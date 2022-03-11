@@ -15,6 +15,7 @@ limitations under the License.
  */
 package com.example.android.wearable.wear.wearnotifications;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -243,12 +244,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Sets the Activity to start in a new, empty task
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        PendingIntent notifyPendingIntent =
+        @SuppressLint("InlinedApi") PendingIntent notifyPendingIntent =
                 PendingIntent.getActivity(
                         this,
                         0,
                         notifyIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
                 );
 
 
@@ -259,7 +260,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent snoozeIntent = new Intent(this, BigTextIntentService.class);
         snoozeIntent.setAction(BigTextIntentService.ACTION_SNOOZE);
 
-        PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, 0);
+        @SuppressLint("InlinedApi") PendingIntent snoozePendingIntent = PendingIntent.getService(
+                this,
+                0,
+                snoozeIntent,
+                PendingIntent.FLAG_MUTABLE);
         NotificationCompat.Action snoozeAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_alarm_white_48dp,
@@ -272,7 +277,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent dismissIntent = new Intent(this, BigTextIntentService.class);
         dismissIntent.setAction(BigTextIntentService.ACTION_DISMISS);
 
-        PendingIntent dismissPendingIntent = PendingIntent.getService(this, 0, dismissIntent, 0);
+        @SuppressLint("InlinedApi") PendingIntent dismissPendingIntent = PendingIntent.getService(
+                this,
+                0,
+                dismissIntent,
+                PendingIntent.FLAG_MUTABLE);
         NotificationCompat.Action dismissAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_cancel_white_48dp,
@@ -295,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
 
-        Notification notification = notificationCompatBuilder
+        @SuppressLint("WrongConstant") Notification notification = notificationCompatBuilder
                 // BIG_TEXT_STYLE sets title and content for API 16 (4.1 and after).
                 .setStyle(bigTextStyle)
                 // Title for API <16 (4.0 and below) devices.
@@ -347,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * comments/responses via RemoteInput and the BigPictureSocialIntentService on 24+ (N+) and
      * Wear devices.
      */
+    @SuppressLint("WrongConstant")
     private void generateBigPictureStyleNotification() {
 
         Log.d(TAG, "generateBigPictureStyleNotification()");
@@ -517,6 +527,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * on API level 16 (4.1.x - Jelly Bean) and after, displays INBOX_STYLE. Otherwise, displays a
      * basic notification.
      */
+    @SuppressLint("WrongConstant")
     private void generateInboxStyleNotification() {
 
         Log.d(TAG, "generateInboxStyleNotification()");
@@ -656,6 +667,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * devices on API level 24 (7.0 - Nougat) and after, displays MESSAGING_STYLE. Otherwise,
      * displays a basic BIG_TEXT_STYLE.
      */
+    @SuppressLint("WrongConstant")
     private void generateMessagingStyleNotification() {
 
         Log.d(TAG, "generateMessagingStyleNotification()");
