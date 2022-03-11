@@ -166,9 +166,10 @@ class MainActivity : AppCompatActivity(),
         val args: Bundle = pref.extras
         val fragment = supportFragmentManager.fragmentFactory.instantiate(
             classLoader,
-            pref.fragment
+            pref.fragment!!
         ).apply {
             arguments = args
+            @Suppress("DEPRECATION")
             setTargetFragment(caller, 0)
         }
         // Replace the existing Fragment with the new Fragment

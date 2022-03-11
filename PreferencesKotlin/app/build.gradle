@@ -18,6 +18,5 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.preference:preference-ktx:1.1.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 }
