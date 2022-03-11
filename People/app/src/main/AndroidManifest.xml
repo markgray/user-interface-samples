@@ -24,7 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.People"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="DataExtractionRules,GoogleAppIndexingWarning">
 
         <!--
             Our main entry point.
