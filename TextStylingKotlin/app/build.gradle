@@ -57,7 +57,6 @@ dependencies {
     androidTestImplementation "com.google.dexmaker:dexmaker:$dexmakerVersion"
     androidTestImplementation "com.google.dexmaker:dexmaker-mockito:$dexmakerMockitoVersion"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 repositories {
