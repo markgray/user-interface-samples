@@ -32,9 +32,9 @@
     <!--
     Specifies the instrumentation test runner used to run the tests.
     -->
-    <instrumentation
-            android:name="android.test.InstrumentationTestRunner"
-            android:targetPackage="com.example.android.basicimmersivemode"
-            android:label="Tests for com.example.android.basicimmersivemode" />
+<!--    <instrumentation-->
+<!--            android:name="android.test.InstrumentationTestRunner"-->
+<!--            android:targetPackage="com.example.android.basicimmersivemode"-->
+<!--            android:label="Tests for com.example.android.basicimmersivemode" />-->
 
 </manifest>
