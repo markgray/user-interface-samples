@@ -15,7 +15,8 @@
   -->
 <LinearLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
-      android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/sample_main_layout">
@@ -48,12 +49,13 @@
               android:layout_height="1dp"
               android:background="@android:color/darker_gray" />
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
               android:name="com.example.android.common.logger.LogFragment"
               android:id="@+id/log_fragment"
               android:layout_width="match_parent"
               android:layout_height="0px"
-              android:layout_weight="1" />
+              android:layout_weight="1"
+            tools:ignore="NestedWeights" />
 
     </LinearLayout>
 
