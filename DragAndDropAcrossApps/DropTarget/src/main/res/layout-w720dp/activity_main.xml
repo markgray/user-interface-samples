@@ -13,7 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<LinearLayout android:id="@+id/sample_main_layout"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sample_main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,7 +53,8 @@
             android:name="com.example.android.common.logger.LogFragment"
             android:layout_width="match_parent"
             android:layout_height="0px"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="NestedWeights,FragmentTagUsage" />
 
     </LinearLayout>
 

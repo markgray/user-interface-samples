@@ -15,6 +15,7 @@
 */
 package com.example.android.dragsource
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -71,6 +72,7 @@ class MainActivity : SampleActivityBase() {
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
      */
+    @SuppressLint("MissingSuperCall")// For some reason lint insists super.onCreate not called
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

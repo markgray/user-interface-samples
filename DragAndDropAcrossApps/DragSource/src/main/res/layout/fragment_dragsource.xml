@@ -17,6 +17,7 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -34,7 +35,8 @@
             android:layout_marginRight="@dimen/section_marginRight"
             android:layout_marginTop="@dimen/section_marginTop"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded">
 
             <ImageView
                 android:id="@+id/image_one"
@@ -43,7 +45,7 @@
                 android:layout_margin="@dimen/image_margin"
                 android:background="@color/drag_inactive"
                 android:scaleType="centerCrop"
-                />
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/image_two"
@@ -52,7 +54,7 @@
                 android:layout_margin="@dimen/image_margin"
                 android:background="@color/drag_inactive"
                 android:scaleType="centerCrop"
-                 />
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -71,7 +73,8 @@
             android:layout_marginRight="@dimen/section_marginRight"
             android:layout_marginTop="@dimen/section_marginTop"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="RtlHardcoded">
 
             <ImageView
                 android:id="@+id/local_target"
@@ -80,14 +83,16 @@
                 android:layout_margin="@dimen/image_margin"
                 android:background="@color/drag_inactive"
                 android:pointerIcon="crosshair"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="@dimen/text_size"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:layout_weight="1"
-                android:text="Drop your image here." />
+                android:text="Drop your image here."
+                tools:ignore="HardcodedText,InefficientWeight" />
 
         </LinearLayout>
 
