@@ -38,6 +38,6 @@
         android:layout_marginLeft="@dimen/margin_small"
         android:text="@string/remove_task_button_text"
         android:onClick="onRemoveFromOverview"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded,UsingOnClickInXml" />
 
 </LinearLayout>

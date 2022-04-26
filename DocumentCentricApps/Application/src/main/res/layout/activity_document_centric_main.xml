@@ -52,7 +52,8 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_medium"
             android:text="@string/new_document_button_text"
-            android:onClick="createNewDocument" />
+            android:onClick="createNewDocument"
+            tools:ignore="UsingOnClickInXml" />
 
         <CheckBox
             android:id="@+id/multiple_task_checkbox"
