@@ -57,9 +57,9 @@ class DefaultChatRepository internal constructor(
 
     private var currentChat: Long = 0L
 
-    private val chats = Contact.CONTACTS.map { contact: Contact ->
+    private val chats = Contact.CONTACTS.associate { contact: Contact ->
         contact.id to Chat(contact)
-    }.toMap()
+    }
 
     init {
         notificationHelper.setUpNotificationChannels()

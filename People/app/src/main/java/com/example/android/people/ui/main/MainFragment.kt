@@ -46,9 +46,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         val contactAdapter = ContactAdapter { id ->
             navigationController.openChat(id, null)
         }
-        viewModel.contacts.observe(viewLifecycleOwner, { contacts ->
+        viewModel.contacts.observe(viewLifecycleOwner) { contacts ->
             contactAdapter.submitList(contacts)
-        })
+        }
         binding.contacts.run {
             layoutManager = LinearLayoutManager(view.context)
             setHasFixedSize(true)
