@@ -173,9 +173,9 @@ class SliceViewHolder(
         uriGroup.setOnClickListener {
             context.startActivity(Intent(Intent.ACTION_VIEW, uri.convertToSliceViewerScheme()))
         }
-        selectedMode.observe(lifecycleOwner, {
+        selectedMode.observe(lifecycleOwner) {
             sliceView.mode = it ?: SliceView.MODE_LARGE
-        })
+        }
         uriValue.text = uri.toString()
     }
 }

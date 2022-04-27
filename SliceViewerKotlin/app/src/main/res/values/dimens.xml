@@ -14,7 +14,7 @@
   limitations under the License.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Define standard dimensions to comply with Holo-style grids and rhythm. -->
 
@@ -29,7 +29,7 @@
     <dimen name="slice_elevation">@dimen/margin_tiny</dimen>
     <dimen name="horizontal_page_margin">@dimen/margin_small</dimen>
     <dimen name="vertical_page_margin">@dimen/margin_small</dimen>
-    <dimen name="textSize">10sp</dimen>
+    <dimen name="textSize" tools:ignore="SmallSp">10sp</dimen>
     <dimen name="smallTextSize">9sp</dimen>
     <dimen name="align_with_slice_item">20dp</dimen>
 </resources>

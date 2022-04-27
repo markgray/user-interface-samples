@@ -142,7 +142,7 @@ class SampleSliceProvider : SliceProvider() {
      * @param sliceUri the [Uri] for the [Slice] we are to create.
      * @return a [Slice] with the header "Test Slice"
      */
-    @SuppressLint("InlinedApi")
+    @SuppressLint("InlinedApi", "RestrictedApi")
     private fun createTestSlice(sliceUri: Uri): Slice {
         val activityAction = SliceAction.create(
             PendingIntent.getActivity(

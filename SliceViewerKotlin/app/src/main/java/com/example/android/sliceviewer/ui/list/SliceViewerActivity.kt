@@ -16,6 +16,7 @@
 
 package com.example.android.sliceviewer.ui.list
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -250,6 +251,7 @@ class SliceViewerActivity : AppCompatActivity() {
      * @return You must return `true` for the menu to be displayed, if you return `false` it will
      * not be shown.
      */
+    @SuppressLint("AlwaysShowAction")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
             setIcon(R.drawable.ic_large)
@@ -259,13 +261,13 @@ class SliceViewerActivity : AppCompatActivity() {
             add(R.string.large_mode)
         }
 
-        viewModel.selectedMode.observe(this, {
+        viewModel.selectedMode.observe(this) {
             when (it) {
                 SliceView.MODE_SHORTCUT -> typeMenu.setIcon(R.drawable.ic_shortcut)
                 SliceView.MODE_SMALL -> typeMenu.setIcon(R.drawable.ic_small)
                 SliceView.MODE_LARGE -> typeMenu.setIcon(R.drawable.ic_large)
             }
-        })
+        }
         super.onCreateOptionsMenu(menu)
         return true
     }

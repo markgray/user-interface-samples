@@ -18,6 +18,7 @@
 
 package com.example.android.sliceviewer.ui.single
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -167,6 +168,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
      * @return You must return `true` for the menu to be displayed, if you return `false` it will
      * not be shown.
      */
+    @SuppressLint("AlwaysShowAction")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
             setIcon(R.drawable.ic_large)
