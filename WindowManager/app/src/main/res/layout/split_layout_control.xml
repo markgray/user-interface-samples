@@ -25,7 +25,8 @@
     android:minWidth="250dp"
     android:minHeight="200dp"
     android:background="@color/color_split_controls_background"
-    tools:context="SplitLayoutActivity">
+    tools:context="SplitLayoutActivity"
+    tools:ignore="Overdraw">
 
 
     <Button

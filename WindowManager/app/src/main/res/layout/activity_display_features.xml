@@ -104,10 +104,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:drawableStart="@color/color_feature_separating"
         android:text="@string/separating"
         app:layout_constraintBottom_toTopOf="@id/unknown_color_text_view"
-        app:layout_constraintStart_toEndOf="@id/separating_color_image_view" />
+        app:layout_constraintStart_toEndOf="@id/separating_color_image_view"
+        app:drawableStartCompat="@color/color_feature_separating" />
 
     <ImageView
         android:id="@+id/unknown_color_image_view"

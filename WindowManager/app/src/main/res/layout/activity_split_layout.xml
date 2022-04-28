@@ -22,7 +22,8 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="SplitLayoutActivity">
+    tools:context="SplitLayoutActivity"
+    tools:ignore="DuplicateIncludedIds">
 
     <com.example.windowmanagersample.SplitLayout
         android:id="@+id/split_layout"
@@ -33,10 +34,12 @@
         android:padding="5dp">
         <include
             android:id="@id/start_layout"
-            layout="@layout/split_layout_content" />
+            layout="@layout/split_layout_content"
+            tools:ignore="DuplicateIncludedIds" />
         <include
             android:id="@id/end_layout"
-            layout="@layout/split_layout_control" />
+            layout="@layout/split_layout_control"
+            tools:ignore="DuplicateIncludedIds" />
     </com.example.windowmanagersample.SplitLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

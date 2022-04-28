@@ -25,7 +25,8 @@
     android:minWidth="200dp"
     android:minHeight="200dp"
     android:background="@color/color_split_content_background"
-    tools:context="SplitLayoutActivity">
+    tools:context="SplitLayoutActivity"
+    tools:ignore="Overdraw">
 
     <ImageView
         android:id="@+id/image_view"
