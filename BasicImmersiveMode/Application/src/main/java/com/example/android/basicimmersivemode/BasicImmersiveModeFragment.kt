@@ -49,10 +49,12 @@ class BasicImmersiveModeFragment : Fragment() {
     }
 
     /**
-     * Called when the fragment's activity has been created and this fragment's view hierarchy
-     * instantiated. This is called after [onCreateView] and before [onViewStateRestored].
+     * Called when all saved state has been restored into the view hierarchy of the fragment. This
+     * can be used to do initialization based on saved state that you are letting the view hierarchy
+     * track itself, such as whether check box widgets are currently checked. This is called after
+     * [onViewCreated] and before [onStart].
      *
-     * First we call our super's implementation of `onActivityCreated`. Then we initialize our
+     * First we call our super's implementation of `onViewStateRestored`. Then we initialize our
      * [View] variable `val decorView` to the top-level window decor view (containing the standard
      * window frame decorations and the client's content inside of that) of the current [Window] of
      * the activity. Finally we set the [View.OnSystemUiVisibilityChangeListener] of `decorView` to
@@ -62,11 +64,8 @@ class BasicImmersiveModeFragment : Fragment() {
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      * this is the state. We do not override [onSaveInstanceState] so do not use.
      */
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        // TODO: To get a callback specifically when a Fragment activity's Activity.onCreate(Bundle)
-        //  is called, register a androidx.lifecycle.LifecycleObserver on the Activity's Lifecycle
-        //  in onAttach(Context), removing it when it receives the Lifecycle.State.CREATED callback
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         val decorView: View = requireActivity().window.decorView
         @Suppress("DEPRECATION")
         decorView.setOnSystemUiVisibilityChangeListener {
