@@ -20,11 +20,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     defaultConfig {
         applicationId 'com.example.android.immersivemode'
         minSdkVersion 14
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName '1.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -36,6 +36,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.example.android.immersivemode'
 }
 
 dependencies {
