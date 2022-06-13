@@ -15,6 +15,7 @@
  */
 package com.example.android.droptarget
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.ContentResolver
@@ -196,7 +197,7 @@ class DropTargetFragment : Fragment() {
             mImageUri = uri
             return if (ContentResolver.SCHEME_CONTENT == uri!!.scheme) {
                 // Accessing a "content" scheme Uri requires a permission grant.
-                val dropPermissions = requestDragAndDropPermissions(activity, event)
+                val dropPermissions = requestDragAndDropPermissions(activity as Activity, event)
                 d(TAG, "Requesting permissions.")
                 if (dropPermissions == null) {
                     // Permission could not be obtained.
