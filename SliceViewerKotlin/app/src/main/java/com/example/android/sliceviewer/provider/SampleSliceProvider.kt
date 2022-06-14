@@ -151,7 +151,7 @@ class SampleSliceProvider : SliceProvider() {
                 PendingIntent.FLAG_IMMUTABLE
             ),
             IconCompat.createWithResource(
-                context,
+                context as Context,
                 R.drawable.ic_arrow_forward_black_24dp
             ),
             ListBuilder.ICON_IMAGE,
@@ -170,7 +170,7 @@ class SampleSliceProvider : SliceProvider() {
                 subtitle = "Row Subtitle"
                 addEndItem(
                     IconCompat.createWithResource(
-                        context, R.drawable.ic_arrow_forward_black_24dp
+                        context as Context, R.drawable.ic_arrow_forward_black_24dp
                     ), ListBuilder.ICON_IMAGE
                 )
             }
