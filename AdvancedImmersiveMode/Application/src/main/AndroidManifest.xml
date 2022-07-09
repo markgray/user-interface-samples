@@ -32,9 +32,11 @@
          define it on a per-application basis. -->
     <application
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        tools:ignore="AllowBackup,DataExtractionRules">
+        tools:ignore="UnusedAttribute">
 
         <!-- Every activity needs its own Manifest element.  The intent-filter contained in the
              element declares the intents that can be used to activate this Activity.  For instance,

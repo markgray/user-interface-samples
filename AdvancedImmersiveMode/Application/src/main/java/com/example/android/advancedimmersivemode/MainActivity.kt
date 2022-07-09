@@ -169,7 +169,7 @@ class MainActivity : SampleActivityBase() {
         // On screen logging via a fragment with a TextView.
         val logFragment = supportFragmentManager
             .findFragmentById(R.id.log_fragment) as LogFragment?
-        msgFilter.next = logFragment!!.logView
+        msgFilter.next = (logFragment ?: return).logView
         Log.i(TAG, "Ready")
     }
 
@@ -177,6 +177,6 @@ class MainActivity : SampleActivityBase() {
         /**
          * TAG used for logging.
          */
-        const val TAG = "MainActivity"
+        const val TAG: String = "MainActivity"
     }
 }

@@ -390,6 +390,6 @@ class AdvancedImmersiveModeFragment : Fragment() {
         /**
          * TAG used for logging.
          */
-        const val TAG = "AdvancedImmersiveModeFragment"
+        const val TAG: String = "AdvancedImmersiveModeFragment"
     }
 }
