@@ -192,7 +192,7 @@ class ClippingBasicFragment : Fragment() {
      * [ViewOutlineProvider] is an interface by which a [View] builds its [Outline], which is used
      * for shadow casting and clipping.
      */
-    private inner class ClipOutlineProvider : ViewOutlineProvider() {
+    private class ClipOutlineProvider : ViewOutlineProvider() {
         /**
          * Called to get the provider to populate the [Outline] parameter [outline]. This method
          * will be called by a [View] when its owned Drawables are invalidated, when the [View]'s
