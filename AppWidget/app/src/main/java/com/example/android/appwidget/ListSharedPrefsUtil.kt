@@ -102,7 +102,10 @@ object ListSharedPrefsUtil {
      * @return the [SharedPreferences] instance for the preferences file whose name is [name] opened
      * in [mode] preference mode.
      */
-    private fun Context.getSharedPreferencesByNamedArgument(name: String, mode: Int): SharedPreferences {
+    private fun Context.getSharedPreferencesByNamedArgument(
+        name: String,
+        mode: Int
+    ): SharedPreferences {
         return getSharedPreferences(name, mode)
     }
 }

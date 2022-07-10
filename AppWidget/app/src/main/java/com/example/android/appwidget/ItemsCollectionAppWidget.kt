@@ -16,6 +16,7 @@
 
 package com.example.android.appwidget
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -23,6 +24,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import android.widget.Toast
@@ -81,13 +83,14 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * @param appWidgetIds The `appWidgetIds` for which an update is needed. Note that this
      * may be all of the AppWidget instances for this provider, or just a subset of them.
      */
+    @SuppressLint("ObsoleteSdkInt")
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
         val remoteViews = RemoteViews(context.packageName, R.layout.widget_items_collection)
-        if (BuildCompat.isAtLeastS()) {
+        if (Build.VERSION.SDK_INT >= 31) {
             val collectionItems: RemoteViews.RemoteCollectionItems =
                 getRemoteCollectionItems(context)
             remoteViews.setRemoteAdapter(R.id.items_list_view, collectionItems)
@@ -115,9 +118,10 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * @param context The [Context] in which the receiver is running.
      * @param intent The [Intent] being received.
      */
+    @SuppressLint("ObsoleteSdkInt")
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        if (BuildCompat.isAtLeastS() &&
+        if (Build.VERSION.SDK_INT >= 31 &&
             intent?.extras?.getInt(REQUEST_CODE) == REQUEST_CODE_FROM_COLLECTION_WIDGET
         ) {
             val checked: Boolean? = intent.extras?.getBoolean(
@@ -194,7 +198,7 @@ class ItemsCollectionRemoteViewsFactory(
      *
      * @return Count of items.
      */
-    override fun getCount(): Int = items.count()
+    override fun getCount(): Int = items.size
 
     /**
      * Get a [RemoteViews] that displays the data at the specified position in the data set. We
@@ -227,7 +231,7 @@ class ItemsCollectionRemoteViewsFactory(
      *
      * @return The number of types of Views that will be returned by this factory.
      */
-    override fun getViewTypeCount(): Int = items.count()
+    override fun getViewTypeCount(): Int = items.size
 
     /**
      * Get the row id associated with the specified position in the list. We use the position of the
@@ -251,7 +255,7 @@ class ItemsCollectionRemoteViewsFactory(
          * Our dataset of layout file resource IDs, which are used to create [RemoteViews] objects
          * that will display the views contained in the layout file.
          */
-        val items = listOf(
+        val items: List<Int> = listOf(
             R.layout.item_checkboxes,
             R.layout.item_radio_buttons,
             R.layout.item_switches,
@@ -264,14 +268,14 @@ class ItemsCollectionRemoteViewsFactory(
          * checked state. It is included in the [PendingIntent] that [constructRemoteViews] uses in
          * its call to [RemoteViews.setOnCheckedChangeResponse].
          */
-        const val REQUEST_CODE_FROM_COLLECTION_WIDGET = 2
+        const val REQUEST_CODE_FROM_COLLECTION_WIDGET: Int = 2
 
         /**
          * The key used to store the resource ID of the [R.id.item_switch] `Switch` in layout file
          * [R.layout.item_switches] as an extra in the [PendingIntent] that [constructRemoteViews]
          * uses in its call to [RemoteViews.setOnCheckedChangeResponse].
          */
-        const val EXTRA_VIEW_ID = "extra_view_id"
+        const val EXTRA_VIEW_ID: String = "extra_view_id"
 
         /**
          * The key used to store the value [REQUEST_CODE_FROM_COLLECTION_WIDGET] as an extra in the
@@ -280,7 +284,7 @@ class ItemsCollectionRemoteViewsFactory(
          * launched when the `Switch` changes state. It is used in the [PendingIntent] that
          * [constructRemoteViews] uses in its call to [RemoteViews.setOnCheckedChangeResponse].
          */
-        const val REQUEST_CODE = "request_code"
+        const val REQUEST_CODE: String = "request_code"
 
         /**
          * Constructs a [RemoteViews.RemoteCollectionItems] object containing [RemoteViews] for each
@@ -303,13 +307,14 @@ class ItemsCollectionRemoteViewsFactory(
          * display for each row which are constructed to display the views in the layout files whose
          * resource IDs are in our [List] of resource IDs field [items].
          */
+        @SuppressLint("ObsoleteSdkInt", "SupportAnnotationUsage")
         @RequiresApi(31)
         fun getRemoteCollectionItems(context: Context): RemoteViews.RemoteCollectionItems {
             val builder = RemoteViews.RemoteCollectionItems.Builder()
             items.forEachIndexed { index, layoutId ->
                 builder.addItem(index.toLong(), constructRemoteViews(context, layoutId))
             }
-            return builder.setHasStableIds(true).setViewTypeCount(items.count()).build()
+            return builder.setHasStableIds(true).setViewTypeCount(items.size).build()
         }
 
         /**
@@ -351,12 +356,13 @@ class ItemsCollectionRemoteViewsFactory(
          * running Android S and above the [RemoteViews] object will also be configured to use some
          * of the nifty new APIs added to [RemoteViews] in Android S.
          */
+        @SuppressLint("ObsoleteSdkInt")
         internal fun constructRemoteViews(
             context: Context,
             @LayoutRes layoutId: Int
         ): RemoteViews {
             val remoteViews = RemoteViews(context.packageName, layoutId)
-            if (!BuildCompat.isAtLeastS()) {
+            if (Build.VERSION.SDK_INT < 31) {
                 return remoteViews
             }
             // Compound buttons in a widget are stateless. You need to change the state and register for
