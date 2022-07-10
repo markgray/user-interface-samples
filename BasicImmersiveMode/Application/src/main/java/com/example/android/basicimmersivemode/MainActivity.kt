@@ -102,9 +102,9 @@ class MainActivity : SampleActivityBase() {
         // On screen logging via a fragment with a TextView.
         val logFragment = supportFragmentManager
             .findFragmentById(R.id.log_fragment) as LogFragment?
-        msgFilter.next = logFragment!!.logView
-        logFragment.logView!!.setTextAppearance(R.style.Log)
-        logFragment.logView!!.setBackgroundColor(Color.WHITE)
+        msgFilter.next = (logFragment ?: return).logView
+        (logFragment.logView ?: return).setTextAppearance(R.style.Log)
+        (logFragment.logView ?: return).setBackgroundColor(Color.WHITE)
         Log.i(TAG, "Ready")
     }
 
@@ -112,12 +112,12 @@ class MainActivity : SampleActivityBase() {
         /**
          * TAG used for logging.
          */
-        const val TAG = "MainActivity"
+        const val TAG: String = "MainActivity"
 
         /**
          * [Fragment] tag name we use when we add our [BasicImmersiveModeFragment] fragment to the
          * activity state.
          */
-        const val FRAGTAG = "BasicImmersiveModeFragment"
+        const val FRAGTAG: String = "BasicImmersiveModeFragment"
     }
 }

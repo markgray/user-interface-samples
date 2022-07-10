@@ -58,6 +58,6 @@ open class SampleActivityBase : FragmentActivity() {
         /**
          * TAG to be used for logging.
          */
-        const val TAG = "SampleActivityBase"
+        const val TAG: String = "SampleActivityBase"
     }
 }

@@ -109,7 +109,7 @@ class BasicImmersiveModeFragment : Fragment() {
      *  will let the user swipe the bars back in again, but will automatically make them disappear
      *  a few seconds later.
      */
-    fun toggleHideyBar() {
+    private fun toggleHideyBar() {
         // BEGIN_INCLUDE (get_current_ui_flags)
         // The UI options currently enabled are represented by a bitfield.
         // getSystemUiVisibility() gives us that bitfield.
@@ -147,6 +147,6 @@ class BasicImmersiveModeFragment : Fragment() {
         /**
          * TAG used for logging.
          */
-        const val TAG = "BasicImmersiveModeFragment"
+        const val TAG: String = "BasicImmersiveModeFragment"
     }
 }
