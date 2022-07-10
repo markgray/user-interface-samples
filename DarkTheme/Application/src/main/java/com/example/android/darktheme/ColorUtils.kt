@@ -21,6 +21,9 @@ import android.graphics.Color
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 
+/**
+ * Singleton holder for the [getThemeColor] method
+ */
 object ColorUtils {
     /**
      * Queries the theme of the given [Context] for a theme color. Called from the `onCreateOptionsMenu`

@@ -66,6 +66,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
          * TAG used by [MainActivity.showFragment] when adding an instance of [SettingsFragment]
          * to the activity state.
          */
-        const val TAG = "SettingsFragmentTag"
+        const val TAG: String = "SettingsFragmentTag"
     }
 }

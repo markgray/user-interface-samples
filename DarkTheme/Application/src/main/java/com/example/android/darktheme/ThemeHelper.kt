@@ -40,7 +40,7 @@ object ThemeHelper {
     /**
      * Value of `themePref` to select "default" mode
      */
-    const val DEFAULT_MODE = "default"
+    const val DEFAULT_MODE: String = "default"
 
     /**
      * Sets the default night mode for our app based on the value of its [String] parameter [themePref].

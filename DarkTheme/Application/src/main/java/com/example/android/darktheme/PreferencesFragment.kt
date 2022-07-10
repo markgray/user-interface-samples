@@ -56,6 +56,6 @@ class PreferencesFragment : Fragment() {
          * TAG used by [MainActivity.showFragment] when adding an instance of [PreferencesFragment]
          * to the activity state.
          */
-        const val TAG = "PreferencesFragmentTag"
+        const val TAG: String = "PreferencesFragmentTag"
     }
 }

@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById<View>(R.id.toolbar) as Toolbar)
         val navigation = findViewById<BottomNavigationView>(R.id.navigation)
-        navigation.setOnItemSelectedListener (mOnNavigationListener)
+        navigation.setOnItemSelectedListener(mOnNavigationListener)
         if (savedInstanceState == null) {
             showFragment(WelcomeFragment.TAG)
         }

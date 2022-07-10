@@ -57,6 +57,6 @@ class WelcomeFragment : Fragment() {
          * TAG used by [MainActivity.showFragment] when adding an instance of [WelcomeFragment] to
          * the activity state.
          */
-        const val TAG = "VectorDrawableFragmentTag"
+        const val TAG: String = "VectorDrawableFragmentTag"
     }
 }

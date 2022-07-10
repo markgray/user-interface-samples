@@ -45,6 +45,6 @@ class DarkThemeApplication : Application() {
         super.onCreate()
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val themePref = sharedPreferences.getString("themePref", ThemeHelper.DEFAULT_MODE)
-        ThemeHelper.applyTheme(themePref!!)
+        ThemeHelper.applyTheme(themePref ?: return)
     }
 }
