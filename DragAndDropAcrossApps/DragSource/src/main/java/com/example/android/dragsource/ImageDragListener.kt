@@ -152,7 +152,8 @@ open class ImageDragListener : OnDragListener {
      * @param y the `y` coordinate of the [DragEvent]
      */
     @Suppress("UNUSED_PARAMETER")
-    protected fun processLocation(x: Float, y: Float) {}
+    protected fun processLocation(x: Float, y: Float) {
+    }
 
     /**
      * If its [View] parameter [view] is not an [ImageView] we return `false` to report that we did

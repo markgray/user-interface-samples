@@ -293,7 +293,7 @@ class DropTargetFragment : Fragment() {
          * extras of the `ClipDescription` of the [DragEvent] which has been dropped on us and which
          * our [getExtra] method retrieves in order for our `setImageUri` method to log it.
          */
-        const val EXTRA_IMAGE_INFO = "IMAGE_INFO"
+        const val EXTRA_IMAGE_INFO: String = "IMAGE_INFO"
 
         /**
          * TAG used for logging.

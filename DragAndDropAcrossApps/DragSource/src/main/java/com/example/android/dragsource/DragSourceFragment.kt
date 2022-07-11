@@ -352,7 +352,7 @@ class DragSourceFragment : Fragment() {
          * Name of the parameter for the [ClipData] extra that stores a text describing the dragged
          * image.
          */
-        const val EXTRA_IMAGE_INFO = "IMAGE_INFO"
+        const val EXTRA_IMAGE_INFO: String = "IMAGE_INFO"
 
         /**
          * TAG used for logging

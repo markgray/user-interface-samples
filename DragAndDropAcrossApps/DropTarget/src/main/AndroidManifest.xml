@@ -16,13 +16,11 @@
      limitations under the License.
 -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="DropTarget Sample"
-        tools:ignore="AllowBackup">
+        android:label="DropTarget Sample">
         <activity
             android:name=".MainActivity"
             android:exported="true">

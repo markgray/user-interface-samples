@@ -26,8 +26,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="DragSource Sample"
-        tools:ignore="AllowBackup">
+        android:label="DragSource Sample">
         <activity
             android:name="com.example.android.dragsource.MainActivity"
             android:exported="true">
