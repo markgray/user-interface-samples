@@ -31,7 +31,14 @@ import androidx.core.view.WindowInsetsControllerCompat
  * the `systemBarsBehavior` is to be set to in the `controlWindowInsets` method.
  */
 enum class BehaviorOption(
+    /**
+     * User friendly name of the behavior option
+     */
     val title: String,
+    /**
+     * Behavior constant that the `systemBarsBehavior` is to be set to in the
+     * `controlWindowInsets` method.
+     */
     val value: Int
 ) {
     /**
@@ -66,7 +73,14 @@ enum class BehaviorOption(
  * [WindowInsetsControllerCompat] `hide` or `show` method in the `controlWindowInsets` method.
  */
 enum class TypeOption(
+    /**
+     * User friendly string describing the system bars to hide or show.
+     */
     val title: String,
+    /**
+     * Type constant that is passed to the[WindowInsetsControllerCompat] `hide` or `show` method in
+     * the `controlWindowInsets` method.
+     */
     val value: Int
 ) {
     /**
