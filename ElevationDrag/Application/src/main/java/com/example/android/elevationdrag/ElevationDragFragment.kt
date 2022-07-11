@@ -175,7 +175,7 @@ class ElevationDragFragment : Fragment() {
     /**
      * [ViewOutlineProvider] which sets the outline to be an oval which fits the view bounds.
      */
-    private inner class CircleOutlineProvider : ViewOutlineProvider() {
+    private class CircleOutlineProvider : ViewOutlineProvider() {
         /**
          * Called to get the provider to populate the Outline. This method will be called by a [View]
          * when its owned Drawables are invalidated, when the [View]'s size changes, or if
@@ -198,6 +198,6 @@ class ElevationDragFragment : Fragment() {
         /**
          * TAG used for logging
          */
-        const val TAG = "ElevationDragFragment"
+        const val TAG: String = "ElevationDragFragment"
     }
 }
