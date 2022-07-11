@@ -183,7 +183,7 @@ class DocumentCentricActivity : AppCompatActivity() {
          * used as the key which is used to store [mDocumentCounter] in the [PersistableBundle]
          * in our [onSaveInstanceState] method and to retrieve it in our [onPostCreate] method.
          */
-        const val KEY_EXTRA_NEW_DOCUMENT_COUNTER = "KEY_EXTRA_NEW_DOCUMENT_COUNTER"
+        const val KEY_EXTRA_NEW_DOCUMENT_COUNTER: String = "KEY_EXTRA_NEW_DOCUMENT_COUNTER"
 
         /**
          * The number of the next [NewDocumentActivity] to be launched, it is passed under the key
