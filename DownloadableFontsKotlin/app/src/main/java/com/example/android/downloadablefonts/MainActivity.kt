@@ -282,9 +282,9 @@ class MainActivity : AppCompatActivity() {
                 familyNameInput.isErrorEnabled = true
                 familyNameInput.error = getString(R.string.invalid_family_name)
                 Toast.makeText(
-                        this@MainActivity,
-                        R.string.invalid_input,
-                        Toast.LENGTH_SHORT).show()
+                    this@MainActivity,
+                    R.string.invalid_input,
+                    Toast.LENGTH_SHORT).show()
                 return@OnClickListener
             }
             requestDownload(familyName)
@@ -340,18 +340,18 @@ class MainActivity : AppCompatActivity() {
      */
     private fun requestDownload(familyName: String) {
         val queryBuilder = QueryBuilder(familyName,
-                width = progressToWidth(mWidthSeekBar.progress),
-                weight = progressToWeight(mWeightSeekBar.progress),
-                italic = progressToItalic(mItalicSeekBar.progress),
-                besteffort =  mBestEffort.isChecked)
+            width = progressToWidth(mWidthSeekBar.progress),
+            weight = progressToWeight(mWeightSeekBar.progress),
+            italic = progressToItalic(mItalicSeekBar.progress),
+            besteffort = mBestEffort.isChecked)
         val query = queryBuilder.build()
 
         Log.d(TAG, "Requesting a font. Query: $query")
         val request = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                query,
-                R.array.com_google_android_gms_fonts_certs
+            "com.google.android.gms.fonts",
+            "com.google.android.gms",
+            query,
+            R.array.com_google_android_gms_fonts_certs
         )
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
@@ -406,7 +406,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         FontsContractCompat
-                .requestFont(this@MainActivity, request, callback, mHandler)
+            .requestFont(this@MainActivity, request, callback, mHandler)
     }
 
     /**
