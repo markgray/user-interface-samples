@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
          * The emoji [String] that is displayed in each of our [TextView]s, it consists of the
          * [String] field [WOMAN_TECHNOLOGIST] followed by the [String] field [WOMAN_SINGER]
          */
-        const val EMOJI = "$WOMAN_TECHNOLOGIST $WOMAN_SINGER"
+        const val EMOJI: String = "$WOMAN_TECHNOLOGIST $WOMAN_SINGER"
     }
 
     /**
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                 val compat = EmojiCompat.get()
                 val context = regularTextView.context
                 regularTextView.text = compat.process(
-                        context.getString(R.string.regular_text_view, EMOJI))
+                    context.getString(R.string.regular_text_view, EMOJI))
             }
         }
 

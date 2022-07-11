@@ -38,9 +38,9 @@ import androidx.emoji.text.EmojiCompat
  *        the view. Can be 0 to not look for defaults.
  */
 class CustomTextView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     /**
