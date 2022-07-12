@@ -37,7 +37,7 @@ import androidx.viewbinding.ViewBinding
  */
 inline fun <reified BindingT : ViewBinding> FragmentActivity.viewBindings(
     crossinline bind: (View) -> BindingT
-) = object : Lazy<BindingT> {
+): Lazy<BindingT> = object : Lazy<BindingT> {
 
     private var cached: BindingT? = null
 
@@ -65,7 +65,7 @@ inline fun <reified BindingT : ViewBinding> FragmentActivity.viewBindings(
  */
 inline fun <reified BindingT : ViewBinding> Fragment.viewBindings(
     crossinline bind: (View) -> BindingT
-) = object : Lazy<BindingT> {
+): Lazy<BindingT> = object : Lazy<BindingT> {
 
     private var cached: BindingT? = null
 

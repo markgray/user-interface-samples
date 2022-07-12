@@ -28,9 +28,15 @@ import com.example.android.people.data.DefaultChatRepository
 class ReplyReceiver : BroadcastReceiver() {
 
     companion object {
-        const val KEY_TEXT_REPLY = "reply"
+        /**
+         *
+         */
+        const val KEY_TEXT_REPLY: String = "reply"
     }
 
+    /**
+     *
+     */
     override fun onReceive(context: Context, intent: Intent) {
         val repository: ChatRepository = DefaultChatRepository.getInstance(context)
 

@@ -33,7 +33,7 @@ import org.junit.runner.RunWith
 class MainViewModelTest {
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val dummyContacts = Contact.CONTACTS
 
@@ -42,9 +42,9 @@ class MainViewModelTest {
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
             viewModel = MainViewModel(
                 ApplicationProvider.getApplicationContext(),
-                TestChatRepository(dummyContacts.map { contact ->
+                TestChatRepository(dummyContacts.associate { contact ->
                     contact.id to Chat(contact)
-                }.toMap())
+                })
             )
         }
         return viewModel!!

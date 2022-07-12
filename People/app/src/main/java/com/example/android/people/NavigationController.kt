@@ -25,8 +25,14 @@ import androidx.fragment.app.Fragment
  */
 interface NavigationController {
 
+    /**
+     *
+     */
     fun openChat(id: Long, prepopulateText: String?)
 
+    /**
+     *
+     */
     fun openPhoto(photo: Uri)
 
     /**
@@ -43,4 +49,8 @@ interface NavigationController {
     )
 }
 
-fun Fragment.getNavigationController() = requireActivity() as NavigationController
+/**
+ *
+ */
+fun Fragment.getNavigationController(): NavigationController =
+    requireActivity() as NavigationController

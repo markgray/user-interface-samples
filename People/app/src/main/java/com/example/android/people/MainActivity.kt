@@ -48,6 +48,9 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
 
     private lateinit var transition: Transition
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.toolbar)
@@ -60,6 +63,9 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
         }
     }
 
+    /**
+     *
+     */
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -111,6 +117,9 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
         body(binding.name, binding.icon)
     }
 
+    /**
+     *
+     */
     override fun openChat(id: Long, prepopulateText: String?) {
         supportFragmentManager.popBackStack(FRAGMENT_CHAT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         supportFragmentManager.commit {
@@ -119,6 +128,9 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
         }
     }
 
+    /**
+     *
+     */
     override fun openPhoto(photo: Uri) {
         supportFragmentManager.commit {
             addToBackStack(null)

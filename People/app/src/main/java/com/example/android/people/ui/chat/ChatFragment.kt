@@ -47,7 +47,14 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         private const val ARG_FOREGROUND = "foreground"
         private const val ARG_PREPOPULATE_TEXT = "prepopulate_text"
 
-        fun newInstance(id: Long, foreground: Boolean, prepopulateText: String? = null) =
+        /**
+         *
+         */
+        fun newInstance(
+            id: Long,
+            foreground: Boolean,
+            prepopulateText: String? = null
+        ): ChatFragment =
             ChatFragment().apply {
                 arguments = Bundle().apply {
                     putLong(ARG_ID, id)
@@ -60,13 +67,20 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
     private val viewModel: ChatViewModel by viewModels()
     private val binding by viewBindings(ChatFragmentBinding::bind)
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        @Suppress("DEPRECATION")
         setHasOptionsMenu(true)
         enterTransition =
             TransitionInflater.from(context).inflateTransition(R.transition.slide_bottom)
     }
 
+    /**
+     *
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val id = arguments?.getLong(ARG_ID)
         if (id == null) {
@@ -144,12 +158,18 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         }
     }
 
+    /**
+     *
+     */
     override fun onStart() {
         super.onStart()
         val foreground = arguments?.getBoolean(ARG_FOREGROUND) == true
         viewModel.foreground = foreground
     }
 
+    /**
+     *
+     */
     override fun onStop() {
         super.onStop()
         viewModel.foreground = false
@@ -173,6 +193,10 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         }
     }
 
+    /**
+     *
+     */
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.chat, menu)
         menu.findItem(R.id.action_show_as_bubble)?.let { item ->
@@ -183,6 +207,10 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    /**
+     *
+     */
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_show_as_bubble -> {

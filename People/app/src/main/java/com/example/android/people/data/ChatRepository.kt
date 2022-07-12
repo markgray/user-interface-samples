@@ -23,18 +23,59 @@ import androidx.lifecycle.MutableLiveData
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
+/**
+ *
+ */
 interface ChatRepository {
+    /**
+     *
+     */
     fun getContacts(): LiveData<List<Contact>>
+
+    /**
+     *
+     */
     fun findContact(id: Long): LiveData<Contact?>
+
+    /**
+     *
+     */
     fun findMessages(id: Long): LiveData<List<Message>>
+
+    /**
+     *
+     */
     fun sendMessage(id: Long, text: String, photoUri: Uri?, photoMimeType: String?)
+
+    /**
+     *
+     */
     fun updateNotification(id: Long)
+
+    /**
+     *
+     */
     fun activateChat(id: Long)
+
+    /**
+     *
+     */
     fun deactivateChat(id: Long)
+
+    /**
+     *
+     */
     fun showAsBubble(id: Long)
+
+    /**
+     *
+     */
     fun canBubble(id: Long): Boolean
 }
 
+/**
+ *
+ */
 class DefaultChatRepository internal constructor(
     private val notificationHelper: NotificationHelper,
     private val executor: Executor
@@ -43,6 +84,9 @@ class DefaultChatRepository internal constructor(
     companion object {
         private var instance: DefaultChatRepository? = null
 
+        /**
+         *
+         */
         fun getInstance(context: Context): DefaultChatRepository {
             return instance ?: synchronized(this) {
                 instance ?: DefaultChatRepository(
@@ -65,6 +109,9 @@ class DefaultChatRepository internal constructor(
         notificationHelper.setUpNotificationChannels()
     }
 
+    /**
+     *
+     */
     @MainThread
     override fun getContacts(): LiveData<List<Contact>> {
         return MutableLiveData<List<Contact>>().apply {
@@ -72,6 +119,9 @@ class DefaultChatRepository internal constructor(
         }
     }
 
+    /**
+     *
+     */
     @MainThread
     override fun findContact(id: Long): LiveData<Contact?> {
         return MutableLiveData<Contact>().apply {
@@ -79,6 +129,9 @@ class DefaultChatRepository internal constructor(
         }
     }
 
+    /**
+     *
+     */
     @MainThread
     override fun findMessages(id: Long): LiveData<List<Message>> {
         val chat = chats.getValue(id)
@@ -99,6 +152,9 @@ class DefaultChatRepository internal constructor(
         }
     }
 
+    /**
+     *
+     */
     @MainThread
     override fun sendMessage(id: Long, text: String, photoUri: Uri?, photoMimeType: String?) {
         val chat = chats.getValue(id)
@@ -121,11 +177,17 @@ class DefaultChatRepository internal constructor(
         }
     }
 
+    /**
+     *
+     */
     override fun updateNotification(id: Long) {
         val chat = chats.getValue(id)
         notificationHelper.showNotification(chat, fromUser = false, update = true)
     }
 
+    /**
+     *
+     */
     override fun activateChat(id: Long) {
         val chat = chats.getValue(id)
         currentChat = id
@@ -135,12 +197,18 @@ class DefaultChatRepository internal constructor(
         notificationHelper.updateNotification(chat, id, isPrepopulatedMsgs)
     }
 
+    /**
+     *
+     */
     override fun deactivateChat(id: Long) {
         if (currentChat == id) {
             currentChat = 0
         }
     }
 
+    /**
+     *
+     */
     override fun showAsBubble(id: Long) {
         val chat = chats.getValue(id)
         executor.execute {
@@ -148,6 +216,9 @@ class DefaultChatRepository internal constructor(
         }
     }
 
+    /**
+     *
+     */
     override fun canBubble(id: Long): Boolean {
         val chat = chats.getValue(id)
         return notificationHelper.canBubble(chat.contact)

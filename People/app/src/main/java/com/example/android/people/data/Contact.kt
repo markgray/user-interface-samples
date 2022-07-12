@@ -15,16 +15,32 @@
 
 package com.example.android.people.data
 
+import android.net.Uri
 import androidx.core.net.toUri
 
+/**
+ *
+ */
 abstract class Contact(
+    /**
+     *
+     */
     val id: Long,
+    /**
+     *
+     */
     val name: String,
+    /**
+     *
+     */
     val icon: String
 ) {
 
     companion object {
-        val CONTACTS = listOf(
+        /**
+         *
+         */
+        val CONTACTS: List<Contact> = listOf(
             object : Contact(1L, "Cat", "cat.jpg") {
                 override fun reply(text: String) = buildReply().apply { this.text = "Meow" }
             },
@@ -44,15 +60,27 @@ abstract class Contact(
         )
     }
 
-    val iconUri = "content://com.example.android.people/icon/$id".toUri()
+    /**
+     *
+     */
+    val iconUri: Uri = "content://com.example.android.people/icon/$id".toUri()
 
-    val shortcutId = "contact_$id"
+    /**
+     *
+     */
+    val shortcutId: String = "contact_$id"
 
-    fun buildReply() = Message.Builder().apply {
+    /**
+     *
+     */
+    fun buildReply(): Message.Builder = Message.Builder().apply {
         sender = this@Contact.id
         timestamp = System.currentTimeMillis()
     }
 
+    /**
+     *
+     */
     abstract fun reply(text: String): Message.Builder
 
     override fun equals(other: Any?): Boolean {

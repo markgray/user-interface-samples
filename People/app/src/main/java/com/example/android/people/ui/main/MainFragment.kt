@@ -33,11 +33,17 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private val binding by viewBindings(MainFragmentBinding::bind)
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         exitTransition = TransitionInflater.from(context).inflateTransition(R.transition.slide_top)
     }
 
+    /**
+     *
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navigationController = getNavigationController()
         navigationController.updateAppBar(false)

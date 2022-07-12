@@ -35,18 +35,27 @@ class PhotoFragment : Fragment(R.layout.photo_fragment) {
     companion object {
         private const val ARG_PHOTO = "photo"
 
-        fun newInstance(photo: Uri) = PhotoFragment().apply {
+        /**
+         *
+         */
+        fun newInstance(photo: Uri): PhotoFragment = PhotoFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_PHOTO, photo)
             }
         }
     }
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = Fade()
     }
 
+    /**
+     *
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val photo = arguments?.getParcelable<Uri>(ARG_PHOTO)
         if (photo == null) {

@@ -30,6 +30,9 @@ import com.example.android.people.ui.photo.PhotoFragment
  */
 class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationController {
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id = intent.data?.lastPathSegment?.toLongOrNull() ?: return
@@ -40,10 +43,16 @@ class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationCo
         }
     }
 
+    /**
+     *
+     */
     override fun openChat(id: Long, prepopulateText: String?) {
         throw UnsupportedOperationException("BubbleActivity always shows a single chat thread.")
     }
 
+    /**
+     *
+     */
     override fun openPhoto(photo: Uri) {
         // In an expanded Bubble, you can navigate between Fragments just like you would normally
         // do in a normal Activity. Just make sure you don't block onBackPressed().

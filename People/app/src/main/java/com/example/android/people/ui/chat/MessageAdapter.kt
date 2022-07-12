@@ -36,6 +36,9 @@ import com.example.android.people.R
 import com.example.android.people.data.Message
 import com.example.android.people.databinding.MessageItemBinding
 
+/**
+ *
+ */
 class MessageAdapter(
     context: Context,
     private val onPhotoClicked: (photo: Uri) -> Unit
@@ -70,10 +73,16 @@ class MessageAdapter(
         setHasStableIds(true)
     }
 
+    /**
+     *
+     */
     override fun getItemId(position: Int): Long {
         return getItem(position).id
     }
 
+    /**
+     *
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val holder = MessageViewHolder(parent)
         holder.binding.message.setOnClickListener {
@@ -85,6 +94,9 @@ class MessageAdapter(
         return holder
     }
 
+    /**
+     *
+     */
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = getItem(position)
         val lp = holder.binding.message.layoutParams as FrameLayout.LayoutParams
@@ -138,9 +150,15 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Message>() {
 
 }
 
+/**
+ *
+ */
 class MessageViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.message_item, parent, false)
 ) {
+    /**
+     *
+     */
     val binding: MessageItemBinding = MessageItemBinding.bind(itemView)
 }
 

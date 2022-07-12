@@ -23,8 +23,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.example.android.people.data.ChatRepository
+import com.example.android.people.data.Contact
 import com.example.android.people.data.DefaultChatRepository
+import com.example.android.people.data.Message
 
+/**
+ *
+ */
 class ChatViewModel @JvmOverloads constructor(
     application: Application,
     private val repository: ChatRepository = DefaultChatRepository.getInstance(application)
@@ -33,6 +38,10 @@ class ChatViewModel @JvmOverloads constructor(
     private val chatId = MutableLiveData<Long>()
 
     private val _photoUri = MutableLiveData<Uri?>()
+
+    /**
+     *
+     */
     val photo: LiveData<Uri?> = _photoUri
 
     private var _photoMimeType: String? = null
@@ -47,7 +56,7 @@ class ChatViewModel @JvmOverloads constructor(
      * BubbleActivity. Otherwise, the expanding a bubble would remove the notification and the
      * bubble.
      */
-    var foreground = false
+    var foreground: Boolean = false
         set(value) {
             field = value
             chatId.value?.let { id ->
@@ -62,18 +71,21 @@ class ChatViewModel @JvmOverloads constructor(
     /**
      * The contact of this chat.
      */
-    val contact = chatId.switchMap { id -> repository.findContact(id) }
+    val contact: LiveData<Contact?> = chatId.switchMap { id -> repository.findContact(id) }
 
     /**
      * The list of all the messages in this chat.
      */
-    val messages = chatId.switchMap { id -> repository.findMessages(id) }
+    val messages: LiveData<List<Message>> = chatId.switchMap { id -> repository.findMessages(id) }
 
     /**
      * Whether the "Show as Bubble" button should be shown.
      */
-    val showAsBubbleVisible = chatId.map { id -> repository.canBubble(id) }
+    val showAsBubbleVisible: LiveData<Boolean> = chatId.map { id -> repository.canBubble(id) }
 
+    /**
+     *
+     */
     fun setChatId(id: Long) {
         chatId.value = id
         if (foreground) {
@@ -83,6 +95,9 @@ class ChatViewModel @JvmOverloads constructor(
         }
     }
 
+    /**
+     *
+     */
     fun send(text: String) {
         val id = chatId.value
         if (id != null && id != 0L) {
@@ -92,17 +107,26 @@ class ChatViewModel @JvmOverloads constructor(
         _photoMimeType = null
     }
 
+    /**
+     *
+     */
     fun showAsBubble() {
         chatId.value?.let { id ->
             repository.showAsBubble(id)
         }
     }
 
+    /**
+     *
+     */
     fun setPhoto(uri: Uri, mimeType: String) {
         _photoUri.value = uri
         _photoMimeType = mimeType
     }
 
+    /**
+     *
+     */
     override fun onCleared() {
         chatId.value?.let { id -> repository.deactivateChat(id) }
     }

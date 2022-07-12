@@ -34,7 +34,10 @@ class BubbleActivityTest {
     @Test
     fun showsChatFragment() {
         ActivityScenario.launch<BubbleActivity>(
-            Intent(ApplicationProvider.getApplicationContext<Application>(), BubbleActivity::class.java)
+            Intent(
+                ApplicationProvider.getApplicationContext<Application>(),
+                BubbleActivity::class.java
+            )
                 .setAction(Intent.ACTION_VIEW)
                 .setData(Uri.parse("https://android.example.com/chat/1"))
         ).use {

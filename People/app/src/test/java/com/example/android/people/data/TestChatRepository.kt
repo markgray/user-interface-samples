@@ -26,9 +26,9 @@ import androidx.lifecycle.MutableLiveData
  */
 class TestChatRepository(private val chats: Map<Long, Chat>) : ChatRepository {
 
-    var activatedId = 0L
+    var activatedId: Long = 0L
 
-    var bubbleId = 0L
+    var bubbleId: Long = 0L
 
     override fun getContacts(): LiveData<List<Contact>> {
         return MutableLiveData<List<Contact>>().apply {

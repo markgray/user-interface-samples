@@ -22,6 +22,9 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import com.example.android.people.R
 
+/**
+ *
+ */
 typealias OnImageAddedListener = (contentUri: Uri, mimeType: String, label: String) -> Unit
 
 @Suppress("unused")

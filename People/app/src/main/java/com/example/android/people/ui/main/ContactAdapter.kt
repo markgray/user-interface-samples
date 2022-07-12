@@ -25,6 +25,9 @@ import com.example.android.people.R
 import com.example.android.people.data.Contact
 import com.example.android.people.databinding.ChatItemBinding
 
+/**
+ *
+ */
 class ContactAdapter(
     private val onChatClicked: (id: Long) -> Unit
 ) : ListAdapter<Contact, ContactViewHolder>(DIFF_CALLBACK) {
@@ -33,10 +36,16 @@ class ContactAdapter(
         setHasStableIds(true)
     }
 
+    /**
+     *
+     */
     override fun getItemId(position: Int): Long {
         return getItem(position).id
     }
 
+    /**
+     *
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val holder = ContactViewHolder(parent)
         holder.itemView.setOnClickListener {
@@ -45,6 +54,9 @@ class ContactAdapter(
         return holder
     }
 
+    /**
+     *
+     */
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val contact: Contact = getItem(position)
         holder.binding.icon.setImageIcon(Icon.createWithAdaptiveBitmapContentUri(contact.iconUri))
@@ -62,8 +74,14 @@ private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Contact>() {
     }
 }
 
+/**
+ *
+ */
 class ContactViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.chat_item, parent, false)
 ) {
+    /**
+     *
+     */
     val binding: ChatItemBinding = ChatItemBinding.bind(itemView)
 }

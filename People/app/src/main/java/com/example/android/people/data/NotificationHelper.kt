@@ -61,6 +61,9 @@ class NotificationHelper(private val context: Context) {
     private val shortcutManager: ShortcutManager =
         context.getSystemService() ?: throw IllegalStateException()
 
+    /**
+     *
+     */
     fun setUpNotificationChannels() {
         if (notificationManager.getNotificationChannel(CHANNEL_NEW_MESSAGES) == null) {
             notificationManager.createNotificationChannel(
@@ -77,6 +80,9 @@ class NotificationHelper(private val context: Context) {
         updateShortcuts(null)
     }
 
+    /**
+     *
+     */
     @WorkerThread
     fun updateShortcuts(importantContact: Contact?) {
         var shortcuts = Contact.CONTACTS.map { contact ->
@@ -123,6 +129,9 @@ class NotificationHelper(private val context: Context) {
         shortcutManager.addDynamicShortcuts(shortcuts)
     }
 
+    /**
+     *
+     */
     @WorkerThread
     fun showNotification(chat: Chat, fromUser: Boolean, update: Boolean = false) {
         updateShortcuts(chat.contact)
@@ -231,10 +240,10 @@ class NotificationHelper(private val context: Context) {
                     .setGroupConversation(false)
             )
             .setWhen(chat.messages.last().timestamp)
-            // Don't sound/vibrate if an update to an existing notification.
-            if (update) {
-                builder.setOnlyAlertOnce(true)
-            }
+        // Don't sound/vibrate if an update to an existing notification.
+        if (update) {
+            builder.setOnlyAlertOnce(true)
+        }
         notificationManager.notify(chat.contact.id.toInt(), builder.build())
     }
 
@@ -242,6 +251,9 @@ class NotificationHelper(private val context: Context) {
         notificationManager.cancel(id.toInt())
     }
 
+    /**
+     *
+     */
     fun canBubble(contact: Contact): Boolean {
         val channel = notificationManager.getNotificationChannel(
             CHANNEL_NEW_MESSAGES,
@@ -256,6 +268,9 @@ class NotificationHelper(private val context: Context) {
         return areBubblesPreferred || channel?.canBubble() == true
     }
 
+    /**
+     *
+     */
     fun updateNotification(chat: Chat, chatId: Long, prepopulatedMsgs: Boolean) {
         if (!prepopulatedMsgs) {
             // Update notification bubble metadata to suppress notification so that the unread

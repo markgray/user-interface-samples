@@ -23,12 +23,21 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.example.android.people.data.Contact
 
+/**
+ *
+ */
 class AssetFileProvider : ContentProvider() {
 
+    /**
+     *
+     */
     override fun onCreate(): Boolean {
         return true
     }
 
+    /**
+     *
+     */
     override fun getType(uri: Uri): String? {
         val segments = uri.pathSegments
         return when (segments[0]) {
@@ -37,6 +46,9 @@ class AssetFileProvider : ContentProvider() {
         }
     }
 
+    /**
+     *
+     */
     override fun openAssetFile(uri: Uri, mode: String): AssetFileDescriptor? {
         val segments = uri.pathSegments
         return when (segments[0]) {
@@ -54,6 +66,9 @@ class AssetFileProvider : ContentProvider() {
         }
     }
 
+    /**
+     *
+     */
     override fun query(
         uri: Uri,
         projection: Array<out String>?,
@@ -64,10 +79,16 @@ class AssetFileProvider : ContentProvider() {
         throw UnsupportedOperationException("No query")
     }
 
+    /**
+     *
+     */
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
         throw UnsupportedOperationException("No insert")
     }
 
+    /**
+     *
+     */
     override fun update(
         uri: Uri,
         values: ContentValues?,
@@ -77,6 +98,9 @@ class AssetFileProvider : ContentProvider() {
         throw UnsupportedOperationException("No update")
     }
 
+    /**
+     *
+     */
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
         throw UnsupportedOperationException("No delete")
     }

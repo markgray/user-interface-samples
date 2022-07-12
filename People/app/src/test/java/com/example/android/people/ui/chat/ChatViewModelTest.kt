@@ -35,7 +35,7 @@ import org.junit.runner.RunWith
 class ChatViewModelTest {
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val dummyContacts = Contact.CONTACTS
 
@@ -44,9 +44,9 @@ class ChatViewModelTest {
 
     @Before
     fun createViewModel() {
-        repository = TestChatRepository(dummyContacts.map { contact ->
+        repository = TestChatRepository(dummyContacts.associate { contact ->
             contact.id to Chat(contact)
-        }.toMap())
+        })
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
             viewModel = ChatViewModel(ApplicationProvider.getApplicationContext(), repository)
         }

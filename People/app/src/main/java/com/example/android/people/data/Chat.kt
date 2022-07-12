@@ -15,9 +15,20 @@
 
 package com.example.android.people.data
 
+/**
+ *
+ */
 typealias ChatThreadListener = (List<Message>) -> Unit
 
-class Chat(val contact: Contact) {
+/**
+ *
+ */
+class Chat(
+    /**
+     *
+     */
+    val contact: Contact
+) {
 
     private val listeners = mutableListOf<ChatThreadListener>()
 
@@ -25,17 +36,30 @@ class Chat(val contact: Contact) {
         Message(1L, contact.id, "Send me a message", null, null, System.currentTimeMillis()),
         Message(2L, contact.id, "I will reply in 5 seconds", null, null, System.currentTimeMillis())
     )
+
+    /**
+     *
+     */
     val messages: List<Message>
         get() = _messages
 
+    /**
+     *
+     */
     fun addListener(listener: ChatThreadListener) {
         listeners.add(listener)
     }
 
+    /**
+     *
+     */
     fun removeListener(listener: ChatThreadListener) {
         listeners.remove(listener)
     }
 
+    /**
+     *
+     */
     fun addMessage(builder: Message.Builder) {
         builder.id = _messages.last().id + 1
         _messages.add(builder.build())
