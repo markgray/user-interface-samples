@@ -28,8 +28,14 @@ import android.os.Looper
 import android.widget.Toast
 import com.example.android.interactivesliceprovider.util.buildUriWithAuthority
 
+/**
+ *
+ */
 class SliceActionsBroadcastReceiver : BroadcastReceiver() {
 
+    /**
+     *
+     */
     @SuppressLint("InlinedApi")
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
@@ -40,27 +46,30 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
                 @Suppress("DEPRECATION")
                 wm.isWifiEnabled = newState
                 // Wait a bit for wifi to update (TODO: is there a better way to do this?)
-                val h = Handler(Looper.myLooper()!!)
+                val h = Handler(Looper.myLooper() ?: return)
                 h.postDelayed({
                     val uri = context.buildUriWithAuthority("wifi")
                     context.contentResolver.notifyChange(uri, null)
                 }, 1000)
             }
             InteractiveSliceProvider.ACTION_TOAST -> {
-                val message = intent.extras!!.getString(
+                val message = (intent.extras ?: return).getString(
                     InteractiveSliceProvider.EXTRA_TOAST_MESSAGE,
                     "no message"
                 )
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
             InteractiveSliceProvider.ACTION_TOAST_RANGE_VALUE -> {
-                val range = intent.extras!!.getInt(EXTRA_RANGE_VALUE, 0)
+                val range = (intent.extras ?: return).getInt(EXTRA_RANGE_VALUE, 0)
                 Toast.makeText(context, "value: $range", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     companion object {
+        /**
+         *
+         */
         fun getIntent(context: Context, action: String, message: String?): PendingIntent {
             val intent = Intent(action)
             intent.setClass(context, SliceActionsBroadcastReceiver::class.java)

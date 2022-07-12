@@ -37,7 +37,13 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+/**
+ *
+ */
 class WifiSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
@@ -146,6 +152,9 @@ class WifiSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

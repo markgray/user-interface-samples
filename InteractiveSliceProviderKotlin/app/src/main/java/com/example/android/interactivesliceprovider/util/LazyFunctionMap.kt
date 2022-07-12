@@ -19,8 +19,16 @@ package com.example.android.interactivesliceprovider.util
 /**
  * Generic map, useful for keeping a map of lambdas that are lazily converted to Runnables.
  */
-class LazyFunctionMap<K, V>(val method: (key: K) -> V) {
+class LazyFunctionMap<K, V>(
+    /**
+     *
+     */
+    val method: (key: K) -> V) {
     private val map = hashMapOf<K, Runnable>()
+
+    /**
+     *
+     */
     operator fun get(key: K): Runnable {
         var value = map[key]
         if (value == null) {

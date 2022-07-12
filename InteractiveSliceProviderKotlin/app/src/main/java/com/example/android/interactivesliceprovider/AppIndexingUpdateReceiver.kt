@@ -20,7 +20,21 @@ import android.content.Context
 import android.content.Intent
 import com.google.firebase.appindexing.FirebaseAppIndex
 
+/**
+ * Note: Firebase App Indexing is no longer the recommended way of indexing content for display as
+ * suggested results in Google Search App. https://firebase.google.com/docs/app-indexing points to
+ * other useful Google developer products.
+ */
 class AppIndexingUpdateReceiver : BroadcastReceiver() {
+    /**
+     * This method is called when the [BroadcastReceiver] is receiving an [Intent] broadcast.
+     * If the [Intent.getAction] of our [Intent] parameter [intent] is
+     * [FirebaseAppIndex.ACTION_UPDATE_INDEX], we call the [AppIndexingUpdateService.enqueueWork]
+     * method to schedule a job to update the Firebase App Index.
+     *
+     * @param context The [Context] in which the receiver is running.
+     * @param intent The [Intent] being received.
+     */
     override fun onReceive(context: Context?, intent: Intent?) {
         if (FirebaseAppIndex.ACTION_UPDATE_INDEX == intent?.action) {
             // Schedule job to run in the background.

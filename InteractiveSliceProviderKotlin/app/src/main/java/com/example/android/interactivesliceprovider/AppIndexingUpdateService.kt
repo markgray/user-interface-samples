@@ -27,10 +27,29 @@ import com.example.android.interactivesliceprovider.data.model.AppIndexingMetada
 import com.google.firebase.appindexing.FirebaseAppIndex
 import com.google.firebase.appindexing.Indexable
 
+/**
+ * Note: Firebase App Indexing is no longer the recommended way of indexing content for display as
+ * suggested results in Google Search App. https://firebase.google.com/docs/app-indexing points to
+ * other useful Google developer products.
+ */
 class AppIndexingUpdateService : JobIntentService() {
 
     companion object {
+        /**
+         * A unique job ID for scheduling; must be the same value for all work
+         * enqueued for the same class.
+         */
         private const val UNIQUE_JOB_ID = 42
+
+        /**
+         * Call this to enqueue work for your subclass of [JobIntentService]. This will either
+         * directly start the service (when running on pre-O platforms) or enqueue work for it
+         * as a job (when running on O and later). In either case, a wake lock will be held for
+         * you to ensure you continue running. The work you enqueue will ultimately appear at
+         * [onHandleWork].
+         *
+         * @param context Context this is being called from.
+         */
         fun enqueueWork(context: Context) {
             enqueueWork(context, AppIndexingUpdateService::class.java, UNIQUE_JOB_ID, Intent())
         }
@@ -38,6 +57,21 @@ class AppIndexingUpdateService : JobIntentService() {
         private val TAG = AppIndexingUpdateService::class.java.simpleName
     }
 
+    /**
+     * Called serially for each work dispatched to and processed by the service. This
+     * method is called on a background thread, so you can do long blocking operations
+     * here. Upon returning, that work will be considered complete and either the next
+     * pending work dispatched here or the overall service destroyed now that it has
+     * nothing else to do.
+     *
+     * Be aware that when running as a job, you are limited by the maximum job execution
+     * time and any single or total sequential items of work that exceeds that limit will
+     * cause the service to be stopped while in progress and later restarted with the
+     * last unfinished work.  (There is currently no limit on execution duration when
+     * running as a pre-O plain Service.)
+     *
+     * @param intent The [Intent] describing the work to now be processed.
+     */
     override fun onHandleWork(intent: Intent) {
 
         // Retrieve list of indexable data for each slice.
@@ -48,15 +82,15 @@ class AppIndexingUpdateService : JobIntentService() {
         val firebaseAppIndex: FirebaseAppIndex = FirebaseAppIndex.getInstance(applicationContext)
         val appIndexDataList = mutableListOf<Indexable>()
 
-        for (indexableData in sliceIndexableDataList) {
+        for ((httpUrl, contentUri, name, keywords) in sliceIndexableDataList) {
             appIndexDataList.add(
                 Indexable.Builder()
-                    .setUrl(indexableData.httpUrl)
-                    .setName(indexableData.name)
-                    .setKeywords(*indexableData.keywords.toTypedArray())
+                    .setUrl(httpUrl)
+                    .setName(name)
+                    .setKeywords(*keywords.toTypedArray())
                     .setMetadata(
                         Indexable.Metadata.Builder()
-                            .setSliceUri(Uri.parse(indexableData.contentUri)))
+                            .setSliceUri(Uri.parse(contentUri)))
                     .build()
             )
         }

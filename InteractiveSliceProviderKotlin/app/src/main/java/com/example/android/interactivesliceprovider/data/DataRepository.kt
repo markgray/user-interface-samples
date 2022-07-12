@@ -36,7 +36,7 @@ class DataRepository(private val dataSource: FakeDataSource) {
      * [FakeDataSource.fakeGridData] field after a delay of 1500 milliseconds (to simulate network
      * delay).
      */
-    fun getGridData() = dataSource.gridData
+    fun getGridData(): GridData = dataSource.gridData
 
     /**
      * Retrieves the current [ListData] instance that our [FakeDataSource] field [dataSource] stores
@@ -45,7 +45,7 @@ class DataRepository(private val dataSource: FakeDataSource) {
      * [FakeDataSource.fakeListData] field after a delay of 1500 milliseconds (to simulate network
      * delay).
      */
-    fun getListData() = dataSource.listData
+    fun getListData(): ListData = dataSource.listData
 
     /**
      * Registers its [Runnable] parameter [r] as a callback that will be called when the delayed
@@ -117,7 +117,7 @@ class DataRepository(private val dataSource: FakeDataSource) {
         /**
          * Unused.
          */
-        const val TAG = "DataRepository"
+        const val TAG: String = "DataRepository"
     }
 }
 
@@ -133,7 +133,8 @@ data class GridData(
      */
     val title: String,
     /**
-     * Used as the subtitle for the header of the `Slice`: "Typical conditions, with delays up to 28 min."
+     * Used as the subtitle for the header of the `Slice`: "Typical conditions, with
+     * delays up to 28 min."
      */
     val subtitle: String,
     /**
@@ -146,7 +147,7 @@ data class GridData(
     val work: String,
     /**
      * Used as text in a cell of a `gridRow`, its title: "School" example: "12 min"
-      */
+     */
     val school: String
 )
 

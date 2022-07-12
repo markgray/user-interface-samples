@@ -19,6 +19,7 @@ package com.example.android.interactivesliceprovider.slicebuilders
 import android.content.Context
 import android.net.Uri
 import androidx.core.graphics.drawable.IconCompat
+import androidx.slice.Slice
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.SliceAction
 import androidx.slice.builders.cell
@@ -31,13 +32,22 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+/**
+ *
+ */
 @Suppress("RemoveRedundantQualifierName")
 class ReservationSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
-    override fun buildSlice() = list(context, sliceUri, ListBuilder.INFINITY) {
+    /**
+     *
+     */
+    override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         header {
             title = "Upcoming trip to Seattle"
             subtitle = "Feb 1 - 19 | 2 guests"
@@ -98,6 +108,9 @@ class ReservationSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

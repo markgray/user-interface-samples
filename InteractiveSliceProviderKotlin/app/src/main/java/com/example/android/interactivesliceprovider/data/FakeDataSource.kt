@@ -18,9 +18,19 @@ package com.example.android.interactivesliceprovider.data
 
 import android.os.Handler
 
+/**
+ *
+ */
 class FakeDataSource(private val handler: Handler) : DataSource {
-    override var gridData = GridData(title = "", subtitle = "", home = "", work = "", school = "")
-    override var listData = ListData(home = "", work = "", school = "")
+    /**
+     *
+     */
+    override var gridData: GridData = GridData(title = "", subtitle = "", home = "", work = "", school = "")
+
+    /**
+     *
+     */
+    override var listData: ListData = ListData(home = "", work = "", school = "")
 
     private val fakeGridData =
         GridData(
@@ -40,6 +50,9 @@ class FakeDataSource(private val handler: Handler) : DataSource {
         )
     private val listDataCallbacks = mutableSetOf<Runnable>()
 
+    /**
+     *
+     */
     override fun triggerGridDataFetch() {
         handler.postDelayed({
             gridData = fakeGridData
@@ -47,14 +60,23 @@ class FakeDataSource(private val handler: Handler) : DataSource {
         }, 1_500L)
     }
 
+    /**
+     *
+     */
     override fun registerGridDataCallback(r: Runnable) {
         gridDataCallbacks.add(r)
     }
 
+    /**
+     *
+     */
     override fun unregisterGridDataCallbacks() {
         gridDataCallbacks.clear()
     }
 
+    /**
+     *
+     */
     override fun triggerListDataFetch() {
         handler.postDelayed({
             listData = fakeListData
@@ -62,10 +84,16 @@ class FakeDataSource(private val handler: Handler) : DataSource {
         }, 1_500L)
     }
 
+    /**
+     *
+     */
     override fun registerListDataCallback(r: Runnable) {
         listDataCallbacks.add(r)
     }
 
+    /**
+     *
+     */
     override fun unregisterListDataCallbacks() {
         listDataCallbacks.clear()
     }

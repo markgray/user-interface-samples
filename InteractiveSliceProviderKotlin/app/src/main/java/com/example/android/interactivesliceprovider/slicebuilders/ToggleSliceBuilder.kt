@@ -20,6 +20,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.slice.Slice
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.SliceAction
 import androidx.slice.builders.header
@@ -30,12 +31,21 @@ import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceive
 import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+/**
+ *
+ */
 class ToggleSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
-    override fun buildSlice() = list(context, sliceUri, ListBuilder.INFINITY) {
+    /**
+     *
+     */
+    override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         setAccentColor(ContextCompat.getColor(context, R.color.slice_accent_color))
         header {
             title = "Custom toggle"
@@ -54,6 +64,9 @@ class ToggleSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

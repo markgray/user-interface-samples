@@ -33,8 +33,14 @@ import com.google.firebase.appindexing.FirebaseAppIndex
 
 import java.net.URLDecoder
 
+/**
+ *
+ */
 class MainActivity : AppCompatActivity() {
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -115,6 +121,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     *
+     */
     @Suppress("UNUSED_PARAMETER")
     fun onClickIndexSlices(view: View) {
         val intent = Intent(this, AppIndexingUpdateReceiver::class.java)
@@ -125,6 +134,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val PREF_GRANT_SLICE_PERMISSION = "permission_slice_status"
 
+        /**
+         *
+         */
         fun getPendingIntent(context: Context): PendingIntent {
             val intent = Intent(context, MainActivity::class.java)
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)

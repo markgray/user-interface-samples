@@ -31,12 +31,24 @@ import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceive
 import com.example.android.interactivesliceprovider.SliceBuilder
 import com.example.android.interactivesliceprovider.data.DataRepository
 
+/**
+ *
+ */
 class ListSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri,
+    /**
+     *
+     */
     val repo: DataRepository
 ) : SliceBuilder(sliceUri) {
 
+    /**
+     *
+     */
     override fun buildSlice(): Slice {
         val listData = repo.getListData()
         return list(context, sliceUri, 6_000) {
@@ -85,6 +97,9 @@ class ListSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

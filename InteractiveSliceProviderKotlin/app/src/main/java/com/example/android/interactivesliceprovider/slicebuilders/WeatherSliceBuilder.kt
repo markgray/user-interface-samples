@@ -31,11 +31,20 @@ import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceive
 import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+/**
+ *
+ */
 class WeatherSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
+    /**
+     *
+     */
     override fun buildSlice(): Slice {
         val action = SliceAction.create(
             SliceActionsBroadcastReceiver.getIntent(
@@ -103,6 +112,9 @@ class WeatherSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

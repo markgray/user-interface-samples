@@ -16,6 +16,8 @@
 package com.example.android.interactivesliceprovider
 
 import android.app.PendingIntent
+import android.app.slice.Slice.EXTRA_RANGE_VALUE
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -64,11 +66,16 @@ class InteractiveSliceProvider : SliceProvider() {
     private lateinit var inputRangePath: String
     private lateinit var rangePath: String
 
+    /**
+     * Implement this to initialize your slice provider on startup.
+     *
+     * @return `true` if the provider was successfully loaded, `false` otherwise
+     */
     override fun onCreateSliceProvider(): Boolean {
 
         Log.d(TAG, "onCreateSliceProvider()")
 
-        val contextNonNull  = context ?: return false
+        val contextNonNull = context ?: return false
 
         repo = DataRepository(FakeDataSource(Handler(Looper.myLooper()!!)))
         contentNotifiers = LazyFunctionMap {
@@ -98,7 +105,7 @@ class InteractiveSliceProvider : SliceProvider() {
         return true
     }
 
-    /*
+    /**
      * Takes an Intent (as specified by the intent-filter in the manifest) with data
      * ("https://interactivesliceprovider.android.example.com/<your_path>") and returns a content
      * URI ("content://com.example.android.interactivesliceprovider/<your_path>").
@@ -116,6 +123,12 @@ class InteractiveSliceProvider : SliceProvider() {
         return uri
     }
 
+    /**
+     * Implemented to create a slice.
+     *
+     * @param sliceUri the [Uri] of the [Slice] we are to create
+     * @return a [Slice] for our [Uri] parameter [sliceUri]
+     */
     override fun onBindSlice(sliceUri: Uri?): Slice? {
         if (sliceUri == null || sliceUri.path == null) {
             return null
@@ -126,56 +139,57 @@ class InteractiveSliceProvider : SliceProvider() {
         return getSliceBuilder(sliceUri)?.buildSlice()
     }
 
+    @Suppress("ReplaceNotNullAssertionWithElvisReturn") // When cannot have a return
     private fun getSliceBuilder(sliceUri: Uri) = when (sliceUri.path) {
         defaultPath -> DefaultSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         wifiPath -> WifiSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         notePath -> NoteSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         ridePath -> RideSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         togglePath -> ToggleSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         galleryPath -> GallerySliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         weatherPath -> WeatherSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         reservationPath -> ReservationSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         loadListPath -> ListSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri,
-                repo = repo
+            context = context!!,
+            sliceUri = sliceUri,
+            repo = repo
         )
         loadGridPath -> GridSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri,
-                repo = repo
+            context = context!!,
+            sliceUri = sliceUri,
+            repo = repo
         )
         inputRangePath -> InputRangeSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         rangePath -> RangeSliceBuilder(
-                context = context!!,
-                sliceUri = sliceUri
+            context = context!!,
+            sliceUri = sliceUri
         )
         else -> {
             Log.e(TAG, "Unknown URI: $sliceUri")
@@ -183,6 +197,19 @@ class InteractiveSliceProvider : SliceProvider() {
         }
     }
 
+    /**
+     * Called to inform an app that a slice has been pinned. Pinning is a way that slice hosts use
+     * to notify apps of which slices they care about updates for. When a slice is pinned the
+     * content is expected to be relatively fresh and kept up to date.
+     *
+     * Being pinned does not provide any escalated privileges for the slice provider. So apps should
+     * do things such as turn on syncing or schedule a job in response to a onSlicePinned.
+     *
+     * Pinned state is not persisted through a reboot, and apps can expect a new call to
+     * [onSlicePinned] for any slices that should remain pinned after a reboot occurs.
+     *
+     * @param sliceUri The uri of the slice being pinned.
+     */
     override fun onSlicePinned(sliceUri: Uri?) {
         super.onSlicePinned(sliceUri)
         Log.d(TAG, "onSlicePinned - ${sliceUri?.path}")
@@ -193,6 +220,13 @@ class InteractiveSliceProvider : SliceProvider() {
         }
     }
 
+    /**
+     * Called to inform an app that a slices is no longer pinned. This means that no other apps on
+     * the device care about updates to this slice anymore and therefore it is not important to be
+     * updated. Any syncs or jobs related to this slice should be cancelled.
+     *
+     * @param sliceUri The uri of the slice being unpinned.
+     */
     override fun onSliceUnpinned(sliceUri: Uri?) {
         super.onSliceUnpinned(sliceUri)
         Log.d(TAG, "onSliceUnpinned - ${sliceUri?.path}")
@@ -204,13 +238,41 @@ class InteractiveSliceProvider : SliceProvider() {
     }
 
     companion object {
-        const val TAG = "SliceProvider"
+        /**
+         * TAG used for logging
+         */
+        const val TAG: String = "SliceProvider"
 
-        const val ACTION_WIFI_CHANGED = "com.example.androidx.slice.action.WIFI_CHANGED"
-        const val ACTION_TOAST = "com.example.androidx.slice.action.TOAST"
-        const val EXTRA_TOAST_MESSAGE = "com.example.androidx.extra.TOAST_MESSAGE"
-        const val ACTION_TOAST_RANGE_VALUE = "com.example.androidx.slice.action.TOAST_RANGE_VALUE"
+        /**
+         * [Intent] action received by our [BroadcastReceiver] when the wifi status has changed
+         */
+        const val ACTION_WIFI_CHANGED: String = "com.example.androidx.slice.action.WIFI_CHANGED"
 
+        /**
+         * [Intent] action that causes a message stored under the key [EXTRA_TOAST_MESSAGE] to
+         * be toasted.
+         */
+        const val ACTION_TOAST: String = "com.example.androidx.slice.action.TOAST"
+
+        /**
+         * Key under which a message [String] to be toasted is stored in an [Intent] with the action
+         * [ACTION_TOAST].
+         */
+        const val EXTRA_TOAST_MESSAGE: String = "com.example.androidx.extra.TOAST_MESSAGE"
+
+        /**
+         * [Intent] action that causes a message to be toasted displaying the [Int] stored under
+         * the key [EXTRA_RANGE_VALUE] to be displayed.
+         */
+        const val ACTION_TOAST_RANGE_VALUE: String = "com.example.androidx.slice.action.TOAST_RANGE_VALUE"
+
+        /**
+         * Creates a [PendingIntent] for the action given by its [String] parameter [action].
+         *
+         * @param context the [Context] we are running in.
+         * @param action the action that we want the [PendingIntent] to request.
+         * @return a [PendingIntent] for the [Intent] action [action].
+         */
         fun getPendingIntent(context: Context, action: String): PendingIntent {
             val intent = Intent(action)
             return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)

@@ -26,12 +26,45 @@ import com.example.android.interactivesliceprovider.slicebuilders.ListSliceBuild
  * code (theoretically).
  */
 interface DataSource {
+    /**
+     * Data class holding data that the [GridSliceBuilder.buildSlice] method uses when it builds
+     * its `Slice`
+     */
     val gridData: GridData
+
+    /**
+     * Data class holding data that the [ListSliceBuilder.buildSlice] method uses when it builds
+     * its `Slice`. Its members are [String]'s to be used in a `row` of a list.
+     */
     val listData: ListData
+
+    /**
+     *
+     */
     fun triggerGridDataFetch()
+
+    /**
+     *
+     */
     fun registerGridDataCallback(r: Runnable)
+
+    /**
+     *
+     */
     fun unregisterGridDataCallbacks()
+
+    /**
+     *
+     */
     fun registerListDataCallback(r: Runnable)
+
+    /**
+     *
+     */
     fun unregisterListDataCallbacks()
+
+    /**
+     *
+     */
     fun triggerListDataFetch()
 }

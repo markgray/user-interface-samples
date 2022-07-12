@@ -30,11 +30,20 @@ import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceive
 import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
+/**
+ *
+ */
 class InputRangeSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
+    /**
+     *
+     */
     override fun buildSlice(): Slice {
         val icon = IconCompat.createWithResource(context, R.drawable.ic_star_on)
         return list(context, sliceUri, ListBuilder.INFINITY) {
@@ -63,6 +72,9 @@ class InputRangeSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

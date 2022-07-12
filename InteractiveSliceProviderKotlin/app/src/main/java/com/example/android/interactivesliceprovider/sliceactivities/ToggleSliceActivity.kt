@@ -19,8 +19,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
+/**
+ *
+ */
 class ToggleSliceActivity : AppCompatActivity() {
 
+    /**
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_toggle_slice)

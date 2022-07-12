@@ -36,11 +36,20 @@ import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 import java.util.concurrent.TimeUnit
 
+/**
+ *
+ */
 class RideSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
+    /**
+     *
+     */
     override fun buildSlice(): Slice {
         val colorSpan = ForegroundColorSpan(-0xf062a8)
         val headerSubtitle = SpannableString("Ride in 4 min").apply {
@@ -107,6 +116,9 @@ class RideSliceBuilder(
     }
 
     companion object {
-        const val TAG = "ListSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "ListSliceBuilder"
     }
 }

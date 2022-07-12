@@ -19,6 +19,7 @@ package com.example.android.interactivesliceprovider.slicebuilders
 import android.content.Context
 import android.net.Uri
 import androidx.core.graphics.drawable.IconCompat
+import androidx.slice.Slice
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.SliceAction
 import androidx.slice.builders.cell
@@ -31,13 +32,25 @@ import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceive
 import com.example.android.interactivesliceprovider.SliceBuilder
 import com.example.android.interactivesliceprovider.data.DataRepository
 
+/**
+ *
+ */
 class GridSliceBuilder(
+    /**
+     *
+     */
     val context: Context,
     sliceUri: Uri,
+    /**
+     *
+     */
     val repo: DataRepository
 ) : SliceBuilder(sliceUri) {
 
-    override fun buildSlice() = list(context, sliceUri, ListBuilder.INFINITY) {
+    /**
+     *
+     */
+    override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         val data = repo.getGridData()
         header {
             // Second argument for title/subtitle informs system we are waiting for data to load.
@@ -83,6 +96,9 @@ class GridSliceBuilder(
     }
 
     companion object {
-        const val TAG = "GridSliceBuilder"
+        /**
+         *
+         */
+        const val TAG: String = "GridSliceBuilder"
     }
 }
