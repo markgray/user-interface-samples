@@ -221,6 +221,9 @@ class MainActivity : AppCompatActivity(),
      */
     @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class BasicPreferencesFragment : PreferenceFragmentCompat() {
+        /**
+         *
+         */
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.basic_preferences, rootKey)
         }
@@ -231,6 +234,9 @@ class MainActivity : AppCompatActivity(),
      */
     @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class WidgetPreferencesFragment : PreferenceFragmentCompat() {
+        /**
+         *
+         */
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.widgets, rootKey)
         }
@@ -241,6 +247,9 @@ class MainActivity : AppCompatActivity(),
      */
     @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class DialogPreferencesFragment : PreferenceFragmentCompat() {
+        /**
+         *
+         */
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.dialogs, rootKey)
         }
@@ -251,6 +260,9 @@ class MainActivity : AppCompatActivity(),
      */
     @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class AdvancedPreferencesFragment : PreferenceFragmentCompat() {
+        /**
+         *
+         */
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.advanced, rootKey)
         }
