@@ -67,7 +67,8 @@ class ViewModelFactory private constructor(
          * Our singleton instance of [ViewModelFactory].
          */
         @SuppressLint("StaticFieldLeak")
-        @Volatile private var INSTANCE: ViewModelFactory? = null
+        @Volatile
+        private var INSTANCE: ViewModelFactory? = null
 
         /**
          * Returns our singleton instance of [ViewModelFactory], constructing it if it is `null`. If

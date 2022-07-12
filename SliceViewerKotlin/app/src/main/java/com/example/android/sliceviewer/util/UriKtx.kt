@@ -70,6 +70,6 @@ fun Uri.convertToSliceViewerScheme(): Uri {
  */
 fun Uri.hasSupportedSliceScheme(): Boolean {
     return scheme != null && (scheme.equals("slice-http", true)
-            || scheme.equals("slice-https", true)
-            || scheme.equals("slice-content", true))
+        || scheme.equals("slice-https", true)
+        || scheme.equals("slice-content", true))
 }

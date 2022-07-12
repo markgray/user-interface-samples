@@ -49,7 +49,7 @@ class SingleSliceViewModel(
      *  - [SliceView.MODE_LARGE] slice should be presented in large format, as much or all of the
      *  slice contents are shown
      */
-    val selectedMode = MutableLiveData<Int>().apply { value = SliceView.MODE_LARGE }
+    val selectedMode: MutableLiveData<Int> = MutableLiveData<Int>().apply { value = SliceView.MODE_LARGE }
 
     /**
      * Uses the [UriDataSource.addUri] method of [uriDataSource] to add its [Uri] parameter [uri]

@@ -119,7 +119,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_slice_viewer)
         val viewModelFactory: ViewModelFactory? = ViewModelFactory.getInstance(application)
-        viewModel = ViewModelProvider(this, viewModelFactory!!)
+        viewModel = ViewModelProvider(this, viewModelFactory ?: return)
             .get(SingleSliceViewModel::class.java)
 
         sliceView = findViewById(R.id.slice)
@@ -248,6 +248,6 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         /**
          * TAG used for logging.
          */
-        const val TAG = "SingleSliceViewer"
+        const val TAG: String = "SingleSliceViewer"
     }
 }

@@ -194,7 +194,7 @@ object SlicesDiff : DiffUtil.ItemCallback<Uri>() {
      * @param newItem The item in the new list.
      * @return `true` if the two items represent the same object or `false` if they are different.
      */
-    override fun areItemsTheSame(oldItem: Uri, newItem: Uri) = oldItem === newItem
+    override fun areItemsTheSame(oldItem: Uri, newItem: Uri): Boolean = oldItem === newItem
 
     /**
      * Called to check whether two items have the same data. This information is used to detect if
@@ -207,5 +207,5 @@ object SlicesDiff : DiffUtil.ItemCallback<Uri>() {
      * @param newItem The item in the new list.
      * @return True if the contents of the items are the same or false if they are different.
      */
-    override fun areContentsTheSame(oldItem: Uri, newItem: Uri) = oldItem == newItem
+    override fun areContentsTheSame(oldItem: Uri, newItem: Uri): Boolean = oldItem == newItem
 }

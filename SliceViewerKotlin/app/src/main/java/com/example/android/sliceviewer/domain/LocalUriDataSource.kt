@@ -96,12 +96,12 @@ class LocalUriDataSource(
         /**
          * The name of the shared preferences file we use for our database.
          */
-        const val SHARED_PREFS_NAME = "shared_prefs"
+        const val SHARED_PREFS_NAME: String = "shared_prefs"
 
         /**
          * The name of the preference under which we store the set of [String] values that serves as
          * our database of slice [Uri]s.
          */
-        const val KEY_URI = "com.example.android.sliceviewer.sliceuris"
+        const val KEY_URI: String = "com.example.android.sliceviewer.sliceuris"
     }
 }

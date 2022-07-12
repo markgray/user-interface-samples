@@ -42,7 +42,7 @@ class SliceViewModel(
      * the options menu and observers in [SliceViewerActivity] and [SliceAdapter] take appropriate
      * action when it changes value.
      */
-    val selectedMode = MutableLiveData<Int>().apply { value = SliceView.MODE_LARGE }
+    val selectedMode: MutableLiveData<Int> = MutableLiveData<Int>().apply { value = SliceView.MODE_LARGE }
 
     /**
      * Retrieves the [List] of slice [Uri]s stored in our persistent storage. It is used to update
@@ -50,7 +50,7 @@ class SliceViewModel(
      * just return the [List] of slice [Uri]s returned by the [UriDataSource.getAllUris] method of
      * our [uriDataSource] field.
      */
-    val slices
+    val slices: List<Uri>
         get() = uriDataSource.getAllUris()
 
     /**

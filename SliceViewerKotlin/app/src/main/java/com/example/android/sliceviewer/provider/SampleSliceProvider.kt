@@ -89,7 +89,7 @@ class SampleSliceProvider : SliceProvider() {
      *
      * @return `true` if the provider was successfully loaded, `false` otherwise
      */
-    override fun onCreateSliceProvider() = true
+    override fun onCreateSliceProvider(): Boolean = true
 
     /**
      * This method must be overridden if an [IntentFilter] is specified on the [SliceProvider]. In

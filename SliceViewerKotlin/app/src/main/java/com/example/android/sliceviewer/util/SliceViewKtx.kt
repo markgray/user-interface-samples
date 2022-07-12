@@ -111,8 +111,7 @@ fun SliceView.bind(
     val scheme: String? =
         if ((uri.scheme as String).startsWith("slice-")) {
             (uri.scheme as String).replace("slice-", "")
-        }
-        else {
+        } else {
             uri.scheme
         }
 

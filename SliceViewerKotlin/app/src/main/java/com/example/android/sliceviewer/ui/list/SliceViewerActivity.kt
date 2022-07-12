@@ -139,7 +139,7 @@ class SliceViewerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_slice_viewer)
         val viewModelFactory: ViewModelFactory? = ViewModelFactory.getInstance(application)
         setSupportActionBar(findViewById(R.id.search_toolbar))
-        viewModel = ViewModelProvider(this, viewModelFactory!!)
+        viewModel = ViewModelProvider(this, viewModelFactory ?: return)
             .get(SliceViewModel::class.java)
 
         searchView = findViewById<SearchView>(R.id.search_view).apply {
@@ -200,7 +200,7 @@ class SliceViewerActivity : AppCompatActivity() {
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
-        ) = false
+        ): Boolean = false
 
         /**
          * Called when a [RecyclerView.ViewHolder] is swiped by the user. We call the method
@@ -302,6 +302,6 @@ class SliceViewerActivity : AppCompatActivity() {
         /**
          * TAG used for logging
          */
-        const val TAG = "SliceViewer"
+        const val TAG: String = "SliceViewer"
     }
 }
