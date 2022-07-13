@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         val codeBlockTypeface = getFontCompat(R.font.inconsolata)
 
         MarkdownBuilder(bulletPointColor, codeBackgroundColor, codeBlockTypeface, Parser)
-                .markdownToSpans(getString(R.string.display_text))
-                .run { findViewById<TextView>(R.id.styledText).text = this }
+            .markdownToSpans(getString(R.string.display_text))
+            .run { findViewById<TextView>(R.id.styledText).text = this }
     }
 }

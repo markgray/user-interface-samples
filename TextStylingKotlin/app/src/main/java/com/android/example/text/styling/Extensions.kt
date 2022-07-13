@@ -25,9 +25,9 @@ import androidx.core.content.res.ResourcesCompat
 /**
  * Returns a color associated with the resource ID [colorRes].
  */
-fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+fun Context.getColorCompat(@ColorRes colorRes: Int): Int = ContextCompat.getColor(this, colorRes)
 
 /**
  * Returns a font [Typeface] associated with the resource ID [fontRes]/
  */
-fun Context.getFontCompat(@FontRes fontRes: Int) = ResourcesCompat.getFont(this, fontRes)
+fun Context.getFontCompat(@FontRes fontRes: Int): Typeface? = ResourcesCompat.getFont(this, fontRes)

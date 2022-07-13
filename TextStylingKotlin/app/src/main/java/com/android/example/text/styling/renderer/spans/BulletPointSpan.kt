@@ -37,9 +37,9 @@ import androidx.core.graphics.withTranslation
  * @param useColor flag which if `true` tells us to use the custom color [color] for the bullet
  */
 class BulletPointSpan(
-        @Px private val gapWidth: Int = DEFAULT_GAP_WIDTH,
-        @ColorInt private val color: Int = Color.BLACK,
-        private val useColor: Boolean = color != Color.BLACK
+    @Px private val gapWidth: Int = DEFAULT_GAP_WIDTH,
+    @ColorInt private val color: Int = Color.BLACK,
+    private val useColor: Boolean = color != Color.BLACK
 ) : LeadingMarginSpan {
 
     /**
@@ -148,7 +148,7 @@ class BulletPointSpan(
      * @return the Y coordinate of the center of the line.
      */
     private fun getCircleYLocation(lineTop: Int, lineBottom: Int) =
-            (lineTop + lineBottom) / 2.0f
+        (lineTop + lineBottom) / 2.0f
 
     /**
      * Convenience function to calculate the X coordinate of the center of our bullet point circle
@@ -161,7 +161,7 @@ class BulletPointSpan(
      * @return the X coordinate on the [Canvas] at which the bullet point circle should be drawn.
      */
     private fun getCircleXLocation(currentMarginLocation: Int, paragraphDirection: Int) =
-            gapWidth + currentMarginLocation + paragraphDirection * DEFAULT_BULLET_RADIUS
+        gapWidth + currentMarginLocation + paragraphDirection * DEFAULT_BULLET_RADIUS
 
     companion object {
         /**
@@ -173,7 +173,7 @@ class BulletPointSpan(
          * The default value to use for the radius of our bullet point circle.
          */
         @VisibleForTesting
-        const val DEFAULT_BULLET_RADIUS = 15.0f
+        const val DEFAULT_BULLET_RADIUS: Float = 15.0f
     }
 
     /**

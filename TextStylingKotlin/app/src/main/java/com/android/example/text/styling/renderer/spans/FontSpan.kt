@@ -34,7 +34,7 @@ open class FontSpan(private val font: Typeface?) : MetricAffectingSpan() {
      *
      * @param textPaint the paint used for drawing the text
      */
-    override fun updateMeasureState(textPaint: TextPaint) = update(textPaint)
+    override fun updateMeasureState(textPaint: TextPaint): Unit = update(textPaint)
 
     /**
      * Updates the draw state by calling our [update] method to have it install our [Typeface] field
@@ -42,7 +42,7 @@ open class FontSpan(private val font: Typeface?) : MetricAffectingSpan() {
      *
      * @param textPaint the [TextPaint] that will be used to draw the text of our span.
      */
-    override fun updateDrawState(textPaint: TextPaint) = update(textPaint)
+    override fun updateDrawState(textPaint: TextPaint): Unit = update(textPaint)
 
     /**
      * Installs our [Typeface] field [font] into our [TextPaint] parameter [textPaint] while keeping

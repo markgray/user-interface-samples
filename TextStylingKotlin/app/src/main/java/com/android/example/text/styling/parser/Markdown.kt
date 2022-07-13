@@ -37,19 +37,25 @@ data class Element(
     val text: CharSequence,
     val elements: List<Element> = emptyList()
 ) {
+    /**
+     * The various [Type] values that an element can have
+     */
     enum class Type {
         /**
          * A plain text only [Element].
          */
         TEXT,
+
         /**
          * A Blockquote [Element]
          */
         QUOTE,
+
         /**
          * The [Element] is a bullet in an unordered list.
          */
         BULLET_POINT,
+
         /**
          * The [Element] is a code block.
          */

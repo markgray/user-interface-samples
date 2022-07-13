@@ -30,8 +30,8 @@ import android.text.style.BackgroundColorSpan
  * @param backgroundColor the color to use for the background color of a code block.
  */
 class CodeBlockSpan(
-        font: Typeface?,
-        @param:ColorInt private val backgroundColor: Int = Color.LTGRAY
+    font: Typeface?,
+    @param:ColorInt private val backgroundColor: Int = Color.LTGRAY
 ) : FontSpan(font) {
 
     /**
