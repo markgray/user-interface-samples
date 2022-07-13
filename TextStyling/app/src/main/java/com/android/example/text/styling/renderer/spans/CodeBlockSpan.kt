@@ -30,7 +30,7 @@ import androidx.annotation.ColorInt
 class CodeBlockSpan(
     font: Typeface,
     @field:ColorInt @param:ColorInt private val backgroundColor: Int
-    ) : FontSpan(font) {
+) : FontSpan(font) {
     /**
      * Updates the draw state by changing the background color of its [TextPaint] paramter [textPaint]
      * to our property [backgroundColor]. Since this will not affect the measure state, we can just

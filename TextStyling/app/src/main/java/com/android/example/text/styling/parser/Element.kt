@@ -32,14 +32,17 @@ class Element(val type: Type, val text: String, val elements: List<Element>) {
          * A plain text only [Element].
          */
         TEXT,
+
         /**
          * A Blockquote [Element]
          */
         QUOTE,
+
         /**
          * The [Element] is a bullet in an unordered list.
          */
         BULLET_POINT,
+
         /**
          * The [Element] is a code block.
          */

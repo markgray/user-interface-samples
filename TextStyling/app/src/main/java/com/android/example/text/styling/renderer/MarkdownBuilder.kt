@@ -194,7 +194,7 @@ class MarkdownBuilder(
         val startIndex = builder.length
         builder.append(element.text)
         builder.setSpan(
-            CodeBlockSpan(codeBlockTypeface!!, codeBackgroundColor),
+            CodeBlockSpan(codeBlockTypeface ?: return, codeBackgroundColor),
             startIndex,
             builder.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE

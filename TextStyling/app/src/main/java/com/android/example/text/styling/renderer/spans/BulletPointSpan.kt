@@ -32,7 +32,7 @@ import androidx.annotation.VisibleForTesting
 class BulletPointSpan(
     @field:Px @param:Px private val gapWidth: Int,
     @field:ColorInt @param:ColorInt private val color: Int
-    ) : LeadingMarginSpan {
+) : LeadingMarginSpan {
     /**
      * Returns the amount by which to adjust the leading margin. Positive values move away from the
      * leading edge of the paragraph, negative values move towards it. We just return 2 times our
@@ -107,11 +107,11 @@ class BulletPointSpan(
             if (canvas.isHardwareAccelerated) {
                 if (bulletPath == null) {
                     bulletPath = Path()
-                    bulletPath!!.addCircle(0.0f, 0.0f, BULLET_RADIUS, Path.Direction.CW)
+                    (bulletPath ?: return).addCircle(0.0f, 0.0f, BULLET_RADIUS, Path.Direction.CW)
                 }
                 canvas.save()
                 canvas.translate(gapWidth + x + dir * BULLET_RADIUS, y)
-                canvas.drawPath(bulletPath!!, paint)
+                canvas.drawPath(bulletPath ?: return, paint)
                 canvas.restore()
             } else {
                 canvas.drawCircle(gapWidth + x + dir * BULLET_RADIUS, y, BULLET_RADIUS, paint)
@@ -128,7 +128,8 @@ class BulletPointSpan(
          * The radius of the bullet point circle.
          */
         @VisibleForTesting
-        const val BULLET_RADIUS = 15.0f
+        const val BULLET_RADIUS: Float = 15.0f
+
         /**
          * The [Path] we use to draw a circle if the [Canvas] is hardware accelerated
          */
