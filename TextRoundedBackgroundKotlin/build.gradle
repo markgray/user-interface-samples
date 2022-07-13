@@ -16,7 +16,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.7.0'
+    ext.kotlin_version = '1.7.10'
 
     repositories {
         google()
@@ -39,13 +39,3 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-ext {
-    // Sdk and tools
-    minSdkVersion = 15
-    targetSdkVersion = 32
-    compileSdkVersion = 32
-
-    // App dependencies
-    androidxVersion = '1.4.2'
-    ktxVersion = '1.8.0'
-}
