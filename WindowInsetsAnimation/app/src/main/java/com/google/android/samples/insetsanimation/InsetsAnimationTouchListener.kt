@@ -210,7 +210,7 @@ class InsetsAnimationTouchListener(
                     // start handling, by seeing if the gesture is majorly vertical, and
                     // larger than the touch slop
                     isHandling = dy.absoluteValue > dx.absoluteValue &&
-                            dy.absoluteValue >= ViewConfiguration.get(v.context).scaledTouchSlop
+                        dy.absoluteValue >= ViewConfiguration.get(v.context).scaledTouchSlop
                 }
 
                 if (isHandling) {

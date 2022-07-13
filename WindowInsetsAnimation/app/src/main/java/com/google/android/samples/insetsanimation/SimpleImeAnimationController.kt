@@ -163,6 +163,7 @@ internal class SimpleImeAnimationController {
         pendingRequestOnReady = onRequestReady
 
         // Finally we make a controlWindowInsetsAnimation() request:
+        @Suppress("DEPRECATION")
         ViewCompat.getWindowInsetsController(view)?.controlWindowInsetsAnimation(
             // We're only catering for IME animations in this listener
             WindowInsetsCompat.Type.ime(),
@@ -218,7 +219,7 @@ internal class SimpleImeAnimationController {
         val controller = insetsAnimationController
             ?: throw IllegalStateException(
                 "Current WindowInsetsAnimationController is null." +
-                        "This should only be called if isAnimationInProgress() returns true"
+                    "This should only be called if isAnimationInProgress() returns true"
             )
 
         // Call updateInsetTo() with the new inset value
@@ -257,7 +258,7 @@ internal class SimpleImeAnimationController {
         val controller = insetsAnimationController
             ?: throw IllegalStateException(
                 "Current WindowInsetsAnimationController is null." +
-                        "This should only be called if isAnimationInProgress() returns true"
+                    "This should only be called if isAnimationInProgress() returns true"
             )
 
         val hiddenBottom = controller.hiddenStateInsets.bottom

@@ -108,14 +108,14 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * by an downwards scroll. Defaults to `true`.
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    var scrollImeOffScreenWhenVisible = true
+    var scrollImeOffScreenWhenVisible: Boolean = true
 
     /**
      * Set to true to allow scrolling the IME on screen (from not being visible),
      * by an upwards scroll. Defaults to `true`.
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    var scrollImeOnScreenWhenNotVisible = true
+    var scrollImeOnScreenWhenNotVisible: Boolean = true
 
     /**
      * React to a descendant view initiating a nestable scroll operation, claiming the nested scroll
@@ -555,6 +555,26 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         onNestedScrollAccepted(child, target, axes, ViewCompat.TYPE_TOUCH)
     }
 
+    /**
+     * React to a nested scroll in progress. This method will be called when the ViewParent's
+     * current nested scrolling child view dispatches a nested scroll event. To receive calls to
+     * this method the ViewParent must have previously returned `true` for a call to
+     * [onStartNestedScroll].
+     *
+     * Both the consumed and unconsumed portions of the scroll distance are reported to the
+     * ViewParent. An implementation may choose to use the consumed portion to match or chase scroll
+     * position of multiple child elements, for example. The unconsumed portion may be used to
+     * allow continuous dragging of multiple scrolling or draggable elements, such as scrolling
+     * a list within a vertical drawer where the drawer begins dragging once the edge of inner
+     * scrolling content is reached.
+     *
+     * @param target The descendent view controlling the nested scroll
+     * @param dxConsumed Horizontal scroll distance in pixels already consumed by target
+     * @param dyConsumed Vertical scroll distance in pixels already consumed by target
+     * @param dxUnconsumed Horizontal scroll distance in pixels not consumed by target
+     * @param dyUnconsumed Vertical scroll distance in pixels not consumed by target
+     * @param type the type of input which cause this scroll event
+     */
     override fun onNestedScroll(
         target: View,
         dxConsumed: Int,
@@ -574,6 +594,13 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
         )
     }
 
+    /**
+     * React to a nested scroll operation ending. Perform cleanup after a nested scrolling operation.
+     * This method will be called when a nested scroll stops, for example when a nested touch
+     * scroll ends with a [MotionEvent.ACTION_UP] or [MotionEvent.ACTION_CANCEL] event.
+     *
+     * @param target View that initiated the nested scroll
+     */
     override fun onStopNestedScroll(target: View) {
         onStopNestedScroll(target, ViewCompat.TYPE_TOUCH)
     }

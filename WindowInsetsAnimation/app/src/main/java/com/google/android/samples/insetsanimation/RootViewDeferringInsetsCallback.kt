@@ -64,7 +64,7 @@ class RootViewDeferringInsetsCallback(
     init {
         require(persistentInsetTypes and deferredInsetTypes == 0) {
             "persistentInsetTypes and deferredInsetTypes can not contain any of " +
-                    " same WindowInsetsCompat.Type values"
+                " same WindowInsetsCompat.Type values"
         }
     }
 
@@ -195,7 +195,7 @@ class RootViewDeferringInsetsCallback(
             // cycle happen, but this happens too late resulting in a visual flicker.
             // Instead we manually dispatch the most recent WindowInsets to the view.
             if (lastWindowInsets != null && view != null) {
-                ViewCompat.dispatchApplyWindowInsets(view!!, lastWindowInsets!!)
+                ViewCompat.dispatchApplyWindowInsets(view ?: return, lastWindowInsets ?: return)
             }
         }
     }

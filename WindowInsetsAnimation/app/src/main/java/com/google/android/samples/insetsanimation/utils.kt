@@ -50,7 +50,7 @@ fun View.copyBoundsInWindow(rect: Rect) {
     } else {
         throw IllegalArgumentException(
             "Can not copy bounds as view is not laid out" +
-                    " or attached to window"
+                " or attached to window"
         )
     }
 }

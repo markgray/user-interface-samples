@@ -92,10 +92,12 @@ internal class ConversationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
          * The view type that uses the layout file [R.layout.message_bubble_self]
          */
         const val ITEM_TYPE_MESSAGE_SELF = 0
+
         /**
          * The view type that uses the layout file [R.layout.message_bubble_other]
          */
         const val ITEM_TYPE_MESSAGE_OTHER = 1
+
         /**
          * The total number of items in this adapter.
          */
