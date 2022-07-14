@@ -16,8 +16,11 @@
 
 package com.example.windowmanagersample
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.windowmanagersample.databinding.ActivityWindowDemosBinding
 
@@ -27,6 +30,20 @@ import com.example.windowmanagersample.databinding.ActivityWindowDemosBinding
 class WindowDemosActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWindowDemosBinding
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then initialize our [ActivityWindowDemosBinding] field [binding] by having the method
+     * [ActivityWindowDemosBinding.inflate] use the [LayoutInflater] instance that this Window
+     * retrieved from its [Context] to inflate the activity_window_demos.xml layout file
+     * associated with it to produce an [ActivityWindowDemosBinding] instance, and we set our
+     * content view to the outermost View in the layout file associated with [binding].
+     * We set the [View.OnClickListener] of the [ActivityWindowDemosBinding.featuresActivityButton]
+     * button in [binding] to our [showDisplayFeatures] method and the [View.OnClickListener] of the
+     * [ActivityWindowDemosBinding.splitLayoutActivityButton] button in [binding] to our
+     * [showSplitLayout] method.
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWindowDemosBinding.inflate(layoutInflater)

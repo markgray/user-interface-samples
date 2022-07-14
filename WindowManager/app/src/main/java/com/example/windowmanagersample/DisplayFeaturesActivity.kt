@@ -17,8 +17,10 @@
 package com.example.windowmanagersample
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -28,11 +30,12 @@ import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
 import com.example.windowmanagersample.databinding.ActivityDisplayFeaturesBinding
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Date
+import java.util.Locale
 
 /** Demo activity that shows all display features and current device state on the screen. */
 class DisplayFeaturesActivity : AppCompatActivity() {
@@ -44,6 +47,32 @@ class DisplayFeaturesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDisplayFeaturesBinding
     private lateinit var windowInfoRepo: WindowInfoTracker
 
+    /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we initialize our [Activity] variable `val activity` to `this`. We initialize our
+     * [ActivityDisplayFeaturesBinding] field [binding] by having the method
+     * [ActivityDisplayFeaturesBinding.inflate] use the [LayoutInflater] instance that this Window
+     * retrieved from its [Context] to inflate the activity_display_features.xml layout file
+     * associated with it to produce an [ActivityDisplayFeaturesBinding] instance, and we set our
+     * content view to the outermost View in the layout file associated with [binding]. We next
+     * initialize our [WindowInfoTracker] field [windowInfoRepo] to an instance of [WindowInfoTracker]
+     * that is associated with our [Context]. Next we launch a coroutine on the `lifecycleScope`
+     * [CoroutineScope] tied to this LifecycleOwner's Lifecycle. We call the
+     * [Lifecycle.repeatOnLifecycle] method of our [Lifecycle] to have it execute its lambda block
+     * when the lifecycle is at least STARTED (it is cancelled when the lifecycle is STOPPED, and
+     * automatically restarted when the lifecycle is STARTED again). In that lambda block we call the
+     * [WindowInfoTracker.windowLayoutInfo] method of our field [windowInfoRepo] to have it create
+     * a [Flow] of [WindowLayoutInfo], on which we call our `throttleFirst` extension method to
+     * have it delay the first event 10ms to allow the UI to pickup the posture, and then collect
+     * the [WindowLayoutInfo] emitted by the [Flow] in order to pass it to our [updateStateLog]
+     * method and [updateCurrentState] method.
+     *
+     * Having launched our coroutine we proceed to call the `clear` extension function of our
+     * [StringBuilder] field [stateLog] then append the string "State update log" and a newline
+     * character to it.
+     *
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val activity: Activity = this
@@ -64,7 +93,7 @@ class DisplayFeaturesActivity : AppCompatActivity() {
                 windowInfoRepo.windowLayoutInfo(activity)
                     // Throttle first event 10ms to allow the UI to pickup the posture
                     .throttleFirst(10)
-                    .collect { newLayoutInfo ->
+                    .collect { newLayoutInfo: WindowLayoutInfo ->
                         // New posture information
                         updateStateLog(newLayoutInfo)
                         updateCurrentState(newLayoutInfo)

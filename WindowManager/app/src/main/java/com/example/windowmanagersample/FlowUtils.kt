@@ -22,10 +22,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
+/**
+ * Delays the emission of the first `T` of the [Flow] by [waitForMillis] milliseconds.
+ *
+ * @param waitForMillis the number of milliseconds to delay the first `T` by.
+ */
 fun <T> Flow<T>.throttleFirst(waitForMillis: Long): Flow<T> = flow {
     coroutineScope {
         val context = coroutineContext
@@ -34,7 +38,9 @@ fun <T> Flow<T>.throttleFirst(waitForMillis: Long): Flow<T> = flow {
         collect {
             delayPost?.cancel()
             delayPost = async(Dispatchers.Default) {
-                if (throttleEvent) { delay(waitForMillis) }
+                if (throttleEvent) {
+                    delay(waitForMillis)
+                }
                 withContext(context) {
                     emit(it)
                     throttleEvent = false

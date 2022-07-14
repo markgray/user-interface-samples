@@ -54,6 +54,12 @@ class SplitLayout : FrameLayout {
         setAttributes(attrs)
     }
 
+    /**
+     * Our [WindowLayoutInfo] field [windowLayoutInfo] to its parameter [windowLayoutInfo] and then
+     * calls the [requestLayout] method to request that we be laid out again.
+     *
+     * @param windowLayoutInfo the [WindowLayoutInfo] to use.
+     */
     fun updateWindowLayout(windowLayoutInfo: WindowLayoutInfo) {
         this.windowLayoutInfo = windowLayoutInfo
         requestLayout()
@@ -70,6 +76,17 @@ class SplitLayout : FrameLayout {
         }
     }
 
+    /**
+     * Called from layout when this view should assign a size and position to each of its children.
+     * Derived classes with children should override this method and call layout on each of their
+     * children.
+     *
+     * @param changed This is a new size or position for this view
+     * @param left Left position, relative to parent
+     * @param top Top position, relative to parent
+     * @param right Right position, relative to parent
+     * @param bottom Bottom position, relative to parent
+     */
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         val startView = findStartView()
         val endView = findEndView()
@@ -171,6 +188,20 @@ class SplitLayout : FrameLayout {
         return null
     }
 
+    /**
+     * Measure the view and its content to determine the measured width and the measured height.
+     * This method is invoked by [measure] and should be overridden by subclasses to provide
+     * accurate and efficient measurement of their contents.
+     *
+     * When overriding this method, you must call [setMeasuredDimension] to store the measured width
+     * and height of this view. Failure to do so will trigger an [IllegalStateException], thrown by
+     * [measure]. Calling the superclass' `onMeasure` is a valid use.
+     *
+     * @param widthMeasureSpec horizontal space requirements as imposed by the parent. The
+     * requirements are encoded with [android.view.View.MeasureSpec].
+     * @param heightMeasureSpec vertical space requirements as imposed by the parent. The
+     * requirements are encoded with [android.view.View.MeasureSpec].
+     */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         lastWidthMeasureSpec = widthMeasureSpec

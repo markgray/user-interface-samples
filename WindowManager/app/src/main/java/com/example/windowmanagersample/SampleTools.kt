@@ -68,11 +68,11 @@ fun getFeaturePositionInViewRect(
  */
 fun getLayoutParamsForFeatureInFrameLayout(displayFeature: DisplayFeature, view: FrameLayout):
     FrameLayout.LayoutParams? {
-        val featureRectInView = getFeaturePositionInViewRect(displayFeature, view) ?: return null
+    val featureRectInView = getFeaturePositionInViewRect(displayFeature, view) ?: return null
 
-        val lp = FrameLayout.LayoutParams(featureRectInView.width(), featureRectInView.height())
-        lp.leftMargin = featureRectInView.left
-        lp.topMargin = featureRectInView.top
+    val lp = FrameLayout.LayoutParams(featureRectInView.width(), featureRectInView.height())
+    lp.leftMargin = featureRectInView.left
+    lp.topMargin = featureRectInView.top
 
-        return lp
-    }
+    return lp
+}
