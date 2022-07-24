@@ -210,7 +210,7 @@ class ShortcutHelper(private val mContext: Context) {
                     }
                     Log.i(TAG, "Refreshing shortcut: " + shortcut.id)
                     val b = ShortcutInfo.Builder(mContext, shortcut.id)
-                    setSiteInformation(b, shortcut.intent!!.data)
+                    setSiteInformation(b, (shortcut.intent ?: return@noParamNoResultAsync).data)
                     setExtras(b)
                     updateList.add(b.build())
                 }
@@ -403,7 +403,7 @@ class ShortcutHelper(private val mContext: Context) {
      * @return a [Bitmap] version of the "favicon" if found, otherwise `null`.
      */
     private fun fetchFavicon(uri: Uri?): Bitmap? {
-        val iconUri: Uri = uri!!.buildUpon().path("favicon.ico").build()
+        val iconUri: Uri = (uri ?: return null).buildUpon().path("favicon.ico").build()
         Log.i(TAG, "Fetching favicon from: $iconUri")
         return try {
             val conn: URLConnection = URL(iconUri.toString()).openConnection()

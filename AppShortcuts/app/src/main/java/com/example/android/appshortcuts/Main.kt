@@ -457,7 +457,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
         /**
          * TAG used for logging.
          */
-        const val TAG = "appshortcuts"
+        const val TAG: String = "appshortcuts"
 
         /**
          * The short cut ID that is reported to the [ShortcutManager] when the user selects the
