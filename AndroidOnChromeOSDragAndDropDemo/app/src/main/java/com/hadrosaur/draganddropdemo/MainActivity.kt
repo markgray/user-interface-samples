@@ -71,7 +71,7 @@ open class MainActivity : AppCompatActivity() {
          * The [MainActivity] instance to use for context when constructing our [TextView].
          */
         private val mActivity: AppCompatActivity
-        ) : OnDragListener {
+    ) : OnDragListener {
         /**
          * Called when a drag event is dispatched to a [View]. This allows listeners to get a chance
          * to override base [View] behavior. We branch on the action value of our [DragEvent] parameter
@@ -226,7 +226,7 @@ open class MainActivity : AppCompatActivity() {
     /**
      * Custom [OnLongClickListener] that we use for the [TextView] with ID [R.id.text_drag].
      */
-    protected inner class TextViewLongClickListener : OnLongClickListener {
+    protected class TextViewLongClickListener : OnLongClickListener {
         /**
          * Called when a [View] has been clicked and held. First we initialize our [TextView] variable
          * `val thisTextView` by casting our [View] parameter [v] to a [TextView]. Then we initialize
@@ -265,8 +265,17 @@ open class MainActivity : AppCompatActivity() {
             return false
         }
     }
+
     companion object {
-        const val MAX_LENGTH = 5000
-        const val CHARS_TO_READ = 200
+        /**
+         * Maximum number of bytes to read from file descriptor that is dropped on us
+         */
+        const val MAX_LENGTH: Int = 5000
+
+        /**
+         * Number of characters to read and display from the string created from the bytes read
+         * from the dropped file descriptor we have read.
+         */
+        const val CHARS_TO_READ: Int = 200
     }
 }
