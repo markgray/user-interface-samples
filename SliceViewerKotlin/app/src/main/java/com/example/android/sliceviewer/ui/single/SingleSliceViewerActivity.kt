@@ -119,8 +119,8 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_slice_viewer)
         val viewModelFactory: ViewModelFactory? = ViewModelFactory.getInstance(application)
-        viewModel = ViewModelProvider(this, viewModelFactory ?: return)
-            .get(SingleSliceViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory
+            ?: return)[SingleSliceViewModel::class.java]
 
         sliceView = findViewById(R.id.slice)
         uriValue = findViewById(R.id.uri_value)

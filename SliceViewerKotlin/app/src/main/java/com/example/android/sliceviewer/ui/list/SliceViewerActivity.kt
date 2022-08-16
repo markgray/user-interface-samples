@@ -139,8 +139,7 @@ class SliceViewerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_slice_viewer)
         val viewModelFactory: ViewModelFactory? = ViewModelFactory.getInstance(application)
         setSupportActionBar(findViewById(R.id.search_toolbar))
-        viewModel = ViewModelProvider(this, viewModelFactory ?: return)
-            .get(SliceViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory ?: return)[SliceViewModel::class.java]
 
         searchView = findViewById<SearchView>(R.id.search_view).apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
