@@ -14,6 +14,7 @@
 */
 package com.hadrosaur.draganddropdemo
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
 import android.graphics.Color
@@ -170,6 +171,8 @@ open class MainActivity : AppCompatActivity() {
 
                             //Note the use of ContentResolver to resolve the ChromeOS content URI.
                             val contentUri = item.uri
+
+                            @SuppressLint("Recycle") // TODO: Recycle ParcelFileDescriptor
                             val parcelFileDescriptor: ParcelFileDescriptor? = try {
                                 contentResolver.openFileDescriptor(contentUri, "r")
                             } catch (e: FileNotFoundException) {
@@ -185,6 +188,7 @@ open class MainActivity : AppCompatActivity() {
                                     fileInputStream.read(bytes, 0, MAX_LENGTH)
                                 }
                             } catch (ex: Exception) {
+                                Log.e("MainActivity", "Caught exception: $ex")
                             }
                             val contents = String(bytes)
                             val contentLength = if (contents.length > CHARS_TO_READ) CHARS_TO_READ else 0
