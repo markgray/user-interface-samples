@@ -16,7 +16,6 @@
 
 package com.example.android.appwidget
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -144,7 +143,6 @@ class ListAppWidget : AppWidgetProvider() {
          * of binding. It is one of the app widget IDs that is passed to our [onUpdate] override in
          * its [IntArray] parameter `appWidgetIds`.
          */
-        @SuppressLint("RemoteViewLayout")
         internal fun updateAppWidget(
             context: Context,
             appWidgetManager: AppWidgetManager,
@@ -197,11 +195,8 @@ class ListAppWidget : AppWidgetProvider() {
                 // Specify the maximum width and height in dp and a layout, which you want to use
                 // for the specified size
                 val viewMapping: Map<SizeF, RemoteViews> = mapOf(
-                    SizeF(150f, 150f) to constructRemoteViews(
-                        R.layout.widget_grocery_list
-                    ), SizeF(250f, 150f) to constructRemoteViews(
-                        R.layout.widget_grocery_grid
-                    )
+                    SizeF(150f, 150f) to constructRemoteViews(R.layout.widget_grocery_list),
+                    SizeF(250f, 150f) to constructRemoteViews(R.layout.widget_grocery_grid)
                 )
                 RemoteViews(viewMapping)
             } else {

@@ -15,7 +15,7 @@ To implement scalable widget previews, use the [`previewLayout`](https://develop
 
 [`app_widget_info_checkbox_list`](app/src/main/res/xml/app_widget_info_checkbox_list.xml\#L50)
 
-```xml
+```
 <appwidget-provider
     android:previewLayout="@layout/widget_grocery_list"
     ... />
@@ -29,7 +29,7 @@ Provide a description for your widget using the description attribute of `appwid
 
 [`app_widget_info_checkbox_list`](app/src/main/res/xml/app_widget_info_checkbox_list.xml\#L40)
 
-```xml
+```
 <appwidget-provider
     android:description="@string/app_widget_grocery_list_description"
     ... />
@@ -57,21 +57,21 @@ We recommend creating a custom theme and overriding it when running on devices w
 
 [`values/themes.xml`](app/src/main/res/values/themes.xml\#L32)
 
-```xml
+```
 <style name="Theme.AppWidget.AppWidgetContainer"
     parent="@android:style/Theme.DeviceDefault" />
 ```
 
 [`values-v31/themes.xml`](app/src/main/res/values-v31/themes.xml\#L22)
 
-```xml
+```
 <style name="Theme.AppWidget.AppWidgetContainer"
     parent="@android:style/Theme.DeviceDefault.DayNight" />
 ```
 
 [`values-night-v31/themes.xml`](app/src/main/res/values-night-v31/themes.xml\#L20)
 
-```xml
+```
 <!-- Having themes.xml for night-v31 because of the priority order of the resource qualifiers. -->
 <style name="Theme.AppWidget.AppWidgetContainer"
     parent="@android:style/Theme.DeviceDefault.DayNight" />
@@ -79,7 +79,7 @@ We recommend creating a custom theme and overriding it when running on devices w
 
 [`layout/widget_grocery_list.xml`](app/src/main/res/layout/widget_grocery_list.xml\#L21)
 
-```xml
+```
 <LinearLayout
     android:theme="@style/Theme.AppWidget.AppWidgetContainer">
   ...
@@ -99,7 +99,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`values/attrs.xml`](app/src/main/res/values/attrs.xml\#L16)
 
-```xml
+```
 <declare-styleable name="AppWidgetAttrs">
     <attr name="appWidgetPadding" format="dimension" />
     <attr name="appWidgetInnerRadius" format="dimension" />
@@ -109,7 +109,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`values/themes.xml`](app/src/main/res/values/themes.xml\#L32)
 
-```xml
+```
 <style name="Theme.AppWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
     <!-- Radius of the outer bound of widgets to make the rounded corners -->
     <item name="appWidgetRadius">16dp</item>
@@ -128,7 +128,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`values-v31/themes.xml`](app/src/main/res/values-v31/themes.xml\#L22)
 
-```xml
+```
 <style name="Theme.AppWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
     <item name="appWidgetRadius">@android:dimen/system_app_widget_background_radius</item>
     <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
@@ -137,7 +137,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`values/styles.xml`](app/src/main/res/values/styles.xml\#L18)
 
-```xml
+```
 <style name="Widget.AppWidget.AppWidget.Container" parent="android:Widget">
     <item name="android:id">@android:id/background</item>
     <item name="android:background">?android:attr/colorBackground</item>
@@ -146,7 +146,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`values-v21/styles.xml`](app/src/main/res/values-v21/styles.xml\#L21)
 
-```xml
+```
 <!--
   Having styles for v21 because specifying android:attr/colorBackground used in the drawables
   requires API level 21
@@ -159,7 +159,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`drawable-v21/app_widget_background.xml`](app/src/main/res/drawable-v21/app_widget_background.xml\#L21)
 
-```xml
+```
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
   android:shape="rectangle">
 
@@ -170,7 +170,7 @@ To ensure widget compatibility with previous versions of Android, we recommend d
 
 [`layout/widget_checkbox_list.xml`](app/src/main/res/layout/widget_checkbox_list.xml\#L17)
 
-```xml
+```
 layout/widget_layout.xml
 <LinearLayout
   style="@style/Widget.AppWidget.AppWidget.Container">
@@ -200,7 +200,7 @@ Specify the `reconfigurable` flag in the `widgetFeatures` attribute of `appwidge
 
 [`xml/app_widget_info_checkbox_list.xml`](app/src/main/res/xml/app_widget_info_checkbox_list.xml\#L39)
 
-```xml
+```
 <appwidget-provider
     android:configure="com.example.android.appwidget.ListWidgetConfigureActivity"
     android:widgetFeatures="reconfigurable"
@@ -211,7 +211,7 @@ Specify the `reconfigurable` flag in the `widgetFeatures` attribute of `appwidge
 
 If you’d like your widget to use its default configuration when a user adds it, you can skip the configuration step by specifying both the `configuration_optional` and `reconfigurable` flags in the `widgetFeatures` field.
 
-```xml
+```
 <appwidget-provider
     android:configure="com.example.android.appwidget.ListWidgetConfigureActivity"
     android:widgetFeatures="reconfigurable|configuration_optional"
@@ -224,7 +224,7 @@ Starting in Android 12 launchers provide a smoother transition when a user launc
 
 To enable this improved transition, use [`android:id/background`](https://developer.android.com/reference/android/R.id#background)  or `android.R.id.background` to identify your background element:
 
-```xml
+```
 <LinearLayout
   android:id="@android:id/background">
   ...
@@ -251,21 +251,21 @@ The widget itself is still stateless, so you need to store the state and registe
 
 [`ItemsCollectionAppWidget.kt`](app/src/main/java/com/example/android/appwidget/ItemsCollectionAppWidget.kt\#L139)
 
-```kotlin
+```
 // This code will check the Checkbox
 remoteViews.setCompoundButtonChecked(R.id.item_checkbox, true)
 ```
 
 [`ItemsCollectionAppWidget.kt`](app/src/main/java/com/example/android/appwidget/ItemsCollectionAppWidget.kt\#L142)
 
-```kotlin
+```
 // This code will check the item_radio_button2 in the item_radio_group RadioGroup
 remoteViews.setRadioGroupChecked(R.id.item_radio_group, R.id.item_radio_button2))
 ```
 
 [`ItemsCollectionAppWidget.kt`](app/src/main/java/com/example/android/appwidget/ItemsCollectionAppWidget.kt\#L162)
 
-```kotlin
+```
 // Listen for change events.
 // RemoteResponse.fromPendingIntent works on an individual item whereas you can set
 // a PendingIntent template using RemoteViews.setPendingIntentTemplate and
@@ -292,7 +292,7 @@ Here’s an example of how to implement simplified `RemoteViews` collections.
 
 [`ItemsCollectionAppWidget.kt`](app/src/main/java/com/example/android/appwidget/ItemsCollectionAppWidget.kt\#L51)
 
-```kotlin
+```
 remoteViews.setRemoteAdapter(
   R.id.items_list_view, 
   RemoteViews.RemoteCollectionItems.Builder()
@@ -324,7 +324,7 @@ The following XML describes how to use the sizing attributes.
 
 [`xml/app_widget_info_checkbox_list.xml`](app/src/main/res/xml/app_widget_info_checkbox_list.xml\#L38)
 
-```xml
+```
 <appwidget-provider
   android:maxResizeWidth="240dp"
   android:maxResizeHeight="220dp"
@@ -351,7 +351,7 @@ The following code examples show how to provide a list of layouts.
 
 [`ListAppWidget.kt`](app/src/main/java/com/example/android/appwidget/ListAppWidget.kt\#L94)
 
-```kotlin
+```
 val viewMapping: MutableMap<SizeF, RemoteViews> = mutableMapOf()
 // Specify the maximum width and height in dp and a layout, which you want to use for the
 // specified size

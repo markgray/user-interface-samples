@@ -83,7 +83,7 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * @param appWidgetIds The `appWidgetIds` for which an update is needed. Note that this
      * may be all of the AppWidget instances for this provider, or just a subset of them.
      */
-    @SuppressLint("ObsoleteSdkInt")
+    @SuppressLint("ObsoleteSdkInt") // Suggested change would make class less reusable
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -118,7 +118,7 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * @param context The [Context] in which the receiver is running.
      * @param intent The [Intent] being received.
      */
-    @SuppressLint("ObsoleteSdkInt")
+    @SuppressLint("ObsoleteSdkInt") // Suggested change would make class less reusable
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         if (Build.VERSION.SDK_INT >= 31 &&
@@ -307,7 +307,7 @@ class ItemsCollectionRemoteViewsFactory(
          * display for each row which are constructed to display the views in the layout files whose
          * resource IDs are in our [List] of resource IDs field [items].
          */
-        @SuppressLint("ObsoleteSdkInt", "SupportAnnotationUsage")
+        @SuppressLint("ObsoleteSdkInt", "SupportAnnotationUsage") // Suggested change would make class less reusable
         @RequiresApi(31)
         fun getRemoteCollectionItems(context: Context): RemoteViews.RemoteCollectionItems {
             val builder = RemoteViews.RemoteCollectionItems.Builder()
@@ -356,7 +356,7 @@ class ItemsCollectionRemoteViewsFactory(
          * running Android S and above the [RemoteViews] object will also be configured to use some
          * of the nifty new APIs added to [RemoteViews] in Android S.
          */
-        @SuppressLint("ObsoleteSdkInt")
+        @SuppressLint("ObsoleteSdkInt") // Suggested change would make class less reusable
         internal fun constructRemoteViews(
             context: Context,
             @LayoutRes layoutId: Int
