@@ -68,7 +68,7 @@ class ShortcutHelper(private val mContext: Context) {
      * field [mShortcutManager] is 0 we restore dynamic shortcuts our app is always supposed to have.
      */
     fun maybeRestoreAllDynamicShortcuts() {
-        @Suppress("ControlFlowWithEmptyBody")
+        @Suppress("ControlFlowWithEmptyBody") // Suggested change would make class less reusable
         if (mShortcutManager.dynamicShortcuts.size == 0) {
             // NOTE: If this application is always supposed to have dynamic shortcuts, then publish
             // them here.

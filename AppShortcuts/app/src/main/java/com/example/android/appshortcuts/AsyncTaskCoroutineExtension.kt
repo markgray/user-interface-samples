@@ -19,7 +19,7 @@ import kotlin.coroutines.CoroutineContext
  * @param onPostExecute a lambda which takes a [Bitmap] and returns nothing.
  * @param uri the [Uri] that will be passed to the [doInBackground] lambda.
  */
-@Suppress("unused")
+@Suppress("unused") // Suggested change would make class less reusable
 fun CoroutineScope.getBitmapAndDisplay(
     doInBackground: (uri: Uri) -> Bitmap,
     onPostExecute: (Bitmap) -> Unit,

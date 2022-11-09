@@ -130,7 +130,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param v the [View] that was clicked.
      */
-    @Suppress("UNUSED_PARAMETER")
+    @Suppress("UNUSED_PARAMETER") // Suggested change would make class less reusable
     fun onAddPressed(v: View?) {
         addWebSite()
     }
@@ -182,7 +182,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param uri a web site URL which the user wants to add to our short cut list.
      */
-    @SuppressLint("StaticFieldLeak")
+    @SuppressLint("StaticFieldLeak") // TODO: Fix static field leak
     private fun addUriAsync(uri: String) {
         uiScope.noParamNoResultAsync(
             doInBackground = {
@@ -278,8 +278,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
         if (!shortcut.isEnabled) {
             sb.append(sep)
             sb.append("Disabled")
-            @Suppress("UNUSED_VALUE")
-            sep = ", "
+            // sep = ", " // value not needed
         }
         return sb.toString()
     }
@@ -290,7 +289,6 @@ class Main : AppCompatActivity(), View.OnClickListener {
      * @param mContext the application [Context] of [Main] which we use to get a [LayoutInflater]
      * that we can use to inflate item views.
      */
-    @Suppress("CanBeParameter")
     private inner class MyAdapter(private val mContext: Context) : BaseAdapter() {
         /**
          * The system level [LayoutInflater] we use to inflate item views.
@@ -435,7 +433,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
          * @param shortcut the [ShortcutInfo] object that our [View] parameter [view] is to hold and
          * to display.
          */
-        @Suppress("UNUSED_PARAMETER")
+        @Suppress("UNUSED_PARAMETER") // Suggested change would make class less reusable
         fun bindView(view: View, position: Int, shortcut: ShortcutInfo) {
             view.tag = shortcut
             val line1 = view.findViewById<View>(R.id.line1) as TextView
