@@ -62,7 +62,7 @@ internal class QueryBuilder(private var mFamilyName: String) {
      * @param familyName the font family name to use in the request being built.
      * @return `this` [QueryBuilder] to allow chaining.
      */
-    @Suppress("unused")
+    @Suppress("unused") // Suggested change would make class less reusable
     fun withFamilyName(familyName: String): QueryBuilder {
         mFamilyName = familyName
         return this
