@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
         // This demonstrates how to programmatically tint a drawable
         val item = menu.findItem(R.id.action_more)
-        val drawableWrap: Drawable = DrawableCompat.wrap(item.icon).mutate()
+        val drawableWrap: Drawable = DrawableCompat.wrap(item.icon!!).mutate()
         DrawableCompat.setTint(drawableWrap, ColorUtils.getThemeColor(this, R.attr.colorOnPrimary))
         item.icon = drawableWrap
         return true
@@ -178,6 +178,7 @@ class MainActivity : AppCompatActivity() {
      * resource ID [R.id.fragment_layout] with `fragment` using [tag] as its tag and commit that
      * [FragmentTransaction].
      */
+    @Suppress("SameParameterValue") // Suggested change would make method less reusable
     private fun showFragment(tag: String) {
         var fragment: Fragment? = supportFragmentManager.findFragmentByTag(tag)
         if (fragment == null) {

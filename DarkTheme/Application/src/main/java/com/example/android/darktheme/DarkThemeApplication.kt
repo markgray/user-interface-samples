@@ -29,7 +29,7 @@ import androidx.preference.PreferenceManager
  *
  * It is used as the android:name attribute of the application element in our AndroidManifest.xml
  */
-@Suppress("unused")
+@Suppress("unused") // It is used in AndroidManifest.xml
 class DarkThemeApplication : Application() {
     /**
      * Called when the application is starting, before any activity, service, or receiver objects
