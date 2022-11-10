@@ -15,7 +15,7 @@ method to clip a View in a specific shape.
 This example clips the outline of a View as a rounded rectangle by defining a class that
  implements ViewOutlineProvider by following code:
 
-```java
+```
 private class ClipOutlineProvider extends ViewOutlineProvider {
     @Override
     public void getOutline(View view, Outline outline) {
@@ -29,7 +29,7 @@ private class ClipOutlineProvider extends ViewOutlineProvider {
 To clip a View by the defined outline, setting a OutlineProvider to a View
 to be clipped is needed like following:
 
-```java
+```
 final View clippedView = view.findViewById(R.id.frame);
 clippedView.setOutlineProvider(mOutlineProvider);
 ```
@@ -37,7 +37,7 @@ clippedView.setOutlineProvider(mOutlineProvider);
 You can toggle if the View is clipped by calling [setClipToOutline(boolean)][2]
 like following code:
 
-```java
+```
 clippedView.setClipToOutline(true); // Setting false disable clipping
 ```
 
