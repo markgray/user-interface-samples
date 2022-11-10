@@ -67,7 +67,7 @@ class BasicImmersiveModeFragment : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         val decorView: View = requireActivity().window.decorView
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: Use WindowInsets.isVisible(int) to find out about system bar visibilities by setting a View.OnApplyWindowInsetsListener on this view.
         decorView.setOnSystemUiVisibilityChangeListener {
             val height = decorView.height
             Log.i(TAG, "Current height: $height")
@@ -113,12 +113,12 @@ class BasicImmersiveModeFragment : Fragment() {
         // BEGIN_INCLUDE (get_current_ui_flags)
         // The UI options currently enabled are represented by a bitfield.
         // getSystemUiVisibility() gives us that bitfield.
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: SystemUiVisibility flags are deprecated. Use WindowInsetsController instead.
         val uiOptions = requireActivity().window.decorView.systemUiVisibility
         var newUiOptions = uiOptions
         // END_INCLUDE (get_current_ui_flags)
         // BEGIN_INCLUDE (toggle_ui_flags)
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: SystemUiVisibility flags are deprecated. Use WindowInsetsController instead.
         val isImmersiveModeEnabled = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY == uiOptions
         if (isImmersiveModeEnabled) {
             Log.i(TAG, "Turning immersive mode mode off. ")
@@ -132,13 +132,13 @@ class BasicImmersiveModeFragment : Fragment() {
         // all three flags are being toggled together.
         // This sample uses the "sticky" form of immersive mode, which will let the user swipe
         // the bars back in again, but will automatically make them disappear a few seconds later.
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: SystemUiVisibility flags are deprecated. Use WindowInsetsController instead.
         newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: SystemUiVisibility flags are deprecated. Use WindowInsetsController instead.
         newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_FULLSCREEN
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: SystemUiVisibility flags are deprecated. Use WindowInsetsController instead.
         newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: SystemUiVisibility flags are deprecated. Use WindowInsetsController instead.
         requireActivity().window.decorView.systemUiVisibility = newUiOptions
         //END_INCLUDE (set_ui_flags)
     }
