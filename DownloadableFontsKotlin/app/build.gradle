@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.example.android.downloadablefonts"
         minSdkVersion 14
-        targetSdkVersion 32
+        targetSdkVersion 33
     }
 
     buildTypes {
@@ -21,8 +21,8 @@ android {
         implementation 'androidx.legacy:legacy-support-v4:1.0.0'
         implementation 'androidx.legacy:legacy-support-v13:1.0.0'
         implementation 'androidx.cardview:cardview:1.0.0'
-        implementation 'androidx.appcompat:appcompat:1.5.0'
-        implementation 'com.google.android.material:material:1.6.1'
+        implementation 'androidx.appcompat:appcompat:1.5.1'
+        implementation 'com.google.android.material:material:1.7.0'
     }
     namespace 'com.example.android.downloadablefonts'
 }
@@ -31,7 +31,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.core:core-ktx:1.9.0"
 
 }
 

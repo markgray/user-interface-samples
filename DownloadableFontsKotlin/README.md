@@ -12,7 +12,7 @@ Introduction
 There are two ways of requesting a font to download.
 To request a font to download from Java code, you need to create a [FontRequest][1] class first like
 this:
-```java
+```
 FontRequest request = new FontRequest(
     "com.google.android.gms.fonts", // ProviderAuthority
     "com.google.android.gms",  // ProviderPackage
@@ -25,7 +25,7 @@ The third parameter is a query string about the requested font. The syntax of th
 by the font provider.
 
 Then pass the request instance to the `requestFont` method in the [FontsContractCompat][2].
-```java
+```
 FontsContractCompat.requestFont(context, request, callback, handler);
 ```
 The downloaded font or an error code if the request failed will be passed to the callback.
