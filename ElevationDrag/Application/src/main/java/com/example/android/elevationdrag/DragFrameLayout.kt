@@ -114,7 +114,7 @@ class DragFrameLayout @JvmOverloads constructor(
      * @param ev The motion event.
      * @return `true` if the event was handled, `false` otherwise.
      */
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility") // Elevation is visible only to the sighted?
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         mDragHelper.processTouchEvent(ev)
         return true
@@ -192,7 +192,7 @@ class DragFrameLayout @JvmOverloads constructor(
                  * @param dx Change in X position from the last call
                  * @param dy Change in Y position from the last call
                  */
-                @Suppress("RedundantOverride")
+                @Suppress("RedundantOverride") // Suggested change would make class less reusable
                 override fun onViewPositionChanged(
                     changedView: View,
                     left: Int,
