@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION") // TODO: Replace JobIntentService with WorkManager
 
 package com.example.android.interactivesliceprovider
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION") // TODO: Replace PreferenceManager with the AndroidX Preference Library
 
 package com.example.android.interactivesliceprovider
 
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     /**
      *
      */
-    @Suppress("UNUSED_PARAMETER")
+    @Suppress("UNUSED_PARAMETER") // Suggested change would make class less reusable
     fun onClickIndexSlices(view: View) {
         val intent = Intent(this, AppIndexingUpdateReceiver::class.java)
         intent.action = FirebaseAppIndex.ACTION_UPDATE_INDEX

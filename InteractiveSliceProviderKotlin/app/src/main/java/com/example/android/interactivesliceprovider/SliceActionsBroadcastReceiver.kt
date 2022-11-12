@@ -36,14 +36,14 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
     /**
      *
      */
-    @SuppressLint("InlinedApi")
+    @SuppressLint("InlinedApi") // TODO: EXTRA_TOGGLE_STATE requires API 28
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             InteractiveSliceProvider.ACTION_WIFI_CHANGED -> {
                 val wm = context.applicationContext
                     .getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val newState = intent.getBooleanExtra(EXTRA_TOGGLE_STATE, wm.isWifiEnabled)
-                @Suppress("DEPRECATION")
+                @Suppress("DEPRECATION") // TODO: Starting with SDK Q applications are not allowed to enable/disable Wifi
                 wm.isWifiEnabled = newState
                 // Wait a bit for wifi to update (TODO: is there a better way to do this?)
                 val h = Handler(Looper.myLooper() ?: return)

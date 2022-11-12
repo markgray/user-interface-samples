@@ -29,13 +29,11 @@ import androidx.slice.builders.list
 import com.example.android.interactivesliceprovider.InteractiveSliceProvider
 import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceiver
 import com.example.android.interactivesliceprovider.R
-import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
  *
  */
-@Suppress("RemoveRedundantQualifierName")
 class ReservationSliceBuilder(
     /**
      *
@@ -57,7 +55,7 @@ class ReservationSliceBuilder(
                     InteractiveSliceProvider.ACTION_TOAST,
                     "Primary Action for Reservation Slice"
                 ),
-                IconCompat.createWithResource(context, drawable.ic_location),
+                IconCompat.createWithResource(context, R.drawable.ic_location),
                 ListBuilder.ICON_IMAGE,
                 "Primary"
             )
@@ -68,7 +66,7 @@ class ReservationSliceBuilder(
                     context,
                     InteractiveSliceProvider.ACTION_TOAST, "show location on map"
                 ),
-                IconCompat.createWithResource(context, drawable.ic_location),
+                IconCompat.createWithResource(context, R.drawable.ic_location),
                 ListBuilder.ICON_IMAGE,
                 "Show reservation location"
             )
@@ -78,7 +76,7 @@ class ReservationSliceBuilder(
                 SliceActionsBroadcastReceiver.getIntent(
                     context, InteractiveSliceProvider.ACTION_TOAST, "contact host"
                 ),
-                IconCompat.createWithResource(context, drawable.ic_text),
+                IconCompat.createWithResource(context, R.drawable.ic_text),
                 ListBuilder.ICON_IMAGE,
                 "Contact host"
             )

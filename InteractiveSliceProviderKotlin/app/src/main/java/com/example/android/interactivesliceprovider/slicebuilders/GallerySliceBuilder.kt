@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("RemoveRedundantQualifierName")
-
 package com.example.android.interactivesliceprovider.slicebuilders
 
 import android.content.Context
@@ -32,13 +30,11 @@ import androidx.slice.builders.header
 import com.example.android.interactivesliceprovider.InteractiveSliceProvider
 import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceiver
 import com.example.android.interactivesliceprovider.R
-import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
  *
  */
-@Suppress("RemoveRedundantQualifierName")
 class GallerySliceBuilder(
     /**
      *
@@ -55,7 +51,7 @@ class GallerySliceBuilder(
             SliceActionsBroadcastReceiver.getIntent(
                 context, InteractiveSliceProvider.ACTION_TOAST, "open photo album"
             ),
-            IconCompat.createWithResource(context, drawable.ic_location),
+            IconCompat.createWithResource(context, R.drawable.ic_location),
             ListBuilder.ICON_IMAGE,
             "Open photo album"
         )
@@ -72,7 +68,7 @@ class GallerySliceBuilder(
                         context,
                         InteractiveSliceProvider.ACTION_TOAST, "cast photo album"
                     ),
-                    IconCompat.createWithResource(context, drawable.ic_cast),
+                    IconCompat.createWithResource(context, R.drawable.ic_cast),
                     ListBuilder.ICON_IMAGE,
                     "Cast photo album"
                 )
@@ -83,7 +79,7 @@ class GallerySliceBuilder(
                         context,
                         InteractiveSliceProvider.ACTION_TOAST, "share photo album"
                     ),
-                    IconCompat.createWithResource(context, drawable.ic_share),
+                    IconCompat.createWithResource(context, R.drawable.ic_share),
                     ListBuilder.ICON_IMAGE,
                     "Share photo album"
                 )

@@ -112,7 +112,7 @@ class InteractiveSliceProvider : SliceProvider() {
      */
     override fun onMapIntentToUri(intent: Intent): Uri {
 
-        @Suppress("UNNECESSARY_SAFE_CALL")
+        @Suppress("UNNECESSARY_SAFE_CALL") // Better safe than sorry
         val intentPath = intent?.data?.path ?: "/"
         val uriWithoutPathSlash = intentPath.replace("/", "")
 
@@ -140,7 +140,7 @@ class InteractiveSliceProvider : SliceProvider() {
     }
 
     @Suppress("ReplaceNotNullAssertionWithElvisReturn") // When cannot have a return
-    private fun getSliceBuilder(sliceUri: Uri) = when (sliceUri.path) {
+    private fun getSliceBuilder(sliceUri: Uri): SliceBuilder? = when (sliceUri.path) {
         defaultPath -> DefaultSliceBuilder(
             context = context!!,
             sliceUri = sliceUri

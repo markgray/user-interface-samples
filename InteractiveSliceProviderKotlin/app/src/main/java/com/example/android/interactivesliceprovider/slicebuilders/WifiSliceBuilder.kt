@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("RemoveRedundantQualifierName", "RemoveRedundantQualifierName", "RemoveRedundantQualifierName", "RemoveRedundantQualifierName", "RemoveRedundantQualifierName")
-
 package com.example.android.interactivesliceprovider.slicebuilders
 
 import android.content.Context
@@ -34,7 +32,6 @@ import androidx.slice.builders.seeMoreRow
 import com.example.android.interactivesliceprovider.InteractiveSliceProvider
 import com.example.android.interactivesliceprovider.SliceActionsBroadcastReceiver
 import com.example.android.interactivesliceprovider.R
-import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
@@ -55,7 +52,7 @@ class WifiSliceBuilder(
      * via callback in NetworkCallback#onCapabilitiesChanged(Network, NetworkCapabilities) or
      * on-demand from ConnectivityManager#getNetworkCapabilities(Network).
      */
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION") // // TODO: Starting with SDK Q applications are not allowed to enable/disable Wifi
     override fun buildSlice(): Slice {
         // Get wifi state
         val wifiManager = context.applicationContext
@@ -78,7 +75,7 @@ class WifiSliceBuilder(
         val finalWifiEnabled = wifiEnabled
         val mainAction = SliceAction.create(
             InteractiveSliceProvider.getPendingIntent(context, Settings.ACTION_WIFI_SETTINGS),
-            IconCompat.createWithResource(context, drawable.ic_wifi),
+            IconCompat.createWithResource(context, R.drawable.ic_wifi),
             ListBuilder.ICON_IMAGE,
             "Wi-fi Settings"
         )
