@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity(),
             pref.fragment!!
         ).apply {
             arguments = args
-            @Suppress("DEPRECATION")
+            @Suppress("DEPRECATION") // TODO: Replace with a FragmentResultListener
             setTargetFragment(caller, 0)
         }
         // Replace the existing Fragment with the new Fragment
