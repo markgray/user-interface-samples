@@ -262,7 +262,7 @@ class NotificationHelper(private val context: Context) {
         val areBubblesPreferred: Boolean = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             notificationManager.bubblePreference != BUBBLE_PREFERENCE_NONE
         } else {
-            @Suppress("DEPRECATION")
+            @Suppress("DEPRECATION") // Needed for Build.VERSION.SDK_INT < Build.VERSION_CODES.S
             notificationManager.areBubblesAllowed()
         }
         return areBubblesPreferred || channel?.canBubble() == true

@@ -16,6 +16,7 @@
 package com.example.android.people.ui.photo
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.transition.Fade
 import android.view.View
@@ -57,7 +58,12 @@ class PhotoFragment : Fragment(R.layout.photo_fragment) {
      *
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val photo = arguments?.getParcelable<Uri>(ARG_PHOTO)
+        val photo: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_PHOTO, Uri::class.java)
+        } else {
+            @Suppress("DEPRECATION") // Needed for VERSION.SDK_INT < TIRAMISU
+            arguments?.getParcelable(ARG_PHOTO)
+        }
         if (photo == null) {
             if (isAdded) {
                 parentFragmentManager.popBackStack()

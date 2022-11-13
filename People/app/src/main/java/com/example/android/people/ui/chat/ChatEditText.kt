@@ -27,7 +27,7 @@ import com.example.android.people.R
  */
 typealias OnImageAddedListener = (contentUri: Uri, mimeType: String, label: String) -> Unit
 
-@Suppress("unused")
+@Suppress("unused") // Suggested change would make class less reusable
 private val SUPPORTED_MIME_TYPES = setOf(
     "image/jpeg",
     "image/jpg",

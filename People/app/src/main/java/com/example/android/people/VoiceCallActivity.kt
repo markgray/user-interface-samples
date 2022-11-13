@@ -16,6 +16,7 @@
 package com.example.android.people
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -46,7 +47,12 @@ class VoiceCallActivity : AppCompatActivity(R.layout.voice_call_activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val name = intent.getStringExtra(EXTRA_NAME)
-        val icon = intent.getParcelableExtra<Uri>(EXTRA_ICON_URI)
+        val icon: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_ICON_URI, Uri::class.java)
+        } else {
+            @Suppress("DEPRECATION") // Needed for VERSION.SDK_INT < TIRAMISU
+            intent.getParcelableExtra(EXTRA_ICON_URI)
+        }
         if (name == null || icon == null) {
             finish()
             return

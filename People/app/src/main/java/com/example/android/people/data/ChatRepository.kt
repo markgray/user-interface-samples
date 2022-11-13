@@ -191,7 +191,7 @@ class DefaultChatRepository internal constructor(
     override fun activateChat(id: Long) {
         val chat = chats.getValue(id)
         currentChat = id
-        @Suppress("SENSELESS_COMPARISON")
+        @Suppress("SENSELESS_COMPARISON") // Suggested change would make class less reusable
         val isPrepopulatedMsgs =
             chat.messages.size == 2 && chat.messages[0] != null && chat.messages[1] != null
         notificationHelper.updateNotification(chat, id, isPrepopulatedMsgs)

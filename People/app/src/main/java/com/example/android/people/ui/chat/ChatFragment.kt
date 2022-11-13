@@ -72,7 +72,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: Replace setHasOptionsMenu with MenuProvider
         setHasOptionsMenu(true)
         enterTransition =
             TransitionInflater.from(context).inflateTransition(R.transition.slide_bottom)
@@ -196,7 +196,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
     /**
      *
      */
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // TODO: Replace onCreateOptionsMenu with MenuProvider
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.chat, menu)
         menu.findItem(R.id.action_show_as_bubble)?.let { item ->
@@ -210,7 +210,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
     /**
      *
      */
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // TODO: Replace onOptionsItemSelected with MenuProvider
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_show_as_bubble -> {
