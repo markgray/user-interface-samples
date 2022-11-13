@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import androidx.core.graphics.drawable.IconCompat
 import androidx.slice.Slice
 import androidx.slice.SliceProvider
@@ -69,8 +70,7 @@ class SampleSliceProvider : SliceProvider() {
      * @return the [Slice] corresponding to the slice [Uri] parameter [sliceUri] or `null`.
      */
     override fun onBindSlice(sliceUri: Uri): Slice? {
-        @Suppress("NullChecksToSafeCall", "SENSELESS_COMPARISON")
-        if (sliceUri == null || sliceUri.path == null) {
+        if (sliceUri.path == null) {
             return null
         }
         return when (sliceUri.path) {
@@ -142,13 +142,17 @@ class SampleSliceProvider : SliceProvider() {
      * @param sliceUri the [Uri] for the [Slice] we are to create.
      * @return a [Slice] with the header "Test Slice"
      */
-    @SuppressLint("InlinedApi", "RestrictedApi")
+    @SuppressLint("RestrictedApi") // TODO: SliceHints.INFINITY is restricted to library use?
     private fun createTestSlice(sliceUri: Uri): Slice {
         val activityAction = SliceAction.create(
             PendingIntent.getActivity(
                 context, 0,
                 MainActivity.getIntent(context!!),
-                PendingIntent.FLAG_IMMUTABLE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PendingIntent.FLAG_IMMUTABLE
+                } else {
+                    0
+                }
             ),
             IconCompat.createWithResource(
                 context as Context,

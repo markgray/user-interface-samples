@@ -88,7 +88,7 @@ import com.example.android.sliceviewer.ui.list.SliceViewerActivity.Companion.TAG
  * @param scrollable `true` if this view should allow scrollable content when presenting in
  * [SliceView.MODE_LARGE]. Defaults to `false`.
  */
-@SuppressLint("RestrictedApi")
+@SuppressLint("RestrictedApi") // TODO: SliceHints.INFINITY is restricted to library use?
 fun SliceView.bind(
     context: Context,
     lifecycleOwner: LifecycleOwner,

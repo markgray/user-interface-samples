@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-@file:Suppress("RemoveRedundantQualifierName")
-
 package com.example.android.sliceviewer.ui.single
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -30,7 +27,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.slice.Slice
@@ -168,7 +164,6 @@ class SingleSliceViewerActivity : AppCompatActivity() {
      * @return You must return `true` for the menu to be displayed, if you return `false` it will
      * not be shown.
      */
-    @SuppressLint("AlwaysShowAction")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         typeMenu = menu.addSubMenu(R.string.slice_mode_title).apply {
             setIcon(R.drawable.ic_large)
@@ -178,14 +173,13 @@ class SingleSliceViewerActivity : AppCompatActivity() {
             add(R.string.large_mode)
         }
 
-        @Suppress("RedundantSamConstructor")
-        viewModel.selectedMode.observe(this, Observer {
-            when (it) {
+        viewModel.selectedMode.observe(this) { selectedMode: Int ->
+            when (selectedMode) {
                 SliceView.MODE_SHORTCUT -> typeMenu.setIcon(R.drawable.ic_shortcut)
                 SliceView.MODE_SMALL -> typeMenu.setIcon(R.drawable.ic_small)
                 SliceView.MODE_LARGE -> typeMenu.setIcon(R.drawable.ic_large)
             }
-        })
+        }
         super.onCreateOptionsMenu(menu)
         return true
     }
@@ -209,10 +203,9 @@ class SingleSliceViewerActivity : AppCompatActivity() {
             uri = uri,
             scrollable = true
         )
-        @Suppress("RedundantSamConstructor")
-        viewModel.selectedMode.observe(this, Observer {
-            sliceView.mode = it ?: SliceView.MODE_LARGE
-        })
+        viewModel.selectedMode.observe(this) { selectedMode: Int? ->
+            sliceView.mode = selectedMode ?: SliceView.MODE_LARGE
+        }
         uriValue.text = uri.toString()
     }
 

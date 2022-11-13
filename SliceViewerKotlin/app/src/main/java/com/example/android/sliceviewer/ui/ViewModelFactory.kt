@@ -51,7 +51,7 @@ class ViewModelFactory private constructor(
      * @param modelClass a [Class] whose instance is requested
      * @return a newly created [ViewModel]
      */
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST") // The cast is checked by if statments.
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SliceViewModel::class.java)) {
             return SliceViewModel(uriDataSource) as T
@@ -66,7 +66,7 @@ class ViewModelFactory private constructor(
         /**
          * Our singleton instance of [ViewModelFactory].
          */
-        @SuppressLint("StaticFieldLeak")
+        @SuppressLint("StaticFieldLeak") // TODO: Fix static field leak
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
 
