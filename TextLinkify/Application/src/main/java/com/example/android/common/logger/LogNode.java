@@ -34,7 +34,7 @@ public interface LogNode {
      * @param tr If an exception was thrown, this can be sent along for the logging facilities
      *           to extract and print useful information.
      */
-    @SuppressWarnings("UnnecessaryInterfaceModifier")
+    @SuppressWarnings("UnnecessaryInterfaceModifier") // interface's are by default public it seems.
     public void println(int priority, String tag, String msg, Throwable tr);
 
 }

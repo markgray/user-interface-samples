@@ -101,12 +101,12 @@ public class LogView extends androidx.appcompat.widget.AppCompatTextView impleme
         }
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") // Suggested change would make class less reusable
     public LogNode getNext() {
         return mNext;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") // Suggested change would make class less reusable
     public void setNext(LogNode node) {
         mNext = node;
     }
@@ -120,7 +120,7 @@ public class LogView extends androidx.appcompat.widget.AppCompatTextView impleme
      *                  for instance.
      * @return The fully concatenated String as a StringBuilder
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings("UnusedReturnValue") // Suggested change would make class less reusable
     private StringBuilder appendIfNotNull(StringBuilder source, String addStr, String delimiter) {
         if (addStr != null) {
             if (addStr.length() == 0) {
