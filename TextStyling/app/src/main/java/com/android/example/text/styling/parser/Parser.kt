@@ -112,7 +112,7 @@ class Parser {
         return TextMarkdown(parents)
     }
 
-    @Suppress("ConvertToStringTemplate")
+    @Suppress("ConvertToStringTemplate") // Building string by concatenation allows comments
     companion object {
         /**
          * The character "+" followed by a space character which is used to mark a bullet point.
