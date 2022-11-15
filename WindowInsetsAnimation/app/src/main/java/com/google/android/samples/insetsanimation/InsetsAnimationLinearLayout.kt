@@ -16,7 +16,6 @@
 
 package com.google.android.samples.insetsanimation
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
@@ -107,14 +106,14 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * Set to true to allow scrolling the IME off screen (from being visible),
      * by an downwards scroll. Defaults to `true`.
      */
-    @Suppress("MemberVisibilityCanBePrivate")
+    @Suppress("MemberVisibilityCanBePrivate") // I like to use kdoc [] references
     var scrollImeOffScreenWhenVisible: Boolean = true
 
     /**
      * Set to true to allow scrolling the IME on screen (from not being visible),
      * by an upwards scroll. Defaults to `true`.
      */
-    @Suppress("MemberVisibilityCanBePrivate")
+    @Suppress("MemberVisibilityCanBePrivate") // I like to use kdoc [] references
     var scrollImeOnScreenWhenNotVisible: Boolean = true
 
     /**
@@ -304,7 +303,6 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * consumed by this nested scrolling parent and the scroll distances consumed by any other
      * parent up the view hierarchy
      */
-    @SuppressLint("WrongConstant")
     override fun onNestedScroll(
         target: View,
         dxConsumed: Int,
@@ -323,7 +321,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
             } else if (scrollImeOnScreenWhenNotVisible &&
                 !imeAnimController.isInsetAnimationRequestPending() &&
                 ViewCompat.getRootWindowInsets(this)
-                    ?.isVisible(1 shl 3) == false
+                    ?.isVisible(WindowInsetsCompat.Type.ime()) == false
             ) {
                 // If we don't currently have control, the IME is not shown,
                 // the user is scrolling up, and the view can't scroll up any more
@@ -377,7 +375,6 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
      * @param consumed true if the child consumed the fling, false otherwise
      * @return true if this parent consumed or otherwise reacted to the fling
      */
-    @SuppressLint("WrongConstant")
     override fun onNestedFling(
         target: View,
         velocityX: Float,
@@ -394,7 +391,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
             // Otherwise we may need to start a control request and immediately fling
             // using the velocityY
             val imeVisible: Boolean = ViewCompat.getRootWindowInsets(this)
-                ?.isVisible(1 shl 3) == true
+                ?.isVisible(WindowInsetsCompat.Type.ime()) == true
             when {
                 velocityY > 0 && scrollImeOnScreenWhenNotVisible && !imeVisible -> {
                     // If the fling is in a upwards direction, and the IME is not visible,

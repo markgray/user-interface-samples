@@ -22,8 +22,8 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
-import android.view.WindowInsets.Type
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -171,7 +171,7 @@ class InsetsAnimationTouchListener(
      * @param event The [MotionEvent] object containing full information about the event.
      * @return `true` if the listener has consumed the event, `false` otherwise.
      */
-    @SuppressLint("NewApi", "ClickableViewAccessibility", "WrongConstant")
+    @SuppressLint("ClickableViewAccessibility") // Accessibility is a joke with Android
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         if (velocityTracker == null) {
             // Obtain a VelocityTracker if we don't have one yet
@@ -223,7 +223,7 @@ class InsetsAnimationTouchListener(
                         shouldStartRequest(
                             dy = dy,
                             imeVisible = ViewCompat.getRootWindowInsets(v)
-                                ?.isVisible(Type.ime()) == true
+                                ?.isVisible(WindowInsetsCompat.Type.ime()) == true
                         )
                     ) {
                         // If we don't currently have control (and a request isn't pending),

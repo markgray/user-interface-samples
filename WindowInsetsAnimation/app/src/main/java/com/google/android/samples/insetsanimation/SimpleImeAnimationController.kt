@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate") // I like to use kdoc [] references
 
 package com.google.android.samples.insetsanimation
 
@@ -163,7 +163,7 @@ internal class SimpleImeAnimationController {
         pendingRequestOnReady = onRequestReady
 
         // Finally we make a controlWindowInsetsAnimation() request:
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION") // TODO: Prefer WindowCompat.getInsetsController(Window, View) to explicitly specify the window
         ViewCompat.getWindowInsetsController(view)?.controlWindowInsetsAnimation(
             // We're only catering for IME animations in this listener
             WindowInsetsCompat.Type.ime(),
