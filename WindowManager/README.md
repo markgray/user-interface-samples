@@ -24,7 +24,7 @@ You can determine what `DisplayFeatures`s are available on the device and their
  an updated callback contract to notify your application when a `DisplayFeature`
   changes. You can register/unregister the callback using these methods:
 
-``` java
+```
 registerLayoutChangeCallback(@NonNull Executor executor, @NonNull Consumer<WindowLayoutInfo> callback)
 unregisterLayoutChangeCallback(@NonNull Consumer<WindowLayoutInfo> callback)
 ```
@@ -48,7 +48,7 @@ STATE_FLIPPED
 ```
 
 To access the new state you can use the FoldingFeature information returned to the registered callback:
-``` java
+```
 class LayoutStateChangeCallback : Consumer<WindowLayoutInfo> {
     override fun accept(newLayoutInfo: WindowLayoutInfo) {
         // TODO
@@ -74,13 +74,13 @@ The API results don’t include information about the system insets such as the 
 
 To access these APIs, you need to get an instance of the WindowManager object.
 
-``` java
+```
 var windowManager = WindowManager(this /* context */)
 ```
 
 From here you now have access to the WindowMetrics APIs and can easily call
 
-``` java
+```
 windowManager.currentWindowMetrics
 windowManager.maximumWindowMetrics
 ```
