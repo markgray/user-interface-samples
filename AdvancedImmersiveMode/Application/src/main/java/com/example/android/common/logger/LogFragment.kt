@@ -106,7 +106,7 @@ class LogFragment : Fragment() {
         logView!!.setPadding(paddingPixels, paddingPixels, paddingPixels, paddingPixels)
         logView!!.compoundDrawablePadding = paddingPixels
         logView!!.gravity = Gravity.BOTTOM
-        //@Suppress("DEPRECATION")
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             logView!!.setTextAppearance(android.R.style.TextAppearance_Holo_Medium)
         } else {
