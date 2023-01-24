@@ -28,7 +28,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate") // Suggested change would make the class less reusable
 
 package com.example.android.common.logger
 
@@ -105,8 +105,7 @@ class LogFragment : Fragment() {
         logView!!.setPadding(paddingPixels, paddingPixels, paddingPixels, paddingPixels)
         logView!!.compoundDrawablePadding = paddingPixels
         logView!!.gravity = Gravity.BOTTOM
-        @Suppress("DEPRECATION")
-        logView!!.setTextAppearance(activity, android.R.style.TextAppearance_Holo_Medium)
+        logView!!.setTextAppearance(android.R.style.TextAppearance_Holo_Medium)
         mScrollView.addView(logView)
         return mScrollView
     }
@@ -132,7 +131,7 @@ class LogFragment : Fragment() {
      * from a previous saved state as given here.
      * @return Return the [View] for the fragment's UI.
      */
-    @Suppress("RedundantNullableReturnType")
+    @Suppress("RedundantNullableReturnType") // The method we override returns nullable
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
