@@ -16,7 +16,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.7.20'
+        kotlin_version = '1.7.21'
     }
     repositories {
         google()
@@ -51,14 +51,14 @@ android {
 
 dependencies {
     // Support Libraries
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'androidx.emoji:emoji:1.1.0'
     implementation 'androidx.emoji:emoji-appcompat:1.1.0'
     implementation 'androidx.emoji:emoji-bundled:1.1.0'
 
     // Test
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.0"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.1"
 
     testImplementation 'junit:junit:4.13.2'
 }
