@@ -15,38 +15,16 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.7.21'
+    ext.kotlin_version = '1.8.0'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.0'
+        classpath 'com.android.tools.build:gradle:7.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
-plugins {
-    id 'com.diffplug.spotless'  version '5.7.0'
-}
-
-//subprojects {
-//    apply plugin: 'com.diffplug.spotless'
-//    spotless {
-//        kotlin {
-//            target '**/*.kt'
-//            ktlint(ktlint_version).userData(['android': 'true'])
-//            licenseHeaderFile project.rootProject.file('scripts/copyright')
-//        }
-//        groovyGradle {
-//            target '**/*.gradle' // default target of groovyGradle
-//            // the Groovy Eclipse formatter extends the Java Eclipse formatter,
-//            // so it formats Java files by default (unless `excludeJava` is used).
-//            greclipse().configFile(project.rootProject.file('scripts/greclipse.properties'))
-//            licenseHeaderFile project.rootProject.file('scripts/copyright'), '(buildscript|apply)'
-//        }
-//    }
-//}
 
 allprojects {
     repositories {
