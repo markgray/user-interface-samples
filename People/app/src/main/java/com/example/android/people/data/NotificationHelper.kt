@@ -32,6 +32,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -132,6 +133,7 @@ class NotificationHelper(private val context: Context) {
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     @WorkerThread
     fun showNotification(chat: Chat, fromUser: Boolean, update: Boolean = false) {
         updateShortcuts(chat.contact)
@@ -147,7 +149,7 @@ class NotificationHelper(private val context: Context) {
             Intent(context, BubbleActivity::class.java)
                 .setAction(Intent.ACTION_VIEW)
                 .setData(contentUri),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
 
         val builder = Notification.Builder(context, CHANNEL_NEW_MESSAGES)
@@ -190,7 +192,7 @@ class NotificationHelper(private val context: Context) {
                     Intent(context, MainActivity::class.java)
                         .setAction(Intent.ACTION_VIEW)
                         .setData(contentUri),
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                 )
             )
             // Direct Reply
@@ -203,7 +205,7 @@ class NotificationHelper(private val context: Context) {
                             context,
                             REQUEST_CONTENT,
                             Intent(context, ReplyReceiver::class.java).setData(contentUri),
-                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                         )
                     )
                     .addRemoteInput(
@@ -271,6 +273,7 @@ class NotificationHelper(private val context: Context) {
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     fun updateNotification(chat: Chat, chatId: Long, prepopulatedMsgs: Boolean) {
         if (!prepopulatedMsgs) {
             // Update notification bubble metadata to suppress notification so that the unread

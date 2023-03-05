@@ -26,6 +26,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,16 +74,58 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        @Suppress("DEPRECATION") // TODO: Replace setHasOptionsMenu with MenuProvider
-        setHasOptionsMenu(true)
         enterTransition =
             TransitionInflater.from(context).inflateTransition(R.transition.slide_bottom)
+    }
+
+    /**
+     * Our  [MenuProvider]
+     */
+    private val menuProvider: MenuProvider = object : MenuProvider {
+        /**
+         * Initialize the contents of the Fragment host's standard options menu. We use our
+         * [MenuInflater] parameter [menuInflater] to inflate our menu layout file
+         * [R.menu.chat] into our [Menu] parameter [menu].
+         *
+         * @param menu The options menu in which you place your items.
+         * @param menuInflater a [MenuInflater] you can use to inflate an XML menu file with.
+         */
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.chat, menu)
+            menu.findItem(R.id.action_show_as_bubble)?.let { item ->
+                viewModel.showAsBubbleVisible.observe(viewLifecycleOwner) { visible ->
+                    item.isVisible = visible
+                }
+            }
+        }
+
+        /**
+         * Called by the [MenuHost] when a [MenuItem] is selected from the menu. We do not implement
+         * anything yet, this will be done in `MarsRealEstateFinal`.
+         *
+         * @param menuItem the menu item that was selected
+         * @return `true` if the given menu item is handled by this menu provider, `false` otherwise.
+         */
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.action_show_as_bubble -> {
+                    viewModel.showAsBubble()
+                    if (isAdded) {
+                        parentFragmentManager.popBackStack()
+                    }
+                    true
+                }
+                else -> return false
+            }
+        }
     }
 
     /**
      *
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(menuProvider, viewLifecycleOwner)
         val id = arguments?.getLong(ARG_ID)
         if (id == null) {
             parentFragmentManager.popBackStack()
@@ -190,37 +234,6 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                 viewModel.send(text.toString())
                 text.clear()
             }
-        }
-    }
-
-    /**
-     *
-     */
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // TODO: Replace onCreateOptionsMenu with MenuProvider
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.chat, menu)
-        menu.findItem(R.id.action_show_as_bubble)?.let { item ->
-            viewModel.showAsBubbleVisible.observe(viewLifecycleOwner) { visible ->
-                item.isVisible = visible
-            }
-        }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    /**
-     *
-     */
-    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // TODO: Replace onOptionsItemSelected with MenuProvider
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_show_as_bubble -> {
-                viewModel.showAsBubble()
-                if (isAdded) {
-                    parentFragmentManager.popBackStack()
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 }
