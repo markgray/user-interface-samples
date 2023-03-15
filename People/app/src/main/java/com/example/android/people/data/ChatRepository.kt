@@ -17,7 +17,9 @@ package com.example.android.people.data
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import androidx.annotation.MainThread
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.concurrent.Executor
@@ -155,6 +157,7 @@ class DefaultChatRepository internal constructor(
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     @MainThread
     override fun sendMessage(id: Long, text: String, photoUri: Uri?, photoMimeType: String?) {
         val chat = chats.getValue(id)
@@ -180,6 +183,7 @@ class DefaultChatRepository internal constructor(
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun updateNotification(id: Long) {
         val chat = chats.getValue(id)
         notificationHelper.showNotification(chat, fromUser = false, update = true)
@@ -188,6 +192,7 @@ class DefaultChatRepository internal constructor(
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun activateChat(id: Long) {
         val chat = chats.getValue(id)
         currentChat = id
@@ -209,6 +214,7 @@ class DefaultChatRepository internal constructor(
     /**
      *
      */
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun showAsBubble(id: Long) {
         val chat = chats.getValue(id)
         executor.execute {
