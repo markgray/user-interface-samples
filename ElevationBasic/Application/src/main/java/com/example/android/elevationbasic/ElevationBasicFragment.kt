@@ -108,10 +108,12 @@ class ElevationBasicFragment : Fragment() {
                     Log.d(TAG, "ACTION_DOWN on view.")
                     view.translationZ = 120f
                 }
+
                 MotionEvent.ACTION_UP -> {
                     Log.d(TAG, "ACTION_UP on view.")
                     view.translationZ = 0f
                 }
+
                 else -> return@OnTouchListener false
             }
             true
