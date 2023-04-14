@@ -28,7 +28,6 @@ import androidx.emoji.text.EmojiSpan
 /**
  * This application uses [EmojiCompat] which we configure here in our [onCreate] override.
  */
-@Suppress("unused") // it is used as the android:name= attribute of the application element
 class EmojiCompatApplication : Application() {
 
     companion object {
