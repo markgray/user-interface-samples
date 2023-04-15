@@ -287,8 +287,10 @@ class SliceViewerActivity : AppCompatActivity() {
         when (item.title.toString()) {
             getString(R.string.shortcut_mode) ->
                 viewModel.selectedMode.value = SliceView.MODE_SHORTCUT
+
             getString(R.string.small_mode) ->
                 viewModel.selectedMode.value = SliceView.MODE_SMALL
+
             getString(R.string.large_mode) ->
                 viewModel.selectedMode.value = SliceView.MODE_LARGE
         }
