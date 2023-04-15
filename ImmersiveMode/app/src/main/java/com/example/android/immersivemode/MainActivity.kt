@@ -45,16 +45,16 @@ enum class BehaviorOption(
      * Swipe from the edge to show a hidden bar.
      */
     ShowBarsBySwipe(
-        "BEHAVIOR_SHOW_BARS_BY_SWIPE",
-        WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
+        "BEHAVIOR_DEFAULT",
+        WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
     ),
 
     /**
      * Any interaction on the display to show the navigation bar.
      */
     ShowBarsByTouch(
-        "BEHAVIOR_SHOW_BARS_BY_TOUCH",
-        WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_TOUCH
+        "BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE",
+        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
     ),
 
     /**
