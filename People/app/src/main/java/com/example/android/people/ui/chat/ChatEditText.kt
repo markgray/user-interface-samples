@@ -20,7 +20,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import com.example.android.people.R
 
 /**
  *
@@ -42,7 +41,7 @@ private val SUPPORTED_MIME_TYPES = setOf(
 class ChatEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.editTextStyle
+    defStyleAttr: Int = androidx.appcompat.R.attr.editTextStyle
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     private var onImageAddedListener: OnImageAddedListener? = null
