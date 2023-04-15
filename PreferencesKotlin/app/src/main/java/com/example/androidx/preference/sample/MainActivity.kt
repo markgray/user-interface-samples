@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity(),
      * A preference fragment that demonstrates commonly used preference attributes:
      *  -
      */
-    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
+    // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class BasicPreferencesFragment : PreferenceFragmentCompat() {
         /**
          *
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates preferences which contain dynamic widgets.
      */
-    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
+    // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class WidgetPreferencesFragment : PreferenceFragmentCompat() {
         /**
          *
@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates preferences that launch a dialog when tapped.
      */
-    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
+    // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class DialogPreferencesFragment : PreferenceFragmentCompat() {
         /**
          *
@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity(),
     /**
      * A preference fragment that demonstrates more advanced attributes and functionality.
      */
-    @Suppress("unused") // Used in the file xml/root.xml as a Preference in its PreferenceScreen
+    // Used in the file xml/root.xml as a Preference in its PreferenceScreen
     class AdvancedPreferencesFragment : PreferenceFragmentCompat() {
         /**
          *
