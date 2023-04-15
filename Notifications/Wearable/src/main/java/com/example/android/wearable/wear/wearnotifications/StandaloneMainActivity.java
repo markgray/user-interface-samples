@@ -256,7 +256,7 @@ public class StandaloneMainActivity extends Activity implements
         PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, 0);
         NotificationCompat.Action snoozeAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_alarm_white_48dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_alarm_white_48dp,
                         "Snooze",
                         snoozePendingIntent)
                         .build();
@@ -268,7 +268,7 @@ public class StandaloneMainActivity extends Activity implements
         PendingIntent dismissPendingIntent = PendingIntent.getService(this, 0, dismissIntent, 0);
         NotificationCompat.Action dismissAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_cancel_white_48dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_cancel_white_48dp,
                         "Dismiss",
                         dismissPendingIntent)
                         .build();
@@ -296,7 +296,7 @@ public class StandaloneMainActivity extends Activity implements
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_alarm_white_48dp))
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_alarm_white_48dp))
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
@@ -436,7 +436,7 @@ public class StandaloneMainActivity extends Activity implements
 
         NotificationCompat.Action replyAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_reply_white_18dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_reply_white_18dp,
                         replyLabel,
                         replyActionPendingIntent)
                         .addRemoteInput(remoteInput)
@@ -465,7 +465,7 @@ public class StandaloneMainActivity extends Activity implements
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_person_black_48dp))
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_person_black_48dp))
                 .setContentIntent(mainPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).
@@ -567,7 +567,7 @@ public class StandaloneMainActivity extends Activity implements
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_person_black_48dp))
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_person_black_48dp))
                 .setContentIntent(mainPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).
@@ -706,7 +706,7 @@ public class StandaloneMainActivity extends Activity implements
 
         NotificationCompat.Action replyAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_reply_white_18dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_reply_white_18dp,
                         replyLabel,
                         replyActionPendingIntent)
                         .addRemoteInput(remoteInput)
@@ -742,7 +742,7 @@ public class StandaloneMainActivity extends Activity implements
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_person_black_48dp))
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_person_black_48dp))
                 .setContentIntent(mainPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).

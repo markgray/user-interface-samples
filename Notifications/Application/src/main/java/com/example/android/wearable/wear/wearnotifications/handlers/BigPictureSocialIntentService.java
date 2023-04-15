@@ -190,7 +190,7 @@ public class BigPictureSocialIntentService extends IntentService {
 
         NotificationCompat.Action replyAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_reply_white_18dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_reply_white_18dp,
                         replyLabel,
                         replyActionPendingIntent)
                         .addRemoteInput(remoteInput)
@@ -209,7 +209,7 @@ public class BigPictureSocialIntentService extends IntentService {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_person_black_48dp))
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_person_black_48dp))
                 .setContentIntent(mainPendingIntent)
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 .setSubText(Integer.toString(1))

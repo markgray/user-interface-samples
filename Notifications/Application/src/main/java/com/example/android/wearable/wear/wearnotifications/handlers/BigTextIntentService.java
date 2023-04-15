@@ -169,7 +169,7 @@ public class BigTextIntentService extends IntentService {
         PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, 0);
         NotificationCompat.Action snoozeAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_alarm_white_48dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_alarm_white_48dp,
                         "Snooze",
                         snoozePendingIntent)
                         .build();
@@ -182,7 +182,7 @@ public class BigTextIntentService extends IntentService {
         PendingIntent dismissPendingIntent = PendingIntent.getService(this, 0, dismissIntent, 0);
         NotificationCompat.Action dismissAction =
                 new NotificationCompat.Action.Builder(
-                        R.drawable.ic_cancel_white_48dp,
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_cancel_white_48dp,
                         "Dismiss",
                         dismissPendingIntent)
                         .build();
@@ -204,7 +204,7 @@ public class BigTextIntentService extends IntentService {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_alarm_white_48dp))
+                        com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_alarm_white_48dp))
                 .setContentIntent(notifyPendingIntent)
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                 .setCategory(Notification.CATEGORY_REMINDER)

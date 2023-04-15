@@ -217,7 +217,7 @@ public class MessagingIntentService extends IntentService {
 
         NotificationCompat.Action replyAction =
                 new NotificationCompat.Action.Builder(
-                                R.drawable.ic_reply_white_18dp,
+                                com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_reply_white_18dp,
                                 replyLabel,
                                 replyActionPendingIntent)
                         .addRemoteInput(remoteInput)
@@ -247,7 +247,7 @@ public class MessagingIntentService extends IntentService {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setLargeIcon(
                         BitmapFactory.decodeResource(
-                                getResources(), R.drawable.ic_person_black_48dp))
+                                getResources(), com.example.android.wearable.wear.wearnotifications.common.R.drawable.ic_person_black_48dp))
                 .setContentIntent(mainPendingIntent)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 // Set primary color (important for Wear 2.0 Notifications).
