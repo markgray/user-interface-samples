@@ -52,6 +52,7 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
                     context.contentResolver.notifyChange(uri, null)
                 }, 1000)
             }
+
             InteractiveSliceProvider.ACTION_TOAST -> {
                 val message = (intent.extras ?: return).getString(
                     InteractiveSliceProvider.EXTRA_TOAST_MESSAGE,
@@ -59,6 +60,7 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
                 )
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
+
             InteractiveSliceProvider.ACTION_TOAST_RANGE_VALUE -> {
                 val range = (intent.extras ?: return).getInt(EXTRA_RANGE_VALUE, 0)
                 Toast.makeText(context, "value: $range", Toast.LENGTH_SHORT).show()

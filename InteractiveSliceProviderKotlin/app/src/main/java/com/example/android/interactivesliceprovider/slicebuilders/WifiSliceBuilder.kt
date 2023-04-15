@@ -63,10 +63,12 @@ class WifiSliceBuilder(
         when (wifiState) {
             WifiManager.WIFI_STATE_DISABLED, WifiManager.WIFI_STATE_DISABLING -> state =
                 "disconnected"
+
             WifiManager.WIFI_STATE_ENABLED, WifiManager.WIFI_STATE_ENABLING -> {
                 state = wifiManager.connectionInfo.ssid
                 wifiEnabled = true
             }
+
             WifiManager.WIFI_STATE_UNKNOWN -> state = "" // just don't show anything?
             else -> state = ""
         }
