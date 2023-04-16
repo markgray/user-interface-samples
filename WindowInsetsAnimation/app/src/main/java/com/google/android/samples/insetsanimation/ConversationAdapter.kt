@@ -45,6 +45,7 @@ internal class ConversationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             ITEM_TYPE_MESSAGE_SELF -> {
                 inflater.inflate(R.layout.message_bubble_self, parent, false)
             }
+
             else -> {
                 inflater.inflate(R.layout.message_bubble_other, parent, false)
             }

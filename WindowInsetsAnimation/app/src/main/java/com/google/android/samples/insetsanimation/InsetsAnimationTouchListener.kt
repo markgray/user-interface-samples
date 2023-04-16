@@ -188,6 +188,7 @@ class InsetsAnimationTouchListener(
                 v.copyBoundsInWindow(bounds)
                 lastWindowY = bounds.top
             }
+
             MotionEvent.ACTION_MOVE -> {
                 // Since the view is likely to be translated/moved as the WindowInsetsAnimation
                 // progresses, we need to make sure we account for that change in our touch
@@ -240,6 +241,7 @@ class InsetsAnimationTouchListener(
                     lastWindowY = bounds.top
                 }
             }
+
             MotionEvent.ACTION_UP -> {
                 velocityTracker?.addMovement(event)
 
@@ -254,6 +256,7 @@ class InsetsAnimationTouchListener(
                 // Reset our touch handling state
                 reset()
             }
+
             MotionEvent.ACTION_CANCEL -> {
                 // If we received a ACTION_CANCEL event, cancel any current WindowInsetsAnimation
                 simpleController.cancel()

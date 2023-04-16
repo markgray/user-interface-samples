@@ -400,6 +400,7 @@ class InsetsAnimationLinearLayout @JvmOverloads constructor(
                     // Indicate that we reacted to the fling
                     return true
                 }
+
                 velocityY < 0 && scrollImeOffScreenWhenVisible && imeVisible -> {
                     // If the fling is in a downwards direction, and the IME is visible,
                     // start an control request with an immediate fling
