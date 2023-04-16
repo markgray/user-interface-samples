@@ -229,6 +229,7 @@ object Parser {
                     val bulletPoint = Element(Element.Type.BULLET_POINT, text, subMarks)
                     parents.add(bulletPoint)
                 }
+
                 CODE_BLOCK -> {
                     // a code block is set between two "`" so look for the other one
                     // if another "`" is not found, then this is not a code block

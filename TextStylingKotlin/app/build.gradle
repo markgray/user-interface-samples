@@ -39,6 +39,13 @@ android {
             }
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
     namespace 'com.android.example.text.styling'
 }
 
@@ -47,7 +54,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
     // Android KTX
-    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.core:core-ktx:1.10.0"
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:4.13.2"

@@ -114,6 +114,7 @@ class MarkdownBuilder(
                         append(element.text)
                     }
                 }
+
                 Element.Type.QUOTE -> {
                     // You can set multiple spans for the same text
                     inSpans(StyleSpan(Typeface.ITALIC),
@@ -122,6 +123,7 @@ class MarkdownBuilder(
                         append(element.text)
                     }
                 }
+
                 Element.Type.BULLET_POINT -> {
                     inSpans(BulletPointSpan(20, bulletPointColor)) {
                         for (child in element.elements) {
@@ -129,6 +131,7 @@ class MarkdownBuilder(
                         }
                     }
                 }
+
                 Element.Type.TEXT -> append(element.text)
             }
         }
