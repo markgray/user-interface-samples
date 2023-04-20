@@ -138,7 +138,6 @@ class LogFragment : Fragment() {
      * from a previous saved state as given here.
      * @return Return the [View] for the fragment's UI.
      */
-    @Suppress("RedundantNullableReturnType") // The method we override returns nullable
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
