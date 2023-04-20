@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         // This demonstrates how to programmatically tint a drawable
         val item = menu.findItem(R.id.action_more)
         val drawableWrap: Drawable = DrawableCompat.wrap(item.icon!!).mutate()
-        DrawableCompat.setTint(drawableWrap, ColorUtils.getThemeColor(this, R.attr.colorOnPrimary))
+        DrawableCompat.setTint(drawableWrap, ColorUtils.getThemeColor(this, com.google.android.material.R.attr.colorOnPrimary))
         item.icon = drawableWrap
         return true
     }
