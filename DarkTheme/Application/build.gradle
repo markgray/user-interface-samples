@@ -1,17 +1,5 @@
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.1'
-    }
-}
-
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
 
 repositories {
