@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-buildscript {
-    ext {
-        kotlin_version = '1.8.20'
-    }
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
