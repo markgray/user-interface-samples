@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     defaultConfig {
         applicationId 'com.example.android.immersivemode'
         minSdkVersion 14
