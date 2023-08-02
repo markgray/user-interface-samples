@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.1.0'
     }
 }
 
@@ -38,7 +38,7 @@ List<String> dirs = [
 
 android {
 
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         versionCode 1
