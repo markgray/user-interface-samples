@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.android.example.text.styling.roundedbg"
