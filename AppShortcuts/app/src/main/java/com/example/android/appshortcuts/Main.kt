@@ -237,6 +237,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
                 }
                 refreshList()
             }
+
             R.id.remove -> {
                 mHelper.removeShortcut(shortcut)
                 refreshList()
