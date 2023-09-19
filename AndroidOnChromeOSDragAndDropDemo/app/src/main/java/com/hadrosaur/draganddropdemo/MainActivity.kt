@@ -136,17 +136,20 @@ open class MainActivity : AppCompatActivity() {
                     //If the dragged item is of an undesired type, report that this is not a valid target
                     false
                 }
+
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     // Increase green background colour when item is over top of target.
                     v.setBackgroundColor(Color.argb(150, 0, 255, 0))
                     true
                 }
+
                 DragEvent.ACTION_DRAG_LOCATION -> true
                 DragEvent.ACTION_DRAG_EXITED -> {
                     // Less intense green background colour when item not over target.
                     v.setBackgroundColor(Color.argb(55, 0, 255, 0))
                     true
                 }
+
                 DragEvent.ACTION_DROP -> {
                     requestDragAndDropPermissions(event) //Allow items from other applications
                     val item: ClipData.Item = event.clipData.getItemAt(0)
@@ -166,6 +169,7 @@ open class MainActivity : AppCompatActivity() {
                             droppedText.text = item.text
                             frameTarget.addView(droppedText)
                         }
+
                         event.clipDescription.hasMimeType("application/x-arc-uri-list") -> {
                             //If a file, read the first 200 characters and output them in a new TextView.
 
@@ -205,17 +209,20 @@ open class MainActivity : AppCompatActivity() {
                             droppedText.text = contents.substring(0, contentLength)
                             frameTarget.addView(droppedText)
                         }
+
                         else -> {
                             return false
                         }
                     }
                     true
                 }
+
                 DragEvent.ACTION_DRAG_ENDED -> {
                     // Restore background colour to transparent.
                     v.setBackgroundColor(Color.argb(0, 255, 255, 255))
                     true
                 }
+
                 else -> {
                     Log.e(
                         "DragDrop Example",
