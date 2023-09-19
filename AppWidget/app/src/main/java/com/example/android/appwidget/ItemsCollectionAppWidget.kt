@@ -372,6 +372,7 @@ class ItemsCollectionRemoteViewsFactory(
                     // This code will check the Checkbox
                     remoteViews.setCompoundButtonChecked(R.id.item_checkbox, true)
                 }
+
                 R.layout.item_radio_buttons -> {
                     // This code will check the item_radio_button2 in the item_radio_group RadioGroup
                     remoteViews.setRadioGroupChecked(
@@ -379,6 +380,7 @@ class ItemsCollectionRemoteViewsFactory(
                         R.id.item_radio_button2
                     )
                 }
+
                 R.layout.item_switches -> {
                     val viewId: Int = R.id.item_switch
                     val onCheckedChangePendingIntent: PendingIntent = PendingIntent.getBroadcast(
