@@ -523,9 +523,11 @@ class MainActivity : AppCompatActivity() {
             0 -> {
                 1 // The range of the weight is between (0, 1000) (exclusive)
             }
+
             100 -> {
                 WEIGHT_MAX - 1 // The range of the weight is between (0, 1000) (exclusive)
             }
+
             else -> {
                 WEIGHT_MAX * progress / 100
             }
