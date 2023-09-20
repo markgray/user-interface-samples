@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("PrivatePropertyName")
+
 package com.example.android.people.ui.chat
 
 // import androidx.core.widget.TextViewRichContentReceiverCompat

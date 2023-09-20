@@ -15,6 +15,7 @@
 
 package com.example.android.people.data
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -84,6 +85,7 @@ class NotificationHelper(private val context: Context) {
     /**
      *
      */
+    @SuppressLint("ReportShortcutUsage")
     @WorkerThread
     fun updateShortcuts(importantContact: Contact?) {
         var shortcuts = Contact.CONTACTS.map { contact ->
