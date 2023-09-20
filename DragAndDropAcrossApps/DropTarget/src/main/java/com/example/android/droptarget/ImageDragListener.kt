@@ -74,23 +74,28 @@ open class ImageDragListener : OnDragListener {
                 setTargetColor(view, COLOR_ACTIVE)
                 return true
             }
+
             DragEvent.ACTION_DRAG_ENTERED -> {
                 setTargetColor(view, COLOR_HOVER)
                 return true
             }
+
             DragEvent.ACTION_DRAG_LOCATION -> {
                 processLocation(event.x, event.y)
                 return true
             }
+
             DragEvent.ACTION_DRAG_EXITED -> {
                 setTargetColor(view, COLOR_ACTIVE)
                 return true
             }
+
             DragEvent.ACTION_DROP -> return processDrop(view, event)
             DragEvent.ACTION_DRAG_ENDED -> {
                 setTargetColor(view, COLOR_INACTIVE)
                 return true
             }
+
             else -> {
             }
         }
