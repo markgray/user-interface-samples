@@ -100,19 +100,19 @@ object Parser {
             // we found a quote
             if (lastStartIndex < startIndex) {
                 // check what was before the quote
-                val text = string.subSequence(lastStartIndex, startIndex)
+                val text = string.substring(lastStartIndex, startIndex)
                 parents.addAll(findElements(text, pattern))
             }
             // a quote can only be a paragraph long, so look for end of line
             val endOfQuote = getEndOfParagraph(string, endIndex)
             lastStartIndex = endOfQuote
-            val quotedText = string.subSequence(endIndex, endOfQuote)
+            val quotedText = string.substring(endIndex, endOfQuote)
             parents.add(Element(Element.Type.QUOTE, quotedText, emptyList()))
         }
 
         // check if there are any other element after the quote
         if (lastStartIndex < string.length) {
-            val text = string.subSequence(lastStartIndex, string.length)
+            val text = string.substring(lastStartIndex, string.length)
             parents.addAll(findElements(text, pattern))
         }
 
