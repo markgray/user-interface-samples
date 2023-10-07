@@ -70,10 +70,12 @@ class MainActivity : AppCompatActivity() {
                 showFragment(WelcomeFragment.TAG)
                 return@OnItemSelectedListener true
             }
+
             R.id.navigation_preferences -> {
                 showFragment(PreferencesFragment.TAG)
                 return@OnItemSelectedListener true
             }
+
             R.id.navigation_settings -> {
                 showFragment(SettingsFragment.TAG)
                 return@OnItemSelectedListener true
@@ -186,12 +188,15 @@ class MainActivity : AppCompatActivity() {
                 WelcomeFragment.TAG -> {
                     WelcomeFragment()
                 }
+
                 PreferencesFragment.TAG -> {
                     PreferencesFragment()
                 }
+
                 SettingsFragment.TAG -> {
                     SettingsFragment()
                 }
+
                 else -> {
                     WelcomeFragment()
                 }
