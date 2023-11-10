@@ -86,14 +86,11 @@ object Parser {
      * @return the [TextMarkdown]
      */
     fun parse(string: String): TextMarkdown {
-        val parents = mutableListOf<Element>()
-
-        val patternQuote = Pattern.compile(QUOTE_REGEX)
-        val pattern = Pattern.compile(BULLET_POINT_CODE_BLOCK_REGEX)
-
-        val matcher: Matcher = patternQuote.matcher(string)
+        val parents: MutableList<Element> = ArrayList()
+        val quotePattern: Pattern = Pattern.compile(QUOTE_REGEX)
+        val pattern: Pattern = Pattern.compile(BULLET_POINT_CODE_BLOCK_REGEX)
+        val matcher: Matcher = quotePattern.matcher(string)
         var lastStartIndex = 0
-
         while (matcher.find(lastStartIndex)) {
             val startIndex = matcher.start()
             val endIndex = matcher.end()
@@ -109,13 +106,11 @@ object Parser {
             val quotedText = string.substring(endIndex, endOfQuote)
             parents.add(Element(Element.Type.QUOTE, quotedText, emptyList()))
         }
-
         // check if there are any other element after the quote
         if (lastStartIndex < string.length) {
             val text = string.substring(lastStartIndex, string.length)
             parents.addAll(findElements(text, pattern))
         }
-
         return TextMarkdown(parents)
     }
 
