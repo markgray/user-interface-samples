@@ -17,5 +17,5 @@
     <string name="app_name">TextStyling</string>
     <string name="display_text">> Paragraphs starting with \"\>" are quotes.
         \nLines starting with * or + are bullet points:\n* Point one\n+ Point two, where nested
-        text enclosed in quotes is transformed in `code` block</string>
+        text enclosed in quotes is transformed in a `code` block</string>
 </resources>
