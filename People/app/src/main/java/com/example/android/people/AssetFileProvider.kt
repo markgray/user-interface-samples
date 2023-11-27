@@ -58,10 +58,12 @@ class AssetFileProvider : ContentProvider() {
                     context?.resources?.assets?.openFd(contact.icon)
                 }
             }
+
             "photo" -> {
                 val filename = segments[1]
                 context?.resources?.assets?.openFd(filename)
             }
+
             else -> null
         }
     }

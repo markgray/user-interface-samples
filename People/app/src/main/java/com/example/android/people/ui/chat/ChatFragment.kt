@@ -115,6 +115,7 @@ class ChatFragment : Fragment(R.layout.chat_fragment) {
                     }
                     true
                 }
+
                 else -> return false
             }
         }
