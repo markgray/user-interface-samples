@@ -178,14 +178,14 @@ class MainActivity : AppCompatActivity() {
         behaviorSpinner.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
-            BehaviorOption.values().map { it.title }
+            BehaviorOption.entries.map { it.title }
         )
 
         typeSpinner = findViewById(R.id.type)
         typeSpinner.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
-            TypeOption.values().map { it.title }
+            TypeOption.entries.map { it.title }
         )
 
         val hideButton: Button = findViewById(R.id.hide)
@@ -219,9 +219,9 @@ class MainActivity : AppCompatActivity() {
         // WindowInsetsController can hide or show specified system bars.
         val insetsController = WindowInsetsControllerCompat(window, window.decorView)
         // The behavior of the immersive mode.
-        val behavior = BehaviorOption.values()[behaviorSpinner.selectedItemPosition].value
+        val behavior = BehaviorOption.entries[behaviorSpinner.selectedItemPosition].value
         // The type of system bars to hide or show.
-        val type = TypeOption.values()[typeSpinner.selectedItemPosition].value
+        val type = TypeOption.entries[typeSpinner.selectedItemPosition].value
         insetsController.systemBarsBehavior = behavior
         if (hide) {
             insetsController.hide(type)
