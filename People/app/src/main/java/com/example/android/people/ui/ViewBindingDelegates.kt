@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("SameParameterValue")
+
 package com.example.android.people.ui
 
 import android.view.View

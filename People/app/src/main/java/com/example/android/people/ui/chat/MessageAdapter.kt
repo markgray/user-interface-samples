@@ -138,7 +138,6 @@ class MessageAdapter(
     }
 }
 
-@Suppress("PrivatePropertyName")
 private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Message>() {
 
     override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean {

@@ -91,6 +91,7 @@ abstract class Contact(
 
         if (id != other.id) return false
         if (name != other.name) return false
+        @Suppress("RedundantIf", "RedundantSuppression")
         if (icon != other.icon) return false
 
         return true
