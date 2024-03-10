@@ -46,7 +46,7 @@ public class LogView extends androidx.appcompat.widget.AppCompatTextView impleme
     @Override
     public void println(int priority, String tag, String msg, Throwable tr) {
 
-        
+
         String priorityStr = null;
 
         // For the purposes of this View, we want to print the priority as readable text.
@@ -111,7 +111,7 @@ public class LogView extends androidx.appcompat.widget.AppCompatTextView impleme
     @SuppressWarnings("UnusedReturnValue") // Suggested change would make class less reusable
     private StringBuilder appendIfNotNull(StringBuilder source, String addStr, String delimiter) {
         if (addStr != null) {
-            if (addStr.length() == 0) {
+            if (addStr.isEmpty()) {
                 delimiter = "";
             }
 
