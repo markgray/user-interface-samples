@@ -89,10 +89,10 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
      * [onWidgetContainerClicked] method with the appropriate layout resource ID for the
      * [ListAppWidget] to use in its role as a [AppWidgetProvider].
      *
-     * @param icicle we do not override [onSaveInstanceState] so do not use.
+     * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
-    public override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
