@@ -54,7 +54,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
     // Android KTX
-    implementation "androidx.core:core-ktx:1.13.0"
+    implementation "androidx.core:core-ktx:1.13.1"
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:4.13.2"
