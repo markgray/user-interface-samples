@@ -49,6 +49,7 @@ class DragFrameLayout @JvmOverloads constructor(
     /**
      * The list of [View]s that will be draggable.
      */
+    @Suppress("JoinDeclarationAndAssignment") // It is better this way
     private val mDragViews: MutableList<View>
 
     /**
