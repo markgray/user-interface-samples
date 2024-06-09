@@ -16,5 +16,5 @@
  *
  */
 
-include ':app'
-rootProject.name='WindowManagerSample'
+include(":app")
+rootProject.name = "WindowManagerSample"
