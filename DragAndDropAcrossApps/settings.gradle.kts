@@ -14,4 +14,18 @@
  * limitations under the License.
  */
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage") // TODO: Keep an eye on this
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 include(":DragSource", ":DropTarget")
