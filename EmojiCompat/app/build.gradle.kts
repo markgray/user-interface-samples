@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
 
 android {
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.example.android.emojicompat"
-        minSdkVersion (21)
-        targetSdkVersion (34)
+        minSdk = 21
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled (false)
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -43,25 +47,21 @@ android {
     }
     namespace = "com.example.android.emojicompat"
     configurations.configureEach {
-        resolutionStrategy.force "com.android.support:support-annotations:26.0.0"
+        resolutionStrategy.force("com.android.support:support-annotations:26.0.0")
     }
 }
 
 dependencies {
     // Support Libraries
-    implementation ("androidx.appcompat:appcompat:1.7.0")
-    implementation ("androidx.emoji:emoji:1.1.0")
-    implementation ("androidx.emoji:emoji-appcompat:1.1.0")
-    implementation ("androidx.emoji:emoji-bundled:1.1.0")
-    implementation ("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.emoji:emoji:1.1.0")
+    implementation("androidx.emoji:emoji-appcompat:1.1.0")
+    implementation("androidx.emoji:emoji-bundled:1.1.0")
+    implementation("androidx.core:core-ktx:1.13.1")
 
     // Test
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation ("androidx.test:rules:1.5.0")
-    androidTestImplementation ("androidx.test:runner:1.5.2")
-}
-repositories {
-    google()
-    mavenCentral()
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.1")
 }
