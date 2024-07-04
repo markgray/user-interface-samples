@@ -1,18 +1,20 @@
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
 
 android {
     compileSdk = 34
     defaultConfig {
         applicationId = "com.example.androidx.preference.sample"
-        minSdkVersion (14)
-        targetSdkVersion (34)
+        minSdk = 14
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled (false)
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -26,5 +28,5 @@ android {
 }
 
 dependencies {
-    implementation ("androidx.preference:preference-ktx:1.2.1")
+    implementation("androidx.preference:preference-ktx:1.2.1")
 }
