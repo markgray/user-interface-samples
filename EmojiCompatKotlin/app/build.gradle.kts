@@ -14,23 +14,28 @@
  * limitations under the License.
  */
 
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
 
 android {
     compileSdk = 34
     defaultConfig {
         applicationId = "com.example.android.emojicompat"
-        minSdkVersion (21)
-        targetSdkVersion (34)
+        minSdk = 21
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled (false)
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -45,14 +50,14 @@ android {
 
 dependencies {
     // Support Libraries
-    implementation ("androidx.appcompat:appcompat:1.7.0")
-    implementation ("androidx.emoji:emoji:1.1.0")
-    implementation ("androidx.emoji:emoji-appcompat:1.1.0")
-    implementation ("androidx.emoji:emoji-bundled:1.1.0")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.emoji:emoji:1.1.0")
+    implementation("androidx.emoji:emoji-appcompat:1.1.0")
+    implementation("androidx.emoji:emoji-bundled:1.1.0")
 
     // Test
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation ("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
 
-    testImplementation ("junit:junit:4.13.2")
+    testImplementation("junit:junit:4.13.2")
 }
