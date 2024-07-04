@@ -16,15 +16,15 @@
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
     compileSdk = 34
     defaultConfig {
         applicationId = "com.example.android.immersivemode"
-        minSdkVersion (21)
-        targetSdkVersion (34)
+        minSdk = 21
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -40,6 +40,6 @@ android {
 }
 
 dependencies {
-    implementation ("androidx.core:core-ktx:1.13.1")
-    implementation ("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
 }
