@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
+
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
 
 android {
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.android.example.text.styling.roundedbg"
-        minSdkVersion (21)
-        targetSdkVersion (34)
+        minSdk = 21
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled (false)
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -43,6 +48,6 @@ android {
 }
 
 dependencies {
-    implementation (project(":lib"))
-    implementation ("androidx.appcompat:appcompat:1.7.0")
+    implementation(project(":lib"))
+    implementation("androidx.appcompat:appcompat:1.7.0")
 }
