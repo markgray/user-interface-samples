@@ -54,5 +54,5 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.2.1")
     testImplementation("androidx.test.espresso:espresso-core:3.6.1")
     testImplementation("androidx.test.ext:truth:1.6.0")
-    testImplementation("com.google.truth:truth:1.4.2")
+    testImplementation("com.google.truth:truth:1.4.4")
 }
