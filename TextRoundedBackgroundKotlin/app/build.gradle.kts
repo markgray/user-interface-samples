@@ -48,6 +48,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.activity:activity-ktx:1.9.2")
     implementation(project(":lib"))
     implementation("androidx.appcompat:appcompat:1.7.0")
 }
