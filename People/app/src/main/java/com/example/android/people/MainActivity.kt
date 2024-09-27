@@ -22,15 +22,9 @@ import android.transition.Transition
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
@@ -58,22 +52,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        val rootView = findViewById<LinearLayout>(R.id.root)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Apply the insets as a margin to the view.
-            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = insets.left
-                rightMargin = insets.right
-                topMargin = insets.top
-                bottomMargin = insets.bottom
-            }
-            // Return CONSUMED if you don't want want the window insets to keep passing
-            // down to descendant views.
-            WindowInsetsCompat.CONSUMED
-        }
         setSupportActionBar(binding.toolbar)
         transition = TransitionInflater.from(this).inflateTransition(R.transition.app_bar)
         if (savedInstanceState == null) {
@@ -87,9 +66,11 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
     /**
      *
      */
-    override fun onNewIntent(intent: Intent) {
+    override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        handleIntent(intent)
+        if (intent != null) {
+            handleIntent(intent)
+        }
     }
 
     private fun handleIntent(intent: Intent) {
