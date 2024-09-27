@@ -24,6 +24,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -33,10 +34,15 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArraySet
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.textfield.TextInputLayout
 
 /**
@@ -180,8 +186,23 @@ class MainActivity : AppCompatActivity() {
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val rootView = findViewById<CoordinatorLayout>(R.id.container)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Apply the insets as a margin to the view.
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = insets.left
+                rightMargin = insets.right
+                topMargin = insets.top
+                bottomMargin = insets.bottom
+            }
+            // Return CONSUMED if you don't want want the window insets to keep passing
+            // down to descendant views.
+            WindowInsetsCompat.CONSUMED
+        }
         initializeSeekBars()
         mFamilyNameSet = ArraySet()
         mFamilyNameSet.addAll(listOf(*resources.getStringArray(R.array.family_names)))
