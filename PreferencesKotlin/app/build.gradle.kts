@@ -7,7 +7,7 @@ android {
     compileSdk = 34
     defaultConfig {
         applicationId = "com.example.androidx.preference.sample"
-        minSdk = 14
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -28,5 +28,6 @@ android {
 }
 
 dependencies {
+    implementation("androidx.activity:activity-ktx:1.9.2")
     implementation("androidx.preference:preference-ktx:1.2.1")
 }
