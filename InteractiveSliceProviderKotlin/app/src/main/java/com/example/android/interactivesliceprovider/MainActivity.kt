@@ -25,9 +25,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
+import android.view.ViewGroup
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.slice.SliceManager
 import com.google.firebase.appindexing.FirebaseAppIndex
 
@@ -42,6 +48,7 @@ class MainActivity : AppCompatActivity() {
      *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         // Grants permission to all non-default slices.
@@ -61,6 +68,20 @@ class MainActivity : AppCompatActivity() {
         grantSlicePermissions(defaultUriDecoded.toUri())
 
         setContentView(R.layout.activity_main)
+        val rootView = findViewById<ConstraintLayout>(R.id.root_view)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Apply the insets as a margin to the view.
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = insets.left
+                rightMargin = insets.right
+                topMargin = insets.top
+                bottomMargin = insets.bottom
+            }
+            // Return CONSUMED if you don't want want the window insets to keep passing
+            // down to descendant views.
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun grantSlicePermissions(uri: Uri, notifyIndexOfChange: Boolean = true) {
