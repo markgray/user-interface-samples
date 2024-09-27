@@ -18,9 +18,15 @@ package com.example.android.emojicompat
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.provider.FontRequest
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.emoji.bundled.BundledEmojiCompatConfig
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.EmojiSpan
@@ -80,9 +86,24 @@ class MainActivity : AppCompatActivity() {
      * @param savedInstanceState We do not override [onSaveInstanceState] so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         initEmojiCompat()
         setContentView(R.layout.activity_main)
+        val rootView = findViewById<ScrollView>(R.id.scroll)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Apply the insets as a margin to the view.
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = insets.left
+                rightMargin = insets.right
+                topMargin = insets.top
+                bottomMargin = insets.bottom
+            }
+            // Return CONSUMED if you don't want want the window insets to keep passing
+            // down to descendant views.
+            WindowInsetsCompat.CONSUMED
+        }
 
         // TextView variant provided by EmojiCompat library
         val emojiTextView = findViewById<TextView>(R.id.emoji_text_view)
