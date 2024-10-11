@@ -69,7 +69,7 @@ class ShortcutHelper(private val mContext: Context) {
      */
     fun maybeRestoreAllDynamicShortcuts() {
         @Suppress("ControlFlowWithEmptyBody") // Suggested change would make class less reusable
-        if (mShortcutManager.dynamicShortcuts.size == 0) {
+        if (mShortcutManager.dynamicShortcuts.isEmpty()) {
             // NOTE: If this application is always supposed to have dynamic shortcuts, then publish
             // them here.
             // Note when an application is "restored" on a new device, all dynamic shortcuts
@@ -215,7 +215,7 @@ class ShortcutHelper(private val mContext: Context) {
                     updateList.add(b.build())
                 }
                 // Call update.
-                if (updateList.size > 0) {
+                if (updateList.isNotEmpty()) {
                     callShortcutManager { mShortcutManager.updateShortcuts(updateList) }
                 }
             },
