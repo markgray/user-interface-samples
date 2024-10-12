@@ -24,7 +24,8 @@
     android:background="@drawable/shape_rect"
     android:backgroundTint="@color/color_on_surface_5"
     android:orientation="vertical"
-    tools:context=".ConversationFragment">
+    tools:context=".ConversationFragment"
+    tools:targetApi="r">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
