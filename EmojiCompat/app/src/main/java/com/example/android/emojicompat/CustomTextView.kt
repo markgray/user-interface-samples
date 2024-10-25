@@ -59,7 +59,7 @@ class CustomTextView @JvmOverloads constructor(
      * @param filters the current list of [InputFilter]s used by our [AppCompatTextView] super.
      */
     override fun setFilters(filters: Array<InputFilter>) {
-        super.filters = emojiTextViewHelper.getFilters(filters)
+        super.setFilters(emojiTextViewHelper.getFilters(filters))
     }
 
     /**
