@@ -20,11 +20,11 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.android.example.text.styling"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -54,7 +54,7 @@ android {
 dependencies {
     implementation("androidx.activity:activity-ktx:1.9.3")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
 
     // Dependencies for local unit tests
     testImplementation("junit:junit:4.13.2")
@@ -64,5 +64,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("com.google.dexmaker:dexmaker:1.2")
     androidTestImplementation("com.google.dexmaker:dexmaker-mockito:1.2")
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core-ktx:1.15.0")
 }
