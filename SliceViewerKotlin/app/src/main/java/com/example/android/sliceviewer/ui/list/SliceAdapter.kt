@@ -163,6 +163,7 @@ class SliceViewHolder(
      * @param uri the slice [Uri] we are to display in our [itemView].
      */
     fun bind(uri: Uri) {
+        @Suppress("RedundantValueArgument")
         sliceView.bind(
             context = context,
             lifecycleOwner = lifecycleOwner,
