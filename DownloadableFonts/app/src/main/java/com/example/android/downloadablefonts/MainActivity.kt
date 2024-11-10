@@ -408,6 +408,7 @@ class MainActivity : AppCompatActivity() {
                 mRequestDownloadButton.isEnabled = true
             }
         }
+        // TODO: use Executor based loading/callback,
         FontsContractCompat
             .requestFont(this@MainActivity, request, callback, handlerThreadHandler)
     }
