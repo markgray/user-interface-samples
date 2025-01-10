@@ -95,6 +95,7 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
                 getRemoteCollectionItems(context)
             remoteViews.setRemoteAdapter(R.id.items_list_view, collectionItems)
         } else {
+            // TODO: setRemoteAdapter is deprecated use setRemoteAdapter(int, RemoteViews. RemoteCollectionItems) instead
             remoteViews.setRemoteAdapter(
                 R.id.items_list_view,
                 Intent(context, ItemsCollectionRemoteViewsService::class.java)
