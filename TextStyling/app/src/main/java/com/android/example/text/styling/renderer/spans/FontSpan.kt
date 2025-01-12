@@ -51,16 +51,16 @@ open class FontSpan(private val font: Typeface?) : MetricAffectingSpan() {
      * Installs our [Typeface] field [font] into our [TextPaint] parameter [textPaint] while keeping
      * the style of the old [Typeface] of [textPaint] the same. First we initialize our [Typeface]
      * variable `val old` to the old [Typeface] of our [TextPaint] parameter [textPaint]. If this
-     * is not `null` we initialize our [Int] variable `val oldStyle` to the style of `old` or to 0
-     * if it is `null`. Next we initialize our [Typeface] variable `val fontOldStyle` to a [Typeface]
-     * object that best matches our [Typeface] field [font] and the Style `oldStyle` and then set the
-     * typeface of [textPaint] to `fontOldStyle`.
+     * is not `null` we initialize our [Int] variable `val oldStyle` to the style of `old` or to
+     * [Typeface.NORMAL] if it is `null`. Next we initialize our [Typeface] variable `val fontOldStyle`
+     * to a [Typeface] object that best matches our [Typeface] field [font] and the Style `oldStyle`
+     * and then set the typeface of [textPaint] to `fontOldStyle`.
      *
      * @param textPaint the [TextPaint] that will be used to draw the text of our span.
      */
     private fun update(textPaint: TextPaint) {
         val old: Typeface? = textPaint.typeface
-        val oldStyle: Int = old?.style ?: 0
+        val oldStyle: Int = old?.style ?: Typeface.NORMAL
 
         // Typeface is already cached at the system level
         // keep the style set before
