@@ -48,9 +48,9 @@ import java.io.FileNotFoundException
 open class MainActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main]. We initialize our
-     * [TextView] variable `val dragText` by finding the view with ID [R.id.text_drag] and our
-     * [FrameLayout] variable `val targetFrame` by finding the view with ID [R.id.frame_target]. We
+     * then we set our content view to our layout file `R.layout.activity_main`. We initialize our
+     * [TextView] variable `val dragText` by finding the view with ID `R.id.text_drag` and our
+     * [FrameLayout] variable `val targetFrame` by finding the view with ID `R.id.frame_target`. We
      * set the [OnDragListener] of `targetFrame` to an instance of our [DropTargetListener] class,
      * and set the [OnLongClickListener] of `dragText` to an instance of [TextViewLongClickListener].
      *
@@ -85,7 +85,7 @@ open class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * This is the custom [OnDragListener] used for the [FrameLayout] with ID [R.id.frame_target]
+     * This is the custom [OnDragListener] used for the [FrameLayout] with ID `R.id.frame_target`
      * which is used as the drop target.
      */
     protected inner class DropTargetListener(
@@ -256,7 +256,7 @@ open class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Custom [OnLongClickListener] that we use for the [TextView] with ID [R.id.text_drag].
+     * Custom [OnLongClickListener] that we use for the [TextView] with ID `R.id.text_drag`.
      */
     protected class TextViewLongClickListener : OnLongClickListener {
         /**

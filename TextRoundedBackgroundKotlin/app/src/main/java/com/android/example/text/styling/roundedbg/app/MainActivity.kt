@@ -26,14 +26,14 @@ import androidx.core.view.updateLayoutParams
 
 /**
  * Sample activity that uses [com.android.example.text.styling.roundedbg.RoundedBgTextView].
- * Our layout file [R.layout.activity_main] holds a bunch of these widgets demonstrating what
+ * Our layout file `R.layout.activity_main` holds a bunch of these widgets demonstrating what
  * the `RoundedBgTextView` does when displaying different text using different styles
  */
 class MainActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main] which exercises all
+     * then we set our content view to our layout file `R.layout.activity_main` which exercises all
      * the features of [com.android.example.text.styling.roundedbg.RoundedBgTextView].
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.

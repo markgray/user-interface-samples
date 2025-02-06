@@ -34,7 +34,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
      * [addPreferencesFromResource].
      *
      * First we call the [setPreferencesFromResource] method to have it inflate the XML resource with
-     * ID [R.xml.preferences] and replace the current preference hierarchy with the preference
+     * ID `R.xml.preferences` and replace the current preference hierarchy with the preference
      * hierarchy rooted at the key [rootKey]. Next we initialize our [ListPreference] variable
      * `val themePref` by using the [findPreference] method to find the [Preference] with the key
      * "themePref", and if this is not `null` we set the [Preference.OnPreferenceChangeListener] of

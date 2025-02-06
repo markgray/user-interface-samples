@@ -120,13 +120,13 @@ class ListAppWidget : AppWidgetProvider() {
          * method retrieves from our shared preference for the app widget ID `appWidgetId`. Then
          * we initialize our [RemoteViews] variable `val remoteViews` depending on the value of
          * `layoutId`:
-         *  - `layoutId` is [R.layout.widget_grocery_list]: we initialize our [Map] of [SizeF] to
+         *  - `layoutId` is `R.layout.widget_grocery_list`: we initialize our [Map] of [SizeF] to
          *  [RemoteViews] variable `val viewMapping` to an instance with two entries, one mapping a
          *  150f by 150f [SizeF] to the [RemoteViews] that our `constructRemoteViews` method constructs
-         *  to display the views in the layout file whose resource ID is [R.layout.widget_grocery_list]
+         *  to display the views in the layout file whose resource ID is `R.layout.widget_grocery_list`
          *  and one mapping a 250f by 150f [SizeF] to the [RemoteViews] that `constructRemoteViews`
          *  constructs to display the views in the layout file whose resource ID is
-         *  [R.layout.widget_grocery_grid]. We then "return" a [RemoteViews] instance constructed to
+         *  `R.layout.widget_grocery_grid`. We then "return" a [RemoteViews] instance constructed to
          *  inflate the layout with the closest size specification in `viewMapping` as the value
          *  to be assigned to `remoteViews`.
          *  - any other value of `layoutId` just returns a [RemoteViews] constructed to display the

@@ -31,7 +31,7 @@ class PreferencesFragment : Fragment() {
      * [onCreate] and [onActivityCreated]. It is recommended to __only__ inflate the layout in this
      * method and move logic that operates on the returned View to [onViewCreated]. We return the
      * [View] that our [LayoutInflater] parameter [inflater] inflates from our layout file
-     * [R.layout.fragment_preferences] using our [ViewGroup] parameter [container] for its
+     * `R.layout.fragment_preferences` using our [ViewGroup] parameter [container] for its
      * `LayoutParams` without attaching to it.
      *
      * @param inflater The [LayoutInflater] object that can be used to inflate

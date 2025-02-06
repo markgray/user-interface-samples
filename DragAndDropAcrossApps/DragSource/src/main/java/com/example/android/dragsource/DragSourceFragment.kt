@@ -72,28 +72,28 @@ class DragSourceFragment : Fragment() {
      * method and move logic that operates on the returned View to [onViewCreated].
      *
      * We use our [LayoutInflater] parameter [inflater] to inflate the layout file with resource ID
-     * [R.layout.fragment_dragsource], using our [ViewGroup] parameter [container] to generate its
+     * `R.layout.fragment_dragsource`, using our [ViewGroup] parameter [container] to generate its
      * `LayoutParams` without attaching to it and use the [View] returned to initialize our variable
      * `val view`.
      *
      * Next we set up the two image views in our UI for global drag and drop with a permission grant
      * by:
      *  - Initializing our [Uri] variable `var imageUri` to the [Uri] returned by our [getFileUri]
-     *  for the drawable with ID [R.drawable.image1] and the target name "image1.png"
+     *  for the drawable with ID `R.drawable.image1` and the target name "image1.png"
      *  - Initializing our [ImageView] variable `var imageView` by finding the [View] in our UI with
-     *  ID [R.id.image_one].
+     *  ID `R.id.image_one`.
      *  - Calling our method [setUpDraggableImage] with `imageView` and `imageUri` to configure them
      *  for drag and drop use.
      *  - Setting our [Uri] variable `imageUri` to the [Uri] returned by our [getFileUri] for the
-     *  drawable with ID [R.drawable.image2] and the target name "image2.png"
+     *  drawable with ID `R.drawable.image2` and the target name "image2.png"
      *  - Setting our [ImageView] variable `imageView` by finding the [View] in our UI with ID
-     *  [R.id.image_two].
+     *  `R.id.image_two`.
      *  - Calling our method [setUpDraggableImage] with `imageView` and `imageUri` to configure them
      *  for drag and drop use.
      *
      * Next we set up the local drop target area by:
      *  - Initializing our [ImageView] variable `val localImageTarget` by finding the [View] in our
-     *  UI with ID [R.id.local_target]
+     *  UI with ID `R.id.local_target`
      *  - Setting its [OnDragListener] to an anonymous [ImageDragListener] whose `setImageUri`
      *  override will set our [Uri] field [mLocalImageUri] to the [Uri] passed it then if the [View]
      *  passed it is an [ImageView], set the content of the [View] to the [Uri] passed it.

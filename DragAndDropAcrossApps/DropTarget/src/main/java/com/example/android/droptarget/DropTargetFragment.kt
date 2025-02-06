@@ -59,7 +59,7 @@ class DropTargetFragment : Fragment() {
     private var mImageUri: Uri? = null
 
     /**
-     * The [CheckBox] in our UI with ID [R.id.release_checkbox] labeled "Release permissions
+     * The [CheckBox] in our UI with ID `R.id.release_checkbox` labeled "Release permissions
      * immediately after a drop" which when checked causes us to release the permissions on the
      * [Uri] dropped on us immediately upon drop, otherwise we hold on to them so we can restore
      * the image after the activity has been resized.
@@ -73,9 +73,9 @@ class DropTargetFragment : Fragment() {
      *
      * We initialize our [View] variable `val rootView` to the [View] returned by our [LayoutInflater]
      * parameter [inflater] when its [LayoutInflater.inflate] method inflates our layout file whose
-     * resource ID is [R.layout.fragment_droptarget] using our [ViewGroup] parameter [container] for
+     * resource ID is `R.layout.fragment_droptarget` using our [ViewGroup] parameter [container] for
      * its `LayoutParams` without attaching to it, initialize our [ImageView] variable `val imageView`
-     * by finding the [View] in `rootView` with ID [R.id.image_target], and initialize our
+     * by finding the [View] in `rootView` with ID `R.id.image_target`, and initialize our
      * [ImageDragListener] variable `val imageDragListener` to a new instance then set the
      * [OnDragListener] of `imageView` to `imageDragListener`.
      *
@@ -88,7 +88,7 @@ class DropTargetFragment : Fragment() {
      * `imageView` to [mImageUri].
      *
      * Finally we initialize our [CheckBox] field [mReleasePermissionCheckBox] by finding the [View]
-     * in `rootView` with ID [R.id.release_checkbox] and return `rootView` to the caller.
+     * in `rootView` with ID `R.id.release_checkbox` and return `rootView` to the caller.
      *
      * @param inflater The [LayoutInflater] object that can be used to inflate
      * any views in the fragment.

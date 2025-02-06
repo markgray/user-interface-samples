@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment
 /**
  * Just consists of a `TextView` with a welcome message and two `ImageView` in a vertical
  * `LinearLayout` (does nothing). It is used as the starting contents of the `FrameLayout`
- * with ID [R.id.fragment_layout] in our UI.
+ * with ID `R.id.fragment_layout` in our UI.
  */
 class WelcomeFragment : Fragment() {
     /**
@@ -32,7 +32,7 @@ class WelcomeFragment : Fragment() {
      * [onCreate] and [onActivityCreated]. It is recommended to __only__ inflate the layout in this
      * method and move logic that operates on the returned View to [onViewCreated]. We return the
      * [View] that our [LayoutInflater] parameter [inflater] inflates from our layout file
-     * [R.layout.fragment_welcome] using our [ViewGroup] parameter [container] for its `LayoutParams`
+     * `R.layout.fragment_welcome` using our [ViewGroup] parameter [container] for its `LayoutParams`
      * without attaching to it.
      *
      * @param inflater The [LayoutInflater] object that can be used to inflate

@@ -61,7 +61,7 @@ object ListSharedPrefsUtil {
     /**
      * Returns the [Int] layout file ID that was stored in our preferences file under the key formed
      * by appending the string value of our [appWidgetId] parameter to the prefix string
-     * [PREF_PREFIX_KEY], defaulting to [R.layout.widget_grocery_list] if there is not such entry.
+     * [PREF_PREFIX_KEY], defaulting to `R.layout.widget_grocery_list` if there is not such entry.
      *
      * @param context the [Context] to use to retrieve the [SharedPreferences] instance of our
      * preferences file

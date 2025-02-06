@@ -31,7 +31,7 @@ import androidx.core.view.updateLayoutParams
 /**
  * Behaviors of immersive mode. The [title] field is used as the items to be displayed by the
  * [ArrayAdapter] used as the `adapter` of the [Spinner] field `behaviorSpinner` (resource ID
- * [R.id.behavior] in our layout file), and the [Int] field [value] is the behavior constant that
+ * `R.id.behavior` in our layout file), and the [Int] field [value] is the behavior constant that
  * the `systemBarsBehavior` is to be set to in the `controlWindowInsets` method.
  */
 enum class BehaviorOption(
@@ -72,7 +72,7 @@ enum class BehaviorOption(
 
 /**
  * Type of system bars to hide or show. The [title] field is used as the items to be displayed by the
- * [ArrayAdapter] used as the `adapter` of the [Spinner] field `TypeOption` (resource ID [R.id.type]
+ * [ArrayAdapter] used as the `adapter` of the [Spinner] field `TypeOption` (resource ID `R.id.type`
  * in our layout file), and the [Int] field [value] is the type constant that is passed to the
  * [WindowInsetsControllerCompat] `hide` or `show` method in the `controlWindowInsets` method.
  */
@@ -120,7 +120,7 @@ enum class TypeOption(
  */
 class MainActivity : AppCompatActivity() {
     /**
-     * The [Spinner] in our layout file with ID [R.id.behavior] (labeled "Behavior") used to select
+     * The [Spinner] in our layout file with ID `R.id.behavior` (labeled "Behavior") used to select
      * the behavior of the system bars when they are hidden:
      *  - [WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE] When system bars are hidden in
      *  this mode, they can be revealed with system gestures, such as swiping from the edge of the
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var behaviorSpinner: Spinner
 
     /**
-     * The [Spinner] in our layout file with ID [R.id.type] (labeled "Type") used to select which of
+     * The [Spinner] in our layout file with ID `R.id.type` (labeled "Type") used to select which of
      * the system bars are hidden:
      *  - [WindowInsetsCompat.Type.systemBars] All system bars. Includes statusBars(), captionBar()
      *  as well as navigationBars(), but not ime().
@@ -149,26 +149,26 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.main_activity] whose root view is
+     * then we set our content view to our layout file `R.layout.main_activity` whose root view is
      * a vertical [LinearLayout] holding a:
-     *  - Horizontal [LinearLayout] holding a "HIDE" and a "SHOW" [Button] (ID [R.id.hide] and
-     *  [R.id.show])
-     *  - A [TextView] displaying the text "Behavior", above a [Spinner] with ID [R.id.behavior]
-     *  - A [TextView] displaying the text "Type", above a [Spinner] with ID [R.id.type]
+     *  - Horizontal [LinearLayout] holding a "HIDE" and a "SHOW" [Button] (ID `R.id.hide` and
+     *  `R.id.show`)
+     *  - A [TextView] displaying the text "Behavior", above a [Spinner] with ID `R.id.behavior`
+     *  - A [TextView] displaying the text "Type", above a [Spinner] with ID `R.id.type`
      *
      * Next we initialize our [Spinner] field [behaviorSpinner] by finding the view in our UI with
-     * ID [R.id.behavior] and set its `adapter` to a new instance of [ArrayAdapter] which displays
+     * ID `R.id.behavior` and set its `adapter` to a new instance of [ArrayAdapter] which displays
      * the `title` property of the constants of the [BehaviorOption] `enum` class in the system layout
      * file [android.R.layout.simple_list_item_1], and we initialize our [Spinner] field [typeSpinner]
-     * by finding the view in our UI with ID [R.id.type] and set its `adapter` to a new instance of
+     * by finding the view in our UI with ID `R.id.type` and set its `adapter` to a new instance of
      * [ArrayAdapter] which displays the `title` property of the constants of the [TypeOption] `enum`
      * class in the system layout file [android.R.layout.simple_list_item_1].
      *
      * We initialize our [Button] variable `val hideButton` by finding the view in our UI with ID
-     * [R.id.hide] and set its [View.OnClickListener] to a lambda which calls our [controlWindowInsets]
+     * `R.id.hide` and set its [View.OnClickListener] to a lambda which calls our [controlWindowInsets]
      * method with `true` to have it hide the system bars the user selected using [typeSpinner] with
      * the behavior he selected using [behaviorSpinner], and we initialize our [Button] variable
-     * `val showButton` by finding the view in our UI with ID [R.id.show] and set its [View.OnClickListener]
+     * `val showButton` by finding the view in our UI with ID `R.id.show` and set its [View.OnClickListener]
      * to a lambda which calls our [controlWindowInsets] method with `false` to have it show the system
      * bars the user selected using [typeSpinner] with the behavior he selected using [behaviorSpinner].
      *

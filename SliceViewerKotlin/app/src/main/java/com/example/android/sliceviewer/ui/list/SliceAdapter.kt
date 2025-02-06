@@ -119,20 +119,20 @@ class SliceViewHolder(
     private val context: Context = view.context
 
     /**
-     * The [SliceView] with ID [R.id.slice] in `view`, used to display the [Slice]
+     * The [SliceView] with ID `R.id.slice` in `view`, used to display the [Slice]
      */
     private val sliceView: SliceView = view.findViewById(R.id.slice)
 
     /**
-     * The [TextView] with ID [R.id.uri_value] in `view`, used to display the string value of the
+     * The [TextView] with ID `R.id.uri_value` in `view`, used to display the string value of the
      * slice [Uri] we are bound to.
      */
     private val uriValue: TextView = view.findViewById(R.id.uri_value)
 
     /**
-     * The [ViewGroup] with ID [R.id.uri_group] in `view`, it is the vertical `LinearLayout` at the
+     * The [ViewGroup] with ID `R.id.uri_group` in `view`, it is the vertical `LinearLayout` at the
      * top of `view` which holds a static [TextView] with the text "URI" and the [TextView] holding
-     * the string value of the slice [Uri] we are bound to (ID [R.id.uri_value], ie. our [uriValue]
+     * the string value of the slice [Uri] we are bound to (ID `R.id.uri_value`, ie. our [uriValue]
      * field). Its [View.OnClickListener] is set to a lambda which launches an activity using an
      * [Intent] which uses a [Uri] formed by adding a "slice-" prefix to the scheme of the [Uri] we
      * are bound to. `SingleSliceViewerActivity` has an `intent-filter` in AndroidManifest for these

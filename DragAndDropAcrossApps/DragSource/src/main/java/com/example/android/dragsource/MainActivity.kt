@@ -57,7 +57,7 @@ class MainActivity : SampleActivityBase() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main]. There are two of
+     * then we set our content view to our layout file `R.layout.activity_main`. There are two of
      * these: layout/activity_main.xml used by displays narrower than 720dp, and displays 720dp or
      * greater will use layout-w720dp/activity_main.xml with the only difference being that the
      * layout/activity_main.xml file contains a [ViewAnimator] that holds the sample description
@@ -70,7 +70,7 @@ class MainActivity : SampleActivityBase() {
      * this activity to start a new [FragmentTransaction] which we use to initialize our variable
      * `val transaction`, initialize our [DragSourceFragment] variable `val fragment` with a new
      * instance, use `transaction` to replace any content in the container in our UI whose ID is
-     * [R.id.sample_content_fragment] with `fragment` and then commit `transaction`. If it is
+     * `R.id.sample_content_fragment` with `fragment` and then commit `transaction`. If it is
      * non-`null` we are being re-initialized after previously being shut and the system will take
      * care of restoring our fragments.
      *
@@ -111,7 +111,7 @@ class MainActivity : SampleActivityBase() {
      * you add items to the menu, you can implement the Activity's [onOptionsItemSelected] method to
      * handle them there.
      *
-     * We use a [MenuInflater] for this context to our inflate our menu layout file [R.menu.main]
+     * We use a [MenuInflater] for this context to our inflate our menu layout file `R.menu.main`
      * into our [Menu] parameter [menu] and return `true` so that the menu will be displayed.
      *
      * @param menu The options [Menu] in which you place your items.
@@ -129,8 +129,8 @@ class MainActivity : SampleActivityBase() {
      * items or otherwise dynamically modify the contents.
      *
      * We initialize our [MenuItem] variable `val logToggle` by finding the item in our [Menu]
-     * parameter [menu] with ID [R.id.menu_toggle_log], and set it to visible if the [View] in our
-     * UI with ID [R.id.sample_output] is a [ViewAnimator] (layout file layout/activity_main.xml
+     * parameter [menu] with ID `R.id.menu_toggle_log`, and set it to visible if the [View] in our
+     * UI with ID `R.id.sample_output` is a [ViewAnimator] (layout file layout/activity_main.xml
      * for displays narrower than 720dp only, it is a `LinearLayout` in the layout file used for
      * 720dp or wider displays layout-w720dp/activity_main.xml). If our [Boolean] field [mLogShown]
      * is `true` we set the title of `logToggle` to "Hide Log" or to "Show Log" if it is `false`.
@@ -151,14 +151,14 @@ class MainActivity : SampleActivityBase() {
     /**
      * This hook is called whenever an item in your options menu is selected.
      *
-     * When the `itemId` property of our [MenuItem] parameter [item] is [R.id.menu_toggle_log] we
+     * When the `itemId` property of our [MenuItem] parameter [item] is `R.id.menu_toggle_log` we
      * toggle the value of our [Boolean] field [mLogShown], initialize our [ViewAnimator] variable
-     * `val output` by finding the [View] in our UI with ID [R.id.sample_output] and if [mLogShown]
+     * `val output` by finding the [View] in our UI with ID `R.id.sample_output` and if [mLogShown]
      * is now `true` set the child view of `output` that will be displayed to 1 (our [LogFragment])
      * if it is now `false` we set the child view of `output` that will be displayed to 0 (the
      * text describing the sample). We then call [invalidateOptionsMenu] to report that the options
      * menu has changed, and should be recreated by a call to [onCreateOptionsMenu], and return
-     * `true` to consume the event here. If the `itemID` is not [R.id.menu_toggle_log] we return the
+     * `true` to consume the event here. If the `itemID` is not `R.id.menu_toggle_log` we return the
      * value returned by our super's implementation of `onOptionsItemSelected`.
      *
      * @param item The menu item that was selected.

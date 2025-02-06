@@ -45,7 +45,7 @@ import androidx.core.view.updateLayoutParams
  */
 class DocumentCentricActivity : AppCompatActivity() {
     /**
-     * The [CheckBox] in our UI labeled "Task per document" with ID [R.id.multiple_task_checkbox].
+     * The [CheckBox] in our UI labeled "Task per document" with ID `R.id.multiple_task_checkbox`.
      * When it is checked the flag [Intent.FLAG_ACTIVITY_MULTIPLE_TASK] is added to the [Intent]
      * used to launch [NewDocumentActivity]. This causes the system to create a new task and launch
      * [NewDocumentActivity] into it.
@@ -54,9 +54,9 @@ class DocumentCentricActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_document_centric_main],
+     * then we set our content view to our layout file `R.layout.activity_document_centric_main`,
      * and initialize our [CheckBox] field [mCheckbox] by finding the view in our UI with the ID
-     * [R.id.multiple_task_checkbox]. Our UI consists of a root vertical `LinearLayout` holding two
+     * `R.id.multiple_task_checkbox`. Our UI consists of a root vertical `LinearLayout` holding two
      * vertical `LinearLayout`, the top one just holding a `TextView` displaying text describing the
      * demo, and the bottom one holding a `Button` labeled "Create new document" which launches a
      * new instance of [NewDocumentActivity], and a [CheckBox] labeled "Task per document" which the

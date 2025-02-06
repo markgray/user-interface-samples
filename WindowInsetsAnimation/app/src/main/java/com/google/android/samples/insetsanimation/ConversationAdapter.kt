@@ -30,8 +30,8 @@ internal class ConversationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
      * represent an item. We initialize our [LayoutInflater] variable `val inflater` to the
      * [LayoutInflater] from context of our [ViewGroup] parameter [parent]. Then we initialize
      * our [View] variable `val view` to the [View] that `inflater` inflates from the layout file
-     * [R.layout.message_bubble_self] when our [viewType] parameter is [ITEM_TYPE_MESSAGE_SELF],
-     * or else to the [View] it inflates from the layout file [R.layout.message_bubble_other] --
+     * `R.layout.message_bubble_self` when our [viewType] parameter is [ITEM_TYPE_MESSAGE_SELF],
+     * or else to the [View] it inflates from the layout file `R.layout.message_bubble_other` --
      * in both cases using [parent] for its layout parmeters without attaching to it. Finally we
      * return a [MessageHolder] constructed using [View] to the caller.
      *
@@ -90,12 +90,12 @@ internal class ConversationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 
     companion object {
         /**
-         * The view type that uses the layout file [R.layout.message_bubble_self]
+         * The view type that uses the layout file `R.layout.message_bubble_self`
          */
         const val ITEM_TYPE_MESSAGE_SELF = 0
 
         /**
-         * The view type that uses the layout file [R.layout.message_bubble_other]
+         * The view type that uses the layout file `R.layout.message_bubble_other`
          */
         const val ITEM_TYPE_MESSAGE_OTHER = 1
 

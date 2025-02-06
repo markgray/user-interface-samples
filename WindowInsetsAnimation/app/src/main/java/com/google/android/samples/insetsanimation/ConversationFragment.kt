@@ -80,7 +80,7 @@ class ConversationFragment : Fragment() {
      * Called immediately after [onCreateView] has returned, but before any saved state has been
      * restored in to the view. This gives subclasses a chance to initialize themselves once they
      * know their view hierarchy has been completely created. First we set the `adapter` of the
-     * [RecyclerView] in the [binding] to our layout file with ID [R.id.conversation_recyclerview]
+     * [RecyclerView] in the [binding] to our layout file with ID `R.id.conversation_recyclerview`
      * (ie. the [FragmentConversationBinding.conversationRecyclerview] property of [binding]) to a
      * new instance of [ConversationAdapter]. The rest of the override sets our activity up to use
      * [WindowInsetsAnimation] to animate its views and the ime, and is well documented in the code.

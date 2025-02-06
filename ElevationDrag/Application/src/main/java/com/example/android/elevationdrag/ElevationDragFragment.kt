@@ -56,7 +56,7 @@ class ElevationDragFragment : Fragment() {
      *
      * First we call our super's implementation of `onCreate`, then we initialize our [ViewOutlineProvider]
      * field [mOutlineProviderCircle] to a new instance of our [CircleOutlineProvider] class and initialize
-     * our [Int] field [mElevationStep] to the raw pixel value of our [R.dimen.elevation_step] "dimen"
+     * our [Int] field [mElevationStep] to the raw pixel value of our `R.dimen.elevation_step` "dimen"
      * resource (8dp) given the display metrics of the device we running on.
      *
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
@@ -74,32 +74,32 @@ class ElevationDragFragment : Fragment() {
      * this method and move logic that operates on the returned View to [onViewCreated].
      *
      * We use our [LayoutInflater] parameter [inflater] to inflate the layout file whose resource ID
-     * is [R.layout.ztranslation] using our [ViewGroup] parameter [container] for its
+     * is `R.layout.ztranslation` using our [ViewGroup] parameter [container] for its
      * `LayoutParams` without attaching to it and use the [View] that [inflater] returns to
      * initialize our variable `val rootView`. This layout file consists of a [DragFrameLayout] root
-     * [ViewGroup] holding a 96dp by 96dp [View] with the ID [R.id.circle] whose outline is set to
+     * [ViewGroup] holding a 96dp by 96dp [View] with the ID `R.id.circle` whose outline is set to
      * a circle and which the user can drag around the screen, and a horizontal `LinearLayout` which
      * holds "Z+" and "Z-" [Button]s which the user can click to raise and lower the `elevation` of
-     * the [R.id.circle] circle.
+     * the `R.id.circle` circle.
      *
      * Next we initialize our [View] variable `val floatingShape` by finding the [View] in `rootView`
-     * with ID [R.id.circle] (this is the [View] to apply z-translation to) and  then set its
+     * with ID `R.id.circle` (this is the [View] to apply z-translation to) and  then set its
      * [ViewOutlineProvider] to our field [mOutlineProviderCircle] (this defines the shape of the
      * [View]'s shadow), and we set the `clipToOutline` property of `floatingShape` to `true` to
      * have the [View] use its [Outline] to clip the contents of the [View].
      *
      * Next we initialize our [DragFrameLayout] variable `val dragLayout` by finding the [View] in
-     * `rootView` with ID [R.id.main_layout] then set its [DragFrameLayout.DragFrameLayoutController]
+     * `rootView` with ID `R.id.main_layout` then set its [DragFrameLayout.DragFrameLayoutController]
      * to a lambda which animates the `translationZ` property of `floatingShape` by 50f if it is
      * currently `captured` for drag, and by 0f otherwise (if the lambda's argument `captured` is
      * `true` it logs "Drag" and if `false` it logs "Drop"). Then we add `floatingShape` to the list
      * of [View]s that are draggable within the container `dragLayout`.
      *
-     * Next we locate the "Z+" [Button] in `rootView` by finding the [View] with ID [R.id.raise_bt]
+     * Next we locate the "Z+" [Button] in `rootView` by finding the [View] with ID `R.id.raise_bt`
      * and set its [View.OnClickListener] to a lambda which increments our [mElevation] field by
      * our [mElevationStep] field, logs the new value of [mElevation], and sets the `elevation`
      * property of `floatingShape` to the new [mElevation]. Then we locate the "Z-" [Button] in
-     * `rootView` by finding the [View] with ID [R.id.lower_bt] and set its [View.OnClickListener]
+     * `rootView` by finding the [View] with ID `R.id.lower_bt` and set its [View.OnClickListener]
      * to a lambda which decrements our [mElevation] field by our [mElevationStep] field (down to
      * a minimum of 0f only), logs the new value of [mElevation], and sets the `elevation` property
      * of `floatingShape` to the new [mElevation].

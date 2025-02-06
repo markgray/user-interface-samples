@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main]. This consists of a
+     * then we set our content view to our layout file `R.layout.activity_main`. This consists of a
      * `ConstraintLayout` root view holding a single `TextView` displaying the text: "This is an
      * Activity of the `AppWidget` sample. Long press the app icon and choose the widget picker to
      * try the widgets in the sample".

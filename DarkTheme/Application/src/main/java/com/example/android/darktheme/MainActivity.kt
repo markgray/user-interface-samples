@@ -58,15 +58,15 @@ class MainActivity : AppCompatActivity() {
      * `onNavigationItemSelected` method of this interface is called when an item in the bottom
      * navigation menu is selected with the [MenuItem] which was selected and the lambda branches on
      * the [MenuItem.getItemId] of the item (aka kotlin `itemId` property):
-     *  - [R.id.navigation_home] calls our [showFragment] method to replace the fragment with tag
+     *  - `R.id.navigation_home` calls our [showFragment] method to replace the fragment with tag
      *  [WelcomeFragment.TAG] with a new instance of [WelcomeFragment].
-     *  - [R.id.navigation_preferences] calls our [showFragment] method to replace the fragment with
+     *  - `R.id.navigation_preferences` calls our [showFragment] method to replace the fragment with
      *  tag [PreferencesFragment.TAG] with a new instance of [PreferencesFragment].
-     *  - [R.id.navigation_settings] calls our [showFragment] method to replace the fragment with
+     *  - `R.id.navigation_settings` calls our [showFragment] method to replace the fragment with
      *  tag [SettingsFragment.TAG] with a new instance of [SettingsFragment].
      *
      * After calling [showFragment] each branch returns `true` to display the item as the selected
-     * item. The `FrameLayout` with ID [R.id.fragment_layout] in our layout file is used to hold
+     * item. The `FrameLayout` with ID `R.id.fragment_layout` in our layout file is used to hold
      * the latest fragment. If the `itemID` is not one of ours we return `false` so the item will
      * not be selected.
      */
@@ -92,17 +92,17 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main]. The root view of
-     * this layout is a `ConstraintLayout` with ID [R.id.container] which holds a [Toolbar] with ID
-     * [R.id.toolbar], a `FrameLayout` with ID [R.id.fragment_layout], and a [BottomNavigationView]
-     * with ID [R.id.navigation] at the bottom of the `ConstraintLayout`. We set the [Toolbar] with
-     * ID [R.id.toolbar] in our UI to act as the `ActionBar` for this Activity window by calling the
+     * then we set our content view to our layout file `R.layout.activity_main`. The root view of
+     * this layout is a `ConstraintLayout` with ID `R.id.container` which holds a [Toolbar] with ID
+     * `R.id.toolbar`, a `FrameLayout` with ID `R.id.fragment_layout`, and a [BottomNavigationView]
+     * with ID `R.id.navigation` at the bottom of the `ConstraintLayout`. We set the [Toolbar] with
+     * ID `R.id.toolbar` in our UI to act as the `ActionBar` for this Activity window by calling the
      * [setSupportActionBar] method. Next we initialize our [BottomNavigationView] variable
-     * `val navigation` by finding the view with ID [R.id.navigation] and set its
+     * `val navigation` by finding the view with ID `R.id.navigation` and set its
      * [BottomNavigationView.OnNavigationItemSelectedListener] to our field [mOnNavigationListener].
      * Finally if our [Bundle] parameter [savedInstanceState] is `null` we are being started for the
      * first time so we call our [showFragment] method to have it load our [WelcomeFragment] into
-     * the `FrameLayout` with ID [R.id.fragment_layout]. If it is non-`null` we are being restarted
+     * the `FrameLayout` with ID `R.id.fragment_layout`. If it is non-`null` we are being restarted
      * and the system will care of restoring whichever fragment was running when we were shut down.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
@@ -139,8 +139,8 @@ class MainActivity : AppCompatActivity() {
      * Initialize the contents of the Activity's standard options menu. You should place your menu
      * items in the [Menu] parameter [menu]. This is only called once, the first time the options
      * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
-     * We use a [MenuInflater] for this context to inflate our menu layout file [R.menu.main_menu]
-     * into our [Menu] parameter [menu]. If holds a single [MenuItem] with ID [R.id.action_more] and
+     * We use a [MenuInflater] for this context to inflate our menu layout file `R.menu.main_menu`
+     * into our [Menu] parameter [menu]. If holds a single [MenuItem] with ID `R.id.action_more` and
      * the title "More". We initialize our [MenuItem] variable `val item` by finding that [MenuItem]
      * then initialize our [Drawable] variable `val drawableWrap` by using the [DrawableCompat.wrap]
      * method to wrap the [MenuItem.getIcon] (aka kotlin `icon` property) of `item` and making that
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * This hook is called whenever an item in your options menu is selected. We initialize our [Int]
      * variable `val id` to the `itemId` of our [MenuItem] parameter [item]. If `id` is equal to the
-     * resource ID [R.id.action_more] (our [MenuItem]) we return `true` to the caller to consume the
+     * resource ID `R.id.action_more` (our [MenuItem]) we return `true` to the caller to consume the
      * event here, otherwise we return the value returned by our super's implementation of
      * `onOptionsItemSelected`.
      *
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Called to replace the [Fragment] occupying the [R.id.fragment_layout] container in our UI with
+     * Called to replace the [Fragment] occupying the `R.id.fragment_layout` container in our UI with
      * the [Fragment] whose tag is the same as our [String] parameter [tag]. We use the [FragmentManager]
      * for interacting with fragments associated with this activity to search for a [Fragment] whose
      * tag is [tag] and initialize our variable `var fragment` to what it returns. If `fragment` is
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
      *
      * We then use the [FragmentManager] for interacting with fragments associated with this activity
      * to begin a new [FragmentTransaction] which we use to replace the contents of the container with
-     * resource ID [R.id.fragment_layout] with `fragment` using [tag] as its tag and commit that
+     * resource ID `R.id.fragment_layout` with `fragment` using [tag] as its tag and commit that
      * [FragmentTransaction].
      */
     @Suppress("SameParameterValue") // Suggested change would make method less reusable

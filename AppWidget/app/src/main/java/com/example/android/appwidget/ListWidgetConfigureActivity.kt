@@ -65,7 +65,7 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
      * [ActivityWidgetConfigureBinding.inflate] method inflates and binds to when it uses the
      * [LayoutInflater] instance that this Window retrieved from its Context to inflate its
      * associated layout file layout/activity_widget_configure.xml (resource ID
-     * [R.layout.activity_widget_configure]). This layout file consists of a vertical `LinearLayout`
+     * `R.layout.activity_widget_configure`). This layout file consists of a vertical `LinearLayout`
      * root view which holds two vertical `LinearLayout`'s which hold a "Grocery List" and a
      * "To-do List" which consist of a bunch of `CheckBox` widgets for items on the list. Having
      * inflated our [ActivityWidgetConfigureBinding] we set our content view to the outermost `View`
@@ -74,13 +74,13 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
      *
      * We next set the [View.OnClickListener] of the [ActivityWidgetConfigureBinding.groceryListContainer]
      * `LinearLayout` which holds the "Grocery List" to a lambda which calls our [onWidgetContainerClicked]
-     * method with the resource ID [R.layout.widget_grocery_list] which refers to the layout file
+     * method with the resource ID `R.layout.widget_grocery_list` which refers to the layout file
      * layout/widget_grocery_list.xml (which consists of a bunch of `CheckBox` widgets whose
      * android:text attributes are names of grocery items).
      *
      * Then we set the [View.OnClickListener] of the [ActivityWidgetConfigureBinding.todoListContainer]
      * `LinearLayout` which holds the "To-do List" to a lambda which calls our [onWidgetContainerClicked]
-     * method with the resource ID [R.layout.widget_todo_list] which refers to the layout file
+     * method with the resource ID `R.layout.widget_todo_list` which refers to the layout file
      * layout/widget_todo_list.xml (which consists of a bunch of `CheckBox` widgets whose
      * android:text attributes are names of household chores).
      *

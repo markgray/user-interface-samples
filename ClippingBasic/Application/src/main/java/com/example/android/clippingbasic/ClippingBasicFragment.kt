@@ -39,7 +39,7 @@ class ClippingBasicFragment : Fragment() {
     private var mClickCount = 0
 
     /**
-     * The [Outline] used to clip the [FrameLayout] with ID [R.id.frame] which holds our [TextView]
+     * The [Outline] used to clip the [FrameLayout] with ID `R.id.frame` which holds our [TextView]
      * field [mTextView].
      */
     private lateinit var mOutlineProvider: ViewOutlineProvider
@@ -67,7 +67,7 @@ class ClippingBasicFragment : Fragment() {
      * by receiving a call to [onCreateOptionsMenu] and related methods. We initialize our
      * [ViewOutlineProvider] field [mOutlineProvider] with a new instance of [ClipOutlineProvider],
      * and initialize our [Array] of [String] field [mSampleTexts] with the strings stored under the
-     * resource ID [R.array.sample_texts] in our activity's [Resources].
+     * resource ID `R.array.sample_texts` in our activity's [Resources].
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +83,7 @@ class ClippingBasicFragment : Fragment() {
      * this method and move logic that operates on the returned View to [onViewCreated].
      *
      * We use our [LayoutInflater] parameter [inflater] to inflate the layout file whose resource ID
-     * is [R.layout.clipping_basic_fragment] using our [ViewGroup] parameter [container] for its
+     * is `R.layout.clipping_basic_fragment` using our [ViewGroup] parameter [container] for its
      * `LayoutParams` without attaching to it and return the [View] that [inflater] returns to our
      * caller.
      *
@@ -111,11 +111,11 @@ class ClippingBasicFragment : Fragment() {
      * however attached to its parent at this point.
      *
      * First we call our super's implementation of `onViewCreated`. We initialize our [TextView]
-     * field [mTextView] by finding the view with ID [R.id.text_view] then call our [changeText]
+     * field [mTextView] by finding the view with ID `R.id.text_view` then call our [changeText]
      * method to have it set the initial text for the [TextView]. We initialize our [View] variable
-     * `val clippedView` by finding the view with ID [R.id.frame] (the [FrameLayout] holding our
+     * `val clippedView` by finding the view with ID `R.id.frame` (the [FrameLayout] holding our
      * [TextView] field [mTextView]) and then set the [ViewOutlineProvider] of `clippedView` to our
-     * field [mOutlineProvider]. We set the [View.OnClickListener] of the [Button] with ID [R.id.button]
+     * field [mOutlineProvider]. We set the [View.OnClickListener] of the [Button] with ID `R.id.button`
      * to a lambda which branches on the value of the `clipToOutline` property of `clippedView`:
      *  - `true` - currently the Outline should be used to clip the contents of the [View]:
      *  Sets the `clipToOutline` property to `false`, logs the fact that "Clipping to outline is
@@ -124,7 +124,7 @@ class ClippingBasicFragment : Fragment() {
      *  Sets the `clipToOutline` property to `true`, logs the fact that "Clipping to outline is
      *  enabled", then sets the text of the [Button] clicked to "Disable outline clipping".
      *
-     * Finally we set the [View.OnClickListener] of the [View] with ID [R.id.text_view] (our [TextView]
+     * Finally we set the [View.OnClickListener] of the [View] with ID `R.id.text_view` (our [TextView]
      * displaying one of the strings in our [Array] of strings field [mSampleTexts]) to a lambda which
      * increments our field [mClickCount], calls our [changeText] method to update the text in the
      * [TextView], and then calls the [View.invalidateOutline] method of `clippedView` to invalidate

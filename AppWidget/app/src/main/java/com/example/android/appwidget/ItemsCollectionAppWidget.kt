@@ -56,7 +56,7 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * Override this method to implement your own AppWidget functionality.
      *
      * We initialize our [RemoteViews] variable `val remoteViews` to a new instance which uses
-     * the layout file with the resource ID [R.layout.widget_items_collection] as the layout file
+     * the layout file with the resource ID `R.layout.widget_items_collection` as the layout file
      * containing the views it will display (we pass the name of this application's package because
      * it is the package that contains the layout resource file). If [BuildCompat.isAtLeastS] returns
      * `true` indicating that the device we are running on uses a pre-release version of Android S or
@@ -64,11 +64,11 @@ class ItemsCollectionAppWidget : AppWidgetProvider() {
      * variable `val collectionItems` to the instance returned by our [getRemoteCollectionItems]
      * method for our [Context] parameter [context], then call the [RemoteViews.setRemoteAdapter]
      * method of `remoteViews` to set its adapter to a simple adapter for the `ListView` with the
-     * ID [R.id.items_list_view] in the layout file layout/widget_items_collection.xml used by
+     * ID `R.id.items_list_view` in the layout file layout/widget_items_collection.xml used by
      * `remoteViews` with `collectionItems` as the items to display in the AdapterView.
      * If [BuildCompat.isAtLeastS] returns `false` indicating that the device we are running on uses
      * a version of Android older than Android S we call the [RemoteViews.setRemoteAdapter] method
-     * of `remoteViews` with [R.id.items_list_view] as the ID of the `AdapterView` and an [Intent]
+     * of `remoteViews` with `R.id.items_list_view` as the ID of the `AdapterView` and an [Intent]
      * for our [ItemsCollectionRemoteViewsService] custom [RemoteViewsService] which will be the
      * service that will be providing data to the `RemoteViewsAdapter`
      *
@@ -264,16 +264,16 @@ class ItemsCollectionRemoteViewsFactory(
 
         /**
          * The value stored as an extra under the key [REQUEST_CODE] in the [Intent] that we receive
-         * in the `onReceive` override of [ItemsCollectionAppWidget] when the [R.id.item_switch]
-         * `Switch` in the [RemoteViews] constructed from layout file [R.layout.item_switches] changes
+         * in the `onReceive` override of [ItemsCollectionAppWidget] when the `R.id.item_switch`
+         * `Switch` in the [RemoteViews] constructed from layout file `R.layout.item_switches` changes
          * checked state. It is included in the [PendingIntent] that [constructRemoteViews] uses in
          * its call to [RemoteViews.setOnCheckedChangeResponse].
          */
         const val REQUEST_CODE_FROM_COLLECTION_WIDGET: Int = 2
 
         /**
-         * The key used to store the resource ID of the [R.id.item_switch] `Switch` in layout file
-         * [R.layout.item_switches] as an extra in the [PendingIntent] that [constructRemoteViews]
+         * The key used to store the resource ID of the `R.id.item_switch` `Switch` in layout file
+         * `R.layout.item_switches` as an extra in the [PendingIntent] that [constructRemoteViews]
          * uses in its call to [RemoteViews.setOnCheckedChangeResponse].
          */
         const val EXTRA_VIEW_ID: String = "extra_view_id"
@@ -281,7 +281,7 @@ class ItemsCollectionRemoteViewsFactory(
         /**
          * The key used to store the value [REQUEST_CODE_FROM_COLLECTION_WIDGET] as an extra in the
          * [PendingIntent] that [constructRemoteViews] uses when it builds the [PendingIntent] for
-         * the [R.id.item_switch] `Switch` in layout file [R.layout.item_switches] that will be
+         * the `R.id.item_switch` `Switch` in layout file `R.layout.item_switches` that will be
          * launched when the `Switch` changes state. It is used in the [PendingIntent] that
          * [constructRemoteViews] uses in its call to [RemoteViews.setOnCheckedChangeResponse].
          */
@@ -323,14 +323,14 @@ class ItemsCollectionRemoteViewsFactory(
          * file whose resource ID is our parameter [layoutId], and if the device is running a
          * version of Android older than Android S returns that object as is. If the device is
          * running Android S or newer we branch on the value of [layoutId]:
-         *  - [R.layout.item_checkboxes] (a `LinearLayout` holding a single `CheckBox`) we call the
+         *  - `R.layout.item_checkboxes` (a `LinearLayout` holding a single `CheckBox`) we call the
          *  [RemoteViews.setCompoundButtonChecked] method of `remoteViews` to "Check" the `CheckBox`
-         *  in the layout file whose ID is [R.id.item_checkbox].
-         *  - [R.layout.item_radio_buttons] (a `RadioGroup` holding two `RadioButton` widgets) we
+         *  in the layout file whose ID is `R.id.item_checkbox`.
+         *  - `R.layout.item_radio_buttons` (a `RadioGroup` holding two `RadioButton` widgets) we
          *  call the [RemoteViews.setRadioGroupChecked] method of `remoteViews` to "Check" the
-         *  [R.id.item_radio_button2] `RadioButton` in the [R.id.item_radio_button2] `RadioGroup`.
-         *  - [R.layout.item_switches] (a `LinearLayout` holding a single `Switch` widget) we
-         *  initialize our [Int] variable `val viewId` to the resource ID [R.id.item_switch] (the
+         *  `R.id.item_radio_button2` `RadioButton` in the `R.id.item_radio_button2` `RadioGroup`.
+         *  - `R.layout.item_switches` (a `LinearLayout` holding a single `Switch` widget) we
+         *  initialize our [Int] variable `val viewId` to the resource ID `R.id.item_switch` (the
          *  ID of the `Switch` in the layout file) then initialize our [PendingIntent] variable
          *  `val onCheckedChangePendingIntent` to a [PendingIntent] that will perform a broadcast
          *  using [REQUEST_CODE_FROM_COLLECTION_WIDGET] as the private request code, an [Intent]

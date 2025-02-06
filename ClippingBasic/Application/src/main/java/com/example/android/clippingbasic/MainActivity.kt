@@ -55,18 +55,18 @@ class MainActivity : SampleActivityBase() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main]. The layout file used
+     * then we set our content view to our layout file `R.layout.activity_main`. The layout file used
      * for displays narrower then 720dp - layout/activity_main.xml consists of a root `LinearLayout`
      * holding a `ViewAnimator` with two child views: a `ScrollView` holding a `TextView` displaying
      * the sample description, and a `fragment` for our [LogFragment] (these are toggled between using
      * our options menu). Below the `ViewAnimator` in the `LinearLayout` is a 1dp "darker_gray" spacer
-     * `View` and a `FrameLayout` with the ID [R.id.sample_content_fragment] which is used to hold
+     * `View` and a `FrameLayout` with the ID `R.id.sample_content_fragment` which is used to hold
      * our sample fragment [ClippingBasicFragment]. The layout file used for displays 720dp and wider
      * is the file layout-w720dp/activity_main.xml which consists of a root horizontal `LinearLayout`
      * holding a vertical `LinearLayout` which holds a `FrameLayout` holding a `TextView` displaying
      * the sample description, followed by a 1dp "darker_gray" spacer `View`, followed by a `fragment`
      * for our [LogFragment]. To the right in the root `LinearLayout` is a 1dp "darker_gray" spacer
-     * `View` and a `FrameLayout` with the ID [R.id.sample_content_fragment] which is used to hold
+     * `View` and a `FrameLayout` with the ID `R.id.sample_content_fragment` which is used to hold
      * our sample fragment [ClippingBasicFragment].
      *
      * If our [Bundle] parameter [savedInstanceState] is non-`null` we are being restarted so our
@@ -75,7 +75,7 @@ class MainActivity : SampleActivityBase() {
      * associated with this activity to begin a [FragmentTransaction] with which we initialize our
      * variable `val transaction`, and initialize our [ClippingBasicFragment] variable `val fragment`
      * to a new instance. We then use `transaction` to replace any existing fragment that is in the
-     * container with resource ID [R.id.sample_content_fragment] with `fragment`. Finally we "commit"
+     * container with resource ID `R.id.sample_content_fragment` with `fragment`. Finally we "commit"
      * `transaction`.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
@@ -115,8 +115,8 @@ class MainActivity : SampleActivityBase() {
      * Initialize the contents of the Activity's standard options menu. You should place your menu
      * items in the [Menu] parameter [menu]. This is only called once, the first time the options
      * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
-     * We use a [MenuInflater] for our [Context] to inflate our menu layout file [R.menu.main] into
-     * our [Menu] parameter [menu] (it consists of a single [MenuItem] with ID [R.id.menu_toggle_log]
+     * We use a [MenuInflater] for our [Context] to inflate our menu layout file `R.menu.main` into
+     * our [Menu] parameter [menu] (it consists of a single [MenuItem] with ID `R.id.menu_toggle_log`
      * whose title toggles between "Show Log" and "Hide Log" depending on whether the [LogFragment]
      * is invisible or visible at the moment). Finally we return `true` so that the menu will be
      * displayed.
@@ -134,8 +134,8 @@ class MainActivity : SampleActivityBase() {
      * Prepare the Screen's standard options menu to be displayed. This is called right before the
      * menu is shown, every time it is shown. You can use this method to efficiently enable/disable
      * items or otherwise dynamically modify the contents. We initialize our [MenuItem] variable
-     * `val logToggle` by finding the item in our [Menu] parameter [menu] with ID [R.id.menu_toggle_log]
-     * and set its visibility to visible iff the view with ID [R.id.sample_output] is a [ViewAnimator]
+     * `val logToggle` by finding the item in our [Menu] parameter [menu] with ID `R.id.menu_toggle_log`
+     * and set its visibility to visible iff the view with ID `R.id.sample_output` is a [ViewAnimator]
      * (this is true only for displays narrower than 720dp, for wider displays the view is a
      * `LinearLayout` holding both the sample description and our [LogFragment] which is always
      * visible). The we set the title of `logToggle` to "Hide Log" is our [Boolean] field [mLogShown]
@@ -155,9 +155,9 @@ class MainActivity : SampleActivityBase() {
 
     /**
      * This hook is called whenever an item in your options menu is selected. When the item ID of our
-     * [MenuItem] parameter [item] is [R.id.menu_toggle_log] we toggle the value of our [Boolean]
+     * [MenuItem] parameter [item] is `R.id.menu_toggle_log` we toggle the value of our [Boolean]
      * field [mLogShown] then initialize our [ViewAnimator] variable `val output` to the view with
-     * ID [R.id.sample_output]. If [mLogShown] is now `true` we set the displayed child of `output`
+     * ID `R.id.sample_output`. If [mLogShown] is now `true` we set the displayed child of `output`
      * to 1 (the `fragment` holding our [LogFragment]) and if it is now `false` we set its displayed
      * child to 0 (the `ScrollView` wrapped `TextView` displaying the sample description). We then
      * call the [invalidateOptionsMenu] method to report that the options menu has changed, so should

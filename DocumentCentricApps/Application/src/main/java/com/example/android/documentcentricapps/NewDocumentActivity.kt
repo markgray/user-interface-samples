@@ -40,7 +40,7 @@ import androidx.core.view.updateLayoutParams
  */
 class NewDocumentActivity : AppCompatActivity() {
     /**
-     * The [TextView] in our UI with ID [R.id.hello_new_document_text_view] which is used to display
+     * The [TextView] in our UI with ID `R.id.hello_new_document_text_view` which is used to display
      * our [Int] field [mDocumentCount] which is passed to use as an extra in the [Intent] which
      * [DocumentCentricActivity] uses to launch us.
      */
@@ -54,15 +54,15 @@ class NewDocumentActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`
-     * then we set our content view to our layout file [R.layout.activity_new_document] (it consists
+     * then we set our content view to our layout file `R.layout.activity_new_document` (it consists
      * of a root `LinearLayout` holding our [TextView] field [mDocumentCounterTextView] and a
      * `Button` labeled "Remove from Overview" whose android:onClick attribute calls our method
      * [onRemoveFromOverview] to have it call [finishAndRemoveTask] to close our activity). We then
      * initialize our [Int] field [mDocumentCount] to the value stored as an extra in the [Intent]
      * that started this activity under the key [DocumentCentricActivity.KEY_EXTRA_NEW_DOCUMENT_COUNTER],
      * and initialize our [TextView] field [mDocumentCounterTextView] by finding the [View] in our
-     * UI with the ID [R.id.hello_new_document_text_view]. Finally we call our [setDocumentCounterText]
-     * method with the resource ID [R.string.hello_new_document_counter] (points to the [String]
+     * UI with the ID `R.id.hello_new_document_text_view`. Finally we call our [setDocumentCounterText]
+     * method with the resource ID `R.string.hello_new_document_counter` (points to the [String]
      * "Hello Document %s!") to have it use that [String] to format [mDocumentCount] and display the
      * result as the text of [mDocumentCounterTextView].
      *
@@ -111,7 +111,7 @@ class NewDocumentActivity : AppCompatActivity() {
      * it to this new [Intent].
      *
      * First we call our super's implementation of `onNewIntent`, then we call our [setDocumentCounterText]
-     * method with the resource ID [R.string.reusing_document_counter] (points to the [String]
+     * method with the resource ID `R.string.reusing_document_counter` (points to the [String]
      * "Reusing Document %s!) to have it use that [String] to format [mDocumentCount] and display the
      * result as the text of [mDocumentCounterTextView].
      *
@@ -127,7 +127,7 @@ class NewDocumentActivity : AppCompatActivity() {
 
     /**
      * This is called by the android:onClick attribute of the `Button` in our UI labeled "Remove
-     * from Overview", resource ID [R.id.remove_task_button] when the user clicks that `Button`.
+     * from Overview", resource ID `R.id.remove_task_button` when the user clicks that `Button`.
      * We just call the [finishAndRemoveTask] method to have the system close our task and
      * completely remove it as a part of finishing the root activity of our task.
      *

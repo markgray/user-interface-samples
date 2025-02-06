@@ -35,42 +35,42 @@ class TextRoundedBgAttributeReader(context: Context, attrs: AttributeSet?) {
 
     /**
      * The value of the `roundedTextHorizontalPadding` attribute used, the default in the style resource
-     * [R.style.RoundedBgTextView] is 2dp. It is used in constructing a [TextRoundedBgHelper] as its
+     * `R.style.RoundedBgTextView` is 2dp. It is used in constructing a [TextRoundedBgHelper] as its
      * `horizontalPadding` property.
      */
     val horizontalPadding: Int
 
     /**
      * The value of the `roundedTextVerticalPadding` attribute used, the default in the style resource
-     * [R.style.RoundedBgTextView] is 2dp. It is used in constructing a [TextRoundedBgHelper] as its
+     * `R.style.RoundedBgTextView` is 2dp. It is used in constructing a [TextRoundedBgHelper] as its
      * `verticalPadding` property.
      */
     val verticalPadding: Int
 
     /**
      * The value of the `roundedTextDrawable` attribute used, the default in the style resource
-     * [R.style.RoundedBgTextView] is [R.drawable.rounded_text_bg]. It is used in constructing a
+     * `R.style.RoundedBgTextView` is `R.drawable.rounded_text_bg`. It is used in constructing a
      * [TextRoundedBgHelper] as its `drawable` property.
      */
     val drawable: Drawable
 
     /**
      * The value of the `roundedTextDrawableLeft` attribute used, the default in the style resource
-     * [R.style.RoundedBgTextView] is [R.drawable.rounded_text_bg_left]. It is used in constructing
+     * `R.style.RoundedBgTextView` is `R.drawable.rounded_text_bg_left`. It is used in constructing
      * a [TextRoundedBgHelper] as its `drawableLeft` property.
      */
     val drawableLeft: Drawable
 
     /**
      * The value of the `roundedTextDrawableMid` attribute used, the default in the style resource
-     * [R.style.RoundedBgTextView] is [R.drawable.rounded_text_bg_mid]. It is used in constructing
+     * `R.style.RoundedBgTextView` is `R.drawable.rounded_text_bg_mid`. It is used in constructing
      * a [TextRoundedBgHelper] as its `drawableMid` property.
      */
     val drawableMid: Drawable
 
     /**
      * The value of the `roundedTextDrawableRight` attribute used, the default in the style resource
-     * [R.style.RoundedBgTextView] is [R.drawable.rounded_text_bg_right]. It is used in constructing
+     * `R.style.RoundedBgTextView` is `R.drawable.rounded_text_bg_right`. It is used in constructing
      * a [TextRoundedBgHelper] as its `drawableRight` property.
      */
     val drawableRight: Drawable

@@ -56,7 +56,7 @@ import com.example.android.sliceviewer.ui.ViewModelFactory
 class SliceViewerActivity : AppCompatActivity() {
 
     /**
-     * The [SearchView] in our layout file with ID [R.id.search_view] which allows the user to enter
+     * The [SearchView] in our layout file with ID `R.id.search_view` which allows the user to enter
      * a [Slice] URI that he wants to view.
      */
     private lateinit var searchView: SearchView
@@ -86,7 +86,7 @@ class SliceViewerActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_slice_viewer]. It consists
+     * then we set our content view to our layout file `R.layout.activity_slice_viewer`. It consists
      * of a [LinearLayout] root view, which holds a [FrameLayout] which contains a [CardView] holding
      * a [Toolbar] holding a [SearchView]. Below this in the [LinearLayout] is a [RecyclerView] which
      * holds view holders for each of the slices that have been searched for in the [SearchView].
@@ -95,7 +95,7 @@ class SliceViewerActivity : AppCompatActivity() {
      *
      * Next we initialize our [ViewModelFactory] variable `val viewModelFactory` to the singleton
      * instance of our [ViewModelFactory] (creating it if need be). We use the [setSupportActionBar]
-     * method to set the [Toolbar] in our UI with ID [R.id.search_toolbar] as the `ActionBar` for
+     * method to set the [Toolbar] in our UI with ID `R.id.search_toolbar` as the `ActionBar` for
      * our Activity window. We initialize our [SliceViewModel] field [viewModel] by creating the
      * [ViewModelProvider], which will create ViewModels via the Factory `viewModelFactory` and
      * retain them in a store of `this` ViewModelStoreOwner and calling its [ViewModelProvider.get]
@@ -103,7 +103,7 @@ class SliceViewerActivity : AppCompatActivity() {
      * associated with.
      *
      * Next we initialize our [SearchView] field [searchView] by finding the view with the ID
-     * [R.id.search_view] immediately using the [apply] extension function on it to:
+     * `R.id.search_view` immediately using the [apply] extension function on it to:
      *  - Set its [SearchView.OnQueryTextListener] to an anonymous instance whose `onQueryTextChange`
      *  override always returns `false` when the query text is changed by the user to have the default
      *  action performed, and overrides its `onQueryTextSubmit` to add the [Slice] that the [Uri]
@@ -125,7 +125,7 @@ class SliceViewerActivity : AppCompatActivity() {
      *  - [SliceView.MODE_LARGE] slice should be presented in large format, as much or all of the
      *  slice contents are shown.
      *
-     * Next we find the [RecyclerView] in our UI with ID [R.id.slice_list] immediately using the
+     * Next we find the [RecyclerView] in our UI with ID `R.id.slice_list` immediately using the
      * [apply] extension function on it to:
      *  - Set its adapter to [sliceAdapter]
      *  - Construct an [ItemTouchHelper] which uses an instance of our [SwipeCallback] custom
@@ -245,7 +245,7 @@ class SliceViewerActivity : AppCompatActivity() {
      * We initialize our [SubMenu] field [typeMenu] by using the [Menu.addSubMenu] method of our
      * [Menu] parameter [menu] to add a new sub-menu to it, using the [apply] extension function to
      * immediately:
-     *  - Set its icon to the drawable with resource ID [R.drawable.ic_large]
+     *  - Set its icon to the drawable with resource ID `R.drawable.ic_large`
      *  - Configure the sub-menu item's display option to [MenuItem.SHOW_AS_ACTION_ALWAYS] (Always
      *  show this item as a button in an Action Bar)
      *  - Add an item to the sub-menu whose title is "Shortcut"
@@ -256,11 +256,11 @@ class SliceViewerActivity : AppCompatActivity() {
      * [viewModel] whose [LifecycleOwner] is `this` and whose [Observer] lambda branches on the
      * value of `selectedMode`:
      *  - [SliceView.MODE_SHORTCUT] sets the icon of [typeMenu] to the drawable with resource ID
-     *  [R.drawable.ic_shortcut]
+     *  `R.drawable.ic_shortcut`
      *  - [SliceView.MODE_SMALL] sets the icon of [typeMenu] to the drawable with resource ID
-     *  [R.drawable.ic_small]
+     *  `R.drawable.ic_small`
      *  - [SliceView.MODE_LARGE] sets the icon of [typeMenu] to the drawable with resource ID
-     *  [R.drawable.ic_large]
+     *  `R.drawable.ic_large`
      *
      * Finally we call our super's implementation of `onCreateOptionsMenu` and return `true` so that
      * the [Menu] will be displayed.

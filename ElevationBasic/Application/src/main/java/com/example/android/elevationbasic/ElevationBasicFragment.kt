@@ -58,10 +58,10 @@ class ElevationBasicFragment : Fragment() {
      * this method and move logic that operates on the returned View to [onViewCreated].
      *
      * We use our [LayoutInflater] parameter [inflater] to inflate the layout file whose resource ID
-     * is [R.layout.elevation_basic] using our [ViewGroup] parameter [container] for its
+     * is `R.layout.elevation_basic` using our [ViewGroup] parameter [container] for its
      * `LayoutParams` without attaching to it and use the [View] that [inflater] returns to
      * initialize our variable `val rootView`, then initialize our [View] variable `val shape2` by
-     * finding the view in `rootView` with ID [R.id.floating_shape_2]. Then we set the
+     * finding the view in `rootView` with ID `R.id.floating_shape_2`. Then we set the
      * [OnTouchListener] of `shape2` to an anonymous class which branches on the value of the masked
      * action being performed by the [MotionEvent] `shape2` received:
      *  - [MotionEvent.ACTION_DOWN] (a pressed gesture has started) it logs the message "ACTION_DOWN

@@ -34,14 +34,14 @@ import com.example.android.common.logger.Log
  */
 class AdvancedImmersiveModeFragment : Fragment() {
     /**
-     * The [CheckBox] labeled "Hide Navigation bar" resource ID [R.id.flag_hide_navbar], toggles the
+     * The [CheckBox] labeled "Hide Navigation bar" resource ID `R.id.flag_hide_navbar`, toggles the
      * `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] which requests that the
      * system navigation be temporarily hidden when set.
      */
     private lateinit var mHideNavCheckbox: CheckBox
 
     /**
-     * The [CheckBox] labeled "Hide Status Bar" resource ID [R.id.flag_hide_statbar], toggles the
+     * The [CheckBox] labeled "Hide Status Bar" resource ID `R.id.flag_hide_statbar`, toggles the
      * `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_FULLSCREEN] which requests that the [View]
      * go into the normal fullscreen mode so that its content can take over the screen while still
      * allowing the user to interact with the application.
@@ -49,7 +49,7 @@ class AdvancedImmersiveModeFragment : Fragment() {
     private lateinit var mHideStatusBarCheckBox: CheckBox
 
     /**
-     * The [CheckBox] labeled "Enable Immersive Mode" resource ID [R.id.flag_enable_immersive],
+     * The [CheckBox] labeled "Enable Immersive Mode" resource ID `R.id.flag_enable_immersive`,
      * toggles the `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_IMMERSIVE] which requests that
      * the [View] would like to remain interactive when hiding the navigation bar. If this flag is
      * not set, [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION] will be force cleared by the system on any
@@ -58,7 +58,7 @@ class AdvancedImmersiveModeFragment : Fragment() {
     private lateinit var mImmersiveModeCheckBox: CheckBox
 
     /**
-     * The [CheckBox] labeled "Enable Immersive Mode (Sticky)" resource ID [R.id.flag_enable_immersive_sticky],
+     * The [CheckBox] labeled "Enable Immersive Mode (Sticky)" resource ID `R.id.flag_enable_immersive_sticky`,
      * toggles the `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] which requests
      * that the [View] would like to remain interactive when hiding the status bar and/or hiding the
      * navigation bar. Use this flag to create an immersive experience while also hiding the system
@@ -69,7 +69,7 @@ class AdvancedImmersiveModeFragment : Fragment() {
     private lateinit var mImmersiveModeStickyCheckBox: CheckBox
 
     /**
-     * The [CheckBox] labeled "Enable Low Profile Mode" resource ID [R.id.flag_enable_lowprof],
+     * The [CheckBox] labeled "Enable Low Profile Mode" resource ID `R.id.flag_enable_lowprof`,
      * toggles the `setSystemUiVisibility` flag [View.SYSTEM_UI_FLAG_LOW_PROFILE] which requests
      * that the [View] enter an unobtrusive "low profile" mode. This is for use in games, book
      * readers, video players, or any other "immersive" application where the usual system chrome is
@@ -101,33 +101,33 @@ class AdvancedImmersiveModeFragment : Fragment() {
      * [onCreate] and {[onActivityCreated]. It is recommended to __only__ inflate the layout in this
      * method and move logic that operates on the returned [View] to [onViewCreated].
      *
-     * We use our [LayoutInflater] parameter [inflater] to inflate our layout file [R.layout.fragment_flags],
+     * We use our [LayoutInflater] parameter [inflater] to inflate our layout file `R.layout.fragment_flags`,
      * using our [ViewGroup] parameter [container] for its `LayoutParams` without attaching to it and
      * use the [View] that [inflater] returns to initialize our variable `val flagsView`.
      *
-     * We find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_lowprof] (labeled "Enable Low
+     * We find the [CheckBox] in `flagsView` with ID `R.id.flag_enable_lowprof` (labeled "Enable Low
      * Profile Mode") to initialize [mLowProfileCheckBox], find the [CheckBox] in `flagsView` with ID
-     * [R.id.flag_hide_navbar] (labeled "Hide Navigation bar") to initialize [mHideNavCheckbox], find
-     * the [CheckBox] in `flagsView` with ID [R.id.flag_hide_statbar] (labeled "Hide Status Bar") to
+     * `R.id.flag_hide_navbar` (labeled "Hide Navigation bar") to initialize [mHideNavCheckbox], find
+     * the [CheckBox] in `flagsView` with ID `R.id.flag_hide_statbar` (labeled "Hide Status Bar") to
      * initialize [mHideStatusBarCheckBox], find the [CheckBox] in `flagsView` with ID
-     * [R.id.flag_enable_immersive] (labeled "Enable Immersive Mode") to initialize [mImmersiveModeCheckBox],
-     * and find the [CheckBox] in `flagsView` with ID [R.id.flag_enable_immersive_sticky] (labeled
+     * `R.id.flag_enable_immersive` (labeled "Enable Immersive Mode") to initialize [mImmersiveModeCheckBox],
+     * and find the [CheckBox] in `flagsView` with ID `R.id.flag_enable_immersive_sticky` (labeled
      * "Enable Immersive Mode (Sticky)") to initialize [mImmersiveModeStickyCheckBox].
      *
      * We initialize our [Button] variable `val toggleFlagsButton` to the [Button] in `flagsView` with
-     * ID [R.id.btn_changeFlags] (labeled "Do things!") and set its `OnClickListener` to a lambda
+     * ID `R.id.btn_changeFlags` (labeled "Do things!") and set its `OnClickListener` to a lambda
      * which calls our method [toggleUiFlags] to have it apply the current [CheckBox] selections to
      * our UI.
      *
      * We initialize our [Button] variable `val presetsImmersiveModeButton` to the [Button] in `flagsView`
-     * with ID [R.id.btn_immersive] (labeled "Immersive Mode") and set its `OnClickListener` to a lambda
+     * with ID `R.id.btn_immersive` (labeled "Immersive Mode") and set its `OnClickListener` to a lambda
      * which sets the flags [View.SYSTEM_UI_FLAG_FULLSCREEN], [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION], and
      * [View.SYSTEM_UI_FLAG_IMMERSIVE] and clears the flags [View.SYSTEM_UI_FLAG_LOW_PROFILE], and
      * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] and does the same thing to the checked state of the
      * [CheckBox] which toggles each of these flags.
      *
      * We initialize our [Button] variable `val presetsLeanbackModeButton` to the [Button] in `flagsView`
-     * with ID [R.id.btn_leanback] (labeled "Leanback Mode") and set its `OnClickListener` to a lambda
+     * with ID `R.id.btn_leanback` (labeled "Leanback Mode") and set its `OnClickListener` to a lambda
      * which sets the flags [View.SYSTEM_UI_FLAG_FULLSCREEN], [View.SYSTEM_UI_FLAG_HIDE_NAVIGATION],
      * and clears the flags [View.SYSTEM_UI_FLAG_LOW_PROFILE], [View.SYSTEM_UI_FLAG_IMMERSIVE] and
      * [View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY] and does the same thing to the checked state of the

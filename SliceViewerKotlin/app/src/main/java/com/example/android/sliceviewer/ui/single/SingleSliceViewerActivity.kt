@@ -65,12 +65,12 @@ class SingleSliceViewerActivity : AppCompatActivity() {
     private lateinit var viewModel: SingleSliceViewModel
 
     /**
-     * The [SliceView] in our UI with ID [R.id.slice], displays our [Slice]
+     * The [SliceView] in our UI with ID `R.id.slice`, displays our [Slice]
      */
     private lateinit var sliceView: SliceView
 
     /**
-     * The [TextView] in our UI with ID [R.id.uri_value], displays the string value of the slice
+     * The [TextView] in our UI with ID `R.id.uri_value`, displays the string value of the slice
      * [Uri] we were passed in the [Intent] that launched us.
      */
     private lateinit var uriValue: TextView
@@ -86,7 +86,7 @@ class SingleSliceViewerActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_single_slice_viewer] which
+     * then we set our content view to our layout file `R.layout.activity_single_slice_viewer` which
      * consists of a `ConstraintLayout` root view holding a [TextView] for the label "URI", above a
      * [TextView] holding the string value of the slice [Uri] we were launched to display, with a
      * `ScrollView` holding the [SliceView] we display the [Slice] in below that.
@@ -97,8 +97,8 @@ class SingleSliceViewerActivity : AppCompatActivity() {
      * via the Factory `viewModelFactory` and retain them in a store of `this` [ViewModelStoreOwner]
      * to return an existing [SingleSliceViewModel] or create a new one.
      *
-     * We initialize our [SliceView] field [sliceView] by finding the view with ID [R.id.slice], and
-     * our [TextView] field [uriValue] by finding the view with ID [R.id.uri_value]. If the [Intent]
+     * We initialize our [SliceView] field [sliceView] by finding the view with ID `R.id.slice`, and
+     * our [TextView] field [uriValue] by finding the view with ID `R.id.uri_value`. If the [Intent]
      * that started this activity has a non-`null` data [Uri], and our [Uri.hasSupportedSliceScheme]
      * extension function determines that that [Uri] has a supported slice scheme we initialize our
      * [Uri] variable `val sliceUri` to the [Uri] that our [Uri.convertToOriginalScheme] creates from
@@ -164,9 +164,9 @@ class SingleSliceViewerActivity : AppCompatActivity() {
      * items in to the [Menu] parameter [menu]. This is only called once, the first time the options
      * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
      * We initialize our [SubMenu] field [typeMenu] by using the [Menu.addSubMenu] method of [menu]
-     * to add a new [SubMenu] to [menu] with the title whose resource ID is [R.string.slice_mode_title]
+     * to add a new [SubMenu] to [menu] with the title whose resource ID is `R.string.slice_mode_title`
      * ("Mode") and use the [apply] extension function of that [SubMenu] to:
-     *  - set its icon to the drawable with resource ID [R.drawable.ic_large]
+     *  - set its icon to the drawable with resource ID `R.drawable.ic_large`
      *  - specify that the item should always be shown as a button in the action bar
      *  - Add a [MenuItem] with the title "Shortcut"
      *  - Add a [MenuItem] with the title "Small"
@@ -174,9 +174,9 @@ class SingleSliceViewerActivity : AppCompatActivity() {
      *
      * Then we add an observer to the [SingleSliceViewModel.selectedMode] property of [viewModel]
      * which when the property changes value to:
-     *  - [SliceView.MODE_SHORTCUT] sets the icon of [typeMenu] to the drawable [R.drawable.ic_shortcut]
-     *  - [SliceView.MODE_SMALL] sets the icon of [typeMenu] to the drawable [R.drawable.ic_small]
-     *  - [SliceView.MODE_LARGE] sets the icon of [typeMenu] to the drawable [R.drawable.ic_large]
+     *  - [SliceView.MODE_SHORTCUT] sets the icon of [typeMenu] to the drawable `R.drawable.ic_shortcut`
+     *  - [SliceView.MODE_SMALL] sets the icon of [typeMenu] to the drawable `R.drawable.ic_small`
+     *  - [SliceView.MODE_LARGE] sets the icon of [typeMenu] to the drawable `R.drawable.ic_large`
      *
      * Finally we call our super's implementation of `onCreateOptionsMenu` and return `true` so that
      * our [Menu] will be displayed.

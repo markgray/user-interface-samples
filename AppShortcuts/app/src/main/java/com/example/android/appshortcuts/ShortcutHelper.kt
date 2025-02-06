@@ -257,7 +257,7 @@ class ShortcutHelper(private val mContext: Context) {
      * [Bitmap] variable `val bmp` to the "favicon.ico" icon that is associtated with [uri] which
      * our [fetchFavicon] method fetches from the internet. If `bmp` is not `null` we set the icon
      * of [b] to it, otherwise we set it to the [Icon] created from the drawable with resource ID
-     * [R.drawable.link]. Finally we return [b] to the caller to allow chaining.
+     * `R.drawable.link`. Finally we return [b] to the caller to allow chaining.
      *
      * @param b the [ShortcutInfo.Builder] to which we add the site information pertaining to our
      * [Uri] parameter [uri].
@@ -338,7 +338,7 @@ class ShortcutHelper(private val mContext: Context) {
      * Removes the dynamic shortcut of [ShortcutInfo] parameter [shortcut] by its ID. It does this
      * by calling the [ShortcutManager.removeDynamicShortcuts] method of [ShortcutManager] field
      * [mShortcutManager] with the `id` property of [shortcut]. Called from the `onClick` override
-     * of [Main] when the ID of the `View` clicked is [R.id.remove] (the "Remove" `Button` in the
+     * of [Main] when the ID of the `View` clicked is `R.id.remove` (the "Remove" `Button` in the
      * layout file layout/list_item.xml which is used for each of the items in the `ListView` of
      * the UI of [Main]).
      *
@@ -352,7 +352,7 @@ class ShortcutHelper(private val mContext: Context) {
      * Disables the dynamic shortcut of [ShortcutInfo] parameter [shortcut] by its ID. It does this
      * by calling the [ShortcutManager.disableShortcuts] method of [ShortcutManager] field
      * [mShortcutManager] with the `id` property of [shortcut]. Called from the `onClick` override
-     * of [Main] when the ID of the `View` clicked is [R.id.disable] and the shortcut is presently
+     * of [Main] when the ID of the `View` clicked is `R.id.disable` and the shortcut is presently
      * enabled (the `Button` is in the layout file layout/list_item.xml which is used for each of
      * the items in the `ListView` of the UI of [Main]  -- its label is set to "Disable" when the
      * shortcut is currently enabled).
@@ -367,7 +367,7 @@ class ShortcutHelper(private val mContext: Context) {
      * Enables the dynamic shortcut of [ShortcutInfo] parameter [shortcut] by its ID. It does this
      * by calling the [ShortcutManager.enableShortcuts] method of [ShortcutManager] field
      * [mShortcutManager] with the `id` property of [shortcut]. Called from the `onClick` override
-     * of [Main] when the ID of the `View` clicked is [R.id.disable] and the shortcut is presently
+     * of [Main] when the ID of the `View` clicked is `R.id.disable` and the shortcut is presently
      * disabled (the `Button` is in the layout file layout/list_item.xml which is used for each of
      * the items in the `ListView` of the UI of [Main] -- its label is set to "Enable" when the
      * shortcut is currently disabled).

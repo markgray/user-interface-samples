@@ -77,7 +77,7 @@ class BasicImmersiveModeFragment : Fragment() {
 
     /**
      * This hook is called whenever an item in your options menu is selected. If the `itemId` of our
-     * [MenuItem] parameter [item] is [R.id.sample_action] ("Toggle Immersive Mode!") we call our
+     * [MenuItem] parameter [item] is `R.id.sample_action` ("Toggle Immersive Mode!") we call our
      * method [toggleHideyBar] to have it detect and toggle immersive mode. In any case we return
      * `true` to consume the event here.
      *

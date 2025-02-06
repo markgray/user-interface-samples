@@ -37,12 +37,12 @@ import com.android.example.text.styling.renderer.MarkdownBuilder
 class MainActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main] which consists of a
+     * then we set our content view to our layout file `R.layout.activity_main` which consists of a
      * `ConstraintLayout` root view holding a single [TextView] and we initialize our [TextView]
-     * variable `val textView` by finding that view whose ID is [R.id.styled_text]. We initialize
-     * our [Int] variable `val bulletPointColor` by retrieving the color [R.color.colorAccent] which
+     * variable `val textView` by finding that view whose ID is `R.id.styled_text`. We initialize
+     * our [Int] variable `val bulletPointColor` by retrieving the color `R.color.colorAccent` which
      * is `FF4081` -- a pastel shade of red. We initialize our [Int] variable `val codeBackgroundColor`
-     * by retrieving the color [R.color.code_background] which is `BBBBBB` -- a light gray.
+     * by retrieving the color `R.color.code_background` which is `BBBBBB` -- a light gray.
      *
      * We then initialize our [Typeface] variable `val codeBlockTypeface` by using the `font-family`
      * which is defined in the font/inconsolata.xml file to download the "Inconsolata" font from the
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
      * code blocks, using `codeBlockTypeface` as the [Typeface] to be used for code blocks, and a
      * new instance of [Parser] to be used to parse the markdown text. We then call the method
      * `markdownToSpans` of that [MarkdownBuilder] to have it create a [CharSequence] from the
-     * markdown [String] with the resource ID [R.string.display_text] and use that [CharSequence] to
+     * markdown [String] with the resource ID `R.string.display_text` and use that [CharSequence] to
      * initialize our variable `val text`. Finally we set the `text` of our [TextView] variable
      * `textView` to our [CharSequence] variable `text`
      *

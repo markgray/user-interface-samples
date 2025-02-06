@@ -85,8 +85,8 @@ class Main : AppCompatActivity(), View.OnClickListener {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.main] which holds a [Button] which
-     * allows the user to add another shortcut (ID [R.id.add]) and a [ListView] which lists the URLs
+     * then we set our content view to our layout file `R.layout.main` which holds a [Button] which
+     * allows the user to add another shortcut (ID `R.id.add`) and a [ListView] which lists the URLs
      * which we use for Launcher Shortcuts. We initialize our [ShortcutHelper] field [mHelper] with
      * a new instance, call its [ShortcutHelper.maybeRestoreAllDynamicShortcuts] method to have it
      * restore any dynamic shortcuts our app may have (a no-op since we do not have any ATM), and
@@ -95,7 +95,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      * of the [Intent] that started this activity is [ACTION_ADD_WEBSITE] (declared in our Manifest)
      * we call our [addWebSite] method to have it pop up an [AlertDialog] that will allow the user
      * to add another URL to our list of shortcuts. We initialize our [ListView] variable `val listView`
-     * by finding the [View] with ID [R.id.list], initialize our [MyAdapter] field [mAdapter] to a
+     * by finding the [View] with ID `R.id.list`, initialize our [MyAdapter] field [mAdapter] to a
      * new instance that uses our application [Context] to access the [LayoutInflater] system service,
      * and set [mAdapter] to be the adapter for `listView`.
      *
@@ -228,18 +228,18 @@ class Main : AppCompatActivity(), View.OnClickListener {
     }
 
     /**
-     * [Main] is set as the [View.OnClickListener] for both the "Remove" (ID [R.id.remove]) and the
-     * "Disable" (ID [R.id.disable]) buttons in the layout file layout/list_item.xml which is used
+     * [Main] is set as the [View.OnClickListener] for both the "Remove" (ID `R.id.remove`) and the
+     * "Disable" (ID `R.id.disable`) buttons in the layout file layout/list_item.xml which is used
      * to display items in our [ListView] of existing shortcuts so this method is called whenever
      * either of these buttons are clicked. We initialize our [ShortcutInfo] variable `val shortcut`
      * by retrieving the `tag` of the parent [View] of [v]. Then we branch on the `id` of [v]:
-     *  - [R.id.disable]: if `shortcut` is enabled we call the [ShortcutHelper.disableShortcut] method
+     *  - `R.id.disable`: if `shortcut` is enabled we call the [ShortcutHelper.disableShortcut] method
      *  of our [ShortcutHelper] field [mHelper] to disable `shortcut`, otherwise we call the
      *  [ShortcutHelper.enableShortcut] method of [mHelper] to enable `shortcut`. In either case we
      *  then call our [refreshList] method to have it refresh the dataset held by our [MyAdapter]
      *  field [mAdapter] with all mutable shortcuts for this app in order for them to be displayed
      *  in our [ListView].
-     *  - [R.id.remove]: we call the [ShortcutHelper.removeShortcut] method of [mHelper] to remove
+     *  - `R.id.remove`: we call the [ShortcutHelper.removeShortcut] method of [mHelper] to remove
      *  `shortcut`, then call our [refreshList] method to have it refresh the dataset held by our
      *  [MyAdapter] field [mAdapter] with all mutable shortcuts for this app in order for them to
      *  be displayed in our [ListView].
@@ -410,7 +410,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
          * parameters unless you use specify a root view and prevent attachment to that root. If our
          * [View] parameter [convertView] is not `null` we initialize our variable `val view` to it,
          * if it is `null` we initialize `view` to the [View] that our [LayoutInflater] field
-         * [mInflater] returns when it inflates our item view layout file [R.layout.list_item] using
+         * [mInflater] returns when it inflates our item view layout file `R.layout.list_item` using
          * our [ViewGroup] parameter [parent] for its layout params without attaching to it. Then we
          * call our method [bindView] to have it configure `view` to hold and display the [ShortcutInfo]
          * object in position [position] of our dataset [List] of [ShortcutInfo] field [mList]. Finally
@@ -437,15 +437,15 @@ class Main : AppCompatActivity(), View.OnClickListener {
          * object at position [position] of our dataset [List] of [ShortcutInfo] field [mList].
          * First we set the `tag` property of our [View] parameter [view] to our [ShortcutInfo]
          * parameter [shortcut]. We initialize our [TextView] variable `val line1` by finding the
-         * [View] in [view] with ID [R.id.line1] and our [TextView] variable `val line2` by finding
-         * the [View] in [view] with ID [R.id.line2]. We set the text of `line1` to the `longLabel`
+         * [View] in [view] with ID `R.id.line1` and our [TextView] variable `val line2` by finding
+         * the [View] in [view] with ID `R.id.line2`. We set the text of `line1` to the `longLabel`
          * property of [shortcut], and the text of `line2` to the [String] that our [getType] method
          * returns describing the "type" of shortcut that [shortcut] is. We initialize our [Button]
-         * variable `val remove` by finding the [View] in [view] with ID [R.id.remove] and our
-         * [Button] variable `val disable` by finding the [View] in [view] with ID [R.id.disable].
+         * variable `val remove` by finding the [View] in [view] with ID `R.id.remove` and our
+         * [Button] variable `val disable` by finding the [View] in [view] with ID `R.id.disable`.
          * If the `isEnabled` property of [shortcut] is `true` we set the text of `disable` to the
-         * [String] with resource ID [R.string.disable_shortcut] ("Disable"), otherwise we set the
-         * text of `disable` to the [String] with resource ID [R.string.enable_shortcut] ("Enable").
+         * [String] with resource ID `R.string.disable_shortcut` ("Disable"), otherwise we set the
+         * text of `disable` to the [String] with resource ID `R.string.enable_shortcut` ("Enable").
          * Finally we set the `OnClickListener` of both `remove` and `disable` to [Main].
          *
          * @param view the [View] we are to configure to hold and display our [ShortcutInfo]

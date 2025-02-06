@@ -71,11 +71,11 @@ class WeatherForecastAppWidget : AppWidgetProvider() {
      * specification. We initialize our [Map] of [SizeF] to [RemoteViews] variable `val viewMapping`
      * to an instance with three entries, one mapping a 180.0f by 110.0f [SizeF] to a [RemoteViews]
      * constructed to display the views in the layout file with resource ID
-     * [R.layout.widget_weather_forecast_small], one mapping a 270.0f by 110.0f [SizeF] to a
+     * `R.layout.widget_weather_forecast_small`, one mapping a 270.0f by 110.0f [SizeF] to a
      * [RemoteViews] constructed to display the views in the layout file with resource ID
-     * [R.layout.widget_weather_forecast_medium], and one mapping a 270.0f by 280.0f [SizeF] to a
+     * `R.layout.widget_weather_forecast_medium`, and one mapping a 270.0f by 280.0f [SizeF] to a
      * [RemoteViews] constructed to display the views in the layout file with resource ID
-     * [R.layout.widget_weather_forecast_large]. We then call the [AppWidgetManager.updateAppWidget]
+     * `R.layout.widget_weather_forecast_large`. We then call the [AppWidgetManager.updateAppWidget]
      * method of [appWidgetManager] to have it set the [RemoteViews] to use for the app widget ID
      * [appWidgetId] to a [RemoteViews] constructed with `viewMapping` providing the choice of
      * [RemoteViews] to use depending on the closest size specification that will fit in `appWidgetId`.

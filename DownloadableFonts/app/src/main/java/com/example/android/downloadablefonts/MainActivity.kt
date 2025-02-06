@@ -50,7 +50,7 @@ import com.google.android.material.textfield.TextInputLayout
  * Downloadable Fonts is a feature that allows apps to request a certain font from a provider
  * instead of bundling it or downloading it themselves. This means, there is no need to bundle the
  * font as an asset. See https://fonts.google.com/?sort=alpha for the fonts available, our choices
- * are in the [String] array with resource ID [R.array.family_names].
+ * are in the [String] array with resource ID `R.array.family_names`.
  */
 class MainActivity : AppCompatActivity() {
     /**
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     private var mHandler: Handler? = null
 
     /**
-     * The [TextView] in our UI with resource ID [R.id.textview]. It contains text whose typeface is
+     * The [TextView] in our UI with resource ID `R.id.textview`. It contains text whose typeface is
      * changed to the one the user asks to be downloaded in the `onTypefaceRetrieved` override of the
      * [FontsContractCompat.FontRequestCallback] passed to [FontsContractCompat.requestFont] in our
      * [requestDownload] method.
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDownloadableFontTextView: TextView
 
     /**
-     * The [SeekBar] in our UI with the ID [R.id.seek_bar_width] which is used to select the width
+     * The [SeekBar] in our UI with the ID `R.id.seek_bar_width` which is used to select the width
      * of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
      * which is included by our content view layout file layout/activity_main.xml Note: Persistent
      * bottom sheets are views that come up from the bottom of the screen, elevated over the main
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mWidthSeekBar: SeekBar
 
     /**
-     * The [SeekBar] in our UI with the ID [R.id.seek_bar_weight] which is used to select the weight
+     * The [SeekBar] in our UI with the ID `R.id.seek_bar_weight` which is used to select the weight
      * of the requested font. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml
      * which is included by our content view layout file layout/activity_main.xml Note: Persistent
      * bottom sheets are views that come up from the bottom of the screen, elevated over the main
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mWeightSeekBar: SeekBar
 
     /**
-     * The [SeekBar] in our UI with the ID [R.id.seek_bar_italic] which is used to select the italic
+     * The [SeekBar] in our UI with the ID `R.id.seek_bar_italic` which is used to select the italic
      * value (0f to 1f) of the requested font. It is in the bottomsheet layout file
      * layout/bottom_sheet_font_query.xml which is included by our content view layout file
      * layout/activity_main.xml Note: Persistent bottom sheets are views that come up from the
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mItalicSeekBar: SeekBar
 
     /**
-     * The [CheckBox] in our UI with the ID [R.id.checkbox_best_effort] which is used to select the
+     * The [CheckBox] in our UI with the ID `R.id.checkbox_best_effort` which is used to select the
      * value to use for the "&besteffort=" query parameter (`true` or `false`) of the requested font
      * URL. It is in the bottomsheet layout file layout/bottom_sheet_font_query.xml which is included
      * by our content view layout file layout/activity_main.xml Note: Persistent bottom sheets are
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mBestEffort: CheckBox
 
     /**
-     * The [Button] in our UI with the ID [R.id.button_request] which when clicked will call our
+     * The [Button] in our UI with the ID `R.id.button_request` which when clicked will call our
      * [requestDownload] method to build a font request URL from the user's current choices and
      * call the [FontsContractCompat.requestFont] method to download that font. It is in the bottom
      * sheet layout file layout/bottom_sheet_font_query.xml which is included by our content view
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * The [ArraySet] holding the names of the fonts we can download. It is read from the string
-     * array resource with ID [R.array.family_names] in our [onCreate] override. It is used only to
+     * array resource with ID `R.array.family_names` in our [onCreate] override. It is used only to
      * verify that the font name chosen in the [AutoCompleteTextView] used to select a font is a
      * valid font name by our [isValidFamilyName] method.
      */
@@ -128,15 +128,15 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file [R.layout.activity_main]. It consists of a
+     * then we set our content view to our layout file `R.layout.activity_main`. It consists of a
      * [androidx.coordinatorlayout.widget.CoordinatorLayout] root view (a super-powered `FrameLayout`)
-     * which includes the layout file [R.layout.bottom_sheet_font_query] (which is a A `FrameLayout`
+     * which includes the layout file `R.layout.bottom_sheet_font_query` (which is a A `FrameLayout`
      * with a rounded corner background and shadow) whose app:layout_behavior attribute is
      * [com.google.android.material.bottomsheet.BottomSheetBehavior] (ie. a bottom sheet with a peek
      * height of 120dp which can come up from the bottom of the screen, elevated over the main content.
      * It can be dragged vertically to expose more or less of its content) which holds a
      * [androidx.core.widget.NestedScrollView] holding all of the controls used to select and
-     * configure the font to be requested. [R.layout.activity_main] also contains a `LinearLayout`
+     * configure the font to be requested. `R.layout.activity_main` also contains a `LinearLayout`
      * holding a [TextView] which displays sample text whose typeface is changed when a new font is
      * downloaded, and a [ProgressBar] used to display the progress of the font download.
      *
@@ -145,20 +145,20 @@ class MainActivity : AppCompatActivity() {
      * we want to download.
      *
      * We initialize our [ArraySet] field [mFamilyNameSet] with a new instance then add all of the
-     * strings in the [R.array.family_names] string array resource to it (our method [isValidFamilyName]
+     * strings in the `R.array.family_names` string array resource to it (our method [isValidFamilyName]
      * uses this [ArraySet] to verify that the font name the user chooses is a valid font name).
      *
      * Next we initialize our [TextView] field [mDownloadableFontTextView] by finding the view with
-     * ID [R.id.textview] (contains the sample text whose typeface will be changed to use the font
+     * ID `R.id.textview` (contains the sample text whose typeface will be changed to use the font
      * that is downloaded). We initialize our [ArrayAdapter] variable `val adapter` to an instance
      * which uses the layout file with ID [android.R.layout.simple_dropdown_item_1line] when
-     * instantiating views, and the string array whose resource ID is [R.array.family_names] as the
+     * instantiating views, and the string array whose resource ID is `R.array.family_names` as the
      * objects to represent in the ListView. We initialize our [TextInputLayout] variable
-     * `val familyNameInput` by finding the view with ID [R.id.auto_complete_family_name_input]
+     * `val familyNameInput` by finding the view with ID `R.id.auto_complete_family_name_input`
      * (it is a Layout which wraps a [AutoCompleteTextView] to show a floating label when the hint
      * is hidden while the user inputs text, and is used to display an error message if the user
      * tries to choose an invalid font). We initialize our [AutoCompleteTextView] variable
-     * `val autoCompleteFamilyName` by finding the view with ID [R.id.auto_complete_family_name]
+     * `val autoCompleteFamilyName` by finding the view with ID `R.id.auto_complete_family_name`
      * (it is the [AutoCompleteTextView] wrapped by `familyNameInput` which the user uses to choose
      * a font name). We then set hte adapter of `autoCompleteFamilyName` to `adapter` and add an
      * anonymous [TextWatcher] to it whose `onTextChanged` override uses our [isValidFamilyName]
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
      * Name".
      *
      * Next we initialize our [Button] field [mRequestDownloadButton] by finding the view in our UI
-     * with the ID [R.id.button_request] and set its [View.OnClickListener] to a lambda which
+     * with the ID `R.id.button_request` and set its [View.OnClickListener] to a lambda which
      * initializes its [String] variable `val familyName` to the `text` in `autoCompleteFamilyName`.
      * If our [isValidFamilyName] determines that it is not a valid family it enables the error
      * functionality of `familyNameInput` and sets the error message that will be displayed below its
@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity() {
      * [Button] field [mRequestDownloadButton].
      *
      * Finally our [onCreate] override initializes our [CheckBox] field [mBestEffort] by finding the
-     * view with ID [R.id.checkbox_best_effort].
+     * view with ID `R.id.checkbox_best_effort`.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously being shut
      * down then this [Bundle] contains the data it most recently supplied in [onSaveInstanceState].
@@ -324,14 +324,14 @@ class MainActivity : AppCompatActivity() {
      * Provider to be used for the request, uses the [String] "com.google.android.gms" as the package
      * for the Font Provider to be used for the request (this is used to verify the identity of the
      * provider), uses `query` as the query to be sent over to the provider, and uses our resource
-     * array with ID [R.array.com_google_android_gms_fonts_certs] as the resource array with the
+     * array with ID `R.array.com_google_android_gms_fonts_certs` as the resource array with the
      * list of sets of hashes for the certificates the provider should be signed with (this is used
      * to verify the identity of the provider). That last array is in our file values/font_certs.xml
-     * and is an array of the string arrays [R.array.com_google_android_gms_fonts_certs_dev] and
-     * [R.array.com_google_android_gms_fonts_certs_prod] which are defined in the same file.
+     * and is an array of the string arrays `R.array.com_google_android_gms_fonts_certs_dev` and
+     * `R.array.com_google_android_gms_fonts_certs_prod` which are defined in the same file.
      *
      * Next we intitialize our [ProgressBar] variable `val progressBar` by finding the view in our UI
-     * with ID [R.id.progressBar] and set it to be visible. We initialize our variable `val callback`
+     * with ID `R.id.progressBar` and set it to be visible. We initialize our variable `val callback`
      * to an anonymous [FontsContractCompat.FontRequestCallback] whose `onTypefaceRetrieved` override
      * sets the `typeface` property of our [TextView] field [mDownloadableFontTextView] to its [Typeface]
      * parameter `typeface`, sets the visibility of `progressBar` to [View.GONE] and enables our [Button]
@@ -417,27 +417,27 @@ class MainActivity : AppCompatActivity() {
      * Locates and configures all of the [SeekBar] widgets in our UI that are to be used to vary the
      * characteristics of the font that is requested. The [SeekBar] widgets are all in our bottom
      * sheet layout file layout/bottom_sheet_font_query.xml and are configured as follows:
-     *  - "Width" is found at resource ID [R.id.seek_bar_width] to initialize our [SeekBar] field
+     *  - "Width" is found at resource ID `R.id.seek_bar_width` to initialize our [SeekBar] field
      *  [mWidthSeekBar], its default `progress` property is calculated to initialize our variable
      *  `val widthValue` to be 100 times [Constants.WIDTH_DEFAULT] divided by [Constants.WIDTH_MAX],
-     *  the [TextView] that displays its current value is found at resource ID [R.id.textview_width]
+     *  the [TextView] that displays its current value is found at resource ID `R.id.textview_width`
      *  to initialize our variable `val widthTextView` and the text of `widthTextView` is set to the
      *  [String] value of `widthValue`, and finally its [OnSeekBarChangeListener] is set to an anonymous
      *  instance whose `onProgressChanged` override sets the text of `widthTextView` to the width
      *  returned by our [progressToWidth] method for the current `progress` value passed the override,
      *  and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
-     *  - "Weight" is found at resource ID [R.id.seek_bar_weight] to initialize our [SeekBar] field
+     *  - "Weight" is found at resource ID `R.id.seek_bar_weight` to initialize our [SeekBar] field
      *  [mWeightSeekBar], its default `progress` property is calculated to initialize our variable
      *  `val weightValue` to be 100 times [Constants.WEIGHT_DEFAULT] divided by [Constants.WEIGHT_MAX],
-     *  the [TextView] that displays its current value is found at resource ID [R.id.textview_weight]
+     *  the [TextView] that displays its current value is found at resource ID `R.id.textview_weight`
      *  to initialize our variable `val weightTextView` and the text of `weightTextView` is set to the
      *  [String] value of `weightValue`, and finally its [OnSeekBarChangeListener] is set to an
      *  anonymous instance whose `onProgressChanged` override sets the text of `weightTextView` to
      *  the value returned by our [progressToWeight] method for the current `progress` value passed
      *  the override, and whose `onStartTrackingTouch` and `onStopTrackingTouch` are no-ops.
-     *  - "Italic" is found at resource ID [R.id.seek_bar_italic] to initialize our [SeekBar] field
+     *  - "Italic" is found at resource ID `R.id.seek_bar_italic` to initialize our [SeekBar] field
      *  [mItalicSeekBar], its default `progress` property is set to [Constants.ITALIC_DEFAULT], the
-     *  [TextView] that displays its current value is found at resource ID [R.id.textview_italic]
+     *  [TextView] that displays its current value is found at resource ID `R.id.textview_italic`
      *  to initialize our variable `val italicTextView` and the text of `italicTextView` is set to
      *  [Constants.ITALIC_DEFAULT], and finally its [OnSeekBarChangeListener] is set to an anonymous
      *  instance whose `onProgressChanged` override sets the text of `progressToItalic` to the
@@ -488,7 +488,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Convenience function to check whether our [String] parameter [familyName] is among the font
      * family names in our [ArraySet] field [mFamilyNameSet] which is read from the string array
-     * resource with ID [R.array.family_names] in our [onCreate] override. It is a subset of the
+     * resource with ID `R.array.family_names` in our [onCreate] override. It is a subset of the
      * font family names actually avaiable from the provider but the only ones this demo allows the
      * user to chose from. We return `true` if [familyName] is not `null` and it exists in the set
      * [mFamilyNameSet], otherwise we return `false`.

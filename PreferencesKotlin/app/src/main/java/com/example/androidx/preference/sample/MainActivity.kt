@@ -58,14 +58,14 @@ class MainActivity : AppCompatActivity(),
 
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`
-     * then we set our content view to our layout file [R.layout.activity_main] which just consists
-     * of a `LinearLayout` root view holding a `FrameLayout` with resource ID [R.id.settings] into
+     * then we set our content view to our layout file `R.layout.activity_main` which just consists
+     * of a `LinearLayout` root view holding a `FrameLayout` with resource ID `R.id.settings` into
      * which we add whichever fragment is called for.
      *
      * If our [Bundle] parameter [savedInstanceState] is `null` this is the first time we have been
      * called so we use the the [FragmentManager] for interacting with fragments associated with this
      * activity to begin a [FragmentTransaction] which we use to replace the current contents of the
-     * container with ID [R.id.settings] with a new instance of [SettingsFragment] and then we commit
+     * container with ID `R.id.settings` with a new instance of [SettingsFragment] and then we commit
      * that [FragmentTransaction]. If [savedInstanceState] is not `null` we are being started after a
      * configuration change so we set the title associated with this activity to the [CharSequence]
      * stored in [savedInstanceState] under the key [TITLE_TAG].
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity(),
      *
      * We then use the [FragmentManager] for interacting with fragments associated with this activity
      * to begin a new [FragmentTransaction] then use that [FragmentTransaction] to replace the current
-     * contents of the container view with ID [R.id.settings] with `fragment`, add the transaction to
+     * contents of the container view with ID `R.id.settings` with `fragment`, add the transaction to
      * the back stack, and then commit the [FragmentTransaction]. Finally we set the title associated
      * with this activity to the `title` property of [pref] and return `true` to report that the
      * fragment creation has been handled.
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity(),
          * [addPreferencesFromResource].
          *
          * We just call the [setPreferencesFromResource] method with the resource ID of our root
-         * [PreferenceScreen] xml file [R.xml.root] (see the file xml/root.xml) and our [String]
+         * [PreferenceScreen] xml file `R.xml.root` (see the file xml/root.xml) and our [String]
          * parameter [rootKey]. Our [PreferenceScreen] holds four [Preference] elements each having
          * the attributes:
          *  - "app:title" the `title` property of the [Preference] passed to our [onPreferenceStartFragment]
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(),
          *  xml/root.xml file
          *  - "app:fragment" the `fragment` property of the [Preference] passed to our [onPreferenceStartFragment]
          *  override which it uses as the class name of the [PreferenceFragmentCompat] which it constructs
-         *  and loads into the container with ID [R.id.settings] (the [FrameLayout] in our activity's
+         *  and loads into the container with ID `R.id.settings` (the [FrameLayout] in our activity's
          *  layout file layout/activity_main.xml)
          *
          * @param savedInstanceState If the fragment is being re-created from a previous saved state,

@@ -51,7 +51,7 @@ import com.example.android.common.logger.MessageOnlyLogFilter
 class MainActivity : SampleActivityBase() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * and then we set our content view to our layout file [R.layout.activity_main].
+     * and then we set our content view to our layout file `R.layout.activity_main`.
      *
      * If the [FragmentManager] for interacting with fragments associated with this activity is not
      * able to find a [Fragment] whose tag name is [FRAGTAG] we are being started for the first
@@ -93,9 +93,9 @@ class MainActivity : SampleActivityBase() {
      * Initialize the contents of the Activity's standard options menu. You should place your menu
      * items in to [Menu] parameter [menu]. This is only called once, the first time the options
      * menu is displayed. To update the menu every time it is displayed, see [onPrepareOptionsMenu].
-     * We use a [MenuInflater] for this context to inflate our menu layout file [R.menu.main] into
+     * We use a [MenuInflater] for this context to inflate our menu layout file `R.menu.main` into
      * our [Menu] parameter [menu]. This layout file holds a single menu item with resource ID
-     * [R.id.sample_action], whose title is "Toggle Immersive Mode!" Finally we return `true` so
+     * `R.id.sample_action`, whose title is "Toggle Immersive Mode!" Finally we return `true` so
      * that the [Menu] will be displayed.
      *
      * @param menu The options [Menu] in which you place your items.

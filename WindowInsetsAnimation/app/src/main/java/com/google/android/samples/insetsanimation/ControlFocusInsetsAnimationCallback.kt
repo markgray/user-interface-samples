@@ -30,7 +30,7 @@ import androidx.core.view.WindowInsetsCompat
  * This is primarily used when animating the [WindowInsetsCompat.Type.ime], so that the
  * appropriate view is focused for accepting input from the IME. One is added using the
  * method [ViewCompat.setWindowInsetsAnimationCallback] for the [EditText] in the layout
- * field layout/fragment_conversation.xml with ID [R.id.message_edittext] in the `onViewCreated`
+ * field layout/fragment_conversation.xml with ID `R.id.message_edittext` in the `onViewCreated`
  * override of [ConversationFragment].
  *
  * @param view the view to request/clear focus
