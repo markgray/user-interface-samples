@@ -27,7 +27,7 @@ import androidx.annotation.ColorInt
 object ColorUtils {
     /**
      * Queries the theme of the given [Context] for a theme color. Called from the `onCreateOptionsMenu`
-     * override of [MainActivity] to retrieve the color [com.google.android.material.R.attr.colorOnPrimary]
+     * override of [MainActivity] to retrieve the color `com.google.android.material.R.attr.colorOnPrimary`
      * that is used for the current theme. **Note: this is used to tint the icon used for a `MenuItem`,
      * but icons are not shown on newer devices.**
      *

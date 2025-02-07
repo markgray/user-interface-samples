@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
      * method to wrap the [MenuItem.getIcon] (aka kotlin `icon` property) of `item` and making that
      * [Drawable] mutable. We then use the [DrawableCompat.setTint] method to set the tint of
      * `drawableWrap` to the current theme color which our [ColorUtils.getThemeColor] method returns
-     * for the [com.google.android.material.R.attr.colorOnPrimary] color (which resolves to the color
+     * for the `com.google.android.material.R.attr.colorOnPrimary` color (which resolves to the color
      * named "primary" which is "Blue 300" in the resource file values-night/colors.xml, and "Blue 700"
      * in the resource file values/colors.xml). We then set the `icon` of `item` to `drawableWrap` and
      * return `true` so that the menu will be displayed. ***Note: the tinting of the icon is useless
