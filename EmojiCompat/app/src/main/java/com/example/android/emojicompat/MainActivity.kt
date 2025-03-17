@@ -16,6 +16,7 @@
 package com.example.android.emojicompat
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -119,7 +120,9 @@ class MainActivity : AppCompatActivity() {
 
         // Regular TextView without EmojiCompat support; you have to manually process the text
         val regularTextView = findViewById<TextView>(R.id.regular_text_view)
-        EmojiCompat.get().registerInitCallback(InitCallback(regularTextView))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            EmojiCompat.get().registerInitCallback(InitCallback(regularTextView))
+        }
 
         // Custom TextView
         val customTextView = findViewById<TextView>(R.id.emoji_custom_text_view)
