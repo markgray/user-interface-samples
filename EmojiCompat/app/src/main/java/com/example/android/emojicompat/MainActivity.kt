@@ -15,6 +15,7 @@
  */
 package com.example.android.emojicompat
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -211,6 +212,7 @@ class MainActivity : AppCompatActivity() {
          * it formats [EMOJI] into the format string "Regular TextView %s" (the string with resource
          * ID `R.string.regular_text_view`).
          */
+        @SuppressLint("NewApi")
         override fun onInitialized() {
             val regularTextView: TextView? = mRegularTextViewRef.get()
             if (regularTextView != null) {
