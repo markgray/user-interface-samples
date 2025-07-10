@@ -37,8 +37,8 @@ import androidx.core.graphics.withTranslation
  * @param useColor flag which if `true` tells us to use the custom color [color] for the bullet
  */
 class BulletPointSpan(
-    @Px private val gapWidth: Int = DEFAULT_GAP_WIDTH,
-    @ColorInt private val color: Int = Color.BLACK,
+    @param:Px private val gapWidth: Int = DEFAULT_GAP_WIDTH,
+    @param:ColorInt private val color: Int = Color.BLACK,
     private val useColor: Boolean = color != Color.BLACK
 ) : LeadingMarginSpan {
 

@@ -39,8 +39,8 @@ import com.android.example.text.styling.renderer.spans.CodeBlockSpan
  * @param parser the [Parser] to use to parse markdown text.
  */
 class MarkdownBuilder(
-    @ColorInt private val bulletPointColor: Int,
-    @ColorInt private val codeBackgroundColor: Int,
+    @param:ColorInt private val bulletPointColor: Int,
+    @param:ColorInt private val codeBackgroundColor: Int,
     private val codeBlockTypeface: Typeface?,
     private val parser: Parser
 ) {
