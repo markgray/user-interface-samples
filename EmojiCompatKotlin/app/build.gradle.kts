@@ -45,8 +45,8 @@ dependencies {
     implementation("androidx.emoji:emoji-bundled:1.1.0")
 
     // Test
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.7.0")
 
     testImplementation("junit:junit:4.13.2")
 }
