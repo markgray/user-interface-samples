@@ -40,10 +40,10 @@ dependencies {
 
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("androidx.test:rules:1.6.1")
-    androidTestImplementation("androidx.test:runner:1.6.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
+    androidTestImplementation("androidx.test:rules:1.7.0")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.7.0")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
 }
