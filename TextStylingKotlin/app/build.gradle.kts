@@ -48,8 +48,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
     androidTestImplementation("org.mockito:mockito-core:5.18.0")
-    androidTestImplementation("androidx.test:runner:1.6.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
     androidTestImplementation("com.google.dexmaker:dexmaker:1.2")
     androidTestImplementation("com.google.dexmaker:dexmaker-mockito:1.2")
     implementation("androidx.core:core-ktx:1.16.0")
