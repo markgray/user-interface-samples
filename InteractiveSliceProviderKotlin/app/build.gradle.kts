@@ -52,8 +52,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("com.google.firebase:firebase-appindexing:20.0.0")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:runner:1.6.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
     //noinspection GradleDependency TODO: figure out why the newer versions use `val` for header
     implementation("androidx.slice:slice-builders-ktx:1.0.0-alpha3")
 }
