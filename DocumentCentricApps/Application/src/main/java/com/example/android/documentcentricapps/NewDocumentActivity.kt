@@ -133,7 +133,7 @@ class NewDocumentActivity : AppCompatActivity() {
      *
      * @param view the [View] that was clicked.
      */
-    @Suppress("UNUSED_PARAMETER") // Suggested change would make method less reusable
+    @Suppress("UNUSED_PARAMETER", "RedundantSuppression") // Suggested change would make method less reusable
     fun onRemoveFromOverview(view: View?) {
         // It is good pratice to remove a document from the overview stack if not needed anymore.
         finishAndRemoveTask()

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.example.android.documentcentricapps
 
 import android.content.Intent
@@ -150,7 +151,7 @@ class DocumentCentricActivity : AppCompatActivity() {
      *
      * @param view the [View] that was clicked, we ignore.
      */
-    @Suppress("UNUSED_PARAMETER") // Suggested change would make method less reusable
+    @Suppress("UNUSED_PARAMETER", "RedundantSuppression") // Suggested change would make method less reusable
     fun createNewDocument(view: View?) {
         val useMultipleTasks: Boolean = mCheckbox.isChecked
         val newDocumentIntent: Intent = newDocumentIntent()
