@@ -150,7 +150,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
      *
      * @param v the [View] that was clicked.
      */
-    @Suppress("UNUSED_PARAMETER") // Suggested change would make class less reusable
+    @Suppress("UNUSED_PARAMETER", "RedundantSuppression") // Suggested change would make class less reusable
     fun onAddPressed(v: View?) {
         addWebSite()
     }
@@ -454,7 +454,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
          * @param shortcut the [ShortcutInfo] object that our [View] parameter [view] is to hold and
          * to display.
          */
-        @Suppress("UNUSED_PARAMETER") // Suggested change would make class less reusable
+        @Suppress("UNUSED_PARAMETER", "RedundantSuppression") // Suggested change would make class less reusable
         fun bindView(view: View, position: Int, shortcut: ShortcutInfo) {
             view.tag = shortcut
             val line1 = view.findViewById<View>(R.id.line1) as TextView

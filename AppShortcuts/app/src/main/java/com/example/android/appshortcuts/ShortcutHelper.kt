@@ -35,6 +35,7 @@ import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
 import java.util.function.BooleanSupplier
+import androidx.core.net.toUri
 
 /**
  * This class exists to make it easier to interact with the [ShortcutManager] system level service.
@@ -242,7 +243,7 @@ class ShortcutHelper(private val mContext: Context) {
     private fun createShortcutForUrl(urlAsString: String): ShortcutInfo {
         Log.i(TAG, "createShortcutForUrl: $urlAsString")
         val b = ShortcutInfo.Builder(mContext, urlAsString)
-        val uri: Uri = Uri.parse(urlAsString)
+        val uri: Uri = urlAsString.toUri()
         b.setIntent(Intent(Intent.ACTION_VIEW, uri))
         setSiteInformation(b, uri)
         setExtras(b)
