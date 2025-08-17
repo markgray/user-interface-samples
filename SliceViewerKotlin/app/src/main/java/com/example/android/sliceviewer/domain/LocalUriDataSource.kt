@@ -19,6 +19,7 @@ package com.example.android.sliceviewer.domain
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.core.content.edit
+import androidx.core.net.toUri
 
 /**
  * Simple CRUD local data source for persisting list of slice URIs in the app's [SharedPreferences]
@@ -45,7 +46,7 @@ class LocalUriDataSource(
         return sharedPrefs.getStringSet(
             KEY_URI, setOf<String>()
         )!!.map {
-            Uri.parse(it)
+            it.toUri()
         }.toMutableList()
     }
 

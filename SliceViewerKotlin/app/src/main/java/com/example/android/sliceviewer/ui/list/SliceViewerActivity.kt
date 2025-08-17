@@ -48,6 +48,7 @@ import com.example.android.sliceviewer.R
 import com.example.android.sliceviewer.domain.LocalUriDataSource
 import com.example.android.sliceviewer.domain.UriDataSource
 import com.example.android.sliceviewer.ui.ViewModelFactory
+import androidx.core.net.toUri
 
 /**
  * Example use of SliceView. Uses a search bar to select/auto-complete a slice uri which is
@@ -164,7 +165,7 @@ class SliceViewerActivity : AppCompatActivity() {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?) = false
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    viewModel.addSlice(Uri.parse(query))
+                    viewModel.addSlice(query!!.toUri())
                     sliceAdapter.submitList(viewModel.slices)
                     searchView.setQuery("", false)
                     searchView.clearFocus()
@@ -176,6 +177,7 @@ class SliceViewerActivity : AppCompatActivity() {
             }
             setOnFocusChangeListener { v: View, hasFocus: Boolean ->
                 if (!hasFocus) {
+                    @Suppress("RemoveRedundantQualifierName")
                     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                         .hideSoftInputFromWindow(v.windowToken, 0)
                 }
