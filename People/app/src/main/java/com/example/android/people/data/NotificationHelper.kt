@@ -31,7 +31,6 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
-import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
@@ -107,9 +106,7 @@ class NotificationHelper(private val context: Context) {
                     Intent(context, MainActivity::class.java)
                         .setAction(Intent.ACTION_VIEW)
                         .setData(
-                            Uri.parse(
-                                "https://android.example.com/chat/${contact.id}"
-                            )
+                            "https://android.example.com/chat/${contact.id}".toUri()
                         )
                 )
                 .setPerson(
