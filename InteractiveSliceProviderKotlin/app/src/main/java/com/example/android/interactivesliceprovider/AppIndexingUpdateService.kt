@@ -26,6 +26,7 @@ import androidx.core.app.JobIntentService
 import com.example.android.interactivesliceprovider.data.model.AppIndexingMetadata
 import com.google.firebase.appindexing.FirebaseAppIndex
 import com.google.firebase.appindexing.Indexable
+import androidx.core.net.toUri
 
 /**
  * Note: Firebase App Indexing is no longer the recommended way of indexing content for display as
@@ -90,7 +91,7 @@ class AppIndexingUpdateService : JobIntentService() {
                     .setKeywords(*keywords.toTypedArray())
                     .setMetadata(
                         Indexable.Metadata.Builder()
-                            .setSliceUri(Uri.parse(contentUri)))
+                            .setSliceUri(contentUri.toUri()))
                     .build()
             )
         }

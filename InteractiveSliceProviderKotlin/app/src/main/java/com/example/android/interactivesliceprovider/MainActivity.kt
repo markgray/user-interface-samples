@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
         for (nonDefaultUri in nonDefaultUris) {
             grantSlicePermissions(
-                Uri.parse(nonDefaultUri),
+                nonDefaultUri.toUri(),
                 false
             )
         }
@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     /**
      *
      */
-    @Suppress("UNUSED_PARAMETER") // Suggested change would make class less reusable
+    @Suppress("UNUSED_PARAMETER", "RedundantSuppression") // Suggested change would make class less reusable
     fun onClickIndexSlices(view: View) {
         val intent = Intent(this, AppIndexingUpdateReceiver::class.java)
         intent.action = FirebaseAppIndex.ACTION_UPDATE_INDEX
