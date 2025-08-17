@@ -156,7 +156,7 @@ open class ImageDragListener : OnDragListener {
      * @param x the `x` coordinate of the [DragEvent]
      * @param y the `y` coordinate of the [DragEvent]
      */
-    @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate") // Suggested change would make class less reusable
+    @Suppress("UNUSED_PARAMETER", "MemberVisibilityCanBePrivate", "RedundantSuppression") // Suggested change would make class less reusable
     protected fun processLocation(x: Float, y: Float) {
     }
 

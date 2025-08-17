@@ -35,6 +35,7 @@ import androidx.core.view.DragAndDropPermissionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.android.common.logger.Log.d
+import androidx.core.net.toUri
 
 /**
  * This sample demonstrates data can be moved between views in different applications via
@@ -113,7 +114,7 @@ class DropTargetFragment : Fragment() {
         if (savedInstanceState != null) {
             val uriString = savedInstanceState.getString(IMAGE_URI)
             if (uriString != null) {
-                mImageUri = Uri.parse(uriString)
+                mImageUri = uriString.toUri()
                 imageView.setImageURI(mImageUri)
             }
         }

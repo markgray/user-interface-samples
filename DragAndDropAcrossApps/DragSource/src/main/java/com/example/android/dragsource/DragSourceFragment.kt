@@ -41,6 +41,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Date
+import androidx.core.net.toUri
 
 /**
  * This sample demonstrates data can be moved between views within the app or between different
@@ -144,7 +145,7 @@ class DragSourceFragment : Fragment() {
         if (savedInstanceState != null) {
             val uriString = savedInstanceState.getString(IMAGE_URI)
             if (uriString != null) {
-                mLocalImageUri = Uri.parse(uriString)
+                mLocalImageUri = uriString.toUri()
                 Log.d(TAG, "Restoring local image to: $mLocalImageUri")
                 localImageTarget.setImageURI(mLocalImageUri)
             }
