@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity() {
         handlerThread.start()
         mHandler = Handler(handlerThread.looper)
         initializeSeekBars()
-        mFamilyNameSet = ArraySet<String>()
+        mFamilyNameSet = ArraySet()
         mFamilyNameSet.addAll(listOf(*resources.getStringArray(R.array.family_names)))
 
         mDownloadableFontTextView = findViewById(R.id.textview)
@@ -227,7 +227,7 @@ class MainActivity : AppCompatActivity() {
         )
         val familyNameInput = findViewById<TextInputLayout>(R.id.auto_complete_family_name_input)
         val autoCompleteFamilyName = findViewById<AutoCompleteTextView>(R.id.auto_complete_family_name)
-        autoCompleteFamilyName.setAdapter<ArrayAdapter<String>>(adapter)
+        autoCompleteFamilyName.setAdapter(adapter)
         autoCompleteFamilyName.addTextChangedListener(object : TextWatcher {
             /**
              * This method is called to notify you that, within our [CharSequence] parameter
