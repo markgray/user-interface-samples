@@ -15,6 +15,7 @@
 */
 package com.android.example.text.styling.roundedbg
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
@@ -76,6 +77,7 @@ class TextRoundedBgAttributeReader(context: Context, attrs: AttributeSet?) {
     val drawableRight: Drawable
 
     init {
+        @SuppressLint("UseKtx") // TODO: Quick fix fumbles replacement
         val typedArray = context.obtainStyledAttributes(
             attrs,
             R.styleable.TextRoundedBgHelper,
