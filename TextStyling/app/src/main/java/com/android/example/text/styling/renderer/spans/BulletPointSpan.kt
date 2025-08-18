@@ -25,6 +25,7 @@ import android.text.style.LeadingMarginSpan
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.annotation.VisibleForTesting
+import androidx.core.graphics.withTranslation
 
 /**
  * Creating a bullet span with bigger bullets than [BulletSpan] and with a left margin
@@ -109,10 +110,9 @@ class BulletPointSpan(
                     bulletPath = Path()
                     (bulletPath ?: return).addCircle(0.0f, 0.0f, BULLET_RADIUS, Path.Direction.CW)
                 }
-                canvas.save()
-                canvas.translate(gapWidth + x + dir * BULLET_RADIUS, y)
-                canvas.drawPath(bulletPath ?: return, paint)
-                canvas.restore()
+                canvas.withTranslation(x = gapWidth + x + dir * BULLET_RADIUS, y = y) {
+                    drawPath(bulletPath ?: return, paint)
+                }
             } else {
                 canvas.drawCircle(gapWidth + x + dir * BULLET_RADIUS, y, BULLET_RADIUS, paint)
             }
