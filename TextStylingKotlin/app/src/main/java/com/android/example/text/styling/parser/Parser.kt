@@ -327,5 +327,6 @@ object Parser {
      * for a line separator in the [String] passed it, and to advance over the line separator if
      * one is found (the new line is part of the element).
      */
+    @Suppress("SystemGetProperty") // TODO: Replace with java.lang.System.lineSeparator()
     private val LINE_SEPARATOR = System.getProperty("line.separator")!!
 }
