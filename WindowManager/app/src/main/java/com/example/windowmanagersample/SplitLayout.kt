@@ -26,6 +26,7 @@ import android.widget.FrameLayout
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowLayoutInfo
+import androidx.core.view.isNotEmpty
 
 /**
  * An example of split-layout for two views, separated by a display feature that goes across the
@@ -117,7 +118,7 @@ class SplitLayout : FrameLayout {
 
     private fun findStartView(): View? {
         var startView = findViewById<View>(startViewId)
-        if (startView == null && childCount > 0) {
+        if (startView == null && isNotEmpty()) {
             startView = getChildAt(0)
         }
         return startView

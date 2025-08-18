@@ -18,11 +18,11 @@ package com.example.windowmanagersample
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -158,7 +158,7 @@ class DisplayFeaturesActivity : AppCompatActivity() {
                         }
                     )
             }
-            featureView.foreground = ColorDrawable(color)
+            featureView.foreground = color.toDrawable()
 
             rootLayout.addView(featureView, lp)
             featureView.id = View.generateViewId()
