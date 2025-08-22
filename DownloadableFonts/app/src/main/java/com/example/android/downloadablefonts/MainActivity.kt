@@ -17,9 +17,6 @@ package com.example.android.downloadablefonts
 
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -38,12 +35,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArraySet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat.getMainExecutor
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.textfield.TextInputLayout
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 /**
  * This sample demonstrates how to use the Downloadable Fonts feature introduced in Android O.
@@ -53,13 +53,6 @@ import com.google.android.material.textfield.TextInputLayout
  * are in the [String] array with resource ID `R.array.family_names`.
  */
 class MainActivity : AppCompatActivity() {
-    /**
-     * The [Handler] we use to download a font. It is lazily initialized by our [handlerThreadHandler]
-     * property to use the `looper` of a [HandlerThread] named "fonts" and then used in a call to
-     * [FontsContractCompat.requestFont] by its [handlerThreadHandler] "alias" in our [requestDownload]
-     * method so it is essentially the backing field for [handlerThreadHandler].
-     */
-    private var mHandler: Handler? = null
 
     /**
      * The [TextView] in our UI with resource ID `R.id.textview`. It contains text whose typeface is
@@ -129,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Called when the activity is starting. First we call our super's implementation of `onCreate`,
      * then we set our content view to our layout file `R.layout.activity_main`. It consists of a
-     * [androidx.coordinatorlayout.widget.CoordinatorLayout] root view (a super-powered `FrameLayout`)
+     * [CoordinatorLayout] root view (a super-powered `FrameLayout`)
      * which includes the layout file `R.layout.bottom_sheet_font_query` (which is a A `FrameLayout`
      * with a rounded corner background and shadow) whose app:layout_behavior attribute is
      * [com.google.android.material.bottomsheet.BottomSheetBehavior] (ie. a bottom sheet with a peek
@@ -339,10 +332,12 @@ class MainActivity : AppCompatActivity() {
      * number given for the font request failure, sets the visibility of `progressBar` to [View.GONE]
      * and enables our [Button] field [mRequestDownloadButton].
      *
-     * Finally we call the [FontsContractCompat.requestFont] method with the [FontRequest] `request`
-     * as the font to download, `callback` as the callback that will be triggered when results are
-     * obtained, and our [Handler] field [handlerThreadHandler] as the handler to use to perform the
-     * font fetching.
+     * Finally we call the [FontsContractCompat.requestFont] method with the `context` argument
+     * this@MainActivity, the `request` argument our [FontRequest] variable `request`, the `style`
+     * argument [Typeface.NORMAL], the `loadingExecutor` argument our [Executor] variable
+     * `executorBackGround`, the `callbackExecutor` argument  an [Executor] that will run enqueued
+     * tasks on the main thread associated with the MainActivity context, and the `callback` argument
+     * our [FontsContractCompat.FontRequestCallback] variable `callback`.
      *
      * @param familyName the font family name that the user has requested.
      */
@@ -408,9 +403,17 @@ class MainActivity : AppCompatActivity() {
                 mRequestDownloadButton.isEnabled = true
             }
         }
-        // TODO: use Executor based loading/callback,
+
+        val executorBackGround: Executor = Executors.newSingleThreadExecutor()
         FontsContractCompat
-            .requestFont(this@MainActivity, request, callback, handlerThreadHandler)
+            .requestFont(
+                this@MainActivity,
+                request,
+                Typeface.NORMAL,
+                executorBackGround,
+                getMainExecutor(this@MainActivity),
+                callback
+            )
     }
 
     /**
@@ -496,25 +499,6 @@ class MainActivity : AppCompatActivity() {
     private fun isValidFamilyName(familyName: String?): Boolean {
         return familyName != null && mFamilyNameSet.contains(familyName)
     }
-
-    /**
-     * Lazily initialized [Handler] that we pass in our call to [FontsContractCompat.requestFont]
-     * that it uses to download our font from our provider in our [requestDownload] method. If our
-     * [Handler] backing field [mHandler] is `null` we initialize our [HandlerThread] variable
-     * `val handlerThread` to a new instance whose [Thread] name is "fonts", start `handlerThread`,
-     * and then initialize [mHandler] to a new instance of [Handler] which will use the [Looper] of
-     * `handlerThread` as its [Looper] instead of the default. Having made sure it is initialized
-     * we return [mHandler] to the caller.
-     */
-    private val handlerThreadHandler: Handler
-        get() {
-            if (mHandler == null) {
-                val handlerThread = HandlerThread("fonts")
-                handlerThread.start()
-                mHandler = Handler(handlerThread.looper)
-            }
-            return mHandler!!
-        }
 
     /**
      * Converts [progress] from a [SeekBar] to the value of width. If our parameter [progress] is 0 we
