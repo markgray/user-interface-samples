@@ -36,7 +36,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.window:window:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.3")
 
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
