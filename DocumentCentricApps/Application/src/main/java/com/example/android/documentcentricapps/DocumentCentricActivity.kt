@@ -151,7 +151,10 @@ class DocumentCentricActivity : AppCompatActivity() {
      *
      * @param view the [View] that was clicked, we ignore.
      */
-    @Suppress("UNUSED_PARAMETER", "RedundantSuppression") // Suggested change would make method less reusable
+    @Suppress(
+        "UNUSED_PARAMETER",
+        "RedundantSuppression"
+    ) // Suggested change would make method less reusable
     fun createNewDocument(view: View?) {
         val useMultipleTasks: Boolean = mCheckbox.isChecked
         val newDocumentIntent: Intent = newDocumentIntent()
