@@ -46,9 +46,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("com.google.android.material:material:1.13.0")
-    implementation("com.github.bumptech.glide:glide:5.0.4")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.3")
+    implementation("com.github.bumptech.glide:glide:5.0.5")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
 
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("junit:junit:4.13.2")
@@ -58,5 +58,5 @@ dependencies {
     testImplementation("androidx.test.ext:junit:1.3.0")
     testImplementation("androidx.test.espresso:espresso-core:3.7.0")
     testImplementation("androidx.test.ext:truth:1.7.0")
-    testImplementation("com.google.truth:truth:1.4.4")
+    testImplementation("com.google.truth:truth:1.4.5")
 }
