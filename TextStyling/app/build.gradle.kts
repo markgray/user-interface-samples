@@ -25,6 +25,7 @@ android {
                 isOptimizeCode = false
                 proguardFile("proguard-rules.pro")
             }
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
