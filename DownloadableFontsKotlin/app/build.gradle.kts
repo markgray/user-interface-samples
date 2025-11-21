@@ -9,7 +9,7 @@ android {
     compileSdk = 36
     defaultConfig {
         applicationId = "com.example.android.downloadablefonts"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
     }
     buildTypes {
@@ -23,7 +23,7 @@ android {
         }
     }
     dependencies {
-        implementation("androidx.activity:activity-ktx:1.11.0")
+        implementation("androidx.activity:activity-ktx:1.12.0")
         implementation("androidx.legacy:legacy-support-v4:1.0.0")
         implementation("androidx.legacy:legacy-support-v13:1.0.0")
         implementation("androidx.cardview:cardview:1.0.0")
