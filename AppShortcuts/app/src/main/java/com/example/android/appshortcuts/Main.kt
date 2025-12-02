@@ -38,6 +38,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -84,20 +85,35 @@ class Main : AppCompatActivity(), View.OnClickListener {
     private lateinit var mHelper: ShortcutHelper
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file `R.layout.main` which holds a [Button] which
-     * allows the user to add another shortcut (ID `R.id.add`) and a [ListView] which lists the URLs
-     * which we use for Launcher Shortcuts. We initialize our [ShortcutHelper] field [mHelper] with
-     * a new instance, call its [ShortcutHelper.maybeRestoreAllDynamicShortcuts] method to have it
-     * restore any dynamic shortcuts our app may have (a no-op since we do not have any ATM), and
-     * then call its [ShortcutHelper.refreshShortcuts] method to have it look for shortcuts that
-     * have been pushed and refresh them (the refresh part isn't implemented yet). If the `action`
-     * of the [Intent] that started this activity is [ACTION_ADD_WEBSITE] (declared in our Manifest)
-     * we call our [addWebSite] method to have it pop up an [AlertDialog] that will allow the user
-     * to add another URL to our list of shortcuts. We initialize our [ListView] variable `val listView`
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and set our content
+     * view to our layout file `R.layout.main` which holds a [Button] which allows the user to add
+     * another shortcut (ID `R.id.add`) and a [ListView] which lists the URLs which we use for
+     * Launcher Shortcuts.
+     *
+     * We initialize our [LinearLayout] variable `rootView` to the view with ID `R.id.root_view`
+     * then call [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy for applying
+     * window insets to `rootView`, with the `listener` argument a lambda that accepts the [View]
+     * passed the lambda in variable `v` and the [WindowInsetsCompat] passed the lambda in variable
+     * `windowInsets`. It initializes its [Insets] variable `insets` to the
+     * [WindowInsetsCompat.getInsets] of `windowInsets` with [WindowInsetsCompat.Type.systemBars]
+     * as the argument, then it updates the layout parameters of `v` to be a
+     * [ViewGroup.MarginLayoutParams] with the left margin set to `insets.left`, the right margin
+     * set to `insets.right`, the top margin set to `insets.top`, and the bottom margin set to
+     * `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED] to the caller (so that the
+     * window insets will not keep passing down to descendant views).
+     *
+     * We initialize our [ShortcutHelper] field [mHelper] with a new instance, call its
+     * [ShortcutHelper.maybeRestoreAllDynamicShortcuts] method to have it restore any dynamic
+     * shortcuts our app may have (a no-op since we do not have any ATM), and then call its
+     * [ShortcutHelper.refreshShortcuts] method to have it look for shortcuts that have been pushed
+     * and refresh them (the refresh part isn't implemented yet). If the `action` of the [Intent]
+     * that started this activity is [ACTION_ADD_WEBSITE] (declared in our Manifest) we call our
+     * [addWebSite] method to have it pop up an [AlertDialog] that will allow the user to add
+     * another URL to our list of shortcuts. We initialize our [ListView] variable `val listView`
      * by finding the [View] with ID `R.id.list`, initialize our [MyAdapter] field [mAdapter] to a
-     * new instance that uses our application [Context] to access the [LayoutInflater] system service,
-     * and set [mAdapter] to be the adapter for `listView`.
+     * new instance that uses our application [Context] to access the [LayoutInflater] system
+     * service, and set [mAdapter] to be the adapter for `listView`.
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
@@ -106,8 +122,8 @@ class Main : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
         val rootView = findViewById<LinearLayout>(R.id.root_view)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
