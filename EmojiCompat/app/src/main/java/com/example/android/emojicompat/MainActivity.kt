@@ -20,11 +20,14 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
 import androidx.core.provider.FontRequest
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -45,15 +48,33 @@ import java.lang.ref.WeakReference
  */
 class MainActivity : AppCompatActivity() {
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`.
-     * We then call our method [initEmojiCompat] to have it initialize [EmojiCompat] to use either
-     * the bundled "Noto Color Emoji Compat" font bundled with our app due to the presence of a
-     * android:name="fontProviderRequests" meta-data element in our AndroidManifest file (downloads
-     * the font when the app is installed) or the same font downloaded using a [FontRequest] depending
-     * on whether our [USE_BUNDLED_EMOJI] field is `true` or `false`. Next we set our content view to
-     * our layout file `R.layout.activity_main` which consists of a `ScrollView` root view holding
-     * a vertical `LinearLayout` with an [EmojiAppCompatTextView], an [EmojiAppCompatEditText], an
-     * [EmojiAppCompatButton], a [TextView] and our [CustomTextView] custom [TextView].
+     * Called when the activity is starting. First we call [enableEdgeToEdge]
+     * to enable edge to edge display, then we call our super's implementation
+     * of `onCreate`. We then call our method [initEmojiCompat] to have it initialize [EmojiCompat]
+     * to use either the bundled "Noto Color Emoji Compat" font bundled with our app due to the
+     * presence of a android:name="fontProviderRequests" meta-data element in our AndroidManifest
+     * file (downloads the font when the app is installed) or the same font downloaded using a
+     * [FontRequest] depending on whether our [USE_BUNDLED_EMOJI] field is `true` or `false`. Next
+     * we set our content view to our layout file `R.layout.activity_main` which consists of a
+     * [ScrollView] root view holding a vertical [LinearLayout] with an [EmojiAppCompatTextView], an
+     * [EmojiAppCompatEditText], an [EmojiAppCompatButton], a [TextView] and our [CustomTextView]
+     * custom [TextView].
+     *
+     * We initialize our [ScrollView] variable `rootView`
+     * to the view with ID `R.id.scroll` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
      *
      * We then proceed to locate each of the above text displaying views in order to set their text
      * to a [CharSequence] which include emojis from [EmojiCompat]:
@@ -93,8 +114,8 @@ class MainActivity : AppCompatActivity() {
         initEmojiCompat()
         setContentView(R.layout.activity_main)
         val rootView = findViewById<ScrollView>(R.id.scroll)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
