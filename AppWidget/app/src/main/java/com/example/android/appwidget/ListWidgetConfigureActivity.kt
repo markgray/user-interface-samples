@@ -29,6 +29,7 @@ import android.widget.RemoteViews
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -58,10 +59,11 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`.
-     * We then set our result to [Activity.RESULT_CANCELED] (This will cause the widget host to
-     * cancel out of the widget placement if the user presses the back button). Next we initialize
-     * our [ActivityWidgetConfigureBinding] variable `val binding` to the instance that the
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`. We then set our result
+     * to [Activity.RESULT_CANCELED] (This will cause the widget host to cancel out of the widget
+     * placement if the user presses the back button). Next we initialize our
+     * [ActivityWidgetConfigureBinding] variable `val binding` to the instance that the
      * [ActivityWidgetConfigureBinding.inflate] method inflates and binds to when it uses the
      * [LayoutInflater] instance that this Window retrieved from its Context to inflate its
      * associated layout file layout/activity_widget_configure.xml (resource ID
@@ -72,17 +74,29 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
      * in the layout file associated [ActivityWidgetConfigureBinding], and then set the title
      * associated with this activity to the string "Select list for widgets".
      *
-     * We next set the [View.OnClickListener] of the [ActivityWidgetConfigureBinding.groceryListContainer]
-     * `LinearLayout` which holds the "Grocery List" to a lambda which calls our [onWidgetContainerClicked]
-     * method with the resource ID `R.layout.widget_grocery_list` which refers to the layout file
+     * We call [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy for applying
+     * window insets to the `binding.root` root [View], with the `listener` argument a lambda that
+     * accepts the [View] passed the lambda in variable `v` and the [WindowInsetsCompat] passed
+     * the lambda in variable `windowInsets`. It initializes its [Insets] variable `insets` to the
+     * [WindowInsetsCompat.getInsets] of `windowInsets` with [WindowInsetsCompat.Type.systemBars]
+     * as the argument, then it updates the layout parameters of `v` to be a
+     * [ViewGroup.MarginLayoutParams] with the left margin set to `insets.left`, the right margin
+     * set to `insets.right`, the top margin set to `insets.top`, and the bottom margin set to
+     * `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED] to the caller (so that the
+     * window insets will not keep passing down to descendant views).
+     *
+     * We next set the [View.OnClickListener] of the
+     * [ActivityWidgetConfigureBinding.groceryListContainer] `LinearLayout` which holds the
+     * "Grocery List" to a lambda which calls our [onWidgetContainerClicked] method with the
+     * resource ID `R.layout.widget_grocery_list` which refers to the layout file
      * layout/widget_grocery_list.xml (which consists of a bunch of `CheckBox` widgets whose
      * android:text attributes are names of grocery items).
      *
-     * Then we set the [View.OnClickListener] of the [ActivityWidgetConfigureBinding.todoListContainer]
-     * `LinearLayout` which holds the "To-do List" to a lambda which calls our [onWidgetContainerClicked]
-     * method with the resource ID `R.layout.widget_todo_list` which refers to the layout file
-     * layout/widget_todo_list.xml (which consists of a bunch of `CheckBox` widgets whose
-     * android:text attributes are names of household chores).
+     * Then we set the [View.OnClickListener] of the
+     * [ActivityWidgetConfigureBinding.todoListContainer] `LinearLayout` which holds the
+     * "To-do List" to a lambda which calls our [onWidgetContainerClicked] method with the resource
+     * ID `R.layout.widget_todo_list` which refers to the layout file layout/widget_todo_list.xml
+     * (which consists of a bunch of `CheckBox` widgets whose android:text attributes are names of household chores).
      *
      * We next initialize our [Int] field [appWidgetId] to the value stored in the [Intent] that
      * launched us under the key [AppWidgetManager.EXTRA_APPWIDGET_ID], defaulting to the value
@@ -106,9 +120,8 @@ class ListWidgetConfigureActivity : AppCompatActivity() {
 
         val binding = ActivityWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val rootView = binding.root
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
