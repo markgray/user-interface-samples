@@ -23,6 +23,7 @@ import android.view.Window
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -148,29 +149,47 @@ class MainActivity : AppCompatActivity() {
     private lateinit var typeSpinner: Spinner
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file `R.layout.main_activity` whose root view is
-     * a vertical [LinearLayout] holding a:
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and set our content
+     * view to our layout file `R.layout.activity_main` whose root view is a vertical
+     * [LinearLayout] holding a:
      *  - Horizontal [LinearLayout] holding a "HIDE" and a "SHOW" [Button] (ID `R.id.hide` and
      *  `R.id.show`)
      *  - A [TextView] displaying the text "Behavior", above a [Spinner] with ID `R.id.behavior`
      *  - A [TextView] displaying the text "Type", above a [Spinner] with ID `R.id.type`
      *
+     * We initialize our [LinearLayout] variable `rootView`
+     * to the view with ID `R.id.main` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
+     *
      * Next we initialize our [Spinner] field [behaviorSpinner] by finding the view in our UI with
      * ID `R.id.behavior` and set its `adapter` to a new instance of [ArrayAdapter] which displays
-     * the `title` property of the constants of the [BehaviorOption] `enum` class in the system layout
-     * file [android.R.layout.simple_list_item_1], and we initialize our [Spinner] field [typeSpinner]
-     * by finding the view in our UI with ID `R.id.type` and set its `adapter` to a new instance of
-     * [ArrayAdapter] which displays the `title` property of the constants of the [TypeOption] `enum`
-     * class in the system layout file [android.R.layout.simple_list_item_1].
+     * the `title` property of the constants of the [BehaviorOption] `enum` class in the system
+     * layout file [android.R.layout.simple_list_item_1], and we initialize our [Spinner] field
+     * [typeSpinner] by finding the view in our UI with ID `R.id.type` and set its `adapter` to a
+     * new instance of [ArrayAdapter] which displays the `title` property of the constants of the
+     * [TypeOption] `enum` class in the system layout file [android.R.layout.simple_list_item_1].
      *
      * We initialize our [Button] variable `val hideButton` by finding the view in our UI with ID
-     * `R.id.hide` and set its [View.OnClickListener] to a lambda which calls our [controlWindowInsets]
-     * method with `true` to have it hide the system bars the user selected using [typeSpinner] with
-     * the behavior he selected using [behaviorSpinner], and we initialize our [Button] variable
-     * `val showButton` by finding the view in our UI with ID `R.id.show` and set its [View.OnClickListener]
-     * to a lambda which calls our [controlWindowInsets] method with `false` to have it show the system
-     * bars the user selected using [typeSpinner] with the behavior he selected using [behaviorSpinner].
+     * `R.id.hide` and set its [View.OnClickListener] to a lambda which calls our
+     * [controlWindowInsets] method with `true` to have it hide the system bars the user selected
+     * using [typeSpinner] with the behavior they selected using [behaviorSpinner], and we
+     * initialize our [Button] variable `val showButton` by finding the view in our UI with ID
+     * `R.id.show` and set its [View.OnClickListener] to a lambda which calls our
+     * [controlWindowInsets] method with `false` to have it show the system bars the user selected
+     * using [typeSpinner] with the behavior they selected using [behaviorSpinner].
      *
      * @param savedInstanceState we do not override [onSaveInstanceState] so do not use.
      */
@@ -179,8 +198,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         val rootView = findViewById<LinearLayout>(R.id.main)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
