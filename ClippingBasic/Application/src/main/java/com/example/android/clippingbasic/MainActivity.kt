@@ -22,9 +22,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.ViewAnimator
 import androidx.activity.enableEdgeToEdge
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -54,20 +58,37 @@ class MainActivity : SampleActivityBase() {
     private var mLogShown = false
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file `R.layout.activity_main`. The layout file used
-     * for displays narrower then 720dp - layout/activity_main.xml consists of a root `LinearLayout`
-     * holding a `ViewAnimator` with two child views: a `ScrollView` holding a `TextView` displaying
-     * the sample description, and a `fragment` for our [LogFragment] (these are toggled between using
-     * our options menu). Below the `ViewAnimator` in the `LinearLayout` is a 1dp "darker_gray" spacer
-     * `View` and a `FrameLayout` with the ID `R.id.sample_content_fragment` which is used to hold
-     * our sample fragment [ClippingBasicFragment]. The layout file used for displays 720dp and wider
-     * is the file layout-w720dp/activity_main.xml which consists of a root horizontal `LinearLayout`
-     * holding a vertical `LinearLayout` which holds a `FrameLayout` holding a `TextView` displaying
-     * the sample description, followed by a 1dp "darker_gray" spacer `View`, followed by a `fragment`
-     * for our [LogFragment]. To the right in the root `LinearLayout` is a 1dp "darker_gray" spacer
-     * `View` and a `FrameLayout` with the ID `R.id.sample_content_fragment` which is used to hold
-     * our sample fragment [ClippingBasicFragment].
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and set our content
+     * view to our layout file `R.layout.activity_main`. The layout file used for displays narrower
+     * then 720dp - layout/activity_main.xml consists of a root `LinearLayout` holding a
+     * [ViewAnimator] with two child views: a [ScrollView] holding a [TextView] displaying the
+     * sample description, and a `fragment` for our [LogFragment] (these are toggled between using
+     * our options menu). Below the `ViewAnimator` in the `LinearLayout` is a 1dp "darker_gray"
+     * spacer [View] and a [FrameLayout] with the ID `R.id.sample_content_fragment` which is used
+     * to hold our sample fragment [ClippingBasicFragment]. The layout file used for displays 720dp
+     * and wider is the file layout-w720dp/activity_main.xml which consists of a root horizontal
+     * [LinearLayout] holding a vertical [LinearLayout] which holds a [FrameLayout] holding a
+     * [TextView] displaying the sample description, followed by a 1dp "darker_gray" spacer [View],
+     * followed by a `fragment` for our [LogFragment]. To the right in the root [LinearLayout] is a
+     * 1dp "darker_gray" spacer [View] and a [FrameLayout] with the ID `R.id.sample_content_fragment`
+     * which is used to hold our sample fragment [ClippingBasicFragment].
+     *
+     * We initialize our [LinearLayout] variable `rootView`
+     * to the view with ID `R.id.sample_main_layout` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
      *
      * If our [Bundle] parameter [savedInstanceState] is non-`null` we are being restarted so our
      * [ClippingBasicFragment] will be restored by the system so we just return. If it is `null` we
@@ -89,9 +110,8 @@ class MainActivity : SampleActivityBase() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val rootView = findViewById<LinearLayout>(R.id.sample_main_layout)
-        // TODO: Align marginTop of scrollview here instead of in xml
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
