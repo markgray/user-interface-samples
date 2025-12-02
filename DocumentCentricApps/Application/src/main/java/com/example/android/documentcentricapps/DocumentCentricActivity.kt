@@ -22,10 +22,13 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -54,12 +57,30 @@ class DocumentCentricActivity : AppCompatActivity() {
     private lateinit var mCheckbox: CheckBox
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file `R.layout.activity_document_centric_main`,
-     * and initialize our [CheckBox] field [mCheckbox] by finding the view in our UI with the ID
-     * `R.id.multiple_task_checkbox`. Our UI consists of a root vertical `LinearLayout` holding two
-     * vertical `LinearLayout`, the top one just holding a `TextView` displaying text describing the
-     * demo, and the bottom one holding a `Button` labeled "Create new document" which launches a
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and set our content
+     * view to our layout file `R.layout.activity_document_centric_main`.
+     *
+     * We initialize our [LinearLayout] variable `rootView`
+     * to the view with ID `R.id.root_view` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
+     *
+     * We  initialize our [CheckBox] field [mCheckbox] by finding the view in our UI with the ID
+     * `R.id.multiple_task_checkbox`. Our UI consists of a root vertical [LinearLayout] holding two
+     * vertical [LinearLayout], the top one just holding a [TextView] displaying text describing the
+     * demo, and the bottom one holding a [Button] labeled "Create new document" which launches a
      * new instance of [NewDocumentActivity], and a [CheckBox] labeled "Task per document" which the
      * user can use to add the flag [Intent.FLAG_ACTIVITY_MULTIPLE_TASK] the [Intent] used to launch
      * [NewDocumentActivity].
@@ -72,8 +93,8 @@ class DocumentCentricActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document_centric_main)
         val rootView = findViewById<LinearLayout>(R.id.root_view)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
