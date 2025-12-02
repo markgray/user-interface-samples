@@ -26,6 +26,9 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -36,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.collection.ArraySet
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat.getMainExecutor
+import androidx.core.graphics.Insets
 import androidx.core.provider.FontRequest
 import androidx.core.provider.FontsContractCompat
 import androidx.core.view.ViewCompat
@@ -120,33 +124,51 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mFamilyNameSet: ArraySet<String>
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file `R.layout.activity_main`. It consists of a
-     * [CoordinatorLayout] root view (a super-powered `FrameLayout`)
-     * which includes the layout file `R.layout.bottom_sheet_font_query` (which is a A `FrameLayout`
-     * with a rounded corner background and shadow) whose app:layout_behavior attribute is
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and set our content
+     * view to our layout file `R.layout.activity_main`. It consists of a [CoordinatorLayout] root
+     * view (a super-powered [FrameLayout]) which includes the layout file
+     * `R.layout.bottom_sheet_font_query` (which is a A [FrameLayout] with a rounded corner
+     * background and shadow) whose app:layout_behavior attribute is
      * [com.google.android.material.bottomsheet.BottomSheetBehavior] (ie. a bottom sheet with a peek
-     * height of 120dp which can come up from the bottom of the screen, elevated over the main content.
-     * It can be dragged vertically to expose more or less of its content) which holds a
+     * height of 120dp which can come up from the bottom of the screen, elevated over the main
+     * content. It can be dragged vertically to expose more or less of its content) which holds a
      * [androidx.core.widget.NestedScrollView] holding all of the controls used to select and
-     * configure the font to be requested. `R.layout.activity_main` also contains a `LinearLayout`
+     * configure the font to be requested. `R.layout.activity_main` also contains a [LinearLayout]
      * holding a [TextView] which displays sample text whose typeface is changed when a new font is
      * downloaded, and a [ProgressBar] used to display the progress of the font download.
+     *
+     * We initialize our [CoordinatorLayout] variable `rootView`
+     * to the view with ID `R.id.container` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
      *
      * Having set our content view we next call our [initializeSeekBars] method to have it locate
      * and configure all of the [SeekBar] controls used to change the characteristics of the font
      * we want to download.
      *
      * We initialize our [ArraySet] field [mFamilyNameSet] with a new instance then add all of the
-     * strings in the `R.array.family_names` string array resource to it (our method [isValidFamilyName]
-     * uses this [ArraySet] to verify that the font name the user chooses is a valid font name).
+     * strings in the `R.array.family_names` string array resource to it (our method
+     * [isValidFamilyName] uses this [ArraySet] to verify that the font name the user chooses is
+     * a valid font name).
      *
      * Next we initialize our [TextView] field [mDownloadableFontTextView] by finding the view with
      * ID `R.id.textview` (contains the sample text whose typeface will be changed to use the font
      * that is downloaded). We initialize our [ArrayAdapter] variable `val adapter` to an instance
      * which uses the layout file with ID [android.R.layout.simple_dropdown_item_1line] when
      * instantiating views, and the string array whose resource ID is `R.array.family_names` as the
-     * objects to represent in the ListView. We initialize our [TextInputLayout] variable
+     * objects to represent in the [ListView]. We initialize our [TextInputLayout] variable
      * `val familyNameInput` by finding the view with ID `R.id.auto_complete_family_name_input`
      * (it is a Layout which wraps a [AutoCompleteTextView] to show a floating label when the hint
      * is hidden while the user inputs text, and is used to display an error message if the user
@@ -156,11 +178,11 @@ class MainActivity : AppCompatActivity() {
      * a font name). We then set hte adapter of `autoCompleteFamilyName` to `adapter` and add an
      * anonymous [TextWatcher] to it whose `onTextChanged` override uses our [isValidFamilyName]
      * method to determine if the text that the user typed in is valid and if it is valid disables
-     * the error functionality of `familyNameInput` and clears the error message that will be displayed
-     * below its [AutoCompleteTextView] `autoCompleteFamilyName`. If it is invalid the override will
-     * enable the error functionality of `familyNameInput` and set the error message that will be
-     * displayed below its [AutoCompleteTextView] `autoCompleteFamilyName` to "Not a valid Family
-     * Name".
+     * the error functionality of `familyNameInput` and clears the error message that will be
+     * displayed below its [AutoCompleteTextView] `autoCompleteFamilyName`. If it is invalid the
+     * override will enable the error functionality of `familyNameInput` and set the error message
+     * that will be displayed below its [AutoCompleteTextView] `autoCompleteFamilyName` to "Not a
+     * valid Family Name".
      *
      * Next we initialize our [Button] field [mRequestDownloadButton] by finding the view in our UI
      * with the ID `R.id.button_request` and set its [View.OnClickListener] to a lambda which
@@ -183,8 +205,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val rootView = findViewById<CoordinatorLayout>(R.id.container)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
