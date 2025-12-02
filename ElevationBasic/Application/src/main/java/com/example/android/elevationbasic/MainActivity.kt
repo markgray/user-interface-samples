@@ -67,8 +67,8 @@ class MainActivity : SampleActivityBase() {
      * option menu, and layout-w720dp/activity_main.xml displays both the sample description and a
      * `fragment` used for [LogFragment] at the same time.
      *
-     * We initialize our ContentFrameLayout variable `rootView`
-     * to the view with ID `android.R.id.content` then call
+     * We initialize our [LinearLayout] variable `rootView`
+     * to the view with ID `R.id.sample_main_layout` then call
      * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
      * for applying window insets to `rootView`, with the `listener`
      * argument a lambda that accepts the [View] passed the lambda
