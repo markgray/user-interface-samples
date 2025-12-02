@@ -20,12 +20,23 @@ import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
 /**
- *
+ * This activity is launched when the user clicks on the header of the list slice, or when they
+ * click the "See more" row at the bottom of the list slice. It is a full screen version of the
+ * list slice, and is used to respond to the URI: "content://com.example.android.interactivesliceprovider/list"
  */
 class ListSliceActivity : AppCompatActivity() {
 
     /**
+     * Called when the activity is starting.
      *
+     * This is where most initialization should go: calling `setContentView(int)`
+     * to inflate the activity's UI, using `findViewById(int)` to programmatically
+     * interact with widgets in the UI, etc.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most
+     * recently supplied in `onSaveInstanceState(Bundle)`.
+     * Note: Otherwise it is null.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

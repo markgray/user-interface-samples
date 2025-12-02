@@ -33,18 +33,28 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a slice that includes a grid of images.
  *
+ * @param context The `Context` to use for resources and creating intents.
+ * @param sliceUri The `Uri` identifying the `Slice`
  */
 class GallerySliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Builds a slice that mimics a photo gallery.
      *
+     * This slice features a header with a title, subtitle, and a primary action.
+     * Below the header, it includes two additional actions (cast and share).
+     * The main content is a `gridRow` displaying a series of images, simulating
+     * a photo album preview. The grid row itself has a primary action and a
+     * "see more" action to view the full gallery.
+     *
+     * All actions trigger a toast message for demonstration purposes.
+     *
+     * @return The constructed `Slice` object.
      */
     override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         val action = SliceAction.create(
@@ -112,7 +122,7 @@ class GallerySliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag to be used for logging.
          */
         const val TAG: String = "GallerySliceBuilder"
     }

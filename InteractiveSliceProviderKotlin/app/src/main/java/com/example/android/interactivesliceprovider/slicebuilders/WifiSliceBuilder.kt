@@ -35,12 +35,22 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a slice that mimics the Wi-Fi settings slice.
  *
+ * This slice is composed of:
+ *  - A header row with the current Wi-Fi status and a primary action to open Wi-Fi settings.
+ *  - A toggle action to enable or disable Wi-Fi.
+ *  - A list of nearby (fake) Wi-Fi networks.
+ *  - A "see more" row to view all networks, which also opens Wi-Fi settings.
+ *
+ * Note that since Android Q, apps are no longer able to programmatically enable or disable Wi-Fi.
+ * The toggle in this slice will broadcast an intent but won't change the actual Wi-Fi state on
+ * modern devices. This is for demonstration purposes.
+ *
+ * @param context The context to use for resources and creating intents.
+ * @param sliceUri The URI for the slice being built.
  */
 class WifiSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
@@ -51,6 +61,27 @@ class WifiSliceBuilder(
      * surface. WifiInfo is attached in NetworkCapabilities#getTransportInfo() which is available
      * via callback in NetworkCallback#onCapabilitiesChanged(Network, NetworkCapabilities) or
      * on-demand from ConnectivityManager#getNetworkCapabilities(Network).
+     *
+     * Creates a Slice representing the current Wi-Fi state and a list of available networks.
+     *
+     * This slice features a header that displays the current Wi-Fi connection status (e.g.,
+     * "disconnected" or the connected SSID). The header's primary action opens the system's
+     * Wi-Fi settings.
+     *
+     * It also includes a toggle action to enable or disable Wi-Fi. This action is broadcast
+     * to [SliceActionsBroadcastReceiver] to handle the state change.
+     *
+     * Below the header, a list of mock Wi-Fi networks is displayed. Each row represents a
+     * network, showing its name, signal strength icon, and a lock icon if it's "secured".
+     * Tapping a network row simulates a connection attempt by showing a toast message.
+     *
+     * A "See more" row at the bottom provides another entry point to the system's Wi-Fi settings.
+     *
+     * Note: This implementation uses deprecated APIs for managing Wi-Fi state for demonstration
+     * purposes. As of Android Q, apps are no longer permitted to programmatically enable or
+     * disable Wi-Fi.
+     *
+     * @return A [Slice] object representing the Wi-Fi control panel.
      */
     @Suppress("DEPRECATION") // // TODO: Starting with SDK Q applications are not allowed to enable/disable Wifi
     override fun buildSlice(): Slice {

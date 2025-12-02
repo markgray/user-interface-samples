@@ -20,12 +20,23 @@ import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
 /**
+ * This Activity is launched when the user clicks on the Slice representing a note.
  *
+ * It is a very simple Activity that just displays a layout. In a real world application,
+ * this would be the screen to edit the note.
  */
 class NoteSliceActivity : AppCompatActivity() {
 
     /**
+     * Called when the activity is first created. This is where you should do all of your normal
+     * static set up: create views, bind data to lists, etc. This method also provides you with a
+     * Bundle containing the activity's previously frozen state, if there was one.
      *
+     * Always followed by onStart().
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     * shut down then this Bundle contains the data it most recently supplied in [onSaveInstanceState].
+     * Note: Otherwise it is null.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

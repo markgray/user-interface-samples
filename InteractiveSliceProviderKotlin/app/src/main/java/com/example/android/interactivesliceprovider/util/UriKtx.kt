@@ -21,7 +21,10 @@ import android.content.Context
 import android.net.Uri
 
 /**
- * @return Uri with the provided path.
+ * Builds a [Uri] with the `content` scheme and the package name as the authority.
+ *
+ * @param path The path to append to the Uri.
+ * @return A content Uri with the format: `content://<your.package.name>/<path>`.
  */
 fun Context.buildUriWithAuthority(path: String): Uri {
     return Uri.Builder()

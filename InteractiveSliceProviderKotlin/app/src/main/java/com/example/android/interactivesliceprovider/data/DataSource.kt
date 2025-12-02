@@ -39,32 +39,50 @@ interface DataSource {
     val listData: ListData
 
     /**
-     *
+     * This function is called to simulate a data fetch for the grid data used by the
+     * [GridSliceBuilder]. In a real world application this would be where you make a network
+     * request or query a database, but in our case it just randomly modifies the [gridData]
+     * field then executes all of the [Runnable] callbacks that have been registered using
+     * the [registerGridDataCallback] method.
      */
     fun triggerGridDataFetch()
 
     /**
+     * Registers a [Runnable] to be executed when the grid data changes. The `Runnable`'s
+     * [Runnable.run] method will be called when the [triggerGridDataFetch] method is called.
      *
+     * @param r the [Runnable] whose [Runnable.run] method should be called when grid data changes.
      */
     fun registerGridDataCallback(r: Runnable)
 
     /**
-     *
+     * Unregisters all of the [Runnable] callbacks that have been registered using the
+     * [registerGridDataCallback] method. In a real app you might want to take a `Runnable`
+     * argument to unregister only a specific callback.
      */
     fun unregisterGridDataCallbacks()
 
     /**
+     * Registers a [Runnable] to be executed when the list data changes. This is used by
+     * [ListSliceBuilder] to trigger a slice update when its underlying data is updated by a
+     * call to [triggerListDataFetch].
      *
+     * @param r the [Runnable] to be executed.
      */
     fun registerListDataCallback(r: Runnable)
 
     /**
-     *
+     * Unregisters all of the [Runnable] callbacks that have been registered to be executed when
+     * the list data changes.
      */
     fun unregisterListDataCallbacks()
 
     /**
-     *
+     * This function is called to simulate a data fetch for the list data used by the
+     * [ListSliceBuilder]. In a real world application this would be where you make a network
+     * request or query a database, but in our case it just randomly modifies the [listData]
+     * field then executes all of the [Runnable] callbacks that have been registered using
+     * the [registerListDataCallback] method.
      */
     fun triggerListDataFetch()
 }

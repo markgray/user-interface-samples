@@ -20,12 +20,22 @@ import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
 /**
+ * This activity is displayed when the user clicks on the "See weather" action on the slice.
  *
+ * In a real world scenario, this would be a fully featured weather app.
  */
 class WeatherSliceActivity : AppCompatActivity() {
 
     /**
+     * Called when the activity is first created. This is where you should do all of your normal
+     * static set up: create views, bind data to lists, etc.
      *
+     * This implementation simply sets the content view to a layout resource that displays a
+     * placeholder for a weather activity.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     * shut down then this Bundle contains the data it most recently supplied in
+     * `onSaveInstanceState(Bundle)`. Otherwise it is null.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

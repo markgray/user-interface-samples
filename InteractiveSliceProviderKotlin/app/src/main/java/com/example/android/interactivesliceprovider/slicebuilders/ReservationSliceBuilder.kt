@@ -32,18 +32,23 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a slice that includes a header, grid rows, and actions to present
+ * information about a reservation.
  *
+ * @param context The context to use for resource lookups and creating pending intents.
+ * @param sliceUri The URI for the slice.
  */
 class ReservationSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Demonstrates a reservation slice.
      *
+     * This slice is constructed using a [ListBuilder] and features a `header`, multiple `SliceAction`s
+     * (including a primary action), and several `gridRow`s to display reservation details like an
+     * image, check-in, and check-out times.
      */
     override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         header {
@@ -107,7 +112,7 @@ class ReservationSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag for logging.
          */
         const val TAG: String = "ListSliceBuilder"
     }

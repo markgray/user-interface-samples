@@ -32,18 +32,31 @@ import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a note-taking slice with a header and three actions.
  *
+ * This slice features:
+ *  - A header with a title ("Create new note") and a primary action.
+ *  - Three `SliceAction`s to create a text note, a voice note, and a photo note.
+ *
+ * @param context The context required to build the slice.
+ * @param sliceUri The URI for the slice.
+ * @see SliceBuilder
  */
 class NoteSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Builds a Slice that represents a note-taking app.
      *
+     * This Slice uses a list structure with a header and multiple actions.
+     * The header displays "Create new note".
+     * It includes actions for creating a standard note, a voice note, and a photo note.
+     * Tapping any of these actions triggers a corresponding intent (in this sample, most
+     * will show a toast message for demonstration purposes).
+     *
+     * @return The constructed Slice.
      */
     override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         setAccentColor(ContextCompat.getColor(context, R.color.slice_accent_color))
@@ -94,7 +107,7 @@ class NoteSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag used for logging.
          */
         const val TAG: String = "NoteSliceBuilder"
     }

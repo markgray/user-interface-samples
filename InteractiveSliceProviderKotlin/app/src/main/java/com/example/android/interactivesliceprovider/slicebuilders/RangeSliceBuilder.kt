@@ -31,18 +31,33 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a "range" slice. A range slice is a slice that contains a component
+ * that indicates progress, such as a progress bar or a slider. This is useful for displaying
+ * things like download progress, media playback position, or volume levels.
  *
+ * This specific implementation creates a slice with a range input that visually represents a
+ * download at 75% completion.
+ *
+ * @param context The context required to build the slice.
+ * @param sliceUri The URI for the slice being built.
+ * @see SliceBuilder
  */
 class RangeSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Builds a [Slice] that displays a range/progress bar.
      *
+     * This method uses the [list] and [range] builders from the `androidx.slice.builders.ktx`
+     * library to construct the Slice. The Slice will contain a single row with a range input,
+     * representing a download progress of 75 out of 100.
+     *
+     * The row includes a title, subtitle, and a primary action that triggers a toast message.
+     * An accent color is also set for the Slice.
+     *
+     * @return The constructed [Slice] object.
      */
     override fun buildSlice(): Slice {
         val icon = IconCompat.createWithResource(context, R.drawable.ic_star_on)
@@ -67,7 +82,7 @@ class RangeSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag for logging.
          */
         const val TAG: String = "ListSliceBuilder"
     }

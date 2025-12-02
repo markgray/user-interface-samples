@@ -20,12 +20,15 @@ import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
 /**
- *
+ * This Activity is launched when the user clicks on the header of the gallery Slice.
  */
 class GallerySliceActivity : AppCompatActivity() {
 
     /**
+     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
+     * then we set our content view to our layout file [R.layout.activity_gallery_slice].
      *
+     * @param savedInstanceState we do not override `onSaveInstanceState` so do not use.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -32,18 +32,30 @@ import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a Slice that includes a `gridRow`.
  *
+ * This Slice is composed of a header and a `gridRow` displaying a 5-day weather forecast.
+ * Tapping on the header or the grid row triggers a toast message.
+ *
+ * @param context The context required to build the Slice.
+ * @param sliceUri The URI for the Slice.
  */
 class WeatherSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Demonstrates a slice that uses a grid row to show a weather forecast.
      *
+     * The slice is constructed with a header and a grid row. The header includes a title,
+     * subtitle, and a primary action. The grid row contains multiple cells, each representing
+     * a daily weather forecast with an icon, day, and temperature.
+     *
+     * The primary action for both the header and the grid row triggers a broadcast, which in
+     * turn displays a toast message.
+     *
+     * @return a [Slice] that represents a weather forecast.
      */
     override fun buildSlice(): Slice {
         val action = SliceAction.create(
@@ -113,7 +125,7 @@ class WeatherSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag used for logging.
          */
         const val TAG: String = "ListSliceBuilder"
     }

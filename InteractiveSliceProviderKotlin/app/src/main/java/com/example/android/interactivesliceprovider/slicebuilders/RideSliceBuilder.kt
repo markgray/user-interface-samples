@@ -37,18 +37,38 @@ import com.example.android.interactivesliceprovider.SliceBuilder
 import java.util.concurrent.TimeUnit
 
 /**
+ * Demonstrates how to build a "Ride" Slice, which is a common use-case for Slices.
  *
+ * This Slice features a header, two rows, and actions to simulate ordering a ride.
+ * It uses a [ListBuilder] to structure the content, showcasing how to set titles,
+ * subtitles with styled text (using [SpannableString]), and end items with actions.
+ *
+ * The Slice is designed to be interactive, with actions that trigger a
+ * [SliceActionsBroadcastReceiver].
+ *
+ * @param context The context required to access resources and create intents.
+ * @param sliceUri The URI for the Slice being built.
  */
 class RideSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Builds a slice that represents a ride-sharing service.
      *
+     * This slice is constructed as a list and includes:
+     *  - A header with the title "Get ride", a subtitle indicating the wait time, a summary
+     *  of ride times to work and home, and a primary action to "Get Ride".
+     *  - A row for a ride to "Work", showing distance, duration, and price, with a
+     *  corresponding action.
+     *  - A row for a ride to "Home", showing distance, duration, and price, with a
+     *  corresponding action.
+     *
+     * The slice is configured with an accent color and has a time-to-live (TTL) of 10 seconds.
+     * Spannable strings are used to apply custom colors to parts of the subtitles.
+     *
+     * @return The constructed `Slice` object.
      */
     override fun buildSlice(): Slice {
         val colorSpan = ForegroundColorSpan(-0xf062a8)
@@ -117,7 +137,7 @@ class RideSliceBuilder(
 
     companion object {
         /**
-         *
+         * The tag used for logging in this class.
          */
         const val TAG: String = "ListSliceBuilder"
     }

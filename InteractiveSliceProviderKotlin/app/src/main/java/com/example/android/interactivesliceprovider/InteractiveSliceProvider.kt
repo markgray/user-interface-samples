@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION", "ReplaceNotNullAssertionWithElvisReturn")
+
 package com.example.android.interactivesliceprovider
 
 import android.app.PendingIntent
@@ -48,26 +50,121 @@ import com.example.android.interactivesliceprovider.util.buildUriWithAuthority
  */
 class InteractiveSliceProvider : SliceProvider() {
 
+    /**
+     * The repository for the data used by some of our Slices.
+     */
     private lateinit var repo: DataRepository
+
+    /**
+     * Using a LazyFunctionMap with a custom create function that uses the Context to resolve the
+     * content resolver and notify change on the passed in Uri. It's lazy so it will only be
+     * created when it's needed. In this case, it's used when a slice is pinned.
+     *
+     * This is used to notify the Slice system that the content of a slice has changed.
+     */
     private lateinit var contentNotifiers: LazyFunctionMap<Uri, Unit>
 
+    /**
+     * All Slices are identified by a URI. This is the authority for this SliceProvider.
+     *
+     * It is declared in the manifest as "com.example.android.interactivesliceprovider"
+     *
+     * This is used to build all slice URIs.
+     */
     private lateinit var hostNameUrl: String
 
+    /**
+     * Path for the default Slice, which is a Slice that represents this application and allows the
+     * user to launch the app.
+     */
     private lateinit var defaultPath: String
+   
+    /**
+     * The path for the Wi-fi slice.
+     *
+     * This is initialized from a resource string and used to identify and create the Wi-fi slice.
+     */
     private lateinit var wifiPath: String
+
+    /**
+     * The path for the note-taking slice.
+     *
+     * This is initialized from a resource string and used to identify and create the note-taking slice.
+     */
     private lateinit var notePath: String
+
+    /**
+     * Path for the ride hailing slice.
+     *
+     * This is initialized from a resource string and used to identify and create the ride slice.
+     */
     private lateinit var ridePath: String
+    
+    /**
+     * Path for the toggle slice.
+     *
+     * This is initialized from a resource string and used to identify and create the toggle slice.
+     */
     private lateinit var togglePath: String
+    
+    /**
+     * Path for the gallery slice.
+     *
+     * This is initialized from a resource string and used to identify and create the gallery slice.
+     */
     private lateinit var galleryPath: String
+    
+    /**
+     * Path for the weather slice.
+     *
+     * This is initialized from a resource string and used to identify and create the weather slice.
+     */
     private lateinit var weatherPath: String
+    
+    /**
+     * Path for the reservation slice.
+     *
+     * This is initialized from a resource string and used to identify and create the reservation slice.
+     */
     private lateinit var reservationPath: String
+    
+    /**
+     * Path for the list slice.
+     *
+     * This is initialized from a resource string and used to identify and create the list slice.
+     */
     private lateinit var loadListPath: String
+    
+    /**
+     * Path for the grid slice.
+     *
+     * This is initialized from a resource string and used to identify and create the grid slice.
+     */
     private lateinit var loadGridPath: String
+    
+    /**
+     * Path for the input range slice.
+     *
+     * This is initialized from a resource string and used to identify and create the input range slice.
+     */
     private lateinit var inputRangePath: String
+    
+    /**
+     * Path for the range slice.
+     *
+     * This is initialized from a resource string and used to identify and create the range slice.
+     */
     private lateinit var rangePath: String
 
     /**
      * Implement this to initialize your slice provider on startup.
+     *
+     * This method is called during the provider's startup, and must be overridden to initialize
+     * the provider. It is not called every time a slice is bound, but only once on the first
+     * request.
+     *
+     * In this method, we initialize the data repository, content notifiers, and all the paths for
+     * the different Slices this provider can create.
      *
      * @return `true` if the provider was successfully loaded, `false` otherwise
      */
@@ -109,6 +206,21 @@ class InteractiveSliceProvider : SliceProvider() {
      * Takes an Intent (as specified by the intent-filter in the manifest) with data
      * ("https://interactivesliceprovider.android.example.com/<your_path>") and returns a content
      * URI ("content://com.example.android.interactivesliceprovider/<your_path>").
+     *
+     * The Slice framework uses this method to map an intent to a slice URI.
+     *
+     * This is used when an app asks for a slice's content URI by an intent
+     * (e.g. `SliceManager.mapIntentToUri(intent)`).
+     *
+     * In this implementation, we simply take the path from the intent's data,
+     * remove the leading slash, and use it to build a content URI with our
+     * provider's authority.
+     *
+     * For example, an intent with the data "https://interactivesliceprovider.android.example.com/wifi"
+     * will be mapped to "content://com.example.android.interactivesliceprovider/wifi".
+     *
+     * @param intent The intent to map to a slice URI.
+     * @return The slice URI that should be used for this intent.
      */
     override fun onMapIntentToUri(intent: Intent): Uri {
 
@@ -124,10 +236,16 @@ class InteractiveSliceProvider : SliceProvider() {
     }
 
     /**
-     * Implemented to create a slice.
+     * Constructs a `Slice` associated with a specific `Uri`.
      *
-     * @param sliceUri the [Uri] of the [Slice] we are to create
-     * @return a [Slice] for our [Uri] parameter [sliceUri]
+     * This method is called by the system when a client requests a `Slice` from this provider.
+     * The `sliceUri` is used to determine which `Slice` to create. This is achieved by
+     * matching the `sliceUri.path` to a known path and then delegating the `Slice`
+     * construction to the appropriate `SliceBuilder`.
+     *
+     * @param sliceUri The `Uri` identifying the `Slice` to be created.
+     * @return A `Slice` object representing the data for the given `sliceUri`, or `null`
+     * if the `sliceUri` is invalid or a matching `Slice` cannot be created.
      */
     override fun onBindSlice(sliceUri: Uri?): Slice? {
         if (sliceUri == null || sliceUri.path == null) {
@@ -139,7 +257,14 @@ class InteractiveSliceProvider : SliceProvider() {
         return getSliceBuilder(sliceUri)?.buildSlice()
     }
 
-    @Suppress("ReplaceNotNullAssertionWithElvisReturn") // When cannot have a return
+    /**
+     * Given a slice URI, returns the appropriate SliceBuilder for the URI.
+     *
+     * This is essentially a factory for getting the correct builder for a given URI.
+     *
+     * @param sliceUri The URI of the slice to build.
+     * @return A SliceBuilder instance for the given URI, or null if the URI is unknown.
+     */
     private fun getSliceBuilder(sliceUri: Uri): SliceBuilder? = when (sliceUri.path) {
         defaultPath -> DefaultSliceBuilder(
             context = context!!,

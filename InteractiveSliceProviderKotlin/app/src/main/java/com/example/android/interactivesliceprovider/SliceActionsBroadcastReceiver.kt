@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package com.example.android.interactivesliceprovider
 
 import android.annotation.SuppressLint
@@ -29,12 +31,26 @@ import android.widget.Toast
 import com.example.android.interactivesliceprovider.util.buildUriWithAuthority
 
 /**
+ * BroadcastReceiver to handle slice actions.
  *
+ * It is responsible for receiving actions from the Slice, and updating the state of the slice.
+ *
+ * For example, when the user toggles the Wi-Fi in the slice, this class receives the
+ * broadcast, attempts to change the Wi-Fi state, and sends a notification to the slice to
+ * update itself.
  */
 class SliceActionsBroadcastReceiver : BroadcastReceiver() {
 
     /**
+     * Called when this BroadcastReceiver receives an Intent broadcast.
      *
+     * It checks the intent's action and handles it accordingly.
+     *
+     *  - [InteractiveSliceProvider.ACTION_WIFI_CHANGED]: Toggles the Wi-Fi state and notifies a
+     *  change on the slice URI to trigger an update.
+     *  - [InteractiveSliceProvider.ACTION_TOAST]: Shows a toast with a message from the intent extras.
+     *  - [InteractiveSliceProvider.ACTION_TOAST_RANGE_VALUE]: Shows a toast with a range value from
+     *  the intent extras.
      */
     @SuppressLint("InlinedApi") // TODO: EXTRA_TOGGLE_STATE requires API 28
     override fun onReceive(context: Context, intent: Intent) {
@@ -70,7 +86,11 @@ class SliceActionsBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         /**
+         * Returns a PendingIntent to be used as an action in a slice.
          *
+         * @param context the context to use.
+         * @param action the action to be broadcasted.
+         * @param message an optional message to be included in the intent.
          */
         fun getIntent(context: Context, action: String, message: String?): PendingIntent {
             val intent = Intent(action)

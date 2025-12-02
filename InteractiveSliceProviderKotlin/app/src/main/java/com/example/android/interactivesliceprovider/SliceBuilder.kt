@@ -20,15 +20,17 @@ import android.net.Uri
 import androidx.slice.Slice
 
 /**
+ * Abstract class to simplify the building of a Slice.
  *
+ * @param sliceUri the URI for the Slice being built.
  */
 abstract class SliceBuilder(
+    val sliceUri: Uri
+) {
     /**
+     * Constructs the slice.
      *
-     */
-    val sliceUri: Uri) {
-    /**
-     *
+     * @return The constructed slice.
      */
     abstract fun buildSlice(): Slice
 }

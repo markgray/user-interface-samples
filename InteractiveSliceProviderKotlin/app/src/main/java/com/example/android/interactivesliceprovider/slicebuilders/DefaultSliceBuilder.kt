@@ -30,18 +30,29 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates a default [Slice] with a header, rows, and actions.
  *
+ * This builder constructs a `Slice` using [ListBuilder] to showcase common UI elements
+ * like headers, rows with subtitles, and actions. It serves as a basic example of how to
+ * construct a `Slice` for display in a host application.
+ *
+ * @param context The `Context` to use for resources and creating intents.
+ * @param sliceUri The `Uri` identifying the `Slice` to be built.
  */
 class DefaultSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Constructs the `Slice` using a `ListBuilder`.
      *
+     * This method demonstrates the use of a `ListBuilder` to create a `Slice` with a header,
+     * multiple rows, and a primary action. The `Slice` is configured with a custom accent color
+     * and showcases how to set titles, subtitles, summaries, and content descriptions for
+     * different display modes and accessibility purposes.
+     *
+     * @return The constructed `Slice` object.
      */
     override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         val activityAction = SliceAction.create(
@@ -97,7 +108,7 @@ class DefaultSliceBuilder(
 
     companion object {
         /**
-         *
+         * The tag used for logging in this class.
          */
         const val TAG: String = "DefaultSliceBuilder"
     }

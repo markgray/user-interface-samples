@@ -29,9 +29,16 @@ import com.google.firebase.appindexing.Indexable
 import androidx.core.net.toUri
 
 /**
- * Note: Firebase App Indexing is no longer the recommended way of indexing content for display as
- * suggested results in Google Search App. https://firebase.google.com/docs/app-indexing points to
- * other useful Google developer products.
+ * A [JobIntentService] that handles updating content for Firebase App Indexing.
+ *
+ * App Indexing allows the app's content to be searchable in the Google Search App. This service
+ * updates the index with all the slice URIs from this sample, making them available as search
+ * results.
+ *
+ * Note: Firebase App Indexing is no longer the recommended way to index content for display as
+ * suggested results in the Google Search App. The official documentation at
+ * https://firebase.google.com/docs/app-indexing now points to other useful Google developer
+ * products for this purpose.
  */
 class AppIndexingUpdateService : JobIntentService() {
 
@@ -55,6 +62,9 @@ class AppIndexingUpdateService : JobIntentService() {
             enqueueWork(context, AppIndexingUpdateService::class.java, UNIQUE_JOB_ID, Intent())
         }
 
+        /**
+         * TAG for logging.
+         */
         private val TAG = AppIndexingUpdateService::class.java.simpleName
     }
 

@@ -21,6 +21,10 @@ import android.content.Intent
 import com.google.firebase.appindexing.FirebaseAppIndex
 
 /**
+ * This [BroadcastReceiver] is set up to respond to the update request from the Firebase App
+ * Indexing service. It is just a pass-through that forwards the update work to the
+ * [AppIndexingUpdateService].
+ *
  * Note: Firebase App Indexing is no longer the recommended way of indexing content for display as
  * suggested results in Google Search App. https://firebase.google.com/docs/app-indexing points to
  * other useful Google developer products.

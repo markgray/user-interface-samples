@@ -20,12 +20,22 @@ import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
 /**
- *
+ * This Activity is launched when the user clicks on the "See reservations" button in the Slice,
+ * or when the user clicks on the header of the Slice. It simply displays a layout with some text.
+ * In a real-world application, this would be the screen that shows the user's reservations.
  */
 class ReservationSliceActivity : AppCompatActivity() {
 
     /**
+     * Called when the activity is first created. This is where you should do all of your normal
+     * static set up: create views, bind data to lists, etc. This method also provides a Bundle
+     * containing the activity's previously frozen state, if there was one.
      *
+     * Always followed by onStart().
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     * shut down then this Bundle contains the data it most recently supplied in [onSaveInstanceState]
+     * Note: Otherwise it is null.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

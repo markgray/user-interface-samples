@@ -20,12 +20,22 @@ import android.os.Bundle
 import com.example.android.interactivesliceprovider.R
 
 /**
+ * This activity is launched when the user taps on the input range slice.
  *
+ * It doesn't do anything in this sample, but is required to be present in the app.
  */
 class InputRangeSliceActivity : AppCompatActivity() {
 
     /**
+     * Called when the activity is first created. This is where you should do all of your normal
+     * static set up: create views, bind data to lists, etc. This method also provides you with a
+     * Bundle containing the activity's previously frozen state, if there was one.
      *
+     * Always followed by `onStart()`.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     * shut down then this Bundle contains the data it most recently supplied in `onSaveInstanceState`.
+     * **Note: Otherwise it is null.**
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

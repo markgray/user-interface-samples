@@ -32,22 +32,37 @@ import com.example.android.interactivesliceprovider.SliceBuilder
 import com.example.android.interactivesliceprovider.data.DataRepository
 
 /**
+ * Demonstrates how to build a list slice.
  *
+ * A list slice is ideal for displaying multiple related items, such as a list of destinations
+ * with their corresponding travel times. This builder creates a slice with a header and several
+ * rows, each representing a destination.
+ *
+ * The slice is configured to show a loading state for subtitles while data is being fetched
+ * asynchronously.
+ *
+ * @param context The context required to build the slice.
+ * @param sliceUri The URI identifying the slice.
+ * @param repo The data repository used to fetch destination data.
  */
 class ListSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri,
-    /**
-     *
-     */
     val repo: DataRepository
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Builds a `Slice` that displays a list of destinations and the travel times to them.
      *
+     * This method fetches destination data from the repository and uses the `list` builder
+     * to construct the slice. It includes:
+     *  - A header with a title, subtitle, and a primary action.
+     *  - Three rows, each representing a destination (Work, Home, School).
+     *  - Each row displays the destination name, the travel time (as a subtitle), and an icon.
+     *  - The subtitles are configured to show a loading state if the travel time data is not yet
+     *  available, providing a better user experience for asynchronous data loading.
+     *
+     * @return The constructed `Slice` object.
      */
     override fun buildSlice(): Slice {
         val listData = repo.getListData()
@@ -98,7 +113,7 @@ class ListSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag to be used for logging purposes.
          */
         const val TAG: String = "ListSliceBuilder"
     }

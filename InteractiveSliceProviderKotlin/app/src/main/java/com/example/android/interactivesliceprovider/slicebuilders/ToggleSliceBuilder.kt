@@ -32,18 +32,26 @@ import com.example.android.interactivesliceprovider.R.drawable
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a slice that includes a toggle.
  *
+ * A toggle is a UI element that can be in one of two states, such as "on" or "off".
+ * In this example, we create a toggle for a star icon.
+ *
+ * @param context The context required to build the slice.
+ * @param sliceUri The URI for the slice.
  */
 class ToggleSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Demonstrates a toggle action in a slice.
      *
+     * The slice is built with a header that includes a `SliceAction.createToggle`.
+     * This action allows the user to switch between two states (checked/unchecked).
+     * When the user interacts with the toggle, a broadcast is sent, which in this
+     * example, will display a toast message. The initial state is set to checked.
      */
     override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         setAccentColor(ContextCompat.getColor(context, R.color.slice_accent_color))
@@ -65,7 +73,7 @@ class ToggleSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag for logging.
          */
         const val TAG: String = "ListSliceBuilder"
     }

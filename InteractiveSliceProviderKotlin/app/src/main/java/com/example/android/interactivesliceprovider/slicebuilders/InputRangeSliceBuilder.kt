@@ -31,18 +31,21 @@ import com.example.android.interactivesliceprovider.R
 import com.example.android.interactivesliceprovider.SliceBuilder
 
 /**
+ * Demonstrates how to build a slice that includes a row with a slider.
  *
+ * @param context The context to use.
+ * @param sliceUri The URI for the slice.
  */
 class InputRangeSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri
 ) : SliceBuilder(sliceUri) {
 
     /**
-     *
+     * Builds a slice that includes a row with a slider (input range).
+     * The slider allows the user to select a value between a minimum and a maximum.
+     * It includes a title, subtitle, a custom thumb icon, and a primary action.
+     * When the slider's value changes, a broadcast is sent.
      */
     override fun buildSlice(): Slice {
         val icon = IconCompat.createWithResource(context, R.drawable.ic_star_on)
@@ -73,7 +76,7 @@ class InputRangeSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag used for logging.
          */
         const val TAG: String = "ListSliceBuilder"
     }

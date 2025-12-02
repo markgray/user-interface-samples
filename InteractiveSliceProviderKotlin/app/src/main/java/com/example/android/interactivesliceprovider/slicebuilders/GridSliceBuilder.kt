@@ -33,22 +33,35 @@ import com.example.android.interactivesliceprovider.SliceBuilder
 import com.example.android.interactivesliceprovider.data.DataRepository
 
 /**
+ * Demonstrates how to build a [Slice] that includes a grid of content.
  *
+ * This Slice is composed of a header and a [gridRow] containing multiple [cell] items.
+ * Each cell displays an icon, a title, and some text, representing data fetched from a repository.
+ * The header includes a primary action.
+ *
+ * @param context The [Context] to use for building the Slice.
+ * @param sliceUri The [Uri] for the Slice.
+ * @param repo The [DataRepository] to fetch data from.
  */
 class GridSliceBuilder(
-    /**
-     *
-     */
     val context: Context,
     sliceUri: Uri,
-    /**
-     *
-     */
     val repo: DataRepository
 ) : SliceBuilder(sliceUri) {
 
     /**
+     * Builds the Slice, which is a grid of content.
      *
+     * This method constructs a [Slice] using the `list` builder. It fetches data from a
+     * repository to populate a header and a grid row.
+     *
+     * The header contains a title, a subtitle, and a primary action. The `isEmpty()` check
+     * for title and subtitle is used to indicate to the system that the data is loading.
+     *
+     * The `gridRow` contains three `cell` items, each representing a location (Home, Work, School)
+     * with an icon, title, and corresponding data.
+     *
+     * @return a [Slice] object representing the grid layout.
      */
     override fun buildSlice(): Slice = list(context, sliceUri, ListBuilder.INFINITY) {
         val data = repo.getGridData()
@@ -97,7 +110,7 @@ class GridSliceBuilder(
 
     companion object {
         /**
-         *
+         * Tag used for logging.
          */
         const val TAG: String = "GridSliceBuilder"
     }
