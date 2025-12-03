@@ -20,9 +20,11 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -43,16 +45,32 @@ class SplitLayoutActivity : AppCompatActivity() {
     private lateinit var windowInfoRepo: WindowInfoTracker
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we initialize our [Activity] variable `val activity` to `this`. We initialize our
-     * [ActivitySplitLayoutBinding] field [binding] by having the method
-     * [ActivitySplitLayoutBinding.inflate] use the [LayoutInflater] instance that this Window
-     * retrieved from its [Context] to inflate the activity_split_layout.xml layout file
-     * associated with it to produce an [ActivitySplitLayoutBinding] instance, and we set our
-     * content view to the outermost View in the layout file associated with [binding]. We next
-     * initialize our [WindowInfoTracker] field [windowInfoRepo] to an instance of [WindowInfoTracker]
-     * that is associated with our [Context]. Next we launch a coroutine on the `lifecycleScope`
-     * [CoroutineScope] tied to this LifecycleOwner's Lifecycle. We call the
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and initialize our
+     * [Activity] variable `val activity` to `this`. We initialize our [ActivitySplitLayoutBinding]
+     * field [binding] by having the method [ActivitySplitLayoutBinding.inflate] use the
+     * [LayoutInflater] instance that this Window retrieved from its [Context] to inflate the
+     * activity_split_layout.xml layout file associated with it to produce an
+     * [ActivitySplitLayoutBinding] instance, and we set our content view to the outermost View in
+     * the layout file associated with [binding].
+     *
+     * We call [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to the root [View] of [binding] `rootView`, with the
+     * `listener` argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
+     *
+     * We next initialize our [WindowInfoTracker] field [windowInfoRepo] to an instance of
+     * [WindowInfoTracker] that is associated with our [Context]. Next we launch a coroutine on
+     * the `lifecycleScope` [CoroutineScope] tied to this LifecycleOwner's Lifecycle. We call the
      * [Lifecycle.repeatOnLifecycle] method of our [Lifecycle] to have it execute its lambda block
      * when the lifecycle is at least STARTED (it is cancelled when the lifecycle is STOPPED, and
      * automatically restarted when the lifecycle is STARTED again). In that lambda block we call the
@@ -71,8 +89,9 @@ class SplitLayoutActivity : AppCompatActivity() {
         val activity: Activity = this
 
         binding = ActivitySplitLayoutBinding.inflate(layoutInflater)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
@@ -84,7 +103,6 @@ class SplitLayoutActivity : AppCompatActivity() {
             // down to descendant views.
             WindowInsetsCompat.CONSUMED
         }
-        setContentView(binding.root)
 
         windowInfoRepo = WindowInfoTracker.getOrCreate(this)
         // Create a new coroutine since repeatOnLifecycle is a suspend function
