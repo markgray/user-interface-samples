@@ -41,15 +41,36 @@ import com.example.android.people.ui.viewBindings
 class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationController {
 
     companion object {
+        /**
+         * The name of the Fragment back stack for the chat screen.
+         */
         private const val FRAGMENT_CHAT = "chat"
     }
 
+    /**
+     * The [MainActivityBinding] used to access the views in the layout.
+     * Scoped to the lifecycle of the activity's view (which is instantiated in [onCreate]).
+     */
     private val binding by viewBindings(MainActivityBinding::bind)
 
+    /**
+     * The transition to be used for the animation of the [androidx.appcompat.widget.Toolbar].
+     */
     private lateinit var transition: Transition
 
     /**
+     * Called when the activity is first created. This is where we do all of our normal static set
+     * up: create views, bind data to lists, etc. This method also provides a Bundle containing the
+     * activity's previously frozen state, if there was one.
      *
+     * We set our content view, configure the [androidx.appcompat.widget.Toolbar] as our app bar,
+     * inflate our `app_bar` `Transition`, and if this is the first time we were created 
+     * ([savedInstanceState] is null) we add a `MainFragment` to our UI and handle the `Intent`
+     * that started us.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this Bundle contains the data it most recently supplied in [onSaveInstanceState].
+     * **Note: Otherwise it is null.**
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,20 +80,42 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
             supportFragmentManager.commitNow {
                 replace(R.id.container, MainFragment())
             }
-            intent?.let(::handleIntent)
+            intent?.let(block = ::handleIntent)
         }
     }
 
     /**
+     * This is called for activities that set launchMode to "singleTop" in their
+     * manifest, or if a client used the [Intent.FLAG_ACTIVITY_SINGLE_TOP] flag when calling
+     * [startActivity]. In either case, when the activity is re-launched while at the top of the
+     * activity stack instead of a new instance of the activity being started, `onNewIntent()`
+     * will be called on the existing instance with the Intent that was used to re-launch it.
+     * We then handle this `intent` in our [handleIntent] method.
      *
+     * @param intent The new intent that was started for the activity.
      */
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
-            handleIntent(intent)
+            handleIntent(intent = intent)
         }
     }
 
+    /**
+     * Handles the `Intent` that started the Activity.
+     *
+     * This function is called when the Activity is first created (in `onCreate`) or when a new
+     * intent is delivered to an existing instance (in `onNewIntent`). It inspects the intent's
+     * action to determine the desired behavior.
+     *
+     *  - [Intent.ACTION_VIEW]: This is typically triggered by clicking a dynamic or pinned shortcut.
+     *  It extracts the contact ID from the intent's data URI and opens the corresponding chat screen.
+     *  - [Intent.ACTION_SEND]: This is triggered by a "Direct Share" action from another app.
+     *  It extracts the shortcut ID and the shared text, finds the corresponding contact, and opens
+     *  the chat screen with the text pre-populated.
+     *
+     * @param intent The `Intent` to handle.
+     */
     private fun handleIntent(intent: Intent) {
         when (intent.action) {
             // Invoked when a dynamic shortcut is clicked.
@@ -94,6 +137,21 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
         }
     }
 
+    /**
+     * Updates the appearance of the app bar.
+     *
+     * This method can hide or show the app bar, and toggle between showing the generic app title
+     * and the specific contact's name and icon. An optional lambda can be provided to further
+     * customize the contact's name `TextView` and icon `ImageView`. A transition is used to animate
+     * the changes.
+     *
+     * @param showContact `true` to show the contact's name and icon, `false` to show the default
+     * app title. This has no effect if the app bar is hidden.
+     * @param hidden `true` to hide the app bar entirely, `false` to show it.
+     * @param body A lambda function that receives the `TextView` for the contact's name and the
+     * `ImageView` for the contact's icon, allowing for further customization (e.g., setting the
+     * text and image). This lambda is always executed, even if the views are not visible.
+     */
     override fun updateAppBar(
         showContact: Boolean,
         hidden: Boolean,
@@ -118,7 +176,15 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
     }
 
     /**
+     * Opens the chat screen for a specific contact.
      *
+     * This function ensures that any existing chat screen is removed from the back stack before
+     * adding a new one. This prevents multiple chat screens from piling up. It then creates a new
+     * [ChatFragment] for the given contact `id` and replaces the current content in the `container`.
+     *
+     * @param id The ID of the contact to open the chat with.
+     * @param prepopulateText An optional string to pre-fill in the chat's message input field.
+     * This is typically used when sharing content to the chat from another app.
      */
     override fun openChat(id: Long, prepopulateText: String?) {
         supportFragmentManager.popBackStack(FRAGMENT_CHAT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -129,7 +195,13 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
     }
 
     /**
+     * Opens a screen to display a full-sized photo.
      *
+     * This function replaces the current content with a [PhotoFragment], which displays the
+     * image identified by the provided [Uri]. The transaction is added to the back stack,
+     * allowing the user to return to the previous screen.
+     *
+     * @param photo The [Uri] of the photo to be displayed.
      */
     override fun openPhoto(photo: Uri) {
         supportFragmentManager.commit {

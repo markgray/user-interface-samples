@@ -28,15 +28,37 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Unit tests for [MainViewModel].
+ */
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class MainViewModelTest {
 
+    /**
+     * A JUnit rule that swaps the background executor used by the Architecture Components with a
+     * different one which executes each task synchronously.
+     *
+     * This is necessary for testing `LiveData` because it ensures that any background operations
+     * happen on the same thread, allowing test results to be synchronous and repeatable.
+     */
     @get:Rule
     val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
+    /**
+     * A dummy list of contacts used for testing purposes.
+     */
     private val dummyContacts = Contact.CONTACTS
 
+    /**
+     * Creates an instance of [MainViewModel] for testing.
+     *
+     * This function initializes the ViewModel on the main thread because `MainViewModel` uses
+     * `SavedStateHandle`, which requires it to be created on the main thread. It uses a
+     * [TestChatRepository] pre-populated with dummy contacts.
+     *
+     * @return A new instance of [MainViewModel].
+     */
     private fun createViewModel(): MainViewModel {
         var viewModel: MainViewModel? = null
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
@@ -50,6 +72,13 @@ class MainViewModelTest {
         return viewModel!!
     }
 
+    /**
+     * Verifies that the [MainViewModel] is populated with a list of contacts upon creation.
+     *
+     * This test creates a [MainViewModel] instance and checks if the `contacts` LiveData
+     * holds the expected list of dummy contacts, ensuring the ViewModel correctly loads
+     * and exposes the contact data from the repository.
+     */
     @Test
     fun hasListOfContacts() {
         val viewModel = createViewModel()

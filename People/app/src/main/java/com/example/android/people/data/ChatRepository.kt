@@ -26,57 +26,81 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 /**
- *
+ * A repository for chat-related data.
  */
 interface ChatRepository {
     /**
-     *
+     * Fetches all the contacts.
      */
     fun getContacts(): LiveData<List<Contact>>
 
     /**
+     * Finds the contact with the given ID.
      *
+     * @param id The ID of the contact.
      */
     fun findContact(id: Long): LiveData<Contact?>
 
     /**
+     * Finds all the messages in the chat with the given ID.
      *
+     * @param id The ID of the chat.
      */
     fun findMessages(id: Long): LiveData<List<Message>>
 
     /**
+     * Sends a message to the chat with the given ID.
      *
+     * @param id The ID of the chat.
+     * @param text The text of the message.
+     * @param photoUri The optional URI of a photo to attach.
+     * @param photoMimeType The MIME type of the photo.
      */
     fun sendMessage(id: Long, text: String, photoUri: Uri?, photoMimeType: String?)
 
     /**
+     * Updates the notification for the chat with the given ID.
      *
+     * @param id The ID of the chat.
      */
     fun updateNotification(id: Long)
 
     /**
+     * Activates the chat with the given ID. This is typically used to indicate that the user
+     * is actively looking at the chat.
      *
+     * @param id The ID of the chat.
      */
     fun activateChat(id: Long)
 
     /**
+     * Deactivates the chat with the given ID. This is typically used to indicate that the user
+     * is no longer actively looking at the chat.
      *
+     * @param id The ID of the chat.
      */
     fun deactivateChat(id: Long)
 
     /**
+     * Shows the chat with the given ID as a bubble.
      *
+     * @param id The ID of the chat.
      */
     fun showAsBubble(id: Long)
 
     /**
+     * Returns whether the chat with the given ID can be shown as a bubble.
      *
+     * @param id The ID of the chat.
      */
     fun canBubble(id: Long): Boolean
 }
 
 /**
+ * The default implementation of [ChatRepository].
  *
+ * @param notificationHelper A helper for showing notifications.
+ * @param executor An executor for running background tasks.
  */
 class DefaultChatRepository internal constructor(
     private val notificationHelper: NotificationHelper,
@@ -84,10 +108,15 @@ class DefaultChatRepository internal constructor(
 ) : ChatRepository {
 
     companion object {
+        /**
+         * The singleton instance of the repository.
+         */
         private var instance: DefaultChatRepository? = null
 
         /**
+         * Returns a singleton instance of [DefaultChatRepository].
          *
+         * @param context The application context.
          */
         fun getInstance(context: Context): DefaultChatRepository {
             return instance ?: synchronized(this) {
@@ -101,8 +130,14 @@ class DefaultChatRepository internal constructor(
         }
     }
 
+    /**
+     * The ID of the currently opened chat. `0L` if no chat is open.
+     */
     private var currentChat: Long = 0L
 
+    /**
+     * All the chats, keyed by the contact ID.
+     */
     private val chats = Contact.CONTACTS.associate { contact: Contact ->
         contact.id to Chat(contact)
     }
@@ -112,7 +147,9 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Fetches all the contacts.
      *
+     * @return A [LiveData] of all the contacts.
      */
     @MainThread
     override fun getContacts(): LiveData<List<Contact>> {
@@ -122,7 +159,10 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Finds the contact with the given ID.
      *
+     * @param id The ID of the contact.
+     * @return A [LiveData] of the contact.
      */
     @MainThread
     override fun findContact(id: Long): LiveData<Contact?> {
@@ -132,22 +172,37 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Finds all the messages in the chat with the given ID.
      *
+     * @param id The ID of the chat.
+     * @return A [LiveData] of all the messages.
      */
     @MainThread
     override fun findMessages(id: Long): LiveData<List<Message>> {
         val chat = chats.getValue(id)
         return object : LiveData<List<Message>>() {
 
+            /**
+             * The listener for receiving new messages.
+             */
             private val listener = { messages: List<Message> ->
                 postValue(messages)
             }
 
+            /**
+             * Called when the number of active observers change from 0 to 1. This callback can be
+             * used to know that this [LiveData] is being used thus should be kept up to date.
+             * When this [LiveData] becomes active, we immediately post the current value of the
+             * messages and start listening to new messages.
+             */
             override fun onActive() {
                 value = chat.messages
                 chat.addListener(listener)
             }
 
+            /**
+             * When this [LiveData] becomes inactive, we stop listening to new messages.
+             */
             override fun onInactive() {
                 chat.removeListener(listener)
             }
@@ -155,7 +210,12 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Sends a message to the chat with the given ID.
      *
+     * @param id The ID of the chat.
+     * @param text The text of the message.
+     * @param photoUri The optional URI of a photo to attach.
+     * @param photoMimeType The MIME type of the photo.
      */
     @RequiresApi(Build.VERSION_CODES.S)
     @MainThread
@@ -181,7 +241,9 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Updates the notification for the chat with the given ID.
      *
+     * @param id The ID of the chat.
      */
     @RequiresApi(Build.VERSION_CODES.S)
     override fun updateNotification(id: Long) {
@@ -190,7 +252,10 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Activates the chat with the given ID. This is typically used to indicate that the user
+     * is actively looking at the chat.
      *
+     * @param id The ID of the chat.
      */
     @RequiresApi(Build.VERSION_CODES.S)
     override fun activateChat(id: Long) {
@@ -203,7 +268,10 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Deactivates the chat with the given ID. This is typically used to indicate that the user
+     * is no longer actively looking at the chat.
      *
+     * @param id The ID of the chat.
      */
     override fun deactivateChat(id: Long) {
         if (currentChat == id) {
@@ -212,7 +280,9 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Shows the chat with the given ID as a bubble.
      *
+     * @param id The ID of the chat.
      */
     @RequiresApi(Build.VERSION_CODES.S)
     override fun showAsBubble(id: Long) {
@@ -223,7 +293,9 @@ class DefaultChatRepository internal constructor(
     }
 
     /**
+     * Returns whether the chat with the given ID can be shown as a bubble.
      *
+     * @param id The ID of the chat.
      */
     override fun canBubble(id: Long): Boolean {
         val chat = chats.getValue(id)

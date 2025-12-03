@@ -26,12 +26,17 @@ import androidx.fragment.app.Fragment
 interface NavigationController {
 
     /**
+     * Opens the chat screen for the given contact.
      *
+     * @param id The ID of the contact.
+     * @param prepopulateText The text to prepopulate in the text field. Can be `null`.
      */
     fun openChat(id: Long, prepopulateText: String?)
 
     /**
+     * Opens the photo in a full-screen view.
      *
+     * @param photo The URI of the photo to open.
      */
     fun openPhoto(photo: Uri)
 
@@ -50,7 +55,7 @@ interface NavigationController {
 }
 
 /**
- *
+ * The [NavigationController] for this fragment.
  */
 fun Fragment.getNavigationController(): NavigationController =
     requireActivity() as NavigationController

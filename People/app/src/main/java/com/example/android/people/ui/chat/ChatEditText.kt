@@ -22,10 +22,19 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 
 /**
+ * A listener for when an image is added to the chat.
  *
+ * param contentUri The URI of the image.
+ *
+ * param mimeType The MIME type of the image.
+ *
+ * param label The label of the image.
  */
 typealias OnImageAddedListener = (contentUri: Uri, mimeType: String, label: String) -> Unit
 
+/**
+ * A list of MIME types that are supported for insertion.
+ */
 @Suppress("unused") // Suggested change would make class less reusable
 private val SUPPORTED_MIME_TYPES = setOf(
     "image/jpeg",
@@ -37,6 +46,10 @@ private val SUPPORTED_MIME_TYPES = setOf(
 /**
  * A custom EditText with the ability to handle copy & paste of texts and images. This also works
  * with a software keyboard that can insert images.
+ *
+ * @param context The context of the view.
+ * @param attrs The attributes of the view.
+ * @param defStyleAttr The default style attribute of the view.
  */
 class ChatEditText @JvmOverloads constructor(
     context: Context,
@@ -44,6 +57,9 @@ class ChatEditText @JvmOverloads constructor(
     defStyleAttr: Int = androidx.appcompat.R.attr.editTextStyle
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
 
+    /**
+     * A listener for receiving images inserted into the text box.
+     */
     private var onImageAddedListener: OnImageAddedListener? = null
 
 //  init {
@@ -76,6 +92,8 @@ class ChatEditText @JvmOverloads constructor(
     /**
      * Sets a listener to be called when a new image is added. This might be coming from copy &
      * paste or a software keyboard inserting an image.
+     *
+     * @param listener The listener to be called when a new image is added.
      */
     fun setOnImageAddedListener(listener: OnImageAddedListener?) {
         onImageAddedListener = listener

@@ -29,13 +29,20 @@ class ReplyReceiver : BroadcastReceiver() {
 
     companion object {
         /**
-         *
+         * The key for the text response passed in a [RemoteInput] when a user replies to a
+         * notification.
          */
         const val KEY_TEXT_REPLY: String = "reply"
     }
 
     /**
+     * A [BroadcastReceiver] for handling the "Reply" action in a chat notification.
+     * It retrieves the text input from the user's reply, sends it as a new message
+     * to the corresponding chat, and then updates the notification to reflect the sent reply.
      *
+     * @param context The Context in which the receiver is running.
+     * @param intent The Intent being received, which should contain the user's reply
+     * as a [RemoteInput] and the chat ID in its data URI.
      */
     override fun onReceive(context: Context, intent: Intent) {
         val repository: ChatRepository = DefaultChatRepository.getInstance(context)

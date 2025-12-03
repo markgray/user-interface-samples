@@ -34,10 +34,16 @@ import com.example.android.people.ui.viewBindings
 class PhotoFragment : Fragment(R.layout.photo_fragment) {
 
     companion object {
+        /**
+         * The argument key for the photo URI.
+         */
         private const val ARG_PHOTO = "photo"
 
         /**
+         * Creates a new instance of [PhotoFragment] to show the specified photo.
          *
+         * @param photo The URI of the photo to show.
+         * @return A new instance of [PhotoFragment].
          */
         fun newInstance(photo: Uri): PhotoFragment = PhotoFragment().apply {
             arguments = Bundle().apply {
@@ -47,7 +53,11 @@ class PhotoFragment : Fragment(R.layout.photo_fragment) {
     }
 
     /**
+     * Called to do initial creation of a fragment. This is called after [onAttach] and before
+     * [onCreateView]. It just sets a fade-in enter transition for the fragment.
      *
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +65,14 @@ class PhotoFragment : Fragment(R.layout.photo_fragment) {
     }
 
     /**
+     * Called when the fragment's view has been created.
+     * This method retrieves the photo URI from the fragment's arguments,
+     * hides the app bar, and then loads the photo into an ImageView using Glide.
+     * If the photo URI is not found, it pops the fragment from the back stack.
      *
+     * @param view The fragment's view.
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     * this is the state.
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val photo: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

@@ -22,9 +22,13 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 /**
- * Observes this [LiveData] and returns the value.
+ * Observes this [LiveData] for 3 seconds and returns the last emitted value.
+ * This is a blocking method and should be used for testing only.
  *
- * @throws NullPointerException if the observed value is null.
+ * @param T The type of the LiveData value.
+ * @return The last value emitted by the [LiveData].
+ * @throws NullPointerException if the [LiveData] value is null.
+ * @throws InterruptedException if the 3-second waiting time is interrupted.
  */
 fun <T> LiveData<T>.observedValue(): T {
     var result: T? = null

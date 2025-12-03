@@ -31,6 +31,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
@@ -43,6 +44,8 @@ import com.example.android.people.ReplyReceiver
 
 /**
  * Handles all operations related to [Notification].
+ *
+ * @param context The application context.
  */
 class NotificationHelper(private val context: Context) {
 
@@ -52,18 +55,36 @@ class NotificationHelper(private val context: Context) {
          */
         private const val CHANNEL_NEW_MESSAGES = "new_messages"
 
+        /**
+         * The request code for the [PendingIntent] of the "Open Content" action on the expanded bubble,
+         * as well as the fall-back notification.
+         */
         private const val REQUEST_CONTENT = 1
+
+        /**
+         * The request code for the [PendingIntent] of the "Reply" action in the expanded bubble.
+         */
         private const val REQUEST_BUBBLE = 2
     }
 
+    /**
+     * The [NotificationManager] for the app. This is used to create notification channels and post
+     * notifications.
+     */
     private val notificationManager: NotificationManager =
         context.getSystemService() ?: throw IllegalStateException()
 
+    /**
+     * The [ShortcutManager] for the app. This is used to update dynamic shortcuts when needed.
+     */
     private val shortcutManager: ShortcutManager =
         context.getSystemService() ?: throw IllegalStateException()
 
     /**
-     *
+     * Creates the notification channel for new messages.
+     * This is required for all notifications on Android 8.0 (API level 26) and above.
+     * The importance must be IMPORTANCE_HIGH to be eligible for Bubbles.
+     * This method also initializes the dynamic shortcuts, which are used for conversations.
      */
     fun setUpNotificationChannels() {
         if (notificationManager.getNotificationChannel(CHANNEL_NEW_MESSAGES) == null) {
@@ -82,13 +103,21 @@ class NotificationHelper(private val context: Context) {
     }
 
     /**
+     * Updates the dynamic shortcuts for all contacts.
      *
+     * If an `importantContact` is provided, it will be moved to the top of the list. The list of
+     * shortcuts is then truncated to the maximum number of shortcuts allowed by the system.
+     * Finally, the updated list of shortcuts is published to the `ShortcutManager`.
+     *
+     * These shortcuts are used as conversation shortcuts and are required for Bubbles.
+     *
+     * @param importantContact The contact to be prioritized in the shortcut list. Can be null.
      */
     @SuppressLint("ReportShortcutUsage")
     @WorkerThread
     fun updateShortcuts(importantContact: Contact?) {
-        var shortcuts = Contact.CONTACTS.map { contact ->
-            val icon = Icon.createWithAdaptiveBitmap(
+        var shortcuts: List<ShortcutInfo> = Contact.CONTACTS.map { contact: Contact ->
+            val icon: Icon = Icon.createWithAdaptiveBitmap(
                 context.resources.assets.open(contact.icon).use { input ->
                     BitmapFactory.decodeStream(input)
                 }
@@ -130,16 +159,31 @@ class NotificationHelper(private val context: Context) {
     }
 
     /**
+     * Shows a notification for a chat message.
      *
+     * This method constructs and displays a notification that can be promoted to a bubble.
+     * It configures the bubble metadata, such as the intent for the expanded view, the desired
+     * height, and behavior based on user interaction. The notification is built with a
+     * `MessagingStyle` to display the conversation history, and includes a direct reply action.
+     *
+     * The notification is associated with a dynamic shortcut, which is a prerequisite for Bubbles.
+     * It also handles different behaviors for new messages versus updates to existing ones.
+     *
+     * @param chat The chat data, including the contact and messages.
+     * @param fromUser `true` if the notification is being triggered by a direct user action (e.g.,
+     * tapping a shortcut), which can cause the bubble to auto-expand. `false` if it's for an
+     * incoming message.
+     * @param update `true` if this is an update to an existing notification. This suppresses the
+     * notification shade entry and prevents re-alerting the user with sound or vibration.
      */
     @RequiresApi(Build.VERSION_CODES.S)
     @WorkerThread
     fun showNotification(chat: Chat, fromUser: Boolean, update: Boolean = false) {
         updateShortcuts(chat.contact)
-        val icon = Icon.createWithAdaptiveBitmapContentUri(chat.contact.iconUri)
-        val user = Person.Builder().setName(context.getString(R.string.sender_you)).build()
-        val person = Person.Builder().setName(chat.contact.name).setIcon(icon).build()
-        val contentUri = "https://android.example.com/chat/${chat.contact.id}".toUri()
+        val icon: Icon = Icon.createWithAdaptiveBitmapContentUri(chat.contact.iconUri)
+        val user: Person = Person.Builder().setName(context.getString(R.string.sender_you)).build()
+        val person: Person = Person.Builder().setName(chat.contact.name).setIcon(icon).build()
+        val contentUri: Uri = "https://android.example.com/chat/${chat.contact.id}".toUri()
 
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -248,12 +292,25 @@ class NotificationHelper(private val context: Context) {
         notificationManager.notify(chat.contact.id.toInt(), builder.build())
     }
 
+    /**
+     * Dismisses a notification.
+     *
+     * @param id The ID of the notification to be dismissed.
+     */
     private fun dismissNotification(id: Long) {
         notificationManager.cancel(id.toInt())
     }
 
     /**
+     * Checks whether the app can show a bubble for a specific conversation.
      *
+     * Bubbles are enabled if the user has not disabled them in the system settings and if the
+     * notification channel for the conversation is configured to allow bubbling. This check is
+     * version-dependent. On Android S (API 31) and higher, it checks the global `bubblePreference`.
+     * On older versions, it uses the deprecated `areBubblesAllowed()` method.
+     *
+     * @param contact The contact for which to check the bubble eligibility.
+     * @return `true` if a bubble can be shown for this contact, `false` otherwise.
      */
     fun canBubble(contact: Contact): Boolean {
         val channel = notificationManager.getNotificationChannel(
@@ -270,7 +327,23 @@ class NotificationHelper(private val context: Context) {
     }
 
     /**
+     * Updates or dismisses the notification for a chat.
      *
+     * This function is called when the user enters a chat screen.
+     *
+     * If the chat screen is launched with pre-populated messages from the notification, it means the
+     * user has seen the messages, so the notification is dismissed.
+     *
+     * If the user enters the chat through other means (e.g., from the conversation list), the
+     * notification is updated to remove the unread message badge on the collapsed bubble. This is
+     * done by re-issuing the notification with the `suppressNotification` flag set, which removes
+     * the visual indicator that there's a new message without dismissing the bubble itself.
+     *
+     * @param chat The chat data used for updating the notification.
+     * @param chatId The ID of the chat, used for dismissing the notification.
+     * @param prepopulatedMsgs `true` if the chat messages were pre-populated from a notification,
+     * indicating the notification should be dismissed. `false` otherwise, indicating the
+     * notification should just be updated to remove the unread badge.
      */
     @RequiresApi(Build.VERSION_CODES.S)
     fun updateNotification(chat: Chat, chatId: Long, prepopulatedMsgs: Boolean) {

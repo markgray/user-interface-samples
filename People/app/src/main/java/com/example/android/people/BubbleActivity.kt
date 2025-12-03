@@ -31,7 +31,14 @@ import com.example.android.people.ui.photo.PhotoFragment
 class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationController {
 
     /**
+     * The Activity is being created.
      *
+     * We retrieve the contact's ID from the intent's data URI and, if this is the first
+     * creation (i.e., `savedInstanceState` is null), we add a [ChatFragment] to display
+     * the conversation.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * down then this Bundle contains the data it most recently supplied in [onSaveInstanceState].
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +51,20 @@ class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationCo
     }
 
     /**
+     * This is not supported in this Activity because this Activity only shows a single chat thread.
      *
+     * @param id The ID of the contact to open the chat with.
+     * @param prepopulateText The text to prepopulate the message edit box with.
+     * @throws UnsupportedOperationException
      */
     override fun openChat(id: Long, prepopulateText: String?) {
         throw UnsupportedOperationException("BubbleActivity always shows a single chat thread.")
     }
 
     /**
+     * Opens the specified photo in a [PhotoFragment].
      *
+     * @param photo The URI of the photo to open.
      */
     override fun openPhoto(photo: Uri) {
         // In an expanded Bubble, you can navigate between Fragments just like you would normally
@@ -62,6 +75,13 @@ class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationCo
         }
     }
 
+    /**
+     * The expanded bubble does not have an app bar, so we ignore calls to this method.
+     *
+     * @param showContact Whether to show the contact's name in the app bar.
+     * @param hidden Whether the app bar should be hidden.
+     * @param body A lambda that is called to customize the app bar.
+     */
     override fun updateAppBar(
         showContact: Boolean,
         hidden: Boolean,

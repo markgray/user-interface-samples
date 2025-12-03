@@ -23,7 +23,10 @@ import com.example.android.people.data.Contact
 import com.example.android.people.data.DefaultChatRepository
 
 /**
+ * The ViewModel for the screen that displays a list of contacts.
  *
+ * @param application The application.
+ * @property repository The repository for the contacts.
  */
 class MainViewModel @JvmOverloads constructor(
     application: Application,

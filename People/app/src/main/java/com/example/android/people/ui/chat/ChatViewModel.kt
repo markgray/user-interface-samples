@@ -28,22 +28,35 @@ import com.example.android.people.data.DefaultChatRepository
 import com.example.android.people.data.Message
 
 /**
+ * ViewModel for a chat screen.
  *
+ * @param application The application.
+ * @property repository The repository for the chat.
  */
 class ChatViewModel @JvmOverloads constructor(
     application: Application,
-    private val repository: ChatRepository = DefaultChatRepository.getInstance(application)
+    private val repository: ChatRepository = DefaultChatRepository.getInstance(context = application)
 ) : AndroidViewModel(application) {
 
+    /**
+     * The ID of the chat that is currently displayed.
+     */
     private val chatId = MutableLiveData<Long>()
 
+    /**
+     * The URI of an image to be sent with the next message.
+     */
     private val _photoUri = MutableLiveData<Uri?>()
 
     /**
-     *
+     * The URI of an image to be shown in the compose area. This is a temporary state until the
+     * user sends the message.
      */
     val photo: LiveData<Uri?> = _photoUri
 
+    /**
+     * The MIME type of the image to be sent with the next message.
+     */
     private var _photoMimeType: String? = null
 
     /**
@@ -59,11 +72,11 @@ class ChatViewModel @JvmOverloads constructor(
     var foreground: Boolean = false
         set(value) {
             field = value
-            chatId.value?.let { id ->
+            chatId.value?.let { id: Long ->
                 if (value) {
-                    repository.activateChat(id)
+                    repository.activateChat(id = id)
                 } else {
-                    repository.deactivateChat(id)
+                    repository.deactivateChat(id = id)
                 }
             }
         }
@@ -84,7 +97,9 @@ class ChatViewModel @JvmOverloads constructor(
     val showAsBubbleVisible: LiveData<Boolean> = chatId.map { id -> repository.canBubble(id) }
 
     /**
+     * Sets the ID of the chat to be displayed.
      *
+     * @param id The ID of the chat.
      */
     fun setChatId(id: Long) {
         chatId.value = id
@@ -96,28 +111,38 @@ class ChatViewModel @JvmOverloads constructor(
     }
 
     /**
+     * Sends a message.
      *
+     * @param text The text to be sent.
      */
     fun send(text: String) {
-        val id = chatId.value
+        val id: Long? = chatId.value
         if (id != null && id != 0L) {
-            repository.sendMessage(id, text, _photoUri.value, _photoMimeType)
+            repository.sendMessage(
+                id = id,
+                text = text,
+                photoUri = _photoUri.value,
+                photoMimeType = _photoMimeType
+            )
         }
         _photoUri.value = null
         _photoMimeType = null
     }
 
     /**
-     *
+     * Requests to show the current chat as a bubble.
      */
     fun showAsBubble() {
-        chatId.value?.let { id ->
-            repository.showAsBubble(id)
+        chatId.value?.let { id: Long ->
+            repository.showAsBubble(id = id)
         }
     }
 
     /**
+     * Sets a photo to be sent with the next message.
      *
+     * @param uri The URI of the photo.
+     * @param mimeType The MIME type of the photo.
      */
     fun setPhoto(uri: Uri, mimeType: String) {
         _photoUri.value = uri
@@ -125,9 +150,12 @@ class ChatViewModel @JvmOverloads constructor(
     }
 
     /**
+     * Called when this ViewModel is no longer used and will be destroyed.
      *
+     * We deactivate the current chat screen so that the user can receive notifications for this
+     * chat.
      */
     override fun onCleared() {
-        chatId.value?.let { id -> repository.deactivateChat(id) }
+        chatId.value?.let { id: Long -> repository.deactivateChat(id = id) }
     }
 }

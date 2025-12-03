@@ -31,18 +31,24 @@ class VoiceCallActivity : AppCompatActivity(R.layout.voice_call_activity) {
 
     companion object {
         /**
-         *
+         * Used as the key for the name of the contact in the intent extras.
          */
         const val EXTRA_NAME: String = "name"
 
         /**
-         *
+         * Used as the key for the Uri of the contact in the intent extras.
          */
         const val EXTRA_ICON_URI: String = "iconUri"
     }
 
     /**
+     * Called when the activity is first created. This function initializes the activity,
+     * retrieves the contact's name and icon URI from the intent extras, and displays them
+     * on the screen. If the required extras are not provided, the activity is finished.
      *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     * being shut down then this Bundle contains the data it most recently supplied in
+     * `onSaveInstanceState(Bundle)`. Otherwise it is `null`.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

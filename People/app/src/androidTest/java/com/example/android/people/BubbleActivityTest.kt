@@ -28,9 +28,19 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * A simple test for [BubbleActivity]. We cannot test the bubble itself, but we can test the
+ * activity that it opens.
+ */
 @RunWith(AndroidJUnit4::class)
 class BubbleActivityTest {
 
+    /**
+     * Tests that the [BubbleActivity] shows the chat screen for a specific chat conversation.
+     * It launches the activity with an intent that has a specific data URI, simulating
+     * opening a chat from a notification or a bubble. It then verifies that the chat input field
+     * (identified by its hint text) is displayed, confirming that the correct fragment has been loaded.
+     */
     @Test
     fun showsChatFragment() {
         ActivityScenario.launch<BubbleActivity>(
