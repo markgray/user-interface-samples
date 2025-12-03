@@ -23,12 +23,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -85,11 +88,28 @@ class SingleSliceViewerActivity : AppCompatActivity() {
     private lateinit var typeMenu: SubMenu
 
     /**
-     * Called when the activity is starting. First we call our super's implementation of `onCreate`,
-     * then we set our content view to our layout file `R.layout.activity_single_slice_viewer` which
-     * consists of a `ConstraintLayout` root view holding a [TextView] for the label "URI", above a
-     * [TextView] holding the string value of the slice [Uri] we were launched to display, with a
-     * `ScrollView` holding the [SliceView] we display the [Slice] in below that.
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`, and set our content
+     * view to our layout file `R.layout.activity_single_slice_viewer` which consists of a
+     * [ConstraintLayout] root view holding a [TextView] for the label "URI", above a [TextView]
+     * holding the string value of the slice [Uri] we were launched to display, with a [ScrollView]
+     * holding the [SliceView] we display the [Slice] in below that.
+     *
+     * We initialize our [ConstraintLayout] variable `rootView`
+     * to the view with ID `R.id.root_view_single` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
      *
      * We initialize our [ViewModelFactory] variable `val viewModelFactory` to the application's
      * singleton instance, then initialize our [SingleSliceViewModel] field [viewModel] by using
@@ -122,8 +142,8 @@ class SingleSliceViewerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_slice_viewer)
         val rootView = findViewById<ConstraintLayout>(R.id.root_view_single)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
