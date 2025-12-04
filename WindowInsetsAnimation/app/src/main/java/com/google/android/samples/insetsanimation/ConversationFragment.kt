@@ -35,7 +35,7 @@ import com.google.android.samples.insetsanimation.databinding.FragmentConversati
 class ConversationFragment : Fragment() {
     /**
      * The "backing" field for our read only [FragmentConversationBinding] field [binding]. It exists
-     * apparently only to avoid having to use !! every time we reference [binding]. It is initialize
+     * apparently only to avoid having to use !! every time we reference [binding]. It is initialized
      * in our [onCreateView] override by using the [FragmentConversationBinding.inflate] method to
      * inflate its layout file layout/fragment_conversation.xml into a binding object.
      */
