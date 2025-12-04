@@ -52,16 +52,18 @@ class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationCo
      * We initialize our [ContentFrameLayout] variable `rootView`
      * to the view with ID `android.R.id.content` then call
      * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
-     * for applying window insets to `rootView`, with the `listener`
+     * for applying window insets to the root [View] of [binding], with the `listener`
      * argument a lambda that accepts the [View] passed the lambda
      * in variable `v` and the [WindowInsetsCompat] passed the lambda
      * in variable `windowInsets`. It initializes its [Insets] variable
-     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
-     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * `systemBars` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument. It then gets the insets for the
+     * IME (keyboard) using `WindowInsetsCompat.Type.ime()`. It then updates
      * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
-     * with the left margin set to `insets.left`, the right margin set to
-     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
-     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * with the left margin set to `systemBars.left`, the right margin set to
+     * `systemBars.right`, the top margin set to `systemBars.top`, and the bottom margin
+     * set to the maximum of the system bars bottom inset and the IME bottom inset.
+     * Finally it returns [WindowInsetsCompat.CONSUMED]
      * to the caller (so that the window insets will not keep passing down to
      * descendant views).
      *
