@@ -109,13 +109,15 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
         super.onCreate(savedInstanceState)
         val rootView = window.decorView.findViewById<ContentFrameLayout>(android.R.id.content)
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
-            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+
             // Apply the insets as a margin to the view.
             v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = insets.left
-                rightMargin = insets.right
-                topMargin = insets.top
-                bottomMargin = insets.bottom
+                leftMargin = systemBars.left
+                rightMargin = systemBars.right
+                topMargin = systemBars.top
+                bottomMargin = systemBars.bottom.coerceAtLeast(ime.bottom)
             }
             // Return CONSUMED if you don't want want the window insets to keep passing
             // down to descendant views.
