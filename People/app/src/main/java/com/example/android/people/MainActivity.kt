@@ -15,16 +15,30 @@
 
 package com.example.android.people
 
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.ContentFrameLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
@@ -73,7 +87,23 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
      * **Note: Otherwise it is null.**
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        val rootView = window.decorView.findViewById<ContentFrameLayout>(android.R.id.content)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v: View, windowInsets: WindowInsetsCompat ->
+            val insets: Insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Apply the insets as a margin to the view.
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                leftMargin = insets.left
+                rightMargin = insets.right
+                topMargin = insets.top
+                bottomMargin = insets.bottom
+            }
+            // Return CONSUMED if you don't want want the window insets to keep passing
+            // down to descendant views.
+            WindowInsetsCompat.CONSUMED
+        }
+
         setSupportActionBar(binding.toolbar)
         transition = TransitionInflater.from(this).inflateTransition(R.transition.app_bar)
         if (savedInstanceState == null) {
@@ -82,7 +112,44 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
             }
             intent?.let(block = ::handleIntent)
         }
+        requestNotificationPermission()
     }
+
+    /**
+     * Requests the [POST_NOTIFICATIONS] permission from the user.
+     *
+     * This function checks if the app has been granted the [POST_NOTIFICATIONS] permission.
+     * If the permission has not been granted, it launches a system permission request dialog
+     * using the [ActivityResultLauncher] property [actionRequestPermission] launcher. If the
+     * permission is already granted, the function does nothing. This is necessary for apps targeting
+     * Android 13 (API level 33) or higher to be able to post notifications.
+     */
+    private fun requestNotificationPermission() {
+        if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            @SuppressLint("InlinedApi")
+            actionRequestPermission.launch(arrayOf(POST_NOTIFICATIONS))
+            return
+        }
+    }
+
+    /**
+     * An [ActivityResultLauncher] for requesting permissions.
+     *
+     * This launcher is initialized using [registerForActivityResult] with the
+     * [ActivityResultContracts.RequestMultiplePermissions] contract. It is used to
+     * launch the system's permission request dialog. The lambda provided is a callback
+     * that will be executed when the user responds to the permission request, providing
+     * a map of which permissions were granted. In this implementation, the callback is
+     * empty as no specific action is needed immediately after the user's decision.
+     *
+     * @see requestNotificationPermission
+     */
+    private val actionRequestPermission: ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(
+            RequestMultiplePermissions()
+        ) {}
 
     /**
      * This is called for activities that set launchMode to "singleTop" in their
