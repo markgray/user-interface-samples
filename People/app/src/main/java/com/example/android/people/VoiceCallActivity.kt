@@ -57,9 +57,12 @@ class VoiceCallActivity : AppCompatActivity(R.layout.voice_call_activity) {
     }
 
     /**
-     * Called when the activity is first created. This function initializes the activity,
-     * retrieves the contact's name and icon URI from the intent extras, and displays them
-     * on the screen. If the required extras are not provided, the activity is finished.
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`.
+     *
+     * This function initializes the activity, retrieves the contact's name and icon URI from the
+     * intent extras, and displays them on the screen. If the required extras are not provided,
+     * the activity is finished.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously
      * being shut down then this Bundle contains the data it most recently supplied in

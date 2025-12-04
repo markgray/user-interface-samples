@@ -73,18 +73,36 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
     private lateinit var transition: Transition
 
     /**
-     * Called when the activity is first created. This is where we do all of our normal static set
-     * up: create views, bind data to lists, etc. This method also provides a Bundle containing the
-     * activity's previously frozen state, if there was one.
+     * Called when the activity is starting. First we call [enableEdgeToEdge] to enable edge to
+     * edge display, then we call our super's implementation of `onCreate`.
      *
-     * We set our content view, configure the [androidx.appcompat.widget.Toolbar] as our app bar,
-     * inflate our `app_bar` `Transition`, and if this is the first time we were created 
-     * ([savedInstanceState] is null) we add a `MainFragment` to our UI and handle the `Intent`
-     * that started us.
+     * We initialize our [ContentFrameLayout] variable `rootView`
+     * to the view with ID `android.R.id.content` then call
+     * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
+     * for applying window insets to `rootView`, with the `listener`
+     * argument a lambda that accepts the [View] passed the lambda
+     * in variable `v` and the [WindowInsetsCompat] passed the lambda
+     * in variable `windowInsets`. It initializes its [Insets] variable
+     * `insets` to the [WindowInsetsCompat.getInsets] of `windowInsets` with
+     * [WindowInsetsCompat.Type.systemBars] as the argument, then it updates
+     * the layout parameters of `v` to be a [ViewGroup.MarginLayoutParams]
+     * with the left margin set to `insets.left`, the right margin set to
+     * `insets.right`, the top margin set to `insets.top`, and the bottom margin
+     * set to `insets.bottom`. Finally it returns [WindowInsetsCompat.CONSUMED]
+     * to the caller (so that the window insets will not keep passing down to
+     * descendant views).
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut
-     * down then this Bundle contains the data it most recently supplied in [onSaveInstanceState].
-     * **Note: Otherwise it is null.**
+     * We configure the [androidx.appcompat.widget.Toolbar] as our app bar, inflate our `app_bar`
+     * `Transition`, and if this is the first time we were created ([savedInstanceState] is `null`)
+     * we add a [MainFragment] to our UI and handle the `Intent` that started us.
+     *
+     * Finally we call [requestNotificationPermission] to request permission from the user
+     * to post notifications.
+     *
+     * @param savedInstanceState if this is `null` this is the first time we were called so we
+     * use the `FragmentManager` to add a [MainFragment] to our UI, and if it is not `null` we
+     * are being recreated after a configuration change and the system will take care of restoring
+     * our fragment.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -103,7 +121,6 @@ class MainActivity : AppCompatActivity(R.layout.main_activity), NavigationContro
             // down to descendant views.
             WindowInsetsCompat.CONSUMED
         }
-
         setSupportActionBar(binding.toolbar)
         transition = TransitionInflater.from(this).inflateTransition(R.transition.app_bar)
         if (savedInstanceState == null) {
