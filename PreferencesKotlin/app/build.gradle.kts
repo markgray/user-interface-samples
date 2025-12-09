@@ -32,6 +32,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.activity:activity-ktx:1.12.0")
+    implementation("androidx.activity:activity-ktx:1.12.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
 }
