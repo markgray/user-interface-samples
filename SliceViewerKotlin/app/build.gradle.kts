@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation("androidx.activity:activity-ktx:1.12.0")
+    implementation("androidx.activity:activity-ktx:1.12.1")
     implementation("androidx.slice:slice-view:1.1.0-alpha02")
     implementation("androidx.slice:slice-core:1.0.0")
     implementation("androidx.slice:slice-builders:1.0.0")
