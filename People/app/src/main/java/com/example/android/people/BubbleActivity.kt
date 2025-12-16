@@ -52,7 +52,7 @@ class BubbleActivity : AppCompatActivity(R.layout.bubble_activity), NavigationCo
      * We initialize our [ContentFrameLayout] variable `rootView`
      * to the view with ID `android.R.id.content` then call
      * [ViewCompat.setOnApplyWindowInsetsListener] to take over the policy
-     * for applying window insets to the root [View] of [binding], with the `listener`
+     * for applying window insets to the root [View] of `rootView`, with the `listener`
      * argument a lambda that accepts the [View] passed the lambda
      * in variable `v` and the [WindowInsetsCompat] passed the lambda
      * in variable `windowInsets`. It initializes its [Insets] variable

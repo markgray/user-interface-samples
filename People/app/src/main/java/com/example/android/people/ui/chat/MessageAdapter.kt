@@ -172,11 +172,13 @@ class MessageAdapter(
             holder.binding.message.setTag(R.id.tag_photo, message.photoUri)
             Glide.with(holder.binding.message)
                 .load(message.photoUri)
-                .into(CompoundBottomTarget(
-                    view = holder.binding.message,
-                    width = photoSize,
-                    height = photoSize
-                ))
+                .into(
+                    /* target = */ CompoundBottomTarget(
+                        view = holder.binding.message,
+                        width = photoSize,
+                        height = photoSize
+                    )
+                )
         } else {
             holder.binding.message.setTag(R.id.tag_photo, null)
             holder.binding.message.setCompoundDrawables(null, null, null, null)
