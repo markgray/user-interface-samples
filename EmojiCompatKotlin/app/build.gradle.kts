@@ -41,9 +41,9 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.12.1")
     // Support Libraries
     implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.emoji:emoji:1.1.0")
-    implementation("androidx.emoji:emoji-appcompat:1.1.0")
-    implementation("androidx.emoji:emoji-bundled:1.1.0")
+    implementation("androidx.emoji:emoji:1.2.0")
+    implementation("androidx.emoji:emoji-appcompat:1.2.0")
+    implementation("androidx.emoji:emoji-bundled:1.2.0")
 
     // Test
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
