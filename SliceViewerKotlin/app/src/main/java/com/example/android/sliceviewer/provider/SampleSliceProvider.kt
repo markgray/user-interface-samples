@@ -142,13 +142,13 @@ class SampleSliceProvider : SliceProvider() {
      * @param sliceUri the [Uri] for the [Slice] we are to create.
      * @return a [Slice] with the header "Test Slice"
      */
-    @SuppressLint("RestrictedApi") // TODO: SliceHints.INFINITY is restricted to library use?
+    @SuppressLint("RestrictedApi", "ObsoleteSdkInt") // TODO: SliceHints.INFINITY is restricted to library use?
     private fun createTestSlice(sliceUri: Uri): Slice {
         val activityAction = SliceAction.create(
             PendingIntent.getActivity(
-                context, 0,
-                MainActivity.getIntent(context!!),
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                /* context = */ context, /* requestCode = */ 0,
+                /* intent = */ MainActivity.getIntent(context!!),
+                /* flags = */ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     PendingIntent.FLAG_IMMUTABLE
                 } else {
                     0
