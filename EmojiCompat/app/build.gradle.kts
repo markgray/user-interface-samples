@@ -42,7 +42,7 @@ android {
 
 dependencies {
     // Support Libraries
-    implementation("androidx.activity:activity-ktx:1.12.1")
+    implementation("androidx.activity:activity-ktx:1.12.2")
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.emoji:emoji:1.2.0")
     implementation("androidx.emoji:emoji-appcompat:1.2.0")
